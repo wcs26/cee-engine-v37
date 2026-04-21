@@ -1,0 +1,3200 @@
+[
+  {
+    "ref": "BAT-EQ-127",
+    "nom": "Luminaire LED (relamping)",
+    "secteur": "BAT",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "formule": "quantite * cumac_unitaire",
+    "cumac_unitaire": {
+      "H1": 3900,
+      "H2": 3200,
+      "H3": 2700
+    },
+    "unite": "kWhc par luminaire",
+    "duree_vie": 15,
+    "conditions": {
+      "zone": [
+        "H1",
+        "H2",
+        "H3"
+      ]
+    },
+    "conditions_texte": [
+      "Luminaire neuf complet avec modules LED",
+      "Efficacite lumineuse >= 100 lm/W",
+      "Batiment tertiaire existant > 2 ans"
+    ]
+  },
+  {
+    "ref": "BAT-TH-145",
+    "nom": "GTB chauffage + climatisation",
+    "secteur": "BAT",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "formule": "surface * cumac_unitaire",
+    "cumac_unitaire": {
+      "H1": 33,
+      "H2": 28,
+      "H3": 23
+    },
+    "unite": "kWhc par m2",
+    "duree_vie": 15,
+    "conditions": {
+      "zone": [
+        "H1",
+        "H2",
+        "H3"
+      ]
+    },
+    "conditions_texte": [
+      "GTB classe A ou B (EN ISO 52120-1)",
+      "Couvre chauffage + climatisation",
+      "Batiment tertiaire existant > 2 ans"
+    ],
+    "exclusion": [
+      "BAT-TH-116"
+    ]
+  },
+  {
+    "ref": "BAT-TH-104",
+    "nom": "PAC air/eau tertiaire",
+    "secteur": "BAT",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "formule": "surface * cumac_unitaire",
+    "cumac_unitaire": {
+      "H1": 41,
+      "H2": 34,
+      "H3": 26
+    },
+    "unite": "kWhc par m2 chauffe",
+    "duree_vie": 17,
+    "conditions": {
+      "zone": [
+        "H1",
+        "H2",
+        "H3"
+      ]
+    },
+    "conditions_texte": [
+      "COP >= 3.4",
+      "Remplacement chaudiere existante",
+      "Batiment tertiaire existant > 2 ans"
+    ]
+  },
+  {
+    "ref": "IND-UT-117",
+    "nom": "Recuperation chaleur sur compresseur",
+    "secteur": "IND",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "formule": "puissance * cumac_unitaire",
+    "cumac_unitaire": 1720,
+    "unite": "kWhc par kW compresseur",
+    "duree_vie": 15,
+    "conditions": {
+      "seuils_min": {
+        "puissance": 10
+      }
+    },
+    "conditions_texte": [
+      "Puissance compresseur >= 10 kW",
+      "Recuperateur de chaleur neuf"
+    ]
+  },
+  {
+    "ref": "IND-UT-113",
+    "nom": "Moteur haut rendement IE3/IE4",
+    "secteur": "IND",
+    "type": "unitaire",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "formule": "puissance * quantite * cumac_unitaire",
+    "cumac_unitaire": 8200,
+    "unite": "kWhc par kW moteur",
+    "duree_vie": 15,
+    "conditions": {
+      "seuils_min": {
+        "puissance": 0.12
+      }
+    },
+    "conditions_texte": [
+      "Moteur IE3 ou IE4",
+      "Puissance 0.12 a 1000 kW"
+    ]
+  },
+  {
+    "ref": "IND-UT-134",
+    "nom": "Groupe froid haute efficacite",
+    "secteur": "IND",
+    "type": "unitaire",
+    "params": [
+      "puissance_froid"
+    ],
+    "formule": "puissance_froid * cumac_unitaire",
+    "cumac_unitaire": 5400,
+    "unite": "kWhc par kW froid installe",
+    "duree_vie": 15,
+    "conditions": {},
+    "conditions_texte": [
+      "Groupe froid neuf",
+      "EER >= valeur seuil selon puissance"
+    ]
+  },
+  {
+    "ref": "RES-EC-104",
+    "nom": "Renovation globale maison individuelle",
+    "secteur": "RES",
+    "type": "unitaire",
+    "params": [
+      "nb_logements",
+      "energie"
+    ],
+    "formule": "nb_logements * cumac_unitaire",
+    "cumac_unitaire": {
+      "H1_electricite": 77000,
+      "H1_gaz": 124000,
+      "H1_fioul": 155000,
+      "H2_electricite": 63000,
+      "H2_gaz": 102000,
+      "H2_fioul": 127000,
+      "H3_electricite": 42000,
+      "H3_gaz": 68000,
+      "H3_fioul": 85000
+    },
+    "unite": "kWhc par logement",
+    "duree_vie": 30,
+    "conditions": {
+      "zone": [
+        "H1",
+        "H2",
+        "H3"
+      ]
+    },
+    "conditions_texte": [
+      "Gain >= 55% sur consommation conventionnelle",
+      "Audit energetique prealable obligatoire",
+      "Logement existant > 2 ans"
+    ]
+  },
+  {
+    "ref": "BAT-EN-101",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": false,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 2,
+      "H2": 2,
+      "H3": 1
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EN-102",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": false,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 3,
+      "H2": 2,
+      "H3": 1
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EN-103",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": false,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 5,
+      "H2": 4,
+      "H3": 2
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EN-104",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": false,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 5,
+      "H2": 4,
+      "H3": 2
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EN-107",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": false,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 1,
+      "H3": 1
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EN-112",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 160,
+      "H2": 170,
+      "H3": 270
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EN-113",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": false,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 5,
+      "H2": 4,
+      "H3": 3
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-EQ-129",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 9,
+      "H2": 10,
+      "H3": 16
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-SE-103",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "SE",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 120,
+      "H2": 100
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-SE-104",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "SE",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H3": 2
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-SE-105",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "SE",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 130,
+      "H2": 110
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-103",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 210,
+      "H2": 170,
+      "H3": 110
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-105",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 56,
+      "H2": 46,
+      "H3": 31
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-108",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 0,
+      "H3": 0
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-109",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 0,
+      "H3": 0
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-110",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 190,
+      "H2": 160,
+      "H3": 120
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-116",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 0,
+      "H3": 0
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-125",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 400,
+      "H2": 330,
+      "H3": 220
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-126",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H2": 700,
+      "H3": 460,
+      "H1": 850
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-127",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 0,
+      "H3": 0
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-134",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 19,
+      "H2": 17,
+      "H3": 16
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "BAT-TH-142",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 3,
+      "H2": 4,
+      "H3": 4
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-143",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 9,
+      "H2": 13,
+      "H3": 24
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-154",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 11,
+      "H2": 10,
+      "H3": 8
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "BAT-TH-156",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 5,
+      "H2": 4,
+      "H3": 3
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "BAT-TH-158",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 660,
+      "H2": 540,
+      "H3": 360
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-159",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 1,
+      "H3": 1
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "BAT-TH-162",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1600,
+      "H2": 1300,
+      "H3": 900
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-163",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1200,
+      "H2": 1000,
+      "H3": 700
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "BAT-TH-164",
+    "nom": "",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1200,
+      "H2": 1000,
+      "H3": 700
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "IND-BA-110",
+    "nom": "",
+    "secteur": "IND",
+    "sous_secteur": "BA",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 7,
+      "H2": 8,
+      "H3": 8
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "IND-BA-113",
+    "nom": "",
+    "secteur": "IND",
+    "sous_secteur": "BA",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 3,
+      "H2": 4,
+      "H3": 6
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "IND-BA-117",
+    "nom": "",
+    "secteur": "IND",
+    "sous_secteur": "BA",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 2100,
+      "H2": 1700,
+      "H3": 1000
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "IND-UT-103",
+    "nom": "",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H3": 1
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "IND-UT-116",
+    "nom": "",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H2": 14,
+      "H3": 13
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "IND-UT-135",
+    "nom": "",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 7,
+      "H2": 4,
+      "H3": 3
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "RES-CH-103",
+    "nom": "",
+    "secteur": "RES",
+    "sous_secteur": "CH",
+    "type": "surface",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 1,
+      "H2": 0,
+      "H3": 0
+    },
+    "params": [
+      "surface"
+    ],
+    "unite": "kWhc par m2"
+  },
+  {
+    "ref": "RES-CH-104",
+    "nom": "",
+    "secteur": "RES",
+    "sous_secteur": "CH",
+    "type": "unitaire",
+    "duree_vie": null,
+    "actif": true,
+    "conditions_texte": [],
+    "cumac_unitaire": {
+      "H1": 18,
+      "H2": 15,
+      "H3": 11
+    },
+    "params": [
+      "quantite"
+    ],
+    "unite": "kWhc par unité"
+  },
+  {
+    "ref": "IND-UT-124",
+    "nom": "Séquenceur électronique air comprimé",
+    "secteur": "IND",
+    "type": "complexe",
+    "variables": [
+      "nb_compresseurs",
+      "puissance"
+    ],
+    "mode_calcul": "table",
+    "table_cumac": {
+      "2": 2400,
+      "3": 3000,
+      "4": 3600,
+      "5": 4100,
+      "6": 4600,
+      "7": 5100,
+      "8": 5600
+    },
+    "unite": "kWhc par kW (avec optimisation énergie)",
+    "duree_vie": 13,
+    "params": [
+      "nb_compresseurs",
+      "puissance"
+    ],
+    "conditions": {},
+    "conditions_texte": [
+      "Séquenceur avec optimisation énergie",
+      "Industrie uniquement"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-104",
+    "nom": "Chauffage serre - chaudiere biomasse",
+    "secteur": "AGR",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "cumac_unitaire": {
+      "H1": 170,
+      "H2": 140,
+      "H3": 110
+    },
+    "unite": "kWhc par m2 de serre",
+    "duree_vie": 16,
+    "conditions": {},
+    "conditions_texte": [
+      "Chaudiere biomasse neuve",
+      "Serre existante > 2 ans"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-TH-105",
+    "nom": "Chauffage serre - PAC",
+    "secteur": "AGR",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "cumac_unitaire": {
+      "H1": 130,
+      "H2": 110,
+      "H3": 85
+    },
+    "unite": "kWhc par m2 de serre",
+    "duree_vie": 17,
+    "conditions": {},
+    "conditions_texte": [
+      "PAC neuve COP >= 3.4",
+      "Serre existante > 2 ans"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-101",
+    "nom": "Moteur electrique a haut rendement (agri)",
+    "secteur": "AGR",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "cumac_unitaire": 8200,
+    "unite": "kWhc par kW moteur",
+    "duree_vie": 15,
+    "conditions": {
+      "seuils_min": {
+        "puissance": 0.12
+      }
+    },
+    "conditions_texte": [
+      "Moteur IE3 ou IE4",
+      "Usage agricole"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-102",
+    "nom": "Variateur de vitesse (agri)",
+    "secteur": "AGR",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "cumac_unitaire": 9800,
+    "unite": "kWhc par kW",
+    "duree_vie": 15,
+    "conditions": {
+      "seuils_min": {
+        "puissance": 0.5
+      }
+    },
+    "conditions_texte": [
+      "Variateur de vitesse neuf",
+      "Moteur existant"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-104",
+    "nom": "Pre-refroidisseur de lait",
+    "secteur": "AGR",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": {
+      "H1": 42000,
+      "H2": 35000,
+      "H3": 28000
+    },
+    "unite": "kWhc par pre-refroidisseur",
+    "duree_vie": 12,
+    "conditions": {},
+    "conditions_texte": [
+      "Exploitation laitiere",
+      "Pre-refroidisseur neuf"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-108",
+    "nom": "Ventilateur basse consommation (agri)",
+    "secteur": "AGR",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": {
+      "H1": 4500,
+      "H2": 3800,
+      "H3": 3000
+    },
+    "unite": "kWhc par ventilateur",
+    "duree_vie": 10,
+    "conditions": {},
+    "conditions_texte": [
+      "Ventilateur basse conso neuf",
+      "Batiment elevage"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-109",
+    "nom": "Echangeur air-air (agri)",
+    "secteur": "AGR",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": {
+      "H1": 15000,
+      "H2": 12500,
+      "H3": 10000
+    },
+    "unite": "kWhc par echangeur",
+    "duree_vie": 15,
+    "conditions": {},
+    "conditions_texte": [
+      "Echangeur air-air neuf",
+      "Batiment elevage"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-110",
+    "nom": "Eclairage LED batiment agricole",
+    "secteur": "AGR",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": {
+      "H1": 3200,
+      "H2": 2600,
+      "H3": 2100
+    },
+    "unite": "kWhc par luminaire",
+    "duree_vie": 15,
+    "conditions": {},
+    "conditions_texte": [
+      "Luminaire LED neuf",
+      "Batiment agricole existant > 2 ans"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "TRA-EQ-103",
+    "nom": "Pneumatiques basse resistance",
+    "secteur": "TRA",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": 3700,
+    "unite": "kWhc par pneumatique",
+    "duree_vie": 6,
+    "conditions": {},
+    "conditions_texte": [
+      "Pneu classe A ou B en resistance roulement"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "TRA-SE-112",
+    "nom": "Formation eco-conduite",
+    "secteur": "TRA",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": 21700,
+    "unite": "kWhc par conducteur forme",
+    "duree_vie": 3,
+    "conditions": {},
+    "conditions_texte": [
+      "Formation certifiee",
+      "Conducteur PL ou VUL"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "TRA-SE-113",
+    "nom": "Formation eco-conduite VP",
+    "secteur": "TRA",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": 5400,
+    "unite": "kWhc par conducteur forme",
+    "duree_vie": 3,
+    "conditions": {},
+    "conditions_texte": [
+      "Formation certifiee",
+      "Conducteur VP"
+    ],
+    "actif": true
+  },
+  {
+    "ref": "AGRI-EQ-105",
+    "nom": "",
+    "secteur": "AGRI",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-EQ-106",
+    "nom": "Régulation de la ventilation des silos",
+    "secteur": "AGRI",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 13,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-EQ-107",
+    "nom": "Isolation des parois de serre",
+    "secteur": "AGRI",
+    "sous_secteur": "EQ",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-EQ-111",
+    "nom": "Simple écran thermique",
+    "secteur": "AGRI",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 8,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-EQ-112",
+    "nom": "Double paroi gonflable",
+    "secteur": "AGRI",
+    "sous_secteur": "EQ",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 8,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-SE-101",
+    "nom": "",
+    "secteur": "AGRI",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-101",
+    "nom": "Dispositif de stockage d’eau chaude de type « Open Buffer »",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-102",
+    "nom": "Dispositif de stockage d’eau chaude",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-103",
+    "nom": "Pré-refroidisseur de lait",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 14,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-108",
+    "nom": "Pompe à chaleur de type air/eau ou eau/eau",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "surface"
+    ],
+    "duree_vie": 17,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "surface"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "AGRI-TH-109",
+    "nom": "Récupérateur de chaleur à condensation pour serres",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 11,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-110",
+    "nom": "Chaudière à haute performance énergétique pour serres",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 22,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-113",
+    "nom": "Échangeur-récupérateur de chaleur air/air",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-117",
+    "nom": "Déshumidificateur thermodynamique pour serres",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "surface",
+      "quantite"
+    ],
+    "duree_vie": 17,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "surface",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "AGRI-TH-118",
+    "nom": "Double tube de chauffage pour serres",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-TH-119",
+    "nom": "Système de déshumidification avec air extérieur",
+    "secteur": "AGRI",
+    "sous_secteur": "TH",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 17,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-UT-101",
+    "nom": "Moto-variateur synchrone à aimants permanents ou à réluctance",
+    "secteur": "AGRI",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 20,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "AGRI-UT-102",
+    "nom": "Système de variation électronique de vitesse sur un moteur asynchrone",
+    "secteur": "AGRI",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "AGRI-UT-103",
+    "nom": "Système de régulation sur un groupe de production de froid permettant",
+    "secteur": "AGRI",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 14,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "AGRI-UT-104",
+    "nom": "Système de régulation sur un groupe de production de froid permettant",
+    "secteur": "AGRI",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 14,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-EN-106",
+    "nom": "Isolation de combles ou de toitures",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 30,
+    "actif": false,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EN-108",
+    "nom": "Isolation des murs (France d’outre-mer)",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 30,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EN-109",
+    "nom": "Réduction des apports solaires par la toiture (France d’outre-mer)",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 30,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EN-111",
+    "nom": "Fenêtre ou porte-fenêtre complète avec vitrage pariétodynamique",
+    "secteur": "BAT",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 24,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EQ-117",
+    "nom": "Installation frigorifique utilisant du CO subcritique ou transcritique",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-EQ-124",
+    "nom": "Fermeture des meubles frigorifiques de vente à température positive",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 7,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EQ-125",
+    "nom": "Fermeture des meubles frigorifiques de vente à température négative",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 7,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EQ-130",
+    "nom": "Système de condensation frigorifique à haute efficacité",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-EQ-131",
+    "nom": "Conduits de lumière naturelle",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "complexe",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 20,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "surface"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-EQ-134",
+    "nom": "Meuble frigorifique de vente performant",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 10,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-EQ-135",
+    "nom": "Dispositif performant d’alimentation sans interruption",
+    "secteur": "BAT",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-TH-111",
+    "nom": "Chauffe-eau solaire collectif (France métropolitaine)",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 22,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-TH-112",
+    "nom": "Système de variation électronique de vitesse sur un moteur asynchrone",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-TH-115",
+    "nom": "Climatiseur performant",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "surface",
+      "quantite"
+    ],
+    "duree_vie": 9,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "surface",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-TH-121",
+    "nom": "Chauffe-eau solaire (France d’outre-mer)",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 20,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-TH-122",
+    "nom": "Programmateur d’intermittence pour la climatisation",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "surface"
+    ],
+    "duree_vie": 12,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "surface"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-TH-135",
+    "nom": "Système de régulation sur un groupe de production de froid permettant",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 10,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-TH-139",
+    "nom": "Système de récupération de chaleur sur un groupe de production de",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 14,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "BAT-TH-153",
+    "nom": "Système de confinement des allées froides et allées chaudes dans un Data",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-TH-157",
+    "nom": "Chaudière biomasse collective",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "surface",
+      "quantite"
+    ],
+    "duree_vie": 22,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "surface",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "BAT-TH-161",
+    "nom": "Maintien en température des groupes électrogènes de secours",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 11,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Remplacement equipement existant",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-BA-114",
+    "nom": "Conduits de lumière naturelle",
+    "secteur": "IND",
+    "sous_secteur": "BA",
+    "type": "complexe",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 20,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "surface"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-BA-116",
+    "nom": "Luminaires à modules LED",
+    "secteur": "IND",
+    "sous_secteur": "BA",
+    "type": "complexe",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Remplacement equipement existant",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-EN-101",
+    "nom": "Isolation des murs (France d’outre-mer)",
+    "secteur": "IND",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 30,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-EN-102",
+    "nom": "Isolation de combles ou de toitures (France d’outre-mer)",
+    "secteur": "IND",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 30,
+    "actif": false,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-102",
+    "nom": "Système de variation électronique de vitesse sur un moteur asynchrone",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-104",
+    "nom": "Économiseur sur les effluents gazeux",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 10,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-105",
+    "nom": "Brûleur micro-modulant sur chaudière industrielle",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-114",
+    "nom": "Moto-variateur synchrone à aimants permanents ou à réluctance",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 20,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-115",
+    "nom": "Système de régulation sur un groupe de production de froid",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 14,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-118",
+    "nom": "Brûleur avec dispositif de récupération de chaleur sur four industriel",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-120",
+    "nom": "Compresseur d’air basse pression à vis ou centrifuge",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-122",
+    "nom": "Sécheur d’air comprimé à adsorption",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-125",
+    "nom": "Traitement d’eau performant sur chaudière de production de vapeur",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 10,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-129",
+    "nom": "Presse à injecter tout électrique ou hybride",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-130",
+    "nom": "Condenseur sur les effluents gazeux",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 10,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "IND-UT-131",
+    "nom": "Isolation thermique des parois planes ou cylindriques",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "surface",
+      "quantite"
+    ],
+    "duree_vie": 10,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "surface",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-132",
+    "nom": "Moteur asynchrone de classe IE4",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-133",
+    "nom": "Système électronique de pilotage d’un moteur électrique avec",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-137",
+    "nom": "Mise en place d’un système de pompe(s) à chaleur",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-138",
+    "nom": "Conversion de chaleur fatale en électricité ou en air comprimé",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-139",
+    "nom": "Système de stockage de chaleur fatale",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 20,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "IND-UT-140",
+    "nom": "Mise en veille automatique d’une machine",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 15,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "RES-CH-105",
+    "nom": "Passage d’un réseau de chaleur en basse température",
+    "secteur": "RES",
+    "sous_secteur": "CH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 30,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "RES-CH-106",
+    "nom": "Mise en place d’un calorifugeage des canalisations",
+    "secteur": "RES",
+    "sous_secteur": "CH",
+    "type": "complexe",
+    "params": [
+      "surface"
+    ],
+    "duree_vie": 30,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "surface"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "RES-CH-108",
+    "nom": "Récupération de chaleur fatale pour valorisation vers un réseau de",
+    "secteur": "RES",
+    "sous_secteur": "CH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 3,
+    "actif": false,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-101",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-104",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-106",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "complexe",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "TRA-EQ-107",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-108",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-109",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-110",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-111",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-113",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-114",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-115",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-117",
+    "nom": "définissant le modèle de tableau",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-118",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-119",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-120",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-121",
+    "nom": "définissant le modèle de tableau",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-122",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-123",
+    "nom": "Simulateur de conduite",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 3,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-124",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-125",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-126",
+    "nom": "Remotorisation en propulsion électrique ou hybride d’un bateau",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "complexe",
+    "params": [
+      "puissance",
+      "quantite"
+    ],
+    "duree_vie": 17,
+    "actif": false,
+    "conditions": {},
+    "conditions_texte": [
+      "Remplacement equipement existant",
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "puissance",
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "TRA-EQ-127",
+    "nom": "Acquisition d’un bateau neuf à propulsion électrique ou hybride,",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "complexe",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 40,
+    "actif": false,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel",
+      "Equipement neuf"
+    ],
+    "cumac_unitaire": "COMPLEXE",
+    "variables": [
+      "quantite"
+    ],
+    "mode_calcul": "table"
+  },
+  {
+    "ref": "TRA-EQ-128",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-129",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-130",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-131",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-EQ-132",
+    "nom": "Appareil de mesure, d’analyse et d’optimisation",
+    "secteur": "TRA",
+    "sous_secteur": "EQ",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": 4,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-101",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-102",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-104",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-105",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-106",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-107",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-108",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-109",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-110",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-111",
+    "nom": "",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-116",
+    "nom": "Fret ferroviaire",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Equipement/batiment existant > 2 ans",
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  },
+  {
+    "ref": "TRA-SE-117",
+    "nom": "définissant le modèle de tableau",
+    "secteur": "TRA",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "duree_vie": null,
+    "actif": true,
+    "conditions": {},
+    "conditions_texte": [
+      "Installation par professionnel"
+    ],
+    "cumac_unitaire": "A VERIFIER"
+  }
+]

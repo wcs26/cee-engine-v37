@@ -1,0 +1,4093 @@
+[
+  {
+    "ref": "AGRI-EQ-101",
+    "label": "Module température ordinateur climatique",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 6240,
+      "H2": 5200,
+      "H3": 3640,
+      "DOM": 3120
+    },
+    "active": true,
+    "gisements": [
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-102",
+    "label": "Double écran thermique",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 22,
+      "H2": 18,
+      "H3": 13,
+      "DOM": 11
+    },
+    "active": true,
+    "note": "vA65-2 01/04/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-104",
+    "label": "Écrans thermiques latéraux",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 17,
+      "H2": 14,
+      "H3": 10,
+      "DOM": 8
+    },
+    "active": true,
+    "note": "vA62-2 01/01/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-105",
+    "label": "Stop & Start véhicules agricoles",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 6100,
+      "H2": 6100,
+      "H3": 6100,
+      "DOM": 6100
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-106",
+    "label": "Régulation ventilation silos",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 2540,
+      "H2": 2540,
+      "H3": 2540,
+      "DOM": 2540
+    },
+    "active": true,
+    "gisements": [
+      "ventilation",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-107",
+    "label": "Isolation parois de serre",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 14,
+      "H2": 12,
+      "H3": 8,
+      "DOM": 7
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-108",
+    "label": "Stockage eau serre bioclimatique",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m³",
+    "z": {
+      "H1": 2200,
+      "H2": 1800,
+      "H3": 1300,
+      "DOM": 1100
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-109",
+    "label": "Couverture performante de serre",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 18,
+      "H2": 15,
+      "H3": 11,
+      "DOM": 9
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-110",
+    "label": "Séchage solaire panneaux hybrides",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 15600,
+      "H2": 15600,
+      "H3": 15600,
+      "DOM": 15600
+    },
+    "active": true,
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-111",
+    "label": "Simple écran thermique",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 11,
+      "H2": 9,
+      "H3": 7,
+      "DOM": 6
+    },
+    "active": true,
+    "note": "vA62-1 31/08/2024",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-112",
+    "label": "Double paroi gonflable",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 13,
+      "H2": 11,
+      "H3": 8,
+      "DOM": 7
+    },
+    "active": true,
+    "note": "vA73-3 01/09/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "AGRI-EQ-113",
+    "label": "Régulation éclairage serre",
+    "sector": "AGRI",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 4800,
+      "H2": 4800,
+      "H3": 4800,
+      "DOM": 4800
+    },
+    "active": true,
+    "gisements": [
+      "eclairage_interieur",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "AGRI-SE-101",
+    "label": "Contrôle réglage moteur tracteur",
+    "sector": "AGRI",
+    "cat": "Services",
+    "unit": "unité",
+    "z": {
+      "H1": 6100,
+      "H2": 6100,
+      "H3": 6100,
+      "DOM": 6100
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-101",
+    "label": "Stockage eau chaude Open Buffer",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 24000,
+      "H2": 20000,
+      "H3": 14000,
+      "DOM": 12000
+    },
+    "active": true,
+    "gisements": [
+      "ecs",
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-102",
+    "label": "Stockage eau chaude",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "m³",
+    "z": {
+      "H1": 4800,
+      "H2": 4000,
+      "H3": 2800,
+      "DOM": 2400
+    },
+    "active": true,
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-103",
+    "label": "Pré-refroidisseur de lait",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 5000,
+      "H2": 5000,
+      "H3": 5000,
+      "DOM": 5000
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-105",
+    "label": "Récupération chaleur tank à lait",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 8600,
+      "H2": 8600,
+      "H3": 8600,
+      "DOM": 8600
+    },
+    "active": true,
+    "gisements": [
+      "froid",
+      "ecs"
+    ],
+    "zeroEuro": true
+  },
+  {
+    "ref": "AGRI-TH-108",
+    "label": "Chauffage infrarouge élevage",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5700,
+      "H2": 4700,
+      "H3": 3300,
+      "DOM": 2900
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-109",
+    "label": "Récupérateur condensation serre",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 4800,
+      "H2": 4000,
+      "H3": 2800,
+      "DOM": 2400
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-110",
+    "label": "Chaudière HPE serres",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 3200,
+      "H2": 2700,
+      "H3": 1900,
+      "DOM": 1600
+    },
+    "active": true,
+    "note": "vA54-3 01/01/2024",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-113",
+    "label": "Échangeur récupérateur chaleur élevage volailles",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 5400,
+      "H2": 4500,
+      "H3": 3200,
+      "DOM": 2700
+    },
+    "active": true,
+    "gisements": [
+      "ventilation",
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-114",
+    "label": "Récupération chaleur fumées chaudière",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 4000,
+      "H2": 3300,
+      "H3": 2300,
+      "DOM": 2000
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-117",
+    "label": "Déshumidificateur thermodynamique serres",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 8200,
+      "H2": 6800,
+      "H3": 4800,
+      "DOM": 4100
+    },
+    "active": true,
+    "note": "vA73-3 01/09/2025",
+    "zeroEuro": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-118",
+    "label": "Double tube de chauffage serres",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 3100,
+      "H2": 2600,
+      "H3": 1800,
+      "DOM": 1500
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "AGRI-TH-119",
+    "label": "Déshumidification air extérieur",
+    "sector": "AGRI",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 4800,
+      "H2": 4000,
+      "H3": 2800,
+      "DOM": 2400
+    },
+    "active": true,
+    "gisements": [
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "AGRI-UT-101",
+    "label": "Moto-variateur synchrone aimants",
+    "sector": "AGRI",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 4800,
+      "H2": 4800,
+      "H3": 4800,
+      "DOM": 4800
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "AGRI-UT-102",
+    "label": "VEV moteur asynchrone",
+    "sector": "AGRI",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 4800,
+      "H2": 4800,
+      "H3": 4800,
+      "DOM": 4800
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "AGRI-UT-103",
+    "label": "Régulation basse pression flottante",
+    "sector": "AGRI",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 7800,
+      "H2": 7800,
+      "H3": 7800,
+      "DOM": 7800
+    },
+    "active": true,
+    "gisements": [
+      "froid",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "AGRI-UT-104",
+    "label": "Régulation haute pression flottante",
+    "sector": "AGRI",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 9400,
+      "H2": 9400,
+      "H3": 9400,
+      "DOM": 9400
+    },
+    "active": true,
+    "gisements": [
+      "froid",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-EN-101",
+    "label": "Isolation combles/toitures",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 1700,
+      "H2": 1400,
+      "H3": 920,
+      "DOM": 600
+    },
+    "z_elec": {
+      "H1": 1300,
+      "H2": 1070,
+      "H3": 700,
+      "DOM": 460
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64-6 01/01/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-102",
+    "label": "Isolation murs",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 1600,
+      "H2": 1300,
+      "H3": 880,
+      "DOM": 590
+    },
+    "z_elec": {
+      "H1": 1220,
+      "H2": 990,
+      "H3": 670,
+      "DOM": 450
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA65-4 01/01/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-103",
+    "label": "Isolation plancher",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 1100,
+      "H2": 890,
+      "H3": 590,
+      "DOM": 400
+    },
+    "z_elec": {
+      "H1": 840,
+      "H2": 680,
+      "H3": 450,
+      "DOM": 305
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64-6 01/01/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-104",
+    "label": "Fenêtre/porte-fenêtre isolante",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 5500,
+      "H2": 4500,
+      "H3": 2900,
+      "DOM": 1900
+    },
+    "z_elec": {
+      "H1": 4200,
+      "H2": 3430,
+      "H3": 2210,
+      "DOM": 1450
+    },
+    "active": true,
+    "note": "vA54-2 01/01/2024",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-105",
+    "label": "Isolation toitures terrasses",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 1700,
+      "H2": 1400,
+      "H3": 920,
+      "DOM": 600
+    },
+    "z_elec": {
+      "H1": 1300,
+      "H2": 1070,
+      "H3": 700,
+      "DOM": 460
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64-4 01/01/2025",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-TH-101",
+    "label": "Chauffe-eau solaire individuel",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 18500,
+      "H2": 21000,
+      "H3": 24200,
+      "DOM": 29000
+    },
+    "active": true,
+    "note": "vA62-2 01/01/2025",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-TH-112",
+    "label": "Appareil chauffage bois",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 54000,
+      "H2": 44000,
+      "H3": 29000,
+      "DOM": 19000
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-113",
+    "label": "Chaudière biomasse individuelle",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 89000,
+      "H2": 73000,
+      "H3": 49000,
+      "DOM": 33000
+    },
+    "active": true,
+    "note": "vA79-4 01/01/2026",
+    "p6Bonus": 5,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-123",
+    "label": "Optimiseur relance chauffage collectif",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "logement",
+    "z": {
+      "H1": 1380,
+      "H2": 1130,
+      "H3": 810,
+      "DOM": 540
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-TH-124",
+    "label": "Chaudière condensation",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 27700,
+      "H2": 22700,
+      "H3": 16300,
+      "DOM": 10900
+    },
+    "active": true,
+    "note": "vA78 01/01/2026",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-125",
+    "label": "VMC double flux",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 10400,
+      "H2": 8400,
+      "H3": 6200,
+      "DOM": 4100
+    },
+    "active": true,
+    "gisements": [
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAR-TH-127",
+    "label": "VMC simple flux hygroréglable",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 9100,
+      "H2": 7400,
+      "H3": 5500,
+      "DOM": 3600
+    },
+    "active": true,
+    "gisements": [
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAR-TH-129",
+    "label": "PAC air/air résidentiel",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 13200,
+      "H2": 10800,
+      "H3": 7700,
+      "DOM": 5100
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-141",
+    "label": "Climatiseur performant DOM",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 3800
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAR-TH-143",
+    "label": "Système solaire combiné",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 78600,
+      "H2": 89300,
+      "H3": 102900,
+      "DOM": 50000
+    },
+    "active": true,
+    "note": "vA79-6 01/01/2026",
+    "gisements": [
+      "ecs",
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-148",
+    "label": "Chauffe-eau thermodynamique",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 14000,
+      "H2": 14000,
+      "H3": 14000,
+      "DOM": 14000
+    },
+    "active": true,
+    "note": "vA78.4 01/01/2026",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-TH-155",
+    "label": "Ventilation hybride hygroréglable",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 10400,
+      "H2": 8400,
+      "H3": 6200,
+      "DOM": 4100
+    },
+    "active": true,
+    "gisements": [
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAR-TH-158",
+    "label": "Émetteur électrique régulation avancée",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 3300,
+      "H2": 2700,
+      "H3": 1900,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "vA73-3 01/11/2025",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-159",
+    "label": "PAC hybride individuelle",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 68000,
+      "H2": 56000,
+      "H3": 37000,
+      "DOM": 25000
+    },
+    "active": true,
+    "note": "vA50-4 01/04/2023",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-161",
+    "label": "Isolation points singuliers",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 2400,
+      "H2": 2000,
+      "H3": 1400,
+      "DOM": 900
+    },
+    "active": true,
+    "note": "vA71-3 01/08/2025",
+    "zeroEuro": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-TH-162",
+    "label": "Système PVT capteurs hybrides",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 2600,
+      "H2": 2100,
+      "H3": 1500,
+      "DOM": 1000
+    },
+    "active": true,
+    "gisements": [
+      "ecs",
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-165",
+    "label": "Chaudière biomasse collective",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5400,
+      "H2": 4400,
+      "H3": 3200,
+      "DOM": 2100
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-168",
+    "label": "Dispositif solaire thermique",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 2800,
+      "H2": 2300,
+      "H3": 1600,
+      "DOM": 1100
+    },
+    "active": true,
+    "note": "vA78.3 01/01/2026",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-TH-169",
+    "label": "PAC collective air/eau ECS",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 12100,
+      "H2": 9900,
+      "H3": 7100,
+      "DOM": 4700
+    },
+    "active": true,
+    "note": "vA65-2 01/04/2025",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-TH-170",
+    "label": "Récup chaleur serveurs informatiques",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 18000,
+      "H2": 18000,
+      "H3": 18000,
+      "DOM": 18000
+    },
+    "active": true,
+    "note": "vA54-1 01/10/2023",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-171",
+    "label": "PAC air/eau résidentiel",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 68000,
+      "H2": 56000,
+      "H3": 37000,
+      "DOM": 25000
+    },
+    "active": true,
+    "note": "vA78.4 01/01/2026",
+    "zeroEuro": true,
+    "p6Bonus": 5,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-164",
+    "label": "Rénovation globale maison individuelle",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "logement",
+    "z": {
+      "H1": 140000,
+      "H2": 114000,
+      "H3": 82000,
+      "DOM": 55000
+    },
+    "active": true,
+    "note": "vA75-1 P6 01/01/2026",
+    "p6Bonus": 1,
+    "gisements": [
+      "chauffage_batiment",
+      "isolation_enveloppe",
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-TH-172",
+    "label": "PAC eau/eau ou sol/eau résidentiel",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 93000,
+      "H2": 77000,
+      "H3": 51000,
+      "DOM": 34000
+    },
+    "active": true,
+    "note": "vA78.4 01/01/2026",
+    "p6Bonus": 5,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-173",
+    "label": "Régulation programmation pièce par pièce",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 21600,
+      "H2": 17800,
+      "H3": 11800,
+      "DOM": 7900
+    },
+    "active": true,
+    "note": "vA69-2 01/07/2025",
+    "gisements": [
+      "chauffage_batiment",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-TH-174",
+    "label": "Rénovation ampleur maison",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "logement",
+    "z": {
+      "H1": 460000,
+      "H2": 376000,
+      "H3": 271000,
+      "DOM": 180000
+    },
+    "active": true,
+    "note": "vA80-3 17/01/2026",
+    "gisements": [
+      "isolation_enveloppe",
+      "chauffage_batiment",
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAR-TH-175",
+    "label": "Rénovation ampleur appartement",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "logement",
+    "z": {
+      "H1": 350000,
+      "H2": 286000,
+      "H3": 206000,
+      "DOM": 137000
+    },
+    "active": true,
+    "note": "vA80-3 17/01/2026",
+    "gisements": [
+      "isolation_enveloppe",
+      "chauffage_batiment",
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAR-TH-176",
+    "label": "Régulation chauffe-eau électrique Joule",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 3100,
+      "H2": 2500,
+      "H3": 1800,
+      "DOM": 1200
+    },
+    "active": true,
+    "note": "vA58-1 29/12/2023",
+    "gisements": [
+      "ecs",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-TH-177",
+    "label": "Rénovation globale bâtiment collectif",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "logement",
+    "z": {
+      "H1": 2100,
+      "H2": 2100,
+      "H3": 2100,
+      "DOM": 1400
+    },
+    "active": true,
+    "note": "vA80-2 17/01/2026",
+    "gisements": [
+      "isolation_enveloppe",
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-178",
+    "label": "Système géothermique résidentiel",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 72000,
+      "H2": 59000,
+      "H3": 42000,
+      "DOM": 28000
+    },
+    "active": true,
+    "note": "vA75-1 01/01/2026",
+    "p6Bonus": 5,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-179",
+    "label": "PAC collective air/eau",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5400,
+      "H2": 4400,
+      "H3": 3200,
+      "DOM": 2100
+    },
+    "active": true,
+    "note": "vA75-1 01/01/2026",
+    "zeroEuro": true,
+    "p6Bonus": 3,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-180",
+    "label": "PAC collective eau/eau",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 6500,
+      "H2": 5300,
+      "H3": 3800,
+      "DOM": 2500
+    },
+    "active": true,
+    "note": "vA75-1 01/01/2026",
+    "p6Bonus": 4,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-EQ-110",
+    "label": "Luminaire LED parties communes",
+    "sector": "BAR",
+    "cat": "Équipements",
+    "unit": "logement",
+    "z": {
+      "H1": 1600,
+      "H2": 1600,
+      "H3": 1600,
+      "DOM": 1600
+    },
+    "active": true,
+    "gisements": [
+      "eclairage_interieur"
+    ]
+  },
+  {
+    "ref": "BAR-EQ-115",
+    "label": "Affichage consommations énergie",
+    "sector": "BAR",
+    "cat": "Équipements",
+    "unit": "logement",
+    "z": {
+      "H1": 1460,
+      "H2": 1190,
+      "H3": 860,
+      "DOM": 570
+    },
+    "active": true,
+    "gisements": [
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-SE-104",
+    "label": "Réglage équilibrage chauffage",
+    "sector": "BAR",
+    "cat": "Services",
+    "unit": "logement",
+    "z": {
+      "H1": 1650,
+      "H2": 1350,
+      "H3": 970,
+      "DOM": 650
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-SE-105",
+    "label": "CPE Services résidentiel",
+    "sector": "BAR",
+    "cat": "Services",
+    "unit": "logement",
+    "z": {
+      "H1": 7200,
+      "H2": 5900,
+      "H3": 4200,
+      "DOM": 2800
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-SE-106",
+    "label": "Suivi consommations énergie",
+    "sector": "BAR",
+    "cat": "Services",
+    "unit": "logement",
+    "z": {
+      "H1": 810,
+      "H2": 660,
+      "H3": 470,
+      "DOM": 320
+    },
+    "active": true,
+    "gisements": [
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAR-SE-108",
+    "label": "Désembouage individuel",
+    "sector": "BAR",
+    "cat": "Services",
+    "unit": "unité",
+    "z": {
+      "H1": 11800,
+      "H2": 9700,
+      "H3": 6900,
+      "DOM": 4600
+    },
+    "active": true,
+    "note": "Modifiée 71e 01/08/2025",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAR-TH-167",
+    "label": "Chauffe-bain individuel haut rendement",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 8200,
+      "H2": 6700,
+      "H3": 4800,
+      "DOM": 3200
+    },
+    "active": true,
+    "note": "[V25:ajouté]",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-EQ-112",
+    "label": "Systèmes hydro-économes résidentiel",
+    "sector": "BAR",
+    "cat": "Équipements",
+    "unit": "point d'eau",
+    "z": {
+      "H1": 920,
+      "H2": 920,
+      "H3": 920,
+      "DOM": 920
+    },
+    "active": true,
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAR-TH-160",
+    "label": "Isolation réseau chauffage/ECS",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "ml",
+    "z": {
+      "H1": 2100,
+      "H2": 1400,
+      "H3": 900,
+      "DOM": 800
+    },
+    "active": false,
+    "note": "ABROGÉE 01/08/2025 [V25:marqueur historique]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-TH-104",
+    "label": "PAC air/eau ou eau/eau (ancienne)",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 68000,
+      "H2": 56000,
+      "H3": 37000,
+      "DOM": 25000
+    },
+    "active": false,
+    "note": "Remplacée par BAR-TH-171/172 [V25:marqueur historique]",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-EN-101",
+    "label": "Isolation combles/toitures tertiaire",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 2600,
+      "H2": 2100,
+      "H3": 1400,
+      "DOM": 870
+    },
+    "active": true,
+    "note": "vA64-4 FOST vérifié",
+    "sectFactors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "autres": 0.6
+    },
+    "cofrac": true,
+    "zeroEuro": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-102",
+    "label": "Isolation murs tertiaire",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 4800,
+      "H2": 3900,
+      "H3": 2600,
+      "DOM": 1700
+    },
+    "z_elec": {
+      "H1": 3000,
+      "H2": 2500,
+      "H3": 1600,
+      "DOM": 1060
+    },
+    "active": true,
+    "note": "vA64-3 FOST vérifié",
+    "sectFactors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.3,
+      "autres": 0.6
+    },
+    "cofrac": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-103",
+    "label": "Isolation plancher tertiaire",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 5200,
+      "H2": 4200,
+      "H3": 2800,
+      "DOM": 1700
+    },
+    "active": true,
+    "note": "vA64-4 FOST vérifié",
+    "sectFactors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "autres": 0.6
+    },
+    "cofrac": true,
+    "zeroEuro": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-104",
+    "label": "Fenêtre/porte-fenêtre isolante tertiaire",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 6200,
+      "H2": 5050,
+      "H3": 3400,
+      "DOM": 2270
+    },
+    "z_elec": {
+      "H1": 4730,
+      "H2": 3850,
+      "H3": 2590,
+      "DOM": 1730
+    },
+    "active": true,
+    "note": "vA54.3 01/01/2024",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-107",
+    "label": "Isolation toitures-terrasses tertiaire",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 2600,
+      "H2": 2100,
+      "H3": 1400,
+      "DOM": 870
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64-3 FOST vérifié",
+    "sectFactors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "autres": 0.6
+    },
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-110",
+    "label": "Fenêtre pariétodynamique",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 9200,
+      "H2": 7500,
+      "H3": 5400,
+      "DOM": 3600
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-111",
+    "label": "Revêtements réflectifs toiture",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 1400
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-TH-101",
+    "label": "Chauffe-eau solaire collectif tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 2600,
+      "H2": 2600,
+      "H3": 2600,
+      "DOM": 2600
+    },
+    "active": true,
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-103",
+    "label": "Plancher chauffant basse température",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 5200,
+      "H2": 4200,
+      "H3": 3000,
+      "DOM": 2000
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-105",
+    "label": "Radiateur basse température",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 470,
+      "H2": 380,
+      "H3": 270,
+      "DOM": 180
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-108",
+    "label": "Régulation programmation intermittence",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 6100,
+      "H2": 5000,
+      "H3": 3600,
+      "DOM": 2400
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-TH-109",
+    "label": "Optimiseur relance chauffage collectif",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "logement",
+    "z": {
+      "H1": 2800,
+      "H2": 2300,
+      "H3": 1600,
+      "DOM": 1100
+    },
+    "active": true,
+    "note": "vA54.3 01/01/2024",
+    "gisements": [
+      "chauffage_batiment",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-TH-110",
+    "label": "Récupérateur chaleur condensation",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 8100,
+      "H2": 6600,
+      "H3": 4800,
+      "DOM": 3200
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-116",
+    "label": "GTB gestion technique bâtiment",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 49,
+      "H2": 40,
+      "H3": 27,
+      "DOM": 18
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA62.6 01/01/2025",
+    "gisements": [
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-TH-125",
+    "label": "VMC simple flux tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 6,
+      "H2": 5,
+      "H3": 3,
+      "DOM": 2
+    },
+    "active": true,
+    "note": "vA32-2 01/04/2020",
+    "gisements": [
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAT-TH-126",
+    "label": "VMC double flux tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 10,
+      "H2": 8,
+      "H3": 6,
+      "DOM": 4
+    },
+    "active": true,
+    "note": "vA32-2 01/04/2020",
+    "gisements": [
+      "ventilation"
+    ]
+  },
+  {
+    "ref": "BAT-TH-127",
+    "label": "Chaudière condensation tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 27700,
+      "H2": 22700,
+      "H3": 16300,
+      "DOM": 10900
+    },
+    "active": true,
+    "note": "vA79-5 01/01/2026",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-134",
+    "label": "Régulation haute pression flottante froid",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5600,
+      "H2": 5600,
+      "H3": 5600,
+      "DOM": 5600
+    },
+    "active": true,
+    "zeroEuro": true,
+    "gisements": [
+      "froid",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-TH-135",
+    "label": "Régulation haute pression flottante froid DOM",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 5600
+    },
+    "active": true,
+    "gisements": [
+      "froid",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-TH-139",
+    "label": "Récupération chaleur groupe froid",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5600,
+      "H2": 5600,
+      "H3": 5600,
+      "DOM": 5600
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA35-3 01/10/2020",
+    "zeroEuro": true,
+    "gisements": [
+      "froid",
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-142",
+    "label": "Déstratification d'air",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 38000,
+      "H2": 31000,
+      "H3": 22000,
+      "DOM": 15000
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA71-4 01/08/2025",
+    "zeroEuro": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-143",
+    "label": "Ventilo-convecteurs haute performance",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 1650,
+      "H2": 1350,
+      "H3": 970,
+      "DOM": 650
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-145",
+    "label": "Régulation basse pression flottante froid",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5600,
+      "H2": 5600,
+      "H3": 5600,
+      "DOM": 5600
+    },
+    "active": true,
+    "zeroEuro": true,
+    "gisements": [
+      "froid",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-TH-153",
+    "label": "Confinement allées Data Center",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 10400,
+      "H2": 10400,
+      "H3": 10400,
+      "DOM": 10400
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-TH-154",
+    "label": "Récupération chaleur eaux grises",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 22000,
+      "H2": 22000,
+      "H3": 22000,
+      "DOM": 22000
+    },
+    "active": true,
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-156",
+    "label": "Freecooling climatisation",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 9400,
+      "H2": 9400,
+      "H3": 9400,
+      "DOM": 9400
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-TH-157",
+    "label": "Chaudière biomasse collective tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5400,
+      "H2": 4400,
+      "H3": 3200,
+      "DOM": 2100
+    },
+    "active": true,
+    "cofrac": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-158",
+    "label": "PAC réversible air/air tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 860,
+      "H2": 760,
+      "H3": 620,
+      "DOM": 400
+    },
+    "active": true,
+    "note": "vA62.3 01/01/2025",
+    "gisements": [
+      "chauffage_batiment",
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-TH-159",
+    "label": "Raccordement réseau de froid",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 3200,
+      "H2": 3200,
+      "H3": 3200,
+      "DOM": 3200
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-TH-161",
+    "label": "Maintien T° groupes électrogènes PAC",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 8200,
+      "H2": 6700,
+      "H3": 4800,
+      "DOM": 3200
+    },
+    "active": true,
+    "cofrac": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-TH-162",
+    "label": "Système géothermique",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 3300,
+      "H2": 2700,
+      "H3": 1800,
+      "DOM": 1200
+    },
+    "active": true,
+    "note": "vA75-1 P6 01/01/2026",
+    "p6Bonus": 5,
+    "gisements": [
+      "chauffage_batiment",
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-163",
+    "label": "PAC air/eau tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 2200,
+      "H2": 1800,
+      "H3": 1200,
+      "DOM": 800
+    },
+    "active": true,
+    "note": "vA75-1 P6 01/01/2026 remplace TH-113",
+    "p6Bonus": 3,
+    "gisements": [
+      "chauffage_batiment",
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-164",
+    "label": "PAC eau/eau ou eau glycolée/eau",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 2800,
+      "H2": 2300,
+      "H3": 1500,
+      "DOM": 1000
+    },
+    "active": true,
+    "note": "vA75-1 P6 01/01/2026",
+    "p6Bonus": 4,
+    "gisements": [
+      "chauffage_batiment",
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-117",
+    "label": "Installation frigo CO2 sub/transcritique",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "kW",
+    "z": {
+      "H1": 19200,
+      "H2": 19200,
+      "H3": 19200,
+      "DOM": 19200
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-124",
+    "label": "Fermeture meubles frigo T+",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "m linéaire",
+    "z": {
+      "H1": 9200,
+      "H2": 9200,
+      "H3": 9200,
+      "DOM": 9200
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-125",
+    "label": "Fermeture meubles frigo T-",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "m linéaire",
+    "z": {
+      "H1": 16800,
+      "H2": 16800,
+      "H3": 16800,
+      "DOM": 16800
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-129",
+    "label": "Lanterneaux éclairage zénithal",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 2800,
+      "H2": 2800,
+      "H3": 2800,
+      "DOM": 2800
+    },
+    "active": true,
+    "gisements": [
+      "eclairage_interieur"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-130",
+    "label": "Condensation frigo haute efficacité",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "kW",
+    "z": {
+      "H1": 9400,
+      "H2": 9400,
+      "H3": 9400,
+      "DOM": 9400
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-134",
+    "label": "Meuble frigo performant intégré",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "m linéaire",
+    "z": {
+      "H1": 12400,
+      "H2": 12400,
+      "H3": 12400,
+      "DOM": 12400
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-135",
+    "label": "ASI onduleur Data Center",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "kW",
+    "z": {
+      "H1": 2100,
+      "H2": 2100,
+      "H3": 2100,
+      "DOM": 2100
+    },
+    "active": true,
+    "note": "vA65 01/04/2025",
+    "gisements": [
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-SE-103",
+    "label": "Réglage équilibrage chauffage tertiaire",
+    "sector": "BAT",
+    "cat": "Services",
+    "unit": "unité",
+    "z": {
+      "H1": 14200,
+      "H2": 11600,
+      "H3": 8300,
+      "DOM": 5500
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "BAT-SE-104",
+    "label": "CPE Services chauffage tertiaire",
+    "sector": "BAT",
+    "cat": "Services",
+    "unit": "m²",
+    "z": {
+      "H1": 13,
+      "H2": 11,
+      "H3": 8,
+      "DOM": 5
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "BAT-SE-105",
+    "label": "Abaissement T° retour réseau chaleur",
+    "sector": "BAT",
+    "cat": "Services",
+    "unit": "logement",
+    "z": {
+      "H1": 7200,
+      "H2": 5900,
+      "H3": 4200,
+      "DOM": 2800
+    },
+    "active": true,
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-127",
+    "label": "Luminaire LED éclairage général tertiaire",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "m²",
+    "z": {
+      "H1": 22,
+      "H2": 22,
+      "H3": 22,
+      "DOM": 22
+    },
+    "active": true,
+    "note": "vA35-3 modif A71-5 01/08/2025 [V25:ajouté]",
+    "zeroEuro": true,
+    "gisements": [
+      "eclairage_interieur"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-123",
+    "label": "Moto-variateur synchrone à aimants tertiaire",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "kW",
+    "z": {
+      "H1": 4800,
+      "H2": 4800,
+      "H3": 4800,
+      "DOM": 4800
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "BAT-EQ-133",
+    "label": "Systèmes hydro-économes tertiaire",
+    "sector": "BAT",
+    "cat": "Équipements",
+    "unit": "point d'eau",
+    "z": {
+      "H1": 1070,
+      "H2": 1070,
+      "H3": 1070,
+      "DOM": 1070
+    },
+    "active": true,
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-102",
+    "label": "Chaudière collective HPE tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 5400,
+      "H2": 4400,
+      "H3": 3200,
+      "DOM": 2100
+    },
+    "active": true,
+    "note": "vA78 01/01/2026 [V25:ajouté]",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "IND-BA-110",
+    "label": "Déstratificateur air industriel",
+    "sector": "IND",
+    "cat": "Bâtiment",
+    "unit": "unité",
+    "z": {
+      "H1": 38000,
+      "H2": 31000,
+      "H3": 22000,
+      "DOM": 15000
+    },
+    "active": true,
+    "note": "vA71-4 01/08/2025",
+    "zeroEuro": true,
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "IND-EN-101",
+    "label": "Isolation combles/toitures industriel",
+    "sector": "IND",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 22,
+      "H2": 18,
+      "H3": 13,
+      "DOM": 9
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "IND-EN-102",
+    "label": "Isolation murs industriel",
+    "sector": "IND",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 36,
+      "H2": 29,
+      "H3": 21,
+      "DOM": 14
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "IND-EN-103",
+    "label": "Isolation plancher industriel",
+    "sector": "IND",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 21,
+      "H2": 17,
+      "H3": 12,
+      "DOM": 8
+    },
+    "active": true,
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "IND-UT-102",
+    "label": "VEV moteur asynchrone industriel",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 4800,
+      "H2": 4800,
+      "H3": 4800,
+      "DOM": 4800
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-103",
+    "label": "Compresseur air performant industriel",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 7800,
+      "H2": 7800,
+      "H3": 7800,
+      "DOM": 7800
+    },
+    "active": true,
+    "gisements": [
+      "air_comprime"
+    ]
+  },
+  {
+    "ref": "IND-UT-104",
+    "label": "Moteur haut rendement IE3/IE4",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 2200,
+      "H2": 2200,
+      "H3": 2200,
+      "DOM": 2200
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-105",
+    "label": "Brûleur micro-modulant",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 18800,
+      "H2": 15400,
+      "H3": 11000,
+      "DOM": 7400
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-113",
+    "label": "Récupérateur chaleur fumées chaudière",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 12400,
+      "H2": 10200,
+      "H3": 7300,
+      "DOM": 4900
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-114",
+    "label": "Moto-variateur synchrone aimants",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 6100,
+      "H2": 6100,
+      "H3": 6100,
+      "DOM": 6100
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-116",
+    "label": "Régulation haute pression flottante",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 16400,
+      "H2": 16400,
+      "H3": 16400,
+      "DOM": 16400
+    },
+    "active": true,
+    "zeroEuro": true,
+    "gisements": [
+      "froid",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "IND-UT-120",
+    "label": "Compresseur air basse pression",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 7800,
+      "H2": 7800,
+      "H3": 7800,
+      "DOM": 7800
+    },
+    "active": true,
+    "gisements": [
+      "air_comprime"
+    ]
+  },
+  {
+    "ref": "IND-UT-122",
+    "label": "Sécheur air comprimé adsorption",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 18200,
+      "H2": 18200,
+      "H3": 18200,
+      "DOM": 18200
+    },
+    "active": true,
+    "gisements": [
+      "air_comprime"
+    ]
+  },
+  {
+    "ref": "IND-UT-124",
+    "label": "Séquenceur centrale air comprimé",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 7800,
+      "H2": 7800,
+      "H3": 7800,
+      "DOM": 7800
+    },
+    "active": true,
+    "gisements": [
+      "air_comprime",
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "IND-UT-125",
+    "label": "Traitement eau chaudière vapeur",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 18800,
+      "H2": 15400,
+      "H3": 11000,
+      "DOM": 7400
+    },
+    "active": true,
+    "gisements": [
+      "vapeur"
+    ]
+  },
+  {
+    "ref": "IND-UT-127",
+    "label": "Système transmission performant",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 6100,
+      "H2": 6100,
+      "H3": 6100,
+      "DOM": 6100
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-129",
+    "label": "Presse injection tout électrique/hybride",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 12000,
+      "H2": 12000,
+      "H3": 12000,
+      "DOM": 12000
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-130",
+    "label": "Condenseur effluents gazeux chaudière",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 12400,
+      "H2": 10200,
+      "H3": 7300,
+      "DOM": 4900
+    },
+    "active": true,
+    "gisements": [
+      "chauffage_batiment",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-131",
+    "label": "Isolation parois planes/cylindriques",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "m²",
+    "z": {
+      "H1": 4200,
+      "H2": 4200,
+      "H3": 4200,
+      "DOM": 4200
+    },
+    "active": true,
+    "note": "vA37-2 01/04/2021",
+    "zeroEuro": true,
+    "gisements": [
+      "isolation_enveloppe",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-132",
+    "label": "Moteur asynchrone IE4",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 2200,
+      "H2": 2200,
+      "H3": 2200,
+      "DOM": 2200
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-133",
+    "label": "Système pilotage moteur récupération",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 6100,
+      "H2": 6100,
+      "H3": 6100,
+      "DOM": 6100
+    },
+    "active": true,
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "IND-UT-135",
+    "label": "Freecooling eau refroidissement",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 9400,
+      "H2": 9400,
+      "H3": 9400,
+      "DOM": 9400
+    },
+    "active": true,
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "IND-UT-137",
+    "label": "PAC rehausse T° chaleur fatale",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 14200,
+      "H2": 14200,
+      "H3": 14200,
+      "DOM": 14200
+    },
+    "active": true,
+    "note": "vA65-2 01/01/2025",
+    "p6Bonus": 2,
+    "gisements": [
+      "froid",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-138",
+    "label": "Conversion chaleur fatale électricité/air",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 12000,
+      "H2": 12000,
+      "H3": 12000,
+      "DOM": 12000
+    },
+    "active": true,
+    "note": "vA62-1 01/01/2025",
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-139",
+    "label": "Stockage chaleur fatale",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 14200,
+      "H2": 14200,
+      "H3": 14200,
+      "DOM": 14200
+    },
+    "active": true,
+    "note": "vA73-2 01/11/2025",
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-140",
+    "label": "Mise en veille machine air comprimé",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 9400,
+      "H2": 9400,
+      "H3": 9400,
+      "DOM": 9400
+    },
+    "active": true,
+    "note": "vA65-1 01/01/2025",
+    "gisements": [
+      "air_comprime"
+    ]
+  },
+  {
+    "ref": "IND-UT-118",
+    "label": "Brûleur récup chaleur four industriel",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 12000,
+      "H2": 12000,
+      "H3": 12000,
+      "DOM": 12000
+    },
+    "active": true,
+    "note": "[V25:ajouté]",
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-117",
+    "label": "Récup chaleur groupe froid industriel",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 12400,
+      "H2": 10200,
+      "H3": 7300,
+      "DOM": 4900
+    },
+    "active": false,
+    "note": "ABROGÉE 01/08/2025 surfinancement [V25:marqueur]",
+    "gisements": [
+      "froid",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-136",
+    "label": "Systèmes moto-régulés VSD",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 6100,
+      "H2": 6100,
+      "H3": 6100,
+      "DOM": 6100
+    },
+    "active": false,
+    "note": "ABROGÉE 2025 technologie mature [V25:marqueur]",
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "RES-CH-101",
+    "label": "Raccordement réseau chaleur EnR&R",
+    "sector": "RES",
+    "cat": "Réseaux",
+    "unit": "logement",
+    "z": {
+      "H1": 38600,
+      "H2": 31600,
+      "H3": 23900,
+      "DOM": 15000
+    },
+    "active": true,
+    "note": "vA78",
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-102",
+    "label": "Comptage individuel réseau chaleur",
+    "sector": "RES",
+    "cat": "Réseaux",
+    "unit": "logement",
+    "z": {
+      "H1": 4500,
+      "H2": 3700,
+      "H3": 2800,
+      "DOM": 1800
+    },
+    "active": true,
+    "note": "vA65-1",
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-103",
+    "label": "Réhabilitation poste livraison chaleur tertiaire",
+    "sector": "RES",
+    "cat": "Chaleur",
+    "unit": "unité",
+    "z": {
+      "H1": 14200,
+      "H2": 11600,
+      "H3": 8300,
+      "DOM": 5500
+    },
+    "active": true,
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-104",
+    "label": "Réhabilitation poste livraison chaleur résidentiel",
+    "sector": "RES",
+    "cat": "Chaleur",
+    "unit": "unité",
+    "z": {
+      "H1": 14200,
+      "H2": 11600,
+      "H3": 8300,
+      "DOM": 5500
+    },
+    "active": true,
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-105",
+    "label": "Passage réseau basse température",
+    "sector": "RES",
+    "cat": "Chaleur",
+    "unit": "m",
+    "z": {
+      "H1": 75,
+      "H2": 61,
+      "H3": 44,
+      "DOM": 29
+    },
+    "active": true,
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-106",
+    "label": "Calorifugeage canalisations réseau",
+    "sector": "RES",
+    "cat": "Chaleur",
+    "unit": "m",
+    "z": {
+      "H1": 22,
+      "H2": 18,
+      "H3": 13,
+      "DOM": 9
+    },
+    "active": true,
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-107",
+    "label": "Extension réseau de chaleur EnR",
+    "sector": "RES",
+    "cat": "Réseaux",
+    "unit": "ml",
+    "z": {
+      "H1": 8500,
+      "H2": 7000,
+      "H3": 5200,
+      "DOM": 3500
+    },
+    "active": true,
+    "note": "vA73",
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-CH-108",
+    "label": "Récupération chaleur fatale réseau",
+    "sector": "RES",
+    "cat": "Chaleur",
+    "unit": "MWh",
+    "z": {
+      "H1": 360,
+      "H2": 360,
+      "H3": 360,
+      "DOM": 360
+    },
+    "active": true,
+    "gisements": [
+      "reseau_chaleur",
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "RES-EC-103",
+    "label": "Réhabilitation réseau de chaleur",
+    "sector": "RES",
+    "cat": "Réseaux",
+    "unit": "ml",
+    "z": {
+      "H1": 3800,
+      "H2": 3100,
+      "H3": 2300,
+      "DOM": 1500
+    },
+    "active": true,
+    "note": "vA65-2",
+    "gisements": [
+      "reseau_chaleur"
+    ]
+  },
+  {
+    "ref": "RES-EC-104",
+    "label": "Rénovation éclairage extérieur",
+    "sector": "RES",
+    "cat": "Éclairage",
+    "unit": "kW",
+    "z": {
+      "H1": 21000,
+      "H2": 21000,
+      "H3": 21000,
+      "DOM": 21000
+    },
+    "active": true,
+    "note": "vA77 26/11/2025",
+    "gisements": [
+      "eclairage_exterieur"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-101",
+    "label": "Unité transport intermodal rail-route",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 2650,
+      "H2": 2650,
+      "H3": 2650,
+      "DOM": 2650
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-103",
+    "label": "Télématique embarquée suivi conduite",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 2650,
+      "H2": 2650,
+      "H3": 2650,
+      "DOM": 2650
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-104",
+    "label": "Lubrifiant économiseur énergie VL",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "vA14-1",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-106",
+    "label": "Pneus basse résistance roulement",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "vA14-1",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-107",
+    "label": "Unité transport intermodal fluvial-route",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 2650,
+      "H2": 2650,
+      "H3": 2650,
+      "DOM": 2650
+    },
+    "active": true,
+    "note": "vA17-1",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-108",
+    "label": "Wagon autoroute ferroviaire",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 170000,
+      "H2": 170000,
+      "H3": 170000,
+      "DOM": 170000
+    },
+    "active": true,
+    "note": "vA37-6 01/04/2020",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-109",
+    "label": "Barge fluviale",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 170000,
+      "H2": 170000,
+      "H3": 170000,
+      "DOM": 170000
+    },
+    "active": true,
+    "note": "vA17-1",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-110",
+    "label": "Automoteur fluvial",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 230000,
+      "H2": 230000,
+      "H3": 230000,
+      "DOM": 230000
+    },
+    "active": true,
+    "note": "vA19-1",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-111",
+    "label": "Groupe frigorifique haute efficacité",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 35000,
+      "H2": 35000,
+      "H3": 35000,
+      "DOM": 35000
+    },
+    "active": true,
+    "note": "vA24-1",
+    "gisements": [
+      "flotte_vehicules",
+      "froid"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-114",
+    "label": "Véhicule léger électrique personne morale",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 22000,
+      "H2": 22000,
+      "H3": 22000,
+      "DOM": 22000
+    },
+    "active": true,
+    "note": "vA68-3",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-117",
+    "label": "Véhicule léger électrique particulier",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 6400,
+      "H2": 6400,
+      "H3": 6400,
+      "DOM": 6400
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-120",
+    "label": "Rétrofit électrique poids lourd",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 230000,
+      "H2": 230000,
+      "H3": 230000,
+      "DOM": 230000
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-122",
+    "label": "Rétrofit électrique autocar",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 170000,
+      "H2": 170000,
+      "H3": 170000,
+      "DOM": 170000
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-124",
+    "label": "Branchement électrique navires quai",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 8200,
+      "H2": 8200,
+      "H3": 8200,
+      "DOM": 8200
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-126",
+    "label": "Remotorisation électrique/hybride bateau",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 230000,
+      "H2": 230000,
+      "H3": 230000,
+      "DOM": 230000
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-127",
+    "label": "Bateau électrique/hybride eaux intérieures",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 170000,
+      "H2": 170000,
+      "H3": 170000,
+      "DOM": 170000
+    },
+    "active": true,
+    "note": "vA54-1 01/10/2023",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-128",
+    "label": "Autocar/autobus électrique",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 170000,
+      "H2": 170000,
+      "H3": 170000,
+      "DOM": 170000
+    },
+    "active": true,
+    "note": "vA68-3",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-129",
+    "label": "Poids lourd électrique",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 230000,
+      "H2": 230000,
+      "H3": 230000,
+      "DOM": 230000
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-130",
+    "label": "Quadricycle électrique",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 35000,
+      "H2": 35000,
+      "H3": 35000,
+      "DOM": 35000
+    },
+    "active": true,
+    "note": "vA73-3",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-131",
+    "label": "Vélos-cargos électriques",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 810,
+      "H2": 810,
+      "H3": 810,
+      "DOM": 810
+    },
+    "active": true,
+    "note": "vA73-2 23/08/2025",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-101",
+    "label": "Formation chauffeur transport économe",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-116",
+    "label": "Fret ferroviaire",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "UTI.km",
+    "z": {
+      "H1": 8,
+      "H2": 8,
+      "H3": 8,
+      "DOM": 8
+    },
+    "active": true,
+    "note": "vA65-2 01/01/2025",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-117",
+    "label": "Fret fluvial",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "t.km",
+    "z": {
+      "H1": 2,
+      "H2": 2,
+      "H3": 2,
+      "DOM": 2
+    },
+    "active": true,
+    "note": "vA65-1 01/01/2025",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "BAR-EN-106",
+    "label": "Isolation combles/toitures DOM",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 600
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64-5 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-107",
+    "label": "Isolation murs DOM",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 590
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64-4 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-108",
+    "label": "Isolation plancher DOM",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 400
+    },
+    "active": true,
+    "note": "vA64-5 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-EN-109",
+    "label": "Fenêtre/porte-fenêtre DOM",
+    "sector": "BAR",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 1900
+    },
+    "active": true,
+    "note": "vA64-4 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAR-TH-135",
+    "label": "Chauffe-eau solaire collectif DOM",
+    "sector": "BAR",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 5500
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-EN-105",
+    "label": "Isolation combles/toitures tertiaire DOM",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 870
+    },
+    "active": true,
+    "note": "vA64.4 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-106",
+    "label": "Isolation murs tertiaire DOM",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 1130
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64.3 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-108",
+    "label": "Isolation plancher tertiaire DOM",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 1700
+    },
+    "active": true,
+    "cofrac": true,
+    "note": "vA64.4 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-EN-109",
+    "label": "Fenêtre/porte-fenêtre tertiaire DOM",
+    "sector": "BAT",
+    "cat": "Enveloppe",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 2270
+    },
+    "active": true,
+    "note": "vA64.3 01/01/2025 [V26:ajouté]",
+    "gisements": [
+      "isolation_enveloppe"
+    ]
+  },
+  {
+    "ref": "BAT-TH-111",
+    "label": "Chauffe-eau solaire collectif tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 2600,
+      "H2": 2600,
+      "H3": 2600,
+      "DOM": 2600
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-112",
+    "label": "VEV moteur asynchrone tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "kW",
+    "z": {
+      "H1": 4800,
+      "H2": 4800,
+      "H3": 4800,
+      "DOM": 4800
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "motorisation"
+    ]
+  },
+  {
+    "ref": "BAT-TH-115",
+    "label": "Climatiseur performant DOM",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 3800
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "BAT-TH-121",
+    "label": "Chauffe-eau solaire DOM tertiaire",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "m²",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 5500
+    },
+    "active": true,
+    "note": "vA35-3 [V26:ajouté]",
+    "gisements": [
+      "ecs"
+    ]
+  },
+  {
+    "ref": "BAT-TH-122",
+    "label": "Programmateur intermittence clim DOM",
+    "sector": "BAT",
+    "cat": "Thermique",
+    "unit": "unité",
+    "z": {
+      "H1": 0,
+      "H2": 0,
+      "H3": 0,
+      "DOM": 2400
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "regulation_gtb"
+    ]
+  },
+  {
+    "ref": "IND-UT-101",
+    "label": "Management énergétique ISO 50001",
+    "sector": "IND",
+    "cat": "Management",
+    "unit": "site",
+    "z": {
+      "H1": 850000,
+      "H2": 850000,
+      "H3": 850000,
+      "DOM": 850000
+    },
+    "active": true,
+    "note": "vA64 [V26:ajouté]",
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-106",
+    "label": "Brûleur micro-modulant condensation",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 175,
+      "H2": 150,
+      "H3": 120,
+      "DOM": 90
+    },
+    "active": true,
+    "note": "vA64 [V26:ajouté]",
+    "gisements": [
+      "chauffage_batiment"
+    ]
+  },
+  {
+    "ref": "IND-UT-108",
+    "label": "Détection fuites réseau air comprimé",
+    "sector": "IND",
+    "cat": "Air comprimé",
+    "unit": "kW",
+    "z": {
+      "H1": 3600,
+      "H2": 3600,
+      "H3": 3600,
+      "DOM": 3600
+    },
+    "active": true,
+    "note": "vA73 [V26:ajouté]",
+    "zeroEuro": true,
+    "gisements": [
+      "air_comprime"
+    ]
+  },
+  {
+    "ref": "IND-UT-109",
+    "label": "Optimisation production froid industriel",
+    "sector": "IND",
+    "cat": "Froid",
+    "unit": "kW froid",
+    "z": {
+      "H1": 4200,
+      "H2": 3800,
+      "H3": 3200,
+      "DOM": 2600
+    },
+    "active": true,
+    "note": "vA64 [V26:ajouté]",
+    "gisements": [
+      "froid"
+    ]
+  },
+  {
+    "ref": "IND-UT-112",
+    "label": "Système mesurage indicateurs énergétiques",
+    "sector": "IND",
+    "cat": "Management",
+    "unit": "site",
+    "z": {
+      "H1": 320000,
+      "H2": 320000,
+      "H3": 320000,
+      "DOM": 320000
+    },
+    "active": true,
+    "note": "vA64 [V26:ajouté]",
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "IND-UT-134",
+    "label": "Mesurage indicateurs performance énergétique",
+    "sector": "IND",
+    "cat": "Utilités",
+    "unit": "kW",
+    "z": {
+      "H1": 7800,
+      "H2": 7800,
+      "H3": 7800,
+      "DOM": 7800
+    },
+    "active": true,
+    "note": "vA35-2 [V26:ajouté]",
+    "gisements": [
+      "process_thermique"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-113",
+    "label": "Lubrifiant économiseur énergie transport",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-115",
+    "label": "Véhicule transport marchandises optimisé",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "vA14-1 [V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-118",
+    "label": "Aérodynamique poids lourd",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-119",
+    "label": "Aide au démarrage poids lourd",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-121",
+    "label": "Aérodynamique autocar",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-123",
+    "label": "Simulateur de conduite",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-125",
+    "label": "Stop & Start véhicules ferroviaires",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 170000,
+      "H2": 170000,
+      "H3": 170000,
+      "DOM": 170000
+    },
+    "active": true,
+    "note": "vA40-2 [V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-EQ-132",
+    "label": "Mesure conso carburant navire pêche",
+    "sector": "TRA",
+    "cat": "Équipements",
+    "unit": "unité",
+    "z": {
+      "H1": 8200,
+      "H2": 8200,
+      "H3": 8200,
+      "DOM": 8200
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-102",
+    "label": "Formation chauffeur VL économe",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-103",
+    "label": "Formation écoconduite",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-104",
+    "label": "Formation conduite économe moto",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-105",
+    "label": "Formation conduite économe VL",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-106",
+    "label": "Formation écoconduite alt",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-107",
+    "label": "Formation écoconduite poids lourd",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-108",
+    "label": "Formation écoconduite autocar",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-109",
+    "label": "Formation écoconduite VUL",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "personne",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-110",
+    "label": "Gestion poste pneumatique marchandises",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "véhicule",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-111",
+    "label": "Gestion poste pneumatique personnes",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "véhicule",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-112",
+    "label": "Service autopartage en boucle",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "unité",
+    "z": {
+      "H1": 36,
+      "H2": 36,
+      "H3": 36,
+      "DOM": 36
+    },
+    "active": true,
+    "note": "[V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  },
+  {
+    "ref": "TRA-SE-113",
+    "label": "Suivi conso carburants cartes privatives",
+    "sector": "TRA",
+    "cat": "Services",
+    "unit": "véhicule",
+    "z": {
+      "H1": 1300,
+      "H2": 1300,
+      "H3": 1300,
+      "DOM": 1300
+    },
+    "active": true,
+    "note": "vA14-1 [V26:ajouté]",
+    "gisements": [
+      "flotte_vehicules"
+    ]
+  }
+]

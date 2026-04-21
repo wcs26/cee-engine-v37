@@ -1,0 +1,6 @@
+# CEE Engine V37 — runtime dependencies
+flask>=3.0
+gunicorn>=22.0
+python-dotenv>=1.0
+# groq SDK (optionnel — si absent, l'endpoint /ai/groq renvoie une erreur d'install propre)
+groq>=0.11

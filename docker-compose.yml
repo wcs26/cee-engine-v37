@@ -1,0 +1,67 @@
+# CEE Engine V37 PRO — docker-compose production
+# Usage :
+#   cp .env.example .env  # configurer les 5 clés IA + CEE_JWT_SECRET
+#   docker-compose up -d
+#   docker-compose logs -f cee-engine
+
+version: "3.9"
+
+services:
+  cee-engine:
+    build: .
+    image: cee-engine:v37
+    container_name: cee-engine
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    environment:
+      # Logs structurés pour agrégateur externe (Datadog, Loki, ELK)
+      LOG_FORMAT: json
+      # Config métier
+      PRIX_CUMAC: "${PRIX_CUMAC:-0.00878}"
+      PRIX_CUMAC_PRECARITE: "${PRIX_CUMAC_PRECARITE:-0.01523}"
+      COMMISSION_RATE: "${COMMISSION_RATE:-0.00}"
+      # Rate limiting
+      RATE_LIMIT_AI: "${RATE_LIMIT_AI:-30}"
+      RATE_LIMIT_METIER: "${RATE_LIMIT_METIER:-120}"
+      # Auth
+      CEE_JWT_SECRET: "${CEE_JWT_SECRET:-}"
+      # Clés IA (env serveur — jamais exposées au frontend)
+      GROQ_API_KEY: "${GROQ_API_KEY:-}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      MOONSHOT_API_KEY: "${MOONSHOT_API_KEY:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      # Intégrations externes (optionnelles)
+      YOUSIGN_API_KEY: "${YOUSIGN_API_KEY:-}"
+      YOUSIGN_ENV: "${YOUSIGN_ENV:-sandbox}"
+      ERP_WEBHOOK_URL: "${ERP_WEBHOOK_URL:-}"
+      ERP_WEBHOOK_AUTH: "${ERP_WEBHOOK_AUTH:-}"
+    volumes:
+      # Persistance users.json + fiches.json en hors-conteneur
+      - ./data:/app/data
+      - ./users.json:/app/users.json
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5001/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Reverse proxy optionnel pour HTTPS + gzip
+  # Décommenter et configurer TLS si vous exposez en prod publique
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./certs:/etc/nginx/certs:ro
+  #   depends_on:
+  #     - cee-engine

@@ -1,0 +1,270 @@
+/* ═══════════════════════════════════════════════
+   CEE ENGINE — Design Enhancement Layer V35
+   Ajoute des effets modernes SANS casser l'existant
+   ═══════════════════════════════════════════════ */
+
+/* === GLASSMORPHISM & DEPTH === */
+.header {
+  background: rgba(13, 17, 23, 0.85) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(48, 54, 61, 0.6) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* === SMOOTH TRANSITIONS === */
+*, *::before, *::after {
+  transition-property: background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+input, select, textarea, button {
+  transition: all 0.2s ease;
+}
+
+/* === BETTER INPUTS === */
+input[type="text"], input[type="number"], select, textarea {
+  background: rgba(22, 27, 34, 0.8) !important;
+  border: 1px solid rgba(48, 54, 61, 0.8) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  color: var(--text-primary) !important;
+  font-size: 13px !important;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent-blue) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+}
+input:hover, select:hover {
+  border-color: rgba(48, 54, 61, 1) !important;
+}
+
+/* === BUTTONS === */
+button, .btn, [onclick] {
+  cursor: pointer;
+}
+button:hover, .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+button:active, .btn:active {
+  transform: translateY(0);
+}
+
+/* === CARDS (v32-card class) === */
+.v32-card, [class*="card"] {
+  border-radius: 14px !important;
+  border: 1px solid rgba(48, 54, 61, 0.6) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+.v32-card:hover {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+/* === STEPPER ENHANCEMENT === */
+.step {
+  height: 5px !important;
+  border-radius: 3px !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.step.active {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  width: 48px !important;
+}
+.step.completed {
+  background: var(--accent-green) !important;
+  box-shadow: 0 0 8px rgba(35, 134, 54, 0.3);
+}
+
+/* === LOGO PULSE GLOW === */
+.logo-dot {
+  box-shadow: 0 0 12px rgba(35, 134, 54, 0.6);
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 12px rgba(35, 134, 54, 0.6); }
+  50% { opacity: 0.7; box-shadow: 0 0 24px rgba(35, 134, 54, 0.3); }
+}
+
+/* === SECTION PANELS (border-left-3px blocks) === */
+div[style*="border-left:3px solid"] {
+  border-radius: 0 10px 10px 0 !important;
+  transition: all 0.2s ease !important;
+}
+div[style*="border-left:3px solid"]:hover {
+  transform: translateX(2px);
+}
+
+/* === FICHES GRID === */
+.fiche-card {
+  border-radius: 12px !important;
+  transition: all 0.25s ease !important;
+  border: 1px solid var(--border) !important;
+}
+.fiche-card:hover {
+  border-color: var(--accent-blue) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* === TABS === */
+.tab {
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  padding: 6px 14px !important;
+  font-weight: 500 !important;
+}
+.tab:hover:not(.active) {
+  background: rgba(48, 54, 61, 0.5) !important;
+}
+.tab.active {
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* === SCROLLBAR STYLING === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 133, 144, 0.6);
+}
+
+/* === BADGE ENHANCEMENT === */
+.badge {
+  background: rgba(0, 212, 170, 0.1) !important;
+  backdrop-filter: blur(4px);
+  animation: none !important;
+}
+
+/* === KPI BOXES (grid items) === */
+div[style*="text-align:center"][style*="border-radius:8px"] {
+  transition: all 0.2s ease !important;
+}
+div[style*="text-align:center"][style*="border-radius:8px"]:hover {
+  transform: scale(1.03);
+}
+
+/* === CHECKBOX ENHANCEMENT === */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid var(--border) !important;
+  border-radius: 4px !important;
+  background: var(--bg-tertiary) !important;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+}
+input[type="checkbox"]:checked {
+  background: var(--accent-blue) !important;
+  border-color: var(--accent-blue) !important;
+}
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* === SWITCH ENHANCEMENT === */
+.switch {
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* === TOOLTIP STYLE (for title attributes) === */
+[title] {
+  position: relative;
+}
+
+/* === LOADING ANIMATIONS === */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.loading-shimmer {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === FLOATING ACTION BUTTON (bottom-right panels) === */
+div[style*="position:fixed"][style*="bottom"] {
+  border-radius: 14px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(20px) saturate(150%);
+  animation: slideUp 0.3s ease;
+}
+
+/* === RESPONSIVE IMPROVEMENTS === */
+@media (max-width: 768px) {
+  .container { padding: 0 12px !important; }
+  .header-content { flex-wrap: wrap; gap: 8px; }
+  .stepper { display: none; }
+  .logo-text { font-size: 16px !important; }
+
+  div[style*="display:grid"][style*="grid-template-columns:1fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  div[style*="display:grid"][style*="grid-template-columns:1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  div[style*="display:grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .header { position: static !important; }
+  body { background: white !important; color: black !important; }
+  .v32-card { border: 1px solid #ccc !important; }
+}
+
+/* === SELECTION HIGHLIGHT === */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
+}
+
+/* === SMOOTH SCROLL === */
+html {
+  scroll-behavior: smooth;
+}
+
+/* === FOCUS VISIBLE (accessibility) === */
+:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

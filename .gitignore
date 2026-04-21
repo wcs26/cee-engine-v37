@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+dossiers_data/
+post_signature_data/
+conformite_data/
+.DS_Store
+*.output

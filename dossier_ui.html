@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CEE Engine — Saisie & génération dossier</title>
+<style>
+  * { box-sizing:border-box; }
+  body { font-family:-apple-system,Helvetica,Arial,sans-serif; margin:0; padding:16px;
+         background:#f4f7fb; color:#222; }
+  header { display:flex; justify-content:space-between; align-items:center;
+           background:#1f4068; color:white; padding:12px 18px; border-radius:6px;
+           margin-bottom:16px; }
+  header h1 { margin:0; font-size:18px; }
+  .toggle-vue { display:flex; align-items:center; gap:8px; }
+  .toggle-vue label { font-size:13px; cursor:pointer; }
+  #vueBadge { padding:3px 10px; border-radius:4px; font-weight:bold; font-size:12px;
+              background:#08a; }
+  #vueBadge.interne { background:#b00; }
+  .layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .card { background:white; padding:14px; border-radius:6px;
+          box-shadow:0 1px 3px rgba(0,0,0,.08); }
+  .card h2 { margin:0 0 10px; color:#1f4068; font-size:15px;
+             border-bottom:2px solid #1f4068; padding-bottom:6px; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px; }
+  .row.full { grid-template-columns:1fr; }
+  label { display:block; font-size:11px; color:#555; margin-bottom:2px; }
+  input, select { width:100%; padding:6px 8px; border:1px solid #ccc; border-radius:4px;
+                  font-family:inherit; font-size:13px; }
+  input.warn { border-color:#f0ad4e; background:#fff3cd; }
+  button { padding:7px 14px; background:#1f4068; color:white; border:none;
+           border-radius:4px; cursor:pointer; font-weight:600; font-size:13px; }
+  button.secondary { background:#08a; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  button:hover:not(:disabled) { background:#162e4d; }
+  .actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+  #status { padding:8px; margin:8px 0; border-radius:4px; font-size:12px; min-height:18px; }
+  #status.ok { background:#d4edda; color:#155724; }
+  #status.err { background:#f8d7da; color:#721c24; }
+  #status.info { background:#d1ecf1; color:#0c5460; }
+  .calc-box { background:#fff8dc; padding:10px; border-radius:4px; margin-top:8px;
+              font-size:13px; }
+  .calc-box .row-stat { display:flex; justify-content:space-between; padding:2px 0; }
+  .interne-only { display:none; background:#fff8e1; border-left:3px solid #b00;
+                  padding:8px; margin-top:8px; border-radius:4px; }
+  body.vue-interne .interne-only { display:block; }
+  iframe { width:100%; height:75vh; border:1px solid #ccc; border-radius:4px; }
+  .doc-tabs { display:flex; gap:4px; margin-bottom:6px; }
+  .doc-tab { padding:6px 12px; background:#e8ecf3; border:none; cursor:pointer;
+             border-radius:4px 4px 0 0; font-weight:600; font-size:12px; }
+  .doc-tab.active { background:white; border-bottom:2px solid #1f4068; }
+  .preview-area { display:none; }
+  .preview-area.active { display:block; }
+  small.hint { color:#888; font-size:11px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/oracle.html" target="_top" id="retourAuditBtn" style="color:white;text-decoration:none;font-size:13px;padding:4px 10px;border:1px solid rgba(255,255,255,.3);border-radius:4px;">← Retour audit</a>
+  <h1>📋 CEE Engine — Saisie & génération dossier</h1>
+  <div class="toggle-vue">
+    <span id="vueBadge">VUE CLIENT</span>
+    <label><input type="checkbox" id="modeVendeur"> Mode vendeur (vue interne)</label>
+  </div>
+</header>
+
+<div id="status">Saisissez un SIRET pour pré-remplir, ou remplissez manuellement.</div>
+
+<div class="actions">
+  <button onclick="creerDossier()">💾 Créer dossier (persiste)</button>
+  <button class="secondary" onclick="genererPack()">📄 Générer 4 documents (volatile)</button>
+  <button onclick="chargerDossier()">📂 Charger dossier existant</button>
+  <span id="dossierId" style="margin-left:auto; font-size:11px; color:#666;"></span>
+</div>
+
+<div class="layout">
+
+  <!-- ============== BÉNÉFICIAIRE (CLIENT) ============== -->
+  <div class="card">
+    <h2>1️⃣ Bénéficiaire (client final)</h2>
+    <div class="row">
+      <div>
+        <label>SIRET (14 chiffres)</label>
+        <input id="cli_siret" placeholder="40039525700010" oninput="if(this.value.length===14)preremplirClient()">
+      </div>
+      <div>
+        <label>SIREN</label>
+        <input id="cli_siren" readonly style="background:#f0f0f0;">
+      </div>
+    </div>
+    <div class="row full">
+      <div><label>Raison sociale</label><input id="cli_raison_sociale" placeholder="EHPAD / AHBFC / SCI…"></div>
+    </div>
+    <div class="row">
+      <div><label>Forme juridique</label><input id="cli_forme_juridique" placeholder="Association / SAS / SCI"></div>
+      <div><label>Code NAF/APE</label><input id="cli_naf_ape" placeholder="8710A"></div>
+    </div>
+    <div class="row full">
+      <div><label>Adresse</label><input id="cli_adresse"></div>
+    </div>
+    <div class="row">
+      <div><label>CP</label><input id="cli_cp"></div>
+      <div><label>Ville</label><input id="cli_ville"></div>
+    </div>
+    <h2 style="margin-top:14px;">Représentant légal (signataire)</h2>
+    <div class="row">
+      <div><label>Civilité</label>
+        <select id="cli_representant_civilite"><option>M.</option><option>Mme</option></select>
+      </div>
+      <div><label>Prénom</label><input id="cli_representant_prenom"></div>
+    </div>
+    <div class="row">
+      <div><label>Nom</label><input id="cli_representant_nom"></div>
+      <div><label>Fonction</label><input id="cli_representant_fonction" placeholder="Directeur / Gérant…"></div>
+    </div>
+    <h2 style="margin-top:14px;">Référent terrain</h2>
+    <div class="row">
+      <div><label>Nom référent</label><input id="cli_referent_nom"></div>
+      <div><label>Téléphone</label><input id="cli_referent_tel"></div>
+    </div>
+  </div>
+
+  <!-- ============== OPÉRATION ============== -->
+  <div class="card">
+    <h2>2️⃣ Opération CEE</h2>
+    <div class="row">
+      <div>
+        <label>Fiche</label>
+        <select id="op_fiche">
+          <option>BAT-EN-103</option><option>BAT-EN-101</option>
+          <option>BAT-TH-125</option><option>IND-UT-103</option>
+          <option>BAR-TH-104</option>
+        </select>
+      </div>
+      <div>
+        <label>Secteur</label>
+        <select id="op_secteur">
+          <option>sante</option><option>tertiaire</option>
+          <option>industrie</option><option>residentiel</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Zone climatique</label>
+        <select id="op_zone"><option>H1</option><option>H2</option><option>H3</option></select>
+      </div>
+      <div>
+        <label>Surface (m²)</label>
+        <input id="op_surface_m2" type="number" oninput="autoEstimerCout(); recalculerLive()">
+      </div>
+    </div>
+    <div class="row full">
+      <div><label>Nom du chantier</label>
+        <input id="op_nom_chantier" placeholder="MAGRITTE CEZANNE / Bâtiment A…"></div>
+    </div>
+    <div class="row full">
+      <div><label>Adresse chantier</label><input id="op_adresse_chantier"></div>
+    </div>
+    <div class="row">
+      <div><label>CP</label><input id="op_cp_chantier"></div>
+      <div><label>Ville</label><input id="op_ville_chantier"></div>
+    </div>
+
+    <div class="calc-box" id="calcBox">
+      <div class="row-stat"><span>📐 Cumac estimé</span><b id="stat_mwhc">— MWhc</b></div>
+      <div class="row-stat"><span>💶 Prime obligé</span><b id="stat_prime">— €</b></div>
+      <div class="row-stat"><span>💸 Reste à charge</span><b id="stat_reste">— €</b></div>
+      <div class="interne-only">
+        <div class="row-stat"><span>🏗 Coût réel estimé</span><b id="stat_cout_estime">— €</b></div>
+        <div class="row-stat"><span>📊 Marge nette</span><b id="stat_marge">— €</b></div>
+        <div class="row-stat"><span style="color:#b00;">💰 Commission Jimmy</span>
+          <b id="stat_commission" style="color:#b00;">— €</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== ÉMETTEUR ============== -->
+  <div class="card">
+    <h2>3️⃣ Émetteur (entreprise réalisatrice)</h2>
+    <small class="hint">Ex : SIRAT ou H2D — saisie manuelle complète</small>
+    <div class="row">
+      <div>
+        <label>SIRET émetteur</label>
+        <input id="em_siret" placeholder="95117449900016" oninput="if(this.value.length===14)preremplirEmetteur()">
+      </div>
+      <div><label>Forme juridique</label><input id="em_forme_juridique" placeholder="SARL / SAS"></div>
+    </div>
+    <div class="row full">
+      <div><label>Raison sociale</label><input id="em_raison_sociale"></div>
+    </div>
+    <div class="row full">
+      <div><label>Adresse</label><input id="em_adresse"></div>
+    </div>
+    <div class="row">
+      <div><label>CP</label><input id="em_cp"></div>
+      <div><label>Ville</label><input id="em_ville"></div>
+    </div>
+    <div class="row">
+      <div><label>Téléphone</label><input id="em_tel"></div>
+      <div><label>Email</label><input id="em_email"></div>
+    </div>
+    <div class="row">
+      <div><label>TVA intra</label><input id="em_tva_intra"></div>
+      <div><label>NAF</label><input id="em_naf" placeholder="4329A"></div>
+    </div>
+    <div class="row">
+      <div><label>Représentant nom</label><input id="em_representant_nom"></div>
+      <div><label>Fonction</label><input id="em_representant_fonction" placeholder="Gérant"></div>
+    </div>
+  </div>
+
+  <!-- ============== DISPOSITIF & ADMIN ============== -->
+  <div class="card">
+    <h2>4️⃣ Dispositif CEE</h2>
+    <div class="row">
+      <div><label>Obligé / Pollueur</label>
+        <input id="disp_obligé_nom" placeholder="TotalEnergies / EDF / ENGIE…"></div>
+      <div><label>SIRET obligé</label><input id="disp_obligé_siret"></div>
+    </div>
+    <div class="row">
+      <div><label>Délégataire</label>
+        <input id="disp_delegataire_nom" placeholder="Abokine / Économie d'Énergie SAS / Hellio"></div>
+      <div><label>Réf délégataire</label><input id="disp_delegataire_ref"></div>
+    </div>
+    <div class="row">
+      <div><label>Mandataire / Apporteur</label>
+        <input id="disp_mandataire_nom" placeholder="WCS Bulgarie"></div>
+      <div><label>EIK / SIRET mandataire</label>
+        <input id="disp_mandataire_siret_eik" placeholder="207143227"></div>
+    </div>
+    <div class="row">
+      <div><label>N° mandat cession CEE</label><input id="disp_mandat_num"></div>
+      <div><label>Date mandat</label><input id="disp_mandat_date" type="date"></div>
+    </div>
+
+    <h2 style="margin-top:14px;">5️⃣ Suivi administratif</h2>
+    <div class="row">
+      <div><label>Date engagement (devis signé)</label><input id="adm_devis_date" type="date"></div>
+      <div><label>RGE qualification + N°</label><input id="adm_rge_combo" placeholder="Qualibat 7141 / 12345"></div>
+    </div>
+    <div class="row">
+      <div><label>Bureau contrôle COFRAC</label><input id="adm_cofrac_organisme"></div>
+      <div><label>Chargé d'affaire</label><input id="adm_charge_affaire_nom"></div>
+    </div>
+
+    <div class="interne-only">
+      <h2>🔒 Mode vendeur — Financier interne</h2>
+      <div class="row">
+        <div><label>Coût réel installateur (€) <small class="hint">vide = estimation auto</small></label>
+          <input id="adm_cout_reel_realisateur_eur" type="number" step="0.01" placeholder="auto si vide" oninput="recalculerLive()"></div>
+        <div><label>% marge alloué Jimmy</label>
+          <input id="adm_commission_pct_marge" type="number" step="1" value="50" oninput="recalculerLive()"></div>
+      </div>
+      <small class="hint">Si coût réel non saisi : estimation auto via /couts/estimation (catalogue 2026).</small>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============== PRÉVIEW PACK ============== -->
+<div id="previewPanel" class="card" style="margin-top:16px; display:none;">
+  <div class="doc-tabs">
+    <button class="doc-tab active" onclick="showDoc(0)">📊 Gisement</button>
+    <button class="doc-tab" onclick="showDoc(1)">💼 Devis</button>
+    <button class="doc-tab" onclick="showDoc(2)">📝 Convention</button>
+    <button class="doc-tab" onclick="showDoc(3)">✍️ AH</button>
+    <span style="margin-left:auto;">
+      <button onclick="imprimerActif()">🖨 Imprimer doc actif</button>
+      <button onclick="copierLien()" id="btnCopierLien" style="display:none;">🔗 Copier lien partage</button>
+    </span>
+  </div>
+  <div class="preview-area active" id="prev_0"><iframe id="if_0"></iframe></div>
+  <div class="preview-area" id="prev_1"><iframe id="if_1"></iframe></div>
+  <div class="preview-area" id="prev_2"><iframe id="if_2"></iframe></div>
+  <div class="preview-area" id="prev_3"><iframe id="if_3"></iframe></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let CURRENT_DOSSIER_ID = null;
+let CURRENT_LIEN_INTERNE = null, CURRENT_LIEN_CLIENT = null;
+
+function setStatus(msg, type='info') {
+  const el = $('status');
+  el.textContent = msg;
+  el.className = type;
+}
+
+function getVue() {
+  return $('modeVendeur').checked ? 'interne' : 'client';
+}
+
+$('modeVendeur').addEventListener('change', () => {
+  const v = getVue();
+  $('vueBadge').textContent = 'VUE ' + v.toUpperCase();
+  $('vueBadge').className = v === 'interne' ? 'interne' : '';
+  document.body.classList.toggle('vue-interne', v === 'interne');
+  recalculerLive();
+});
+
+async function preremplirClient() {
+  const siret = $('cli_siret').value.trim();
+  if (siret.length !== 14) return;
+  setStatus('Recherche SIRET bénéficiaire…', 'info');
+  try {
+    const r = await fetch(`/documents/preremplir/${siret}?cible=client`);
+    const d = await r.json();
+    if (!r.ok) { setStatus(d.error || 'Erreur SIRET', 'err'); return; }
+    const p = d.preremplissage;
+    for (const [k, v] of Object.entries(p)) {
+      const el = $('cli_' + k);
+      if (el && v) el.value = v;
+    }
+    setStatus(`✓ Pré-remplissage : ${d.completude} champs auto, à compléter manuellement : ${d.champs_a_completer_manuellement.join(', ')}`, 'ok');
+  } catch (e) { setStatus('Erreur réseau : ' + e, 'err'); }
+}
+
+async function preremplirEmetteur() {
+  const siret = $('em_siret').value.trim();
+  if (siret.length !== 14) return;
+  setStatus('Recherche SIRET émetteur…', 'info');
+  try {
+    const r = await fetch(`/documents/preremplir/${siret}?cible=emetteur`);
+    const d = await r.json();
+    if (!r.ok) { setStatus(d.error || 'Erreur SIRET', 'err'); return; }
+    const p = d.preremplissage;
+    if (p.raison_sociale) $('em_raison_sociale').value = p.raison_sociale;
+    if (p.forme_juridique) $('em_forme_juridique').value = p.forme_juridique;
+    if (p.adresse) $('em_adresse').value = p.adresse;
+    if (p.cp) $('em_cp').value = p.cp;
+    if (p.ville) $('em_ville').value = p.ville;
+    if (p.naf_ape) $('em_naf').value = p.naf_ape;
+    setStatus(`✓ Émetteur pré-rempli (${d.completude} champs)`, 'ok');
+  } catch (e) { setStatus('Erreur réseau : ' + e, 'err'); }
+}
+
+async function autoEstimerCout() {
+  if (getVue() !== 'interne') return;
+  const surface = parseFloat($('op_surface_m2').value);
+  if (!surface || surface <= 0) return;
+  if ($('adm_cout_reel_realisateur_eur').value) return; // ne pas écraser saisie manuelle
+  const fiche = $('op_fiche').value;
+  const secteur = $('op_secteur').value;
+  const zone = $('op_zone').value;
+  try {
+    const r = await fetch(`/couts/estimation/${fiche}?surface=${surface}&secteur=${secteur}&zone=${zone}&mode=interne`);
+    const d = await r.json();
+    if (d.cout_total_estime_eur) {
+      $('stat_cout_estime').textContent = d.cout_total_estime_eur.toLocaleString('fr-FR') + ' € (auto)';
+      $('adm_cout_reel_realisateur_eur').placeholder = d.cout_total_estime_eur.toFixed(2) + ' € auto';
+    }
+  } catch (e) {}
+}
+
+function buildPayload() {
+  return {
+    client: {
+      raison_sociale: $('cli_raison_sociale').value,
+      forme_juridique: $('cli_forme_juridique').value,
+      siret: $('cli_siret').value,
+      siren: $('cli_siren').value,
+      naf_ape: $('cli_naf_ape').value,
+      adresse: $('cli_adresse').value,
+      cp: $('cli_cp').value,
+      ville: $('cli_ville').value,
+      representant_civilite: $('cli_representant_civilite').value,
+      representant_prenom: $('cli_representant_prenom').value,
+      representant_nom: $('cli_representant_nom').value,
+      representant_fonction: $('cli_representant_fonction').value,
+      referent_nom: $('cli_referent_nom').value,
+      referent_tel: $('cli_referent_tel').value,
+    },
+    operation: {
+      fiche: $('op_fiche').value, secteur: $('op_secteur').value, zone: $('op_zone').value,
+      surface_m2: parseFloat($('op_surface_m2').value) || 0,
+      nom_chantier: $('op_nom_chantier').value,
+      adresse_chantier: $('op_adresse_chantier').value,
+      cp_chantier: $('op_cp_chantier').value,
+      ville_chantier: $('op_ville_chantier').value,
+    },
+    emetteur: {
+      raison_sociale: $('em_raison_sociale').value,
+      forme_juridique: $('em_forme_juridique').value,
+      siret: $('em_siret').value,
+      adresse: $('em_adresse').value, cp: $('em_cp').value, ville: $('em_ville').value,
+      tel: $('em_tel').value, email: $('em_email').value,
+      tva_intra: $('em_tva_intra').value, naf: $('em_naf').value,
+      representant_nom: $('em_representant_nom').value,
+      representant_fonction: $('em_representant_fonction').value,
+    },
+    dispositif: {
+      obligé_nom: $('disp_obligé_nom').value, obligé_siret: $('disp_obligé_siret').value,
+      delegataire_nom: $('disp_delegataire_nom').value,
+      delegataire_ref: $('disp_delegataire_ref').value,
+      mandataire_nom: $('disp_mandataire_nom').value,
+      mandataire_siret_eik: $('disp_mandataire_siret_eik').value,
+      mandat_num: $('disp_mandat_num').value,
+      mandat_date: $('disp_mandat_date').value,
+    },
+    admin: {
+      devis_date: $('adm_devis_date').value,
+      rge_qualification: ($('adm_rge_combo').value.split('/')[0] || '').trim(),
+      rge_numero: ($('adm_rge_combo').value.split('/')[1] || '').trim(),
+      cofrac_organisme: $('adm_cofrac_organisme').value,
+      charge_affaire_nom: $('adm_charge_affaire_nom').value,
+      cout_reel_realisateur_eur: parseFloat($('adm_cout_reel_realisateur_eur').value) || null,
+      commission_pct_marge: parseFloat($('adm_commission_pct_marge').value) || null,
+    },
+    vue: getVue(),
+  };
+}
+
+async function recalculerLive() {
+  // Calcul rapide via /gisement/calcul (sans tout générer)
+  const surface = parseFloat($('op_surface_m2').value);
+  if (!surface || surface <= 0) return;
+  const op = {
+    fiche: $('op_fiche').value, secteur: $('op_secteur').value, zone: $('op_zone').value,
+    surface_m2: surface,
+    nom: $('op_nom_chantier').value,
+    adresse: $('op_adresse_chantier').value,
+    cp: $('op_cp_chantier').value,
+    ville: $('op_ville_chantier').value,
+  };
+  try {
+    const r = await fetch('/gisement/calcul', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(op)});
+    const d = await r.json();
+    if (d.error) return;
+    $('stat_mwhc').textContent = d.mwhc.toLocaleString('fr-FR') + ' MWhc';
+    $('stat_prime').textContent = d.prime_obligé_eur.toLocaleString('fr-FR') + ' €';
+    $('stat_reste').textContent = d.reste_a_charge_eur.toLocaleString('fr-FR') + ' €';
+    if (getVue() === 'interne') {
+      const cout = parseFloat($('adm_cout_reel_realisateur_eur').value);
+      const pct = parseFloat($('adm_commission_pct_marge').value) || 50;
+      if (cout > 0) {
+        const marge = d.prime_obligé_eur - cout;
+        const comm = marge * pct / 100;
+        $('stat_cout_estime').textContent = cout.toLocaleString('fr-FR') + ' € (saisi)';
+        $('stat_marge').textContent = marge.toLocaleString('fr-FR') + ' €';
+        $('stat_commission').textContent = comm.toLocaleString('fr-FR') + ' €';
+      } else {
+        autoEstimerCout();
+      }
+    }
+  } catch (e) {}
+}
+
+async function genererPack() {
+  setStatus('Génération du pack…', 'info');
+  const payload = buildPayload();
+  try {
+    const r = await fetch('/documents/pack?vue=' + getVue(),
+      {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    const d = await r.json();
+    if (!r.ok) { setStatus(d.error || 'Erreur', 'err'); return; }
+    afficherPack(d.documents);
+    let warns = (d.warnings || []).length ? '⚠️ ' + d.warnings.join(' · ') : '';
+    setStatus(`✓ Pack généré (vue ${d.vue}). ${warns}`, warns ? 'info' : 'ok');
+  } catch (e) { setStatus('Erreur réseau : ' + e, 'err'); }
+}
+
+async function creerDossier() {
+  setStatus('Création dossier persistant…', 'info');
+  const payload = buildPayload();
+  try {
+    const r = await fetch('/dossiers', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    const d = await r.json();
+    if (!r.ok) { setStatus(d.error || 'Erreur', 'err'); return; }
+    CURRENT_DOSSIER_ID = d.id;
+    CURRENT_LIEN_CLIENT = d.url_partage_client;
+    CURRENT_LIEN_INTERNE = d.url_partage_interne;
+    $('dossierId').textContent = `Dossier persisté : ${d.id}`;
+    $('btnCopierLien').style.display = 'inline-block';
+    setStatus(`✓ Dossier ${d.id} créé. Lien partage : ${getVue()==='interne' ? d.url_partage_interne : d.url_partage_client}`, 'ok');
+    // Charger le pack auto
+    const rp = await fetch(`/dossiers/${d.id}/pack?vue=${getVue()}`);
+    const dp = await rp.json();
+    if (dp.documents) afficherPack(dp.documents);
+  } catch (e) { setStatus('Erreur réseau : ' + e, 'err'); }
+}
+
+async function chargerDossier() {
+  const id = prompt('ID dossier (16 caractères) :');
+  if (!id) return;
+  try {
+    const r = await fetch(`/dossiers/${id}`);
+    const d = await r.json();
+    if (!r.ok) { setStatus(d.error, 'err'); return; }
+    chargerDansFormulaire(d);
+    CURRENT_DOSSIER_ID = id;
+    $('dossierId').textContent = `Dossier chargé : ${id}`;
+    setStatus(`✓ Dossier ${id} chargé`, 'ok');
+  } catch (e) { setStatus(e.message, 'err'); }
+}
+
+function chargerDansFormulaire(d) {
+  for (const [section, prefix] of [['client','cli_'],['operation','op_'],['emetteur','em_'],['dispositif','disp_'],['admin','adm_']]) {
+    const data = d[section] || {};
+    for (const [k, v] of Object.entries(data)) {
+      const el = $(prefix + k);
+      if (el && v != null) el.value = v;
+    }
+  }
+  recalculerLive();
+}
+
+function afficherPack(docs) {
+  $('previewPanel').style.display = 'block';
+  ['gisement_html','devis_html','convention_html','ah_html'].forEach((k, i) => {
+    $('if_' + i).srcdoc = docs[k] || '';
+  });
+}
+
+function showDoc(i) {
+  document.querySelectorAll('.preview-area').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.doc-tab').forEach(e => e.classList.remove('active'));
+  $('prev_' + i).classList.add('active');
+  document.querySelectorAll('.doc-tab')[i].classList.add('active');
+}
+
+function imprimerActif() {
+  const active = document.querySelector('.preview-area.active iframe');
+  if (active && active.contentWindow) active.contentWindow.print();
+}
+
+function copierLien() {
+  const lien = window.location.origin + (getVue()==='interne' ? CURRENT_LIEN_INTERNE : CURRENT_LIEN_CLIENT);
+  navigator.clipboard.writeText(lien).then(() =>
+    setStatus(`✓ Lien copié : ${lien}`, 'ok'));
+}
+
+// Init
+(function() {
+  // Masquer bouton retour si on est dans un iframe
+  if (window !== window.top) {
+    var btn = $('retourAuditBtn');
+    if (btn) btn.style.display = 'none';
+  }
+  // Récupérer SIRET depuis hash URL (passé par oracle.html)
+  var h = window.location.hash;
+  if (h && h.startsWith('#siret=')) {
+    var siret = h.replace('#siret=', '').replace(/\D/g, '');
+    if (siret.length === 14) {
+      $('cli_siret').value = siret;
+      preremplirClient();
+    }
+  }
+  // Récupérer vue depuis URL param (sync toggle parent)
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('vue') === 'interne') {
+    $('modeVendeur').checked = true;
+    $('modeVendeur').dispatchEvent(new Event('change'));
+  }
+  // Écouter messages du parent iframe (sync toggle parent→enfant)
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'cee_vue_sync') {
+      var isInterne = e.data.vue === 'interne';
+      if ($('modeVendeur').checked !== isInterne) {
+        $('modeVendeur').checked = isInterne;
+        $('modeVendeur').dispatchEvent(new Event('change'));
+      }
+    }
+  });
+})();
+recalculerLive();
+</script>
+</body>
+</html>

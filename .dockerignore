@@ -1,0 +1,25 @@
+# Exclusions build Docker
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+.git/
+.github/
+.gitignore
+.DS_Store
+pdfs/
+*.pdf
+!fiches.json
+*.backup
+*.bak
+tests/
+.env
+.env.*
+users.json
+/tmp/
+node_modules/

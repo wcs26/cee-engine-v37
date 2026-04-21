@@ -1,0 +1,50 @@
+{
+  "bureaux": {
+    "label": "Bureaux",
+    "factor": 0.6
+  },
+  "enseignement": {
+    "label": "Enseignement",
+    "factor": 0.6
+  },
+  "sante": {
+    "label": "Santé",
+    "factor": 1.2
+  },
+  "hotellerie": {
+    "label": "Hôtellerie-Restauration",
+    "factor": 0.7
+  },
+  "restauration": {
+    "label": "Restauration",
+    "factor": 0.7
+  },
+  "commerce": {
+    "label": "Commerce",
+    "factor": 0.6
+  },
+  "logistique": {
+    "label": "Logistique/Entrepôts",
+    "factor": 0.6
+  },
+  "sport": {
+    "label": "Sport/Loisirs",
+    "factor": 0.6
+  },
+  "culture": {
+    "label": "Culture",
+    "factor": 0.6
+  },
+  "administration": {
+    "label": "Administration",
+    "factor": 0.6
+  },
+  "social": {
+    "label": "Action sociale",
+    "factor": 1.2
+  },
+  "autres": {
+    "label": "Autres tertiaires",
+    "factor": 0.6
+  }
+}

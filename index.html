@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEE Engine - WCS Pro</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin-bottom: 8px; color: #38bdf8; }
+        .subtitle { color: #64748b; margin-bottom: 24px; font-size: 0.9rem; }
+        .card { background: #1e293b; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+        .row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+        label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #334155; border-radius: 8px; background: #0f172a; color: #e2e8f0; font-size: 0.95rem; }
+        input:focus, select:focus { outline: none; border-color: #38bdf8; }
+        .field { flex: 1; min-width: 150px; }
+        button { padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: #38bdf8; color: #0f172a; width: 100%; }
+        .btn-primary:hover { background: #7dd3fc; }
+        .btn-primary:disabled { background: #334155; color: #64748b; cursor: wait; }
+        .or { text-align: center; color: #64748b; margin: 16px 0; font-size: 0.85rem; }
+        #results { display: none; }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .total { font-size: 2rem; font-weight: 700; color: #4ade80; }
+        .total-label { font-size: 0.85rem; color: #64748b; }
+        .opp { background: #0f172a; border-radius: 8px; padding: 16px; margin-bottom: 8px; border-left: 4px solid #334155; }
+        .opp.high { border-color: #ef4444; }
+        .opp.quick { border-color: #f59e0b; }
+        .opp.easy { border-color: #38bdf8; }
+        .opp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .opp-ref { font-weight: 600; font-size: 1.1rem; }
+        .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .badge.high { background: #7f1d1d; color: #fca5a5; }
+        .badge.quick { background: #78350f; color: #fcd34d; }
+        .badge.easy { background: #0c4a6e; color: #7dd3fc; }
+        .badge.low { background: #1e293b; color: #64748b; }
+        .opp-details { display: flex; gap: 24px; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; }
+        .opp-prime { font-size: 1.2rem; font-weight: 600; color: #4ade80; }
+        .opp-pitch { font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+        .summary { background: #0f172a; border-radius: 8px; padding: 16px; white-space: pre-line; font-size: 0.9rem; line-height: 1.5; }
+        .error { color: #f87171; padding: 16px; text-align: center; }
+        .loading { text-align: center; padding: 40px; color: #64748b; }
+        .score-bar { height: 4px; background: #334155; border-radius: 2px; margin-top: 4px; }
+        .score-fill { height: 100%; border-radius: 2px; background: #38bdf8; }
+        .meta { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+        .audit-section { margin-bottom: 12px; }
+        .audit-section h4 { font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .audit-section ul { list-style: none; padding: 0; }
+        .audit-section li { padding: 5px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CEE ENGINE</h1>
+        <p class="subtitle">Assistant de vente CEE - WCS Pro</p>
+
+        <div class="card">
+            <label>SIRET (14 chiffres)</label>
+            <div class="row">
+                <div class="field">
+                    <input id="siret" placeholder="ex: 44306184100047" maxlength="14">
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="analyseSiret()" id="btn-siret">Analyser</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="or">ou saisie manuelle</div>
+
+        <div class="card">
+            <div class="row">
+                <div class="field">
+                    <label>Departement</label>
+                    <input id="dep" placeholder="ex: 69">
+                </div>
+                <div class="field">
+                    <label>Surface m2</label>
+                    <input id="surface" type="number" placeholder="ex: 600">
+                </div>
+                <div class="field">
+                    <label>Code NAF</label>
+                    <input id="naf" placeholder="ex: 4711D">
+                </div>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label>Energie</label>
+                    <select id="energie">
+                        <option value="">Auto</option>
+                        <option value="electricite">Electricite</option>
+                        <option value="gaz">Gaz</option>
+                        <option value="fioul">Fioul</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Prix cumac EUR/kWhc</label>
+                    <input id="prix_cumac" type="number" step="0.001" placeholder="defaut 0.00878" value="0.00878">
+                </div>
+                <div class="field" style="display:flex;align-items:flex-end;">
+                    <button class="btn-primary" onclick="analyseManuel()" id="btn-manual">Analyser</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results">
+            <div class="card" id="results-content"></div>
+            <div class="card" id="audit-card" style="display:none">
+                <h3 style="margin-bottom:16px;font-size:1.1rem;color:#38bdf8">Audit interactif</h3>
+                <div id="q_qualification" class="audit-section"></div>
+                <div id="q_technique" class="audit-section"></div>
+                <div id="q_eligibilite" class="audit-section"></div>
+                <div id="q_closing" class="audit-section"></div>
+                <div id="interactive-questions" style="margin-top:16px"></div>
+                <button class="btn-primary" id="btn-recalcul" style="margin-top:12px;display:none" onclick="recalculer()">Recalculer avec ces reponses</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = "http://localhost:5001";
+
+        function badgeClass(opp) {
+            if (opp.includes("HIGH")) return "high";
+            if (opp.includes("QUICK")) return "quick";
+            if (opp.includes("EASY")) return "easy";
+            return "low";
+        }
+
+        function renderResults(data) {
+            const el = document.getElementById("results-content");
+            const res = document.getElementById("results");
+
+            if (data.error) {
+                el.innerHTML = `<div class="error">${data.error}</div>`;
+                res.style.display = "block";
+                return;
+            }
+
+            // Extraire les données selon le format
+            let pack, totalPrime, summary, entreprise, surface, energie;
+
+            if (data.resultats) {
+                // Format analyse_siret
+                pack = data.resultats.pack || [];
+                totalPrime = data.resultats.total_prime || 0;
+                summary = data.resultats.summary || "";
+                entreprise = data.entreprise;
+                surface = data.surface_estimee;
+                energie = data.energie;
+            } else if (data.pack) {
+                // Format moteur_expert
+                pack = data.pack || [];
+                totalPrime = data.total_prime || 0;
+                summary = data.summary || "";
+            }
+
+            let html = "";
+
+            // Header
+            if (entreprise) {
+                html += `<div style="margin-bottom:16px">
+                    <div style="font-size:1.1rem;font-weight:600">${entreprise.nom || ""}</div>
+                    <div class="meta">NAF ${entreprise.naf} | Dept ${entreprise.departement} ${entreprise.commune || ""}</div>
+                    <div class="meta">Surface: ${surface} m2 (${data.source_surface}) | Energie: ${energie} (${data.source_energie})</div>
+                </div>`;
+            }
+
+            // Total
+            html += `<div class="result-header">
+                <div>
+                    <div class="total-label">POTENTIEL CEE</div>
+                    <div class="total">${totalPrime.toLocaleString("fr-FR")} EUR</div>
+                </div>
+                <div style="text-align:right">
+                    <div class="total-label">ACTIONS</div>
+                    <div style="font-size:1.5rem;font-weight:600">${pack.length}</div>
+                </div>
+            </div>`;
+
+            // Pack
+            for (const p of pack) {
+                const bc = badgeClass(p.opportunite || "");
+                const scoreMax = 30;
+                const scorePct = Math.min((p.score / scoreMax) * 100, 100);
+
+                html += `<div class="opp ${bc}">
+                    <div class="opp-header">
+                        <span class="opp-ref">${p.fiche}</span>
+                        <span class="badge ${bc}">${p.opportunite}</span>
+                    </div>
+                    <div class="opp-details">
+                        <span>${p.type}</span>
+                        <span>${p.cumac.toLocaleString("fr-FR")} kWhc</span>
+                        <span>${p.rentabilite_m2} EUR/m2</span>
+                    </div>
+                    <div class="opp-prime">${p.prime.toLocaleString("fr-FR")} EUR</div>
+                    <div class="score-bar"><div class="score-fill" style="width:${scorePct}%"></div></div>
+                    <div class="meta">Score ${p.score}</div>
+                    <div class="opp-pitch" style="margin-top:8px">${p.pitch || ""}</div>
+                </div>`;
+            }
+
+            el.innerHTML = html;
+            res.style.display = "block";
+
+            // Questions interactives avec predictions
+            if (pack.length > 0) {
+                const naf = document.getElementById("naf")?.value || (entreprise ? entreprise.naf : "");
+                renderInteractiveQuestions(pack, naf, data.surface_estimee || parseFloat(document.getElementById("surface")?.value) || 0);
+            }
+
+            // Audit questions structurées
+            const auditCard = document.getElementById("audit-card");
+            const qs = data.questions_structurees || {};
+            const phases = {qualification: [], technique: [], eligibilite: [], closing: []};
+
+            // Merger les questions de toutes les fiches
+            for (const ref in qs) {
+                for (const phase in qs[ref]) {
+                    if (phases[phase]) {
+                        qs[ref][phase].forEach(q => { if (!phases[phase].includes(q)) phases[phase].push(q); });
+                    }
+                }
+            }
+
+            // Fallback sur audit_questions simple
+            const simpleQ = data.audit_questions || [];
+            if (simpleQ.length && !phases.technique.length) {
+                simpleQ.forEach(q => phases.technique.push(q));
+            }
+
+            const hasQuestions = Object.values(phases).some(arr => arr.length > 0);
+            if (hasQuestions) {
+                const labels = {qualification: "Qualification", technique: "Technique", eligibilite: "Eligibilite", closing: "Closing"};
+                for (const [phase, qs] of Object.entries(phases)) {
+                    const el = document.getElementById("q_" + phase);
+                    if (qs.length) {
+                        el.innerHTML = `<h4>${labels[phase]}</h4><ul>${qs.map(q => `<li>${q}</li>`).join("")}</ul>`;
+                    } else {
+                        el.innerHTML = "";
+                    }
+                }
+                auditCard.style.display = "block";
+            } else {
+                auditCard.style.display = "none";
+            }
+        }
+
+        async function analyseSiret() {
+            const siret = document.getElementById("siret").value.trim();
+            if (!siret) return;
+
+            const btn = document.getElementById("btn-siret");
+            btn.disabled = true;
+            btn.textContent = "Analyse...";
+
+            try {
+                const r = await fetch(`${API}/analyse`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({siret})
+                });
+                const data = await r.json();
+                renderResults(data);
+            } catch (e) {
+                renderResults({error: "API non disponible. Lancez: python3 api.py"});
+            }
+
+            btn.disabled = false;
+            btn.textContent = "Analyser";
+        }
+
+        async function analyseManuel() {
+            const dep = document.getElementById("dep").value.trim();
+            const surface = document.getElementById("surface").value;
+            const naf = document.getElementById("naf").value.trim();
+            const energie = document.getElementById("energie").value || null;
+
+            if (!dep || !surface || !naf) return;
+
+            const btn = document.getElementById("btn-manual");
+            btn.disabled = true;
+            btn.textContent = "Analyse...";
+
+            try {
+                const prix_cumac = parseFloat(document.getElementById("prix_cumac").value) || 0.00878;
+                const r = await fetch(`${API}/expert`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({naf, surface: parseFloat(surface), departement: dep, energie, prix_cumac})
+                });
+                const data = await r.json();
+                renderResults(data);
+            } catch (e) {
+                renderResults({error: "API non disponible. Lancez: python3 api.py"});
+            }
+
+            btn.disabled = false;
+            btn.textContent = "Analyser";
+        }
+
+        // Questions interactives avec predictions
+        let currentContext = {};
+
+        function renderInteractiveQuestions(pack, naf, surface) {
+            currentContext = {naf, surface};
+            const container = document.getElementById("interactive-questions");
+            const btn = document.getElementById("btn-recalcul");
+
+            // Déterminer les questions clés à poser
+            const qMap = [
+                {id: "surface", label: "Surface reelle (m²)", pred_id: "surface"},
+                {id: "energie", label: "Energie de chauffage", pred_id: "energie"},
+            ];
+
+            // Ajouter questions selon les gisements
+            const types = pack.map(p => p.type);
+            if (types.includes("eclairage")) {
+                qMap.push({id: "nb_luminaires", label: "Nombre de luminaires", pred_id: "nb_luminaires"});
+                qMap.push({id: "type_eclairage", label: "Type eclairage actuel", pred_id: "type_eclairage"});
+            }
+            if (types.some(t => t.includes("froid"))) {
+                qMap.push({id: "type_meubles_froids", label: "Type meubles froids", pred_id: "type_meubles_froids"});
+            }
+            if (types.includes("chauffage") || types.includes("PAC_remplacement")) {
+                qMap.push({id: "type_chauffage", label: "Type chauffage actuel", pred_id: "type_chauffage"});
+            }
+            if (types.some(t => ["air_comprime","moteurs"].includes(t))) {
+                qMap.push({id: "puissance", label: "Puissance installee (kW)", pred_id: "puissance"});
+            }
+
+            let html = '<div style="font-size:0.85rem;color:#94a3b8;margin-bottom:8px">Reponses client (cliquez pour selectionner)</div>';
+
+            qMap.forEach(q => {
+                html += `<div style="margin-bottom:10px">
+                    <label style="font-size:0.8rem;color:#64748b">${q.label}</label>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px" id="pred_${q.id}">
+                        <span style="color:#475569;font-size:0.8rem">Chargement...</span>
+                    </div>
+                    <input id="resp_${q.id}" style="margin-top:4px;width:100%;padding:8px;border:1px solid #334155;border-radius:6px;background:#0f172a;color:#e2e8f0;font-size:0.85rem" placeholder="Ou saisir manuellement">
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            btn.style.display = "block";
+
+            // Charger les predictions
+            qMap.forEach(q => loadPredictions(q.id, q.pred_id, naf, surface));
+        }
+
+        async function loadPredictions(fieldId, predId, naf, surface) {
+            try {
+                const r = await fetch(`${API}/predictions`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({question_id: predId, naf, surface})
+                });
+                const data = await r.json();
+                const el = document.getElementById("pred_" + fieldId);
+                if (!el) return;
+
+                el.innerHTML = (data.predictions || []).map(p =>
+                    `<button onclick="selectPred('${fieldId}','${p.value}')" style="padding:4px 10px;border:1px solid #334155;border-radius:6px;background:#1e293b;color:#cbd5e1;font-size:0.8rem;cursor:pointer">${p.label}</button>`
+                ).join("");
+            } catch(e) {}
+        }
+
+        function selectPred(fieldId, value) {
+            document.getElementById("resp_" + fieldId).value = value;
+            // Highlight
+            const btns = document.getElementById("pred_" + fieldId).querySelectorAll("button");
+            btns.forEach(b => b.style.borderColor = b.textContent.includes(value) ? "#38bdf8" : "#334155");
+        }
+
+        async function recalculer() {
+            const naf = document.getElementById("naf").value.trim();
+            const dep = document.getElementById("dep").value.trim();
+            const prix_cumac = parseFloat(document.getElementById("prix_cumac").value) || 0.00878;
+
+            const reponses = {};
+            document.querySelectorAll("[id^='resp_']").forEach(el => {
+                const key = el.id.replace("resp_", "");
+                if (el.value) reponses[key] = el.value;
+            });
+
+            const btn = document.getElementById("btn-recalcul");
+            btn.disabled = true;
+            btn.textContent = "Recalcul...";
+
+            try {
+                const r = await fetch(`${API}/recalcul`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({naf, departement: dep, prix_cumac, reponses})
+                });
+                const data = await r.json();
+                renderResults(data);
+            } catch(e) {
+                console.error(e);
+            }
+
+            btn.disabled = false;
+            btn.textContent = "Recalculer avec ces reponses";
+        }
+
+        // Enter key
+        document.getElementById("siret").addEventListener("keypress", e => { if (e.key === "Enter") analyseSiret(); });
+    </script>
+</body>
+</html>
