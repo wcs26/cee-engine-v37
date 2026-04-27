@@ -86,6 +86,7 @@ from dossiers import register_dossiers_routes
 from monday_sync import register_monday_routes
 from top_fiches_secteur import register_top_fiches_routes
 from post_signature import register_post_signature_routes
+from tunnel import register_tunnel_routes
 from analytics import register_analytics_routes
 from prospection import register_prospection_routes
 from fidelisation import register_fidelisation_routes
@@ -168,6 +169,7 @@ register_dossiers_routes(app)   # V37 P5.5 — persistance dossiers (UUID + lien
 register_monday_routes(app)     # V37 P5.6 — synchronisation bidirectionnelle Monday CRM
 register_top_fiches_routes(app) # V37 P5.7 — TOP 5 fiches CEE par secteur (ROI pre-calcule)
 register_post_signature_routes(app)  # V37 P7 — suivi post-signature (mandat→travaux→COFRAC→PNCEE→paiement)
+register_tunnel_routes(app)  # V37.1 — Tunnel commercial unifié (lead→audit→R1→R2→signature→post_signature) + /analytics/sales-velocity
 register_prospection_routes(app)     # V37 P8 — prospection active CEE (scan zone/secteur + batch audit + score lead)
 register_analytics_routes(app)       # V37 P9 — analytics/reporting (pipeline, forecast, performance, ROI fiches, activité)
 register_fidelisation_routes(app)    # V37 P10 — fidélisation client (PV, IRVE, maintenance, réversion CEE/m²)
