@@ -81,7 +81,8 @@ def _save(t: dict) -> None:
 
 
 def _refresh_index() -> None:
-    """Index léger pour la liste — pas de re-load de chaque tunnel à chaque /tunnel GET."""
+    """Index léger pour la liste — pas de re-load de chaque tunnel à chaque /tunnel GET.
+    V37.3.3 : ajout raison_sociale + source + monday_item_id pour /tunnel & /tunnel/alerts."""
     idx = []
     for f in TUNNEL_DIR.glob("T-*.json"):
         try:
@@ -89,10 +90,13 @@ def _refresh_index() -> None:
             idx.append({
                 "tunnel_id": t["tunnel_id"],
                 "siret": t.get("siret"),
+                "raison_sociale": t.get("raison_sociale"),
                 "current_stage": t.get("current_stage"),
                 "vendor": t.get("vendor"),
+                "source": t.get("source"),
                 "created_at": t.get("created_at"),
                 "updated_at": t.get("updated_at"),
+                "monday_item_id": t.get("monday_item_id"),
             })
         except Exception:
             continue
@@ -378,7 +382,7 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
     # V37.3.1 fix : skip si tunnel test (source commence par "test" / "smoke" / "retest" / "ci")
     #               pour ne plus polluer le board prod pendant les tests.
     src = (t.get("source") or "").lower()
-    is_test_tunnel = any(src.startswith(p) for p in ("test", "smoke", "retest", "ci_"))
+    is_test_tunnel = any(src.startswith(p) for p in ("test", "smoke", "retest", "ci_", "pipeline_seed"))
     if is_test_tunnel:
         hooks_log["monday_push"] = f"skip tunnel test source={src}"
     elif not t.get("monday_item_id"):
