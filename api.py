@@ -468,6 +468,34 @@ def analyse():
     if "error" in result:
         return jsonify(result), 404
 
+    # V37.2 — Auto-création tunnel commercial à chaque audit SIRET (pont audit ↔ tunnel).
+    # Best-effort, jamais bloquant : si le tunnel existe déjà pour ce SIRET, skip.
+    # Si data["vendor"] fourni (par oracle.html), il est attaché.
+    if os.environ.get("CEE_TUNNEL_AUTO", "1") == "1":
+        try:
+            from tunnel import create_tunnel, list_tunnels, advance_tunnel
+            existing = [t for t in list_tunnels() if t.get("siret") == siret]
+            if not existing:
+                vendor = data.get("vendor", "") or (result.get("vendor", "") if isinstance(result, dict) else "")
+                rs = (result.get("entreprise", {}) or {}).get("nom", "") if isinstance(result, dict) else ""
+                t = create_tunnel(siret=siret, vendor=vendor, source="oracle_audit", raison_sociale=rs)
+                # Advance to 'audit' avec la data métier extraite
+                fiches = []
+                if isinstance(result, dict):
+                    pack = (result.get("oracle") or {}).get("pack") or []
+                    fiches = [f.get("ref") for f in pack if isinstance(f, dict) and f.get("ref")]
+                advance_tunnel(t["tunnel_id"], target_stage="audit", data={
+                    "fiches": fiches[:10],
+                    "surface": (result.get("entreprise", {}) or {}).get("surface_estimee_m2", 0) if isinstance(result, dict) else 0,
+                    "departement": ((result.get("entreprise", {}) or {}).get("cp", "") or "")[:2] if isinstance(result, dict) else "",
+                    "rge_installateur": False,
+                    "date_engagement": "",
+                })
+                if isinstance(result, dict):
+                    result["tunnel_id"] = t["tunnel_id"]
+        except Exception:
+            pass  # ne casse jamais l'audit principal
+
     return jsonify(result)
 
 

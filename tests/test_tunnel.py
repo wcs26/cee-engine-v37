@@ -146,5 +146,71 @@ def test_conversion_rate_calcule(isolated_data_dir):
     assert jimmy["conversion_lead_to_signature"] == 0.5
 
 
+# ─────────────────────────────────────────────────────────────
+# V37.2 — Hooks auto + alertes + prédictif
+# ─────────────────────────────────────────────────────────────
+
+def test_hook_audit_score_pncee(isolated_data_dir):
+    """Advance vers 'audit' avec fiche valide → score PNCEE auto attaché."""
+    t = isolated_data_dir.create_tunnel(siret="12345678900012", vendor="Jimmy")
+    isolated_data_dir.advance_tunnel(t["tunnel_id"], target_stage="audit", data={
+        "fiches": ["BAT-EN-103"],
+        "surface": 250,
+        "departement": "75",
+        "rge_installateur": True,
+        "date_engagement": "2026-04-01",
+    })
+    t = isolated_data_dir._load(t["tunnel_id"])
+    assert "checks" in t
+    assert "pncee" in t["checks"]
+    assert "score" in t["checks"]["pncee"]
+    assert "verdict" in t["checks"]["pncee"]
+
+
+def test_hook_dont_break_advance_on_error(isolated_data_dir):
+    """Si un hook échoue (data métier vide), advance ne doit pas crasher."""
+    t = isolated_data_dir.create_tunnel(siret="00000000000000", vendor="Test")
+    r = isolated_data_dir.advance_tunnel(t["tunnel_id"], target_stage="audit", data={})
+    assert r is not None
+    assert r["current_stage"] == "audit"
+
+
+def test_detect_stagnants_recent_vide(isolated_data_dir):
+    """Tunnel fraîchement créé → 0 alerte stagnante."""
+    isolated_data_dir.create_tunnel(siret="12345678900012", vendor="Jimmy")
+    alerts = isolated_data_dir.detect_stagnants()
+    assert isinstance(alerts, list)
+
+
+def test_predict_next_lead(isolated_data_dir):
+    t = isolated_data_dir.create_tunnel(siret="12345678900012", vendor="Jimmy")
+    p = isolated_data_dir.predict_next(t["tunnel_id"])
+    assert p is not None
+    assert p["stage"] == "lead"
+    assert "Qualif" in p["next_action"]
+    assert p["risk"] in ("GO", "PRUDENCE", "STOP")
+
+
+def test_predict_next_inconnu(isolated_data_dir):
+    assert isolated_data_dir.predict_next("T-doesnotexist") is None
+
+
+def test_sla_par_stage_configurable(isolated_data_dir, monkeypatch):
+    """SLA peut être surchargé par CEE_TUNNEL_SLA_<STAGE>_D."""
+    monkeypatch.setenv("CEE_TUNNEL_SLA_LEAD_D", "30")
+    sla = isolated_data_dir._stage_sla_days("lead")
+    assert sla == 30
+
+
+def test_next_action_par_stage(isolated_data_dir):
+    """Chaque stage a une recommandation textuelle distincte."""
+    actions = {s: isolated_data_dir._next_action_for_stage(s)
+               for s in isolated_data_dir.TUNNEL_STAGES}
+    assert "Qualif" in actions["lead"]
+    assert "oracle" in actions["audit"].lower() or "/analyse" in actions["audit"]
+    assert "SPIN" in actions["r1"]
+    assert "Maestro" in actions["r2"] or "10 commandements" in actions["r2"]
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
