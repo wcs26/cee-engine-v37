@@ -63,6 +63,45 @@ def _monday_query(query: str, variables: dict | None = None) -> dict:
         return {"error": str(e)}
 
 
+# V37.3.8 — Mapping stage tunnel → Monday group_id (inverse de monday_group_to_stage du webhook)
+# Permet de déplacer auto l'item Monday quand le tunnel avance.
+STAGE_TO_MONDAY_GROUP = {
+    "lead":            "group_mm2hvk6b",   # R0
+    "audit":           "group_mm2hvk6b",   # R0 (toujours en phase amont)
+    "r1":              "group_mm2hpegm",   # R1
+    "r2":              "group_mm2hegvh",   # R2
+    "signature":       "group_mm2hds6w",   # devis_signe
+    "post_signature":  "group_mm2hwd61",   # travaux_en_cours
+}
+
+
+def move_monday_item_to_group(item_id: str | int, group_id: str, board_id: int | None = None) -> dict:
+    """V37.3.8 — Déplace un item Monday vers le group cible. Source : Monday API GraphQL move_item_to_group."""
+    bid = board_id or MONDAY_DEFAULT_BOARD
+    query = """
+    mutation ($itemId: ID!, $groupId: String!) {
+        move_item_to_group(item_id: $itemId, group_id: $groupId) {
+            id
+            group { id title }
+        }
+    }
+    """
+    return _monday_query(query, {"itemId": str(item_id), "groupId": group_id})
+
+
+def update_monday_item_columns(item_id: str | int, board_id: int, column_values: dict) -> dict:
+    """V37.3.8 — Met à jour les colonnes d'un item Monday existant.
+    column_values: {col_id: value} — ex {'chiffres': '8200', 'texte56': '12345678900012'}"""
+    query = """
+    mutation ($boardId: ID!, $itemId: ID!, $columnValues: JSON!) {
+        change_multiple_column_values(item_id: $itemId, board_id: $boardId, column_values: $columnValues) {
+            id
+        }
+    }
+    """
+    return _monday_query(query, {"boardId": str(board_id), "itemId": str(item_id), "columnValues": json.dumps(column_values)})
+
+
 def push_dossier_to_monday(dossier: dict, board_id: int | None = None) -> dict:
     """Crée un item Monday à partir d'un dossier CEE Engine.
 

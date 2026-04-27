@@ -381,11 +381,42 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
     # V37.2.1 fix : log explicitement chaque outcome (succès, erreur monday, skip), plus jamais silent.
     # V37.3.1 fix : skip si tunnel test (source commence par "test" / "smoke" / "retest" / "ci")
     #               pour ne plus polluer le board prod pendant les tests.
+    # V37.3.8 : si item Monday existe déjà → MAJ position group + colonnes au lieu de skip.
     src = (t.get("source") or "").lower()
-    # V37.3.6 : skip seulement les tunnels VRAIMENT test (pas le seed pipeline réel)
     is_test_tunnel = any(src.startswith(p) for p in ("test_", "smoke", "retest", "ci_"))
     if is_test_tunnel:
         hooks_log["monday_push"] = f"skip tunnel test source={src}"
+    elif t.get("monday_item_id") and os.environ.get("MONDAY_API_TOKEN"):
+        # V37.3.8 — Item existe : déplacer vers le bon group selon stage + MAJ colonnes
+        try:
+            from monday_sync import (
+                STAGE_TO_MONDAY_GROUP, move_monday_item_to_group,
+                update_monday_item_columns, MONDAY_DEFAULT_BOARD,
+            )
+            group_id = STAGE_TO_MONDAY_GROUP.get(new_stage)
+            results = []
+            if group_id:
+                r1 = move_monday_item_to_group(t["monday_item_id"], group_id, MONDAY_DEFAULT_BOARD)
+                if r1 and "error" not in r1:
+                    results.append(f"moved→{group_id}")
+                else:
+                    results.append(f"move_err:{str(r1)[:60]}")
+            # MAJ colonnes : prime + cumac si calculées
+            cv = {}
+            prime = (t.get("checks", {}) or {}).get("prime") or {}
+            if prime.get("prime_brute_eur"):
+                cv["chiffres"] = str(prime["prime_brute_eur"])
+            if t.get("siret") and not t["siret"].startswith("PIPE"):
+                cv["texte56"] = t["siret"]
+            if cv:
+                r2 = update_monday_item_columns(t["monday_item_id"], MONDAY_DEFAULT_BOARD, cv)
+                if r2 and "error" not in r2:
+                    results.append(f"cols={list(cv.keys())}")
+                else:
+                    results.append(f"cols_err:{str(r2)[:60]}")
+            hooks_log["monday_sync"] = " · ".join(results) if results else "no-op"
+        except Exception as e:
+            hooks_log["monday_sync"] = f"err: {type(e).__name__}: {e}"
     elif not t.get("monday_item_id"):
         token_present = bool(os.environ.get("MONDAY_API_TOKEN"))
         if not token_present:
