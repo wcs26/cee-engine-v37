@@ -1322,6 +1322,11 @@
           <span>Mode vendeur</span>
           <div class="switch" id="sellerModeToggle"></div>
         </div>
+        <!-- V37.3.5 — Live pipeline counter (chargé au démarrage depuis /health) -->
+        <button type="button" id="livePipelineBadge" onclick="openToolkit('pipeline');loadSalesVelocity()" title="Pipeline live · cliquer pour voir le détail" style="padding:6px 10px;background:var(--bg-primary);border:1px solid rgba(0,212,170,0.3);border-radius:8px;color:var(--text-secondary);cursor:pointer;font-size:11px;display:flex;align-items:center;gap:8px;">
+          <span style="display:flex;align-items:center;gap:4px;">📊 <span id="livePipelineCount" style="color:var(--accent-cyan);font-weight:700;">—</span></span>
+          <span style="display:flex;align-items:center;gap:4px;color:var(--accent-orange);font-weight:600;">⚠ <span id="liveAlertesCount">—</span></span>
+        </button>
         <!-- V37: point d'accès unique vers les outils commerciaux (compartimenté) -->
         <button type="button" id="toolkitOpenBtn" onclick="openToolkit()" title="Outils commerciaux annexes (historique clients, comparateur acheteurs, documents CEE)" style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:6px;">
           🧰 <span>Outils</span>
@@ -12631,7 +12636,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   })();
 
-  console.log('🚀 WCS ORACLE V37 PRO chargé — Diagnostic CEE + CRM historique + Comparateur acheteurs + Mandat PDF + Tri-IA + Headline proactive + mini-show sources V37.1');
+  console.log('🚀 WCS ORACLE V37 PRO chargé — Diagnostic CEE + CRM historique + Comparateur acheteurs + Mandat PDF + Tri-IA + Headline proactive + mini-show sources V37.1 + tunnel V37.3 live');
+
+  // V37.3.5 — Live pipeline badge dans le header (compteurs depuis /health)
+  (function loadLivePipelineBadge(){
+    fetch('/health').then(r => r.ok ? r.json() : null).then(d => {
+      if (!d || !d.pipeline) return;
+      var p = d.pipeline;
+      var countEl = document.getElementById('livePipelineCount');
+      var alertEl = document.getElementById('liveAlertesCount');
+      if (countEl) countEl.textContent = (p.size || 0) + ' tunnels';
+      if (alertEl) alertEl.textContent = (p.alertes_critique || 0) + (p.alertes_haute ? '+' + p.alertes_haute : '');
+    }).catch(function(){});
+  })();
 
   </script>
   <script src="js/cee-pdfs.js"></script>

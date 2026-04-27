@@ -426,13 +426,32 @@ def health():
             modules_ok[mod] = False
     modules_healthy = all(modules_ok.values())
 
+    # V37.3.5 — stats business pipeline (lecture légère via list_tunnels + alerts)
+    pipeline = {"size": 0, "by_stage": {}, "alertes_critique": 0, "alertes_haute": 0, "signatures_mois_courant": 0}
+    try:
+        from tunnel import list_tunnels, detect_stagnants, sales_velocity, TUNNEL_STAGES
+        all_t = list_tunnels()
+        pipeline["size"] = len(all_t)
+        for s in TUNNEL_STAGES:
+            pipeline["by_stage"][s] = sum(1 for t in all_t if t.get("current_stage") == s)
+        alerts = detect_stagnants()
+        pipeline["alertes_critique"] = sum(1 for a in alerts if a.get("severity") == "critique")
+        pipeline["alertes_haute"] = sum(1 for a in alerts if a.get("severity") == "haute")
+        sv = sales_velocity()
+        pipeline["signatures_mois_courant"] = sv.get("total_signatures", 0)
+        pipeline["objectif_global"] = sv.get("objectif_global_calcule", 0)
+        pipeline["vendors_actifs"] = len(sv.get("vendors", []))
+    except Exception as e:
+        pipeline["error"] = str(e)[:80]
+
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine (Oracle-Fused)",
-        "version": "V37-FUSED",
+        "version": "V37.3.5",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
+        "pipeline": pipeline,  # V37.3.5 — signal métier pour monitoring/dashboard
         "config": {
             "prix_cumac_eur_mwh": round(config.PRIX_CUMAC * 1000, 2),
             "prix_cumac_precarite_eur_mwh": round(config.PRIX_CUMAC_PRECARITE * 1000, 2),

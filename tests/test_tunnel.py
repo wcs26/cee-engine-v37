@@ -212,5 +212,73 @@ def test_next_action_par_stage(isolated_data_dir):
     assert "Maestro" in actions["r2"] or "10 commandements" in actions["r2"]
 
 
+# ─────────────────────────────────────────────────────────────
+# V37.3.4 — backdate + link-post-signature
+# ─────────────────────────────────────────────────────────────
+
+def test_backdate_modifie_dates(isolated_data_dir):
+    """Backdate écrit created_at, updated_at, et history_dates par stage."""
+    t = isolated_data_dir.create_tunnel(siret="12345678900012", vendor="Jimmy")
+    isolated_data_dir.advance_tunnel(t["tunnel_id"], target_stage="audit", data={})
+    # Simuler /tunnel/<id>/backdate
+    tid = t["tunnel_id"]
+    raw = isolated_data_dir._load(tid)
+    raw["created_at"] = "2026-01-15T10:00:00Z"
+    raw["updated_at"] = "2026-02-20T14:00:00Z"
+    for h in raw["history"]:
+        if h["stage"] == "audit":
+            h["ts"] = "2026-02-20T14:00:00Z"
+    isolated_data_dir._save(raw)
+    reloaded = isolated_data_dir._load(tid)
+    assert reloaded["created_at"] == "2026-01-15T10:00:00Z"
+    assert reloaded["updated_at"] == "2026-02-20T14:00:00Z"
+    audit_entry = next(h for h in reloaded["history"] if h["stage"] == "audit")
+    assert audit_entry["ts"] == "2026-02-20T14:00:00Z"
+
+
+def test_backdate_active_alertes(isolated_data_dir):
+    """Tunnel backdaté il y a 30j en stage lead (SLA 2j) → alerte critique."""
+    t = isolated_data_dir.create_tunnel(siret="11111111100001", vendor="Jimmy")
+    raw = isolated_data_dir._load(t["tunnel_id"])
+    from datetime import datetime, timezone, timedelta
+    old = (datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    raw["created_at"] = old
+    raw["updated_at"] = old
+    isolated_data_dir._save(raw)
+    alerts = isolated_data_dir.detect_stagnants()
+    matching = [a for a in alerts if a["tunnel_id"] == t["tunnel_id"]]
+    assert len(matching) == 1
+    assert matching[0]["severity"] == "critique"
+    assert matching[0]["days_in_stage"] >= 29
+
+
+def test_predict_next_inclut_alertes_apres_backdate(isolated_data_dir):
+    """Après backdate stagnant, predict_next contient les alerts."""
+    t = isolated_data_dir.create_tunnel(siret="22222222200002", vendor="Jimmy")
+    raw = isolated_data_dir._load(t["tunnel_id"])
+    from datetime import datetime, timezone, timedelta
+    old = (datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=10)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    raw["updated_at"] = old
+    isolated_data_dir._save(raw)
+    p = isolated_data_dir.predict_next(t["tunnel_id"])
+    assert p["alerts_count"] >= 1
+    assert any(a["type"] == "stagnant" for a in p["alerts"])
+    assert p["risk"] in ("PRUDENCE", "STOP")
+
+
+def test_alerts_index_inclut_raison_sociale(isolated_data_dir):
+    """L'index des alertes contient le nom commercial pour affichage UI."""
+    t = isolated_data_dir.create_tunnel(siret="33333333300003", vendor="Anthony", raison_sociale="Test SARL")
+    raw = isolated_data_dir._load(t["tunnel_id"])
+    from datetime import datetime, timezone, timedelta
+    old = (datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=10)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    raw["updated_at"] = old
+    isolated_data_dir._save(raw)
+    alerts = isolated_data_dir.detect_stagnants()
+    matching = [a for a in alerts if a["tunnel_id"] == t["tunnel_id"]]
+    assert len(matching) == 1
+    assert matching[0]["raison_sociale"] == "Test SARL"
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
