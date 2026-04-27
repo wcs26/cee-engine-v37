@@ -42,6 +42,29 @@ JWT_TTL_SECONDS = 24 * 3600  # 24h
 PBKDF_ITERATIONS = 120_000
 
 
+# V37.1 sécu : refuser un secret faible au boot (vérité plutôt que faux semblant).
+# Mode strict si CEE_ENV=prod ; sinon warning seulement.
+def _validate_jwt_secret_strength(secret: str) -> tuple[bool, str]:
+    if not secret:
+        return False, "CEE_JWT_SECRET non défini"
+    if len(secret) < 32:
+        return False, f"CEE_JWT_SECRET trop court ({len(secret)} chars, min 32)"
+    weak_markers = ("dev", "test", "change", "secret", "password", "default", "qwerty")
+    low = secret.lower()
+    if any(w in low for w in weak_markers):
+        return False, f"CEE_JWT_SECRET contient un marqueur faible (dev/test/change/secret...). Régénère via: openssl rand -hex 32"
+    return True, "OK"
+
+
+_jwt_ok, _jwt_msg = _validate_jwt_secret_strength(JWT_SECRET)
+if not _jwt_ok:
+    if os.environ.get("CEE_ENV", "dev") == "prod":
+        raise RuntimeError(f"[SÉCU] CEE_JWT_SECRET invalide en prod : {_jwt_msg}")
+    else:
+        import sys
+        print(f"[SÉCU WARNING] {_jwt_msg} (toléré en dev, fatal si CEE_ENV=prod)", file=sys.stderr)
+
+
 # ─────────────────────────────────────────────────────────────
 # Password hashing (PBKDF2-SHA256 + salt)
 # ─────────────────────────────────────────────────────────────

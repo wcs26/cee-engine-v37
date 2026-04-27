@@ -31,10 +31,23 @@ from typing import Any
 from flask import jsonify, request, Response
 
 
-# TODO [Railway] : filesystem ephemere — les donnees conformite_data/ sont perdues a chaque redeploy.
-# Migration future : Cloudflare D1, SQLite sur volume persistant Railway, ou S3.
-CONFORMITE_DIR = Path(__file__).parent / "conformite_data"
-CONFORMITE_DIR.mkdir(exist_ok=True)
+# V37.1 P2 — Persistance Fly volume : CEE_DATA_DIR set = volume prod, sinon path local (dev).
+def _resolve_data_dir(subdir: str) -> Path:
+    base = os.environ.get("CEE_DATA_DIR")
+    target = Path(base) / subdir if base else Path(__file__).parent / subdir
+    target.mkdir(parents=True, exist_ok=True)
+    if base:
+        local = Path(__file__).parent / subdir
+        if local.exists() and local != target and not any(target.iterdir()):
+            for f in local.iterdir():
+                try:
+                    (target / f.name).write_bytes(f.read_bytes())
+                except Exception:
+                    pass
+    return target
+
+
+CONFORMITE_DIR = _resolve_data_dir("conformite_data")
 
 ARCHIVE_FILE = CONFORMITE_DIR / "worm_archive.jsonl"
 AUDIT_LOG = CONFORMITE_DIR / "audit_log.jsonl"

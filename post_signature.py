@@ -22,9 +22,26 @@ from flask import Flask, request, jsonify
 
 logger = logging.getLogger(__name__)
 
-# TODO [Railway] : filesystem ephemere — les donnees post_signature_data/ sont perdues a chaque redeploy.
-# Migration future : Cloudflare D1, SQLite sur volume persistant Railway, ou S3.
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "post_signature_data")
+# V37.1 P2 — Persistance Fly volume : CEE_DATA_DIR set = volume prod, sinon path local (dev).
+def _resolve_data_dir(subdir: str) -> str:
+    base = os.environ.get("CEE_DATA_DIR")
+    target = os.path.join(base, subdir) if base else os.path.join(os.path.dirname(os.path.abspath(__file__)), subdir)
+    os.makedirs(target, exist_ok=True)
+    if base:
+        local = os.path.join(os.path.dirname(os.path.abspath(__file__)), subdir)
+        if os.path.exists(local) and os.path.abspath(local) != os.path.abspath(target) and not os.listdir(target):
+            for fname in os.listdir(local):
+                try:
+                    src = os.path.join(local, fname)
+                    if os.path.isfile(src):
+                        with open(src, "rb") as fr, open(os.path.join(target, fname), "wb") as fw:
+                            fw.write(fr.read())
+                except Exception:
+                    pass
+    return target
+
+
+DATA_DIR = _resolve_data_dir("post_signature_data")
 
 # Monday board 5094841405 — group IDs
 MONDAY_BOARD_ID = "5094841405"

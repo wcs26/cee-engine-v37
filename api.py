@@ -51,6 +51,7 @@ try:
 except ImportError:
     pass
 
+import hmac
 import json as _json
 import logging
 import math
@@ -207,12 +208,31 @@ def _log_request_end(response):
     return response
 
 
+# V37.1 sécu : allowlist d'origines au lieu de "*". Évite que n'importe quel site web
+# puisse appeler /ai/* et brûler les crédits LLM. Liste configurable via CEE_CORS_ORIGINS (CSV).
+import os as _os_cors
+_default_origins = "https://cee-engine-v37.fly.dev,http://localhost:5001,http://localhost:8080,http://127.0.0.1:5001"
+ALLOWED_ORIGINS = set(o.strip() for o in _os_cors.environ.get("CEE_CORS_ORIGINS", _default_origins).split(",") if o.strip())
+
+
 @app.after_request
 def cors(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Groq-Key, X-Claude-Key, X-Kimi-Key, X-OpenAI-Key"
+    origin = request.headers.get("Origin", "")
+    if origin in ALLOWED_ORIGINS:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Vary"] = "Origin"
+    elif not origin:
+        # Same-origin requests (Origin header absent) : autorisé tacitement par le browser, pas besoin de header.
+        pass
+    # else : origin non listé → on ne pose pas le header, le browser bloque la réponse.
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Groq-Key, X-Claude-Key, X-Kimi-Key, X-OpenAI-Key, Authorization"
     response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
     response.headers["Access-Control-Max-Age"] = "3600"
+    # Headers de sécurité défensifs
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     # Forcer rechargement des fichiers statiques (pas de cache navigateur)
     if response.content_type and ("html" in response.content_type or "javascript" in response.content_type):
         response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
@@ -225,6 +245,23 @@ def cors(response):
 def handle_preflight():
     if request.method == "OPTIONS":
         return ("", 204)
+
+
+@app.before_request
+def _ai_origin_guard():
+    """V37.1 sécu : refuse les requêtes /ai/* qui ne viennent pas d'une origine autorisée
+    (sauf same-origin où Origin n'est pas envoyé). Bloque l'abus public des proxies LLM."""
+    if request.path.startswith("/ai/") and request.method != "OPTIONS":
+        origin = request.headers.get("Origin", "")
+        if origin and origin not in ALLOWED_ORIGINS:
+            return jsonify({"error": "Origin non autorisée pour /ai/*"}), 403
+        # Pas d'Origin = soit same-origin (toléré), soit client non-navigateur (curl, etc.).
+        # Pour les non-navigateur on exige X-App-Token si CEE_AI_REQUIRE_TOKEN est activé.
+        if not origin and _os_cors.environ.get("CEE_AI_REQUIRE_TOKEN") == "1":
+            expected = _os_cors.environ.get("CEE_APP_TOKEN", "")
+            provided = request.headers.get("X-App-Token", "")
+            if not expected or not provided or not hmac.compare_digest(expected, provided):
+                return jsonify({"error": "X-App-Token requis pour clients non-navigateur"}), 403
 
 
 # ═══════════════════════════════════════════════════════════════════════════

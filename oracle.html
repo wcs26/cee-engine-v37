@@ -235,12 +235,50 @@
       max-height: 5000px;
       opacity: 1;
     }
+    /* V37.1 — Mode compact : après SIRET, cache les cards d'inputs optionnels.
+       Garde visibles : nav-buttons + bouton "Approfondir" + headline. */
+    #step1Details.compact > .card { display: none !important; }
+    #step1DeepenBtnWrap { display: none; margin: 14px 0 6px; }
+    #step1Details.compact #step1DeepenBtnWrap { display: block; }
+    #step1DeepenBtn {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #step1DeepenBtn:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateX(20px); }
       to { opacity: 1; transform: translateX(0); }
     }
-    
+
+    /* V37.1 pilier "ludique" : apparition en cascade des badges sources dans la headline. */
+    @keyframes badgeSlide {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    #insightHeadlineContent > div:first-child > span {
+      animation: badgeSlide 0.45s ease both;
+    }
+    #insightHeadlineContent > div:first-child > span:nth-child(1) { animation-delay: 0s; }
+    #insightHeadlineContent > div:first-child > span:nth-child(2) { animation-delay: 0.10s; }
+    #insightHeadlineContent > div:first-child > span:nth-child(3) { animation-delay: 0.20s; }
+    #insightHeadlineContent > div:first-child > span:nth-child(4) { animation-delay: 0.30s; }
+    #insightHeadlineContent > div:first-child > span:nth-child(5) { animation-delay: 0.40s; }
+    #insightHeadlineContent > div:first-child > span:nth-child(6) { animation-delay: 0.50s; }
+    #insightHeadlineContent > div:first-child > span:nth-child(7) { animation-delay: 0.60s; }
+
+
     h2 {
       font-size: 28px;
       font-weight: 700;
@@ -1434,17 +1472,29 @@
         </div>
         <!-- SIRET Hero: écran d'entrée unique -->
         <div class="siret-hero" id="siretHero">
-          <h2>Identification du site</h2>
-          <p class="subtitle">Entrez un SIRET pour démarrer l'audit CEE</p>
+          <h2>Ton audit CEE en 30 secondes</h2>
+          <p class="subtitle">Un SIRET suffit. L'Engine détecte secteur, zone climatique, surface bâtiment et opportunités d'économies. Sources visibles.</p>
           <div class="hero-input-wrap">
             <input type="text" id="siret" placeholder="123 456 789 00010" maxlength="17" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupSIRET()}" oninput="clearTimeout(window._siretDebounce);window._siretDebounce=setTimeout(function(){var v=document.getElementById('siret').value.replace(/\s/g,'');if(v.length===14&&/^\d{14}$/.test(v))lookupSIRET()},600)">
             <button class="hero-btn" id="siretBtn" onclick="lookupSIRET()">Lancer l'audit</button>
           </div>
           <div class="field-why" style="max-width:500px;margin:12px auto 0;font-size:12px;">Le SIRET pré-remplit automatiquement raison sociale, adresse, code APE et zone climatique.</div>
+          <!-- V37.1 Patch A : mini-show "ludique + connaissances + vérité" pendant le loading SIRET. Chips cochent au fur et à mesure. Une source qui échoue passe en gris (vérité : on ne cache pas). -->
+          <div id="lookupProgress" style="display:none;max-width:680px;margin:20px auto 0;padding:14px 16px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;">
+            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">🔎 Analyse en cours <span id="lookupProgressCount" style="float:right;font-weight:600;color:var(--accent-cyan);"></span></div>
+            <div id="lookupProgressChips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+          </div>
         </div>
 
         <!-- Détails Step 1: masqués jusqu'à résolution SIRET -->
         <div id="step1Details">
+
+        <!-- V37.1 Suggestion-driven : par défaut les champs sont repliés, on n'affiche que la headline + ce bouton + "Continuer". -->
+        <div id="step1DeepenBtnWrap">
+          <button id="step1DeepenBtn" type="button" onclick="(function(){var d=document.getElementById('step1Details');if(d){d.classList.remove('compact');}var w=document.getElementById('step1DeepenBtnWrap');if(w){w.style.display='none';}})()">
+            ⚙️ Affiner (optionnel) — 10 champs : entreprise, caractéristiques, zones d'activité
+          </button>
+        </div>
 
         <div class="card">
           <div class="card-header">
@@ -1661,7 +1711,7 @@
         <div class="nav-buttons">
           <div></div>
           <button class="btn btn-primary" onclick="nextStep()">
-            Continuer
+            Continuer → voir mes gisements d'économies
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
           </button>
         </div>
@@ -1670,8 +1720,8 @@
 
       <!-- ÉTAPE 2: Micro-activité & Gisements -->
       <div class="step-content" id="step2">
-        <h2>Diagnostic Multi-Sectoriel</h2>
-        <p class="subtitle" id="detectedSectorsText">Détection des gisements énergétiques par micro-activité</p>
+        <h2>Tes opportunités d'économies</h2>
+        <p class="subtitle" id="detectedSectorsText">Activités détectées à fort potentiel. Coche celles qui existent chez toi.</p>
         
         <div id="microActivitySection"></div>
         
@@ -1710,8 +1760,8 @@
       <div class="step-content" id="step3">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <div>
-            <h2>Gisements CEE détectés</h2>
-            <p class="subtitle" id="fichesCountText">Sélectionnez les opérations à financer</p>
+            <h2>Tes économies détectées</h2>
+            <p class="subtitle" id="fichesCountText">Opérations les plus rentables, classées par impact € décroissant</p>
           </div>
           <button class="btn btn-outline" id="zeroFilterBtn" onclick="toggleZeroFilter()">
             <span style="color: var(--accent-cyan);">🎁</span> 0€ uniquement
@@ -4446,6 +4496,9 @@
       var step1d = document.getElementById('step1Details');
       if (step1d && !step1d.classList.contains('revealed')) {
         step1d.classList.add('revealed');
+        // V37.1 Suggestion-driven : on révèle le conteneur MAIS on garde les cards repliées.
+        // L'utilisateur voit : headline prime + bouton "Approfondir" + "Continuer".
+        step1d.classList.add('compact');
         var hero = document.getElementById('siretHero');
         if (hero) { hero.style.paddingTop = '24px'; hero.style.paddingBottom = '20px'; }
       }
@@ -7651,10 +7704,21 @@
       return;
     }
 
+    // V37.1 Suggestion-driven : on n'affiche que les TOP_N premières questions par défaut.
+    // Les suivantes sont masquées derrière un bouton "Approfondir" (on respecte l'ordre défini par l'auteur).
+    // Toute question déjà répondue reste visible pour ne pas perdre le contexte.
+    const TOP_N = 3;
+    const total = act.questions.length;
     let html = '<div style="margin-top:16px;">';
-    html += '<div style="font-size:14px;font-weight:600;margin-bottom:12px;">Questionnaire rapide</div>';
-    act.questions.forEach(q => {
-      html += `<div style="margin-bottom:12px;padding:10px 14px;background:var(--bg-tertiary);border-radius:8px;border:1px solid var(--border);">`;
+    html += '<div style="font-size:14px;font-weight:600;margin-bottom:12px;">Questionnaire rapide <span style="font-size:11px;font-weight:400;color:var(--text-secondary);">— suggestions prioritaires</span></div>';
+    let extraCount = 0;
+    act.questions.forEach((q, idx) => {
+      const alreadyAnswered = STATE.gisementConfidence && (q.id in STATE.gisementConfidence);
+      const isExtra = idx >= TOP_N && !alreadyAnswered;
+      if (isExtra) extraCount++;
+      const extraCls = isExtra ? ' q-extra' : '';
+      const extraStyleInline = isExtra ? 'display:none;' : '';
+      html += `<div class="q-item${extraCls}" style="${extraStyleInline}margin-bottom:12px;padding:10px 14px;background:var(--bg-tertiary);border-radius:8px;border:1px solid var(--border);">`;
       html += `<div style="font-size:13px;font-weight:500;margin-bottom:6px;">${q.label}</div>`;
       if (q.why) html += `<div style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">${q.why}</div>`;
 
@@ -7681,6 +7745,9 @@
       }
       html += '</div>';
     });
+    if (extraCount > 0) {
+      html += `<button type="button" onclick="(function(btn){var ex=btn.parentElement.querySelectorAll('.q-extra');ex.forEach(function(e){e.style.display='block';});btn.remove();})(this)" style="margin-top:4px;padding:10px 14px;background:var(--bg-secondary);border:1px dashed var(--border);border-radius:8px;color:var(--text-secondary);cursor:pointer;font-size:12px;width:100%;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--accent-cyan)';this.style.color='var(--text-primary)';" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)';">▾ Approfondir (${extraCount} question${extraCount > 1 ? 's' : ''} secondaire${extraCount > 1 ? 's' : ''})</button>`;
+    }
     html += '</div>';
     container.innerHTML = html;
   }
@@ -12282,12 +12349,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Construction HERO
     var h = '';
     // ─── LIGNE 1 : identité du site (condensée, jamais inventée) ───
+    // V37.1 piliers "précision + vérité + connaissances" : toute donnée affichée doit être sourcée explicitement (suffix "· source") et n'apparaît que si réellement détectée.
     h += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:' + (primeBrute > 0 ? '10px' : '0') + ';">';
     h += '<span style="font-size:14px;font-weight:800;color:var(--text-primary);">' + (diag.raisonSociale || diag.siret) + '</span>';
-    if (diag.ape) h += '<span style="font-size:11px;color:var(--text-secondary);padding:2px 8px;background:var(--bg-tertiary);border-radius:4px;">APE ' + diag.ape + '</span>';
-    if (diag.zone) h += '<span style="font-size:11px;color:var(--accent-blue);padding:2px 8px;background:rgba(59,130,246,0.1);border-radius:4px;">Zone ' + diag.zone + '</span>';
+    if (diag.ape) h += '<span style="font-size:11px;color:var(--text-secondary);padding:2px 8px;background:var(--bg-tertiary);border-radius:4px;" title="Code activité officiel INSEE">APE ' + diag.ape + '<span style="opacity:0.55;margin-left:5px;">· INSEE</span></span>';
+    if (diag.zone) h += '<span style="font-size:11px;color:var(--accent-blue);padding:2px 8px;background:rgba(59,130,246,0.1);border-radius:4px;" title="Zone climatique déduite du code postal">Zone ' + diag.zone + '<span style="opacity:0.55;margin-left:5px;">· géoclimat</span></span>';
+    // V37.1 "connaissances" : surface bâtiment auto-détectée (IGN BD TOPO) si disponible
+    var _surfEst = 0, _surfSrc = '';
+    if (STATE.diagnostic.surfacePlancherEstimee && STATE.diagnostic.surfacePlancherEstimee > 20) { _surfEst = STATE.diagnostic.surfacePlancherEstimee; _surfSrc = 'IGN BD TOPO'; }
+    else if (STATE.diagnostic.surface && STATE.diagnostic.surface > 20) { _surfEst = STATE.diagnostic.surface; _surfSrc = 'saisie'; }
+    if (_surfEst > 0) {
+      h += '<span style="font-size:11px;color:var(--accent-green);padding:2px 8px;background:rgba(52,211,153,0.1);border-radius:4px;" title="Surface plancher ' + _surfSrc + '">📐 ' + Math.round(_surfEst) + ' m²<span style="opacity:0.55;margin-left:5px;">· ' + _surfSrc + '</span></span>';
+    }
     if (STATE.diagnostic.cadastre && STATE.diagnostic.cadastre.reference_cadastrale) {
-      h += '<span style="font-size:10px;color:var(--accent-purple);padding:2px 6px;background:rgba(188,140,255,0.1);border-radius:4px;font-family:\'JetBrains Mono\',monospace;" title="Parcelle cadastrale IGN">📋 ' + STATE.diagnostic.cadastre.reference_cadastrale + '</span>';
+      h += '<span style="font-size:10px;color:var(--accent-purple);padding:2px 6px;background:rgba(188,140,255,0.1);border-radius:4px;font-family:\'JetBrains Mono\',monospace;" title="Parcelle cadastrale IGN">📋 ' + STATE.diagnostic.cadastre.reference_cadastrale + '<span style="opacity:0.55;margin-left:4px;font-family:system-ui;">· cadastre</span></span>';
+    }
+    // V37.1 "anticipation" : secteur CEE inféré depuis APE — montrer la déduction
+    if (STATE.detectedSectors && STATE.detectedSectors.length && !(STATE.detectedSectors.length === 1 && STATE.detectedSectors[0] === 'BAT' && !diag.ape)) {
+      h += '<span style="font-size:11px;color:var(--accent-cyan);padding:2px 8px;background:rgba(0,212,170,0.08);border-radius:4px;" title="Secteur CEE inféré depuis code APE">🏭 ' + STATE.detectedSectors.join(' / ') + '<span style="opacity:0.55;margin-left:5px;">· APE→CEE</span></span>';
     }
     h += '</div>';
 
@@ -12317,6 +12396,17 @@ document.addEventListener('DOMContentLoaded', function() {
         h += '</div>';
       }
       h += '</div>';
+    } else if (diag.siret && diag.ape && _surfEst === 0) {
+      // V37.1 piliers "vérité + anticipation" : prime non-estimable sans surface fiable.
+      // On NE fabrique PAS de chiffre. On le dit honnêtement et on propose l'action minimale pour débloquer la suite.
+      h += '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,193,7,0.06);border:1px dashed rgba(255,193,7,0.4);border-radius:10px;margin-bottom:10px;">';
+      h += '<span style="font-size:18px;">📐</span>';
+      h += '<div style="flex:1;min-width:0;">';
+      h += '<div style="font-size:12px;color:var(--text-primary);font-weight:600;">Surface bâtiment non détectée</div>';
+      h += '<div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">Saisis ta surface (m²) pour voir ta prime estimée.</div>';
+      h += '</div>';
+      h += '<input type="number" min="20" max="100000" placeholder="ex: 450" style="width:120px;padding:8px 10px;border-radius:6px;border:1px solid var(--accent-orange);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;font-weight:600;" onchange="(function(v){var n=parseFloat(v);if(n>20){var s=document.getElementById(\'surface\');if(s){s.value=n;}STATE.diagnostic.surface=n;try{updateInsightHeadline();}catch(e){}}})(this.value)">';
+      h += '</div>';
     }
 
     // ─── LIGNE 3 : action proactive prioritaire ───
@@ -12338,6 +12428,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (primeBrute > 0) {
       var valueEl = document.getElementById('insightPrimeValue');
       if (valueEl) animateCount(valueEl, Math.round(primeBrute), {suffix: ' €', duration: 1400});
+      // V37.1 pilier "ludique" : micro-célébration la première fois qu'une prime est détectée pour ce SIRET.
+      var _celKey = '_firstPrimeCelebrated_' + (diag.siret || '_');
+      if (!STATE[_celKey]) {
+        STATE[_celKey] = true;
+        try { if (typeof celebrate === 'function') celebrate(0.9); } catch(_) {}
+      }
     }
 
     // V37 PERFECT — Mode "One Click" : auto-lancer Penta-IA si configurée et prime connue
@@ -12394,7 +12490,77 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   })();
 
-  console.log('🚀 WCS ORACLE V37 PRO chargé — Diagnostic CEE + CRM historique + Comparateur acheteurs + Mandat PDF + Tri-IA + Headline proactive');
+  // V37.1 Patch A : mini-show progressif pendant le lookup SIRET.
+  // Piliers appliqués :
+  //  • ludique : chips animés qui se cochent
+  //  • surprend par connaissances : expose les 7 sources interrogées (INSEE, APE→CEE, zone, IGN BD TOPO, cadastre, DPE, 234 fiches ADEME)
+  //  • vérité : une source qui échoue passe en "—" gris (pas cachée), pas en "✓" ; aucun fake.
+  (function() {
+    var SOURCES = [
+      { emoji: '🏢', label: 'Sirene (INSEE)',          check: function(){ return STATE.diagnostic && STATE.diagnostic.raisonSociale; } },
+      { emoji: '🏭', label: 'Secteur CEE (APE→CEE)',   check: function(){ return STATE.diagnostic && STATE.diagnostic.ape && STATE.detectedSectors && STATE.detectedSectors.length; } },
+      { emoji: '🌡️', label: 'Zone climatique',         check: function(){ return STATE.diagnostic && STATE.diagnostic.zone; } },
+      { emoji: '📐', label: 'Surface bâtiment (IGN)',  check: function(){ return STATE.diagnostic && ((STATE.diagnostic.surfacePlancherEstimee || 0) > 20 || (STATE.diagnostic.surface || 0) > 20); } },
+      { emoji: '📋', label: 'Parcelle cadastrale',     check: function(){ return STATE.diagnostic && STATE.diagnostic.cadastre && STATE.diagnostic.cadastre.reference_cadastrale; } },
+      { emoji: '🏠', label: 'DPE (Géoportail)',        check: function(){ return STATE.diagnostic && (STATE.diagnostic.dpe || STATE.diagnostic.dpeClasse); } },
+      { emoji: '📘', label: '234 fiches ADEME',        check: function(){ return typeof FICHES !== 'undefined' && FICHES && FICHES.length > 0; } }
+    ];
+    var progressTimer = null;
+    function chipHTML(s, state) {
+      var bg, border, color, icon;
+      if (state === 'ok')       { bg = 'rgba(52,211,153,0.14)'; border = 'rgba(52,211,153,0.45)'; color = 'var(--accent-green)'; icon = '✓'; }
+      else if (state === 'ko')  { bg = 'var(--bg-tertiary)';    border = 'var(--border)';          color = 'var(--text-muted)';  icon = '—'; }
+      else                       { bg = 'var(--bg-tertiary)';    border = 'var(--border)';          color = 'var(--text-secondary)'; icon = '<span style="animation:pulse 1.2s infinite;">⏳</span>'; }
+      return '<span style="padding:5px 10px;background:' + bg + ';border:1px solid ' + border + ';border-radius:6px;font-size:11px;color:' + color + ';display:inline-flex;align-items:center;gap:5px;" title="' + (state === 'ok' ? 'Détecté' : (state === 'ko' ? 'Non disponible pour ce site' : 'Recherche en cours')) + '">' + s.emoji + ' ' + s.label + ' ' + icon + '</span>';
+    }
+    function renderProgress(finalize) {
+      var chips = document.getElementById('lookupProgressChips');
+      var countEl = document.getElementById('lookupProgressCount');
+      if (!chips) return;
+      var ok = 0;
+      chips.innerHTML = SOURCES.map(function(s){
+        var done = false; try { done = !!s.check(); } catch(e){ done = false; }
+        if (done) ok++;
+        return chipHTML(s, done ? 'ok' : (finalize ? 'ko' : 'wait'));
+      }).join('');
+      if (countEl) countEl.textContent = ok + ' / ' + SOURCES.length + (finalize ? ' données détectées' : '');
+    }
+    window.startLookupProgress = function() {
+      var panel = document.getElementById('lookupProgress');
+      if (!panel) return;
+      panel.style.opacity = '1';
+      panel.style.display = 'block';
+      renderProgress(false);
+      if (progressTimer) clearInterval(progressTimer);
+      progressTimer = setInterval(function(){ renderProgress(false); }, 400);
+    };
+    window.finishLookupProgress = function() {
+      if (progressTimer) { clearInterval(progressTimer); progressTimer = null; }
+      renderProgress(true);
+      // Laisse le panneau visible comme preuve, puis dim léger
+      setTimeout(function(){
+        var panel = document.getElementById('lookupProgress');
+        if (!panel) return;
+        panel.style.transition = 'opacity 0.6s ease';
+        panel.style.opacity = '0.55';
+      }, 3500);
+    };
+    // Wrap PAR-DESSUS le wrapper existant (_v37wrapped) pour encadrer tout le cycle
+    var prior = window.lookupSIRET;
+    if (typeof prior === 'function' && !prior._v37progressWrapped) {
+      var wrappedP = async function() {
+        try { window.startLookupProgress(); } catch(e){}
+        var r;
+        try { r = await prior.apply(this, arguments); }
+        finally { setTimeout(function(){ try { window.finishLookupProgress(); } catch(e){} }, 1200); }
+        return r;
+      };
+      wrappedP._v37progressWrapped = true;
+      window.lookupSIRET = wrappedP;
+    }
+  })();
+
+  console.log('🚀 WCS ORACLE V37 PRO chargé — Diagnostic CEE + CRM historique + Comparateur acheteurs + Mandat PDF + Tri-IA + Headline proactive + mini-show sources V37.1');
 
   </script>
   <script src="js/cee-pdfs.js"></script>

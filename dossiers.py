@@ -27,17 +27,37 @@ from datetime import datetime
 from pathlib import Path
 from flask import jsonify, request, Response
 
-# TODO [Railway] : filesystem ephemere — les donnees dossiers_data/ sont perdues a chaque redeploy.
-# Migration future : Cloudflare D1, SQLite sur volume persistant Railway, ou S3.
-DOSSIERS_DIR = Path(__file__).parent / "dossiers_data"
-DOSSIERS_DIR.mkdir(exist_ok=True)
+# V37.1 P2 — Persistance Fly volume : si CEE_DATA_DIR est set (volume monté en prod), on l'utilise ;
+# sinon on retombe sur le path local (dev). Migration auto au boot si volume vide.
+def _resolve_data_dir(subdir: str) -> Path:
+    base = os.environ.get("CEE_DATA_DIR")
+    target = Path(base) / subdir if base else Path(__file__).parent / subdir
+    target.mkdir(parents=True, exist_ok=True)
+    # Migration one-shot : si on est passé sur volume mais qu'il est vide ET que le path local existe avec des données → recopier
+    if base:
+        local = Path(__file__).parent / subdir
+        if local.exists() and local != target and not any(target.glob("*.json")):
+            for f in local.glob("*.json"):
+                try:
+                    (target / f.name).write_bytes(f.read_bytes())
+                except Exception:
+                    pass
+    return target
+
+
+DOSSIERS_DIR = _resolve_data_dir("dossiers_data")
 INDEX_FILE = DOSSIERS_DIR / "_index.json"
 
 
 def _secret() -> str:
-    return (os.environ.get("CEE_DOSSIERS_SECRET")
-            or os.environ.get("CEE_JWT_SECRET")
-            or "dev-secret-v37-change-in-prod")
+    # V37.1 sécu : pas de fallback faible. En prod, échoue clairement plutôt que de signer avec un secret prévisible.
+    s = os.environ.get("CEE_DOSSIERS_SECRET") or os.environ.get("CEE_JWT_SECRET") or ""
+    weak = (not s) or len(s) < 32 or any(w in s.lower() for w in ("dev", "test", "change", "secret", "default", "qwerty"))
+    if weak:
+        if os.environ.get("CEE_ENV", "dev") == "prod":
+            raise RuntimeError("[SÉCU] CEE_DOSSIERS_SECRET ou CEE_JWT_SECRET requis (>= 32 chars, pas de marqueur faible) en prod")
+        return "DEV-ONLY-NOT-FOR-PROD-" + (s or "no-secret")
+    return s
 
 
 def _now_iso() -> str:

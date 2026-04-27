@@ -6,3 +6,7 @@ post_signature_data/
 conformite_data/
 .DS_Store
 *.output
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json
