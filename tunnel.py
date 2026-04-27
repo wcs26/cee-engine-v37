@@ -195,12 +195,13 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
             hooks_log["pncee_score"] = f"err: {e}"
 
     # Hook signature → post_signature.init auto si pas déjà créé
+    # V37.2.1 fix : dossier_id = tunnel_id (toujours unique, aucune collision SIRET)
     if new_stage == "signature":
         d = entry.get("data") or {}
         try:
             import post_signature
-            dossier_id = t.get("siret") or t.get("tunnel_id")
-            if dossier_id and not post_signature._load_dossier(dossier_id):
+            dossier_id = t["tunnel_id"]  # canonique : tunnel_id, pas siret
+            if not post_signature._load_dossier(dossier_id):
                 date_sig = d.get("date_signature") or now_str()
                 dates = post_signature._compute_dates_cibles(date_sig)
                 ps_dossier = {
@@ -213,33 +214,46 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
                     "etapes": {k: {"date_reelle": None, "en_cours": False, "notes": ""}
                                for k in post_signature.ETAPES_ORDRE},
                     "tunnel_id": t["tunnel_id"],
+                    "siret": t.get("siret", ""),
                     "vendor": t.get("vendor", ""),
                     "created_at": _now(),
                     "updated_at": _now(),
                 }
                 post_signature._save_dossier(dossier_id, ps_dossier)
                 t.setdefault("links", {})["post_signature_dossier_id"] = dossier_id
-                hooks_log["post_signature_init"] = "ok"
+                t.setdefault("links", {})["post_signature_url"] = f"/post-signature/{dossier_id}"
+                hooks_log["post_signature_init"] = f"ok dossier_id={dossier_id}"
+            else:
+                hooks_log["post_signature_init"] = "skip déjà existant"
         except Exception as e:
-            hooks_log["post_signature_init"] = f"err: {e}"
+            hooks_log["post_signature_init"] = f"err: {type(e).__name__}: {e}"
 
     # Hook universel → push Monday best-effort si token configuré
-    if os.environ.get("MONDAY_API_TOKEN") and not t.get("monday_item_id"):
-        try:
-            from monday_sync import push_dossier_to_monday
-            payload = {
-                "client": {"raison_sociale": t.get("raison_sociale", ""), "siret": t.get("siret", "")},
-                "operation": {"nom_chantier": f"Tunnel {t.get('tunnel_id', '')[:10]} stage={new_stage}"},
-                "calcul": {},
-                "admin": {},
-            }
-            r = push_dossier_to_monday(payload)
-            if r.get("ok") and r.get("monday_item_id"):
-                t["monday_item_id"] = r["monday_item_id"]
-                t.setdefault("links", {})["monday_url"] = r.get("url", "")
-                hooks_log["monday_push"] = f"item={r['monday_item_id']}"
-        except Exception as e:
-            hooks_log["monday_push"] = f"err: {e}"
+    # V37.2.1 fix : log explicitement chaque outcome (succès, erreur monday, skip), plus jamais silent.
+    if not t.get("monday_item_id"):
+        token_present = bool(os.environ.get("MONDAY_API_TOKEN"))
+        if not token_present:
+            hooks_log["monday_push"] = "skip MONDAY_API_TOKEN absent"
+        else:
+            try:
+                from monday_sync import push_dossier_to_monday
+                payload = {
+                    "client": {"raison_sociale": t.get("raison_sociale", ""), "siret": t.get("siret", "")},
+                    "operation": {"nom_chantier": f"Tunnel {t.get('tunnel_id', '')[:10]} stage={new_stage}"},
+                    "calcul": {},
+                    "admin": {},
+                }
+                r = push_dossier_to_monday(payload) or {}
+                if r.get("ok") and r.get("monday_item_id"):
+                    t["monday_item_id"] = r["monday_item_id"]
+                    t.setdefault("links", {})["monday_url"] = r.get("url", "")
+                    hooks_log["monday_push"] = f"ok item={r['monday_item_id']}"
+                elif r.get("error"):
+                    hooks_log["monday_push"] = f"err: {str(r['error'])[:120]}"
+                else:
+                    hooks_log["monday_push"] = f"err response inattendue: {str(r)[:120]}"
+            except Exception as e:
+                hooks_log["monday_push"] = f"err exception: {type(e).__name__}: {e}"
 
     if hooks_log:
         entry["hooks"] = hooks_log
