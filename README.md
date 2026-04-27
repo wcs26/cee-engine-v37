@@ -1,6 +1,8 @@
-# CEE Engine V37 PRO
+# CEE Engine V37.1 PRO
 
 **Audit CEE prédictif, proactif, intelligent** pour PME tertiaires, industries, multi-sites et copropriétés.
+
+> **V37.1 (2026-04-27)** — Boot guards sécu (JWT secret, CORS allowlist, origin guard `/ai/*`, webhook Monday HMAC), persistance Fly volume avec migration auto AHBFC, tunnel commercial unifié `lead → audit → R1 → R2 → signature → post_signature`, dashboard objectif V38 (`/analytics/sales-velocity`), widget Pipeline dans le drawer. **181 tests verts** (99 → 181). Détails déploiement : `JIMMY_TODO.md` + `SECURITE_RUNBOOK.md` + `scripts/smoke.sh`.
 
 ---
 
@@ -121,24 +123,24 @@ LOG_FORMAT=json gunicorn -w 4 -b 0.0.0.0:5001 api:app
 ## 🧪 Tests
 
 ```bash
-# Tous les tests (49 tests, ~30s)
-python3 -m pytest tests/
-
-# Sans accès internet (39 tests, 14s)
-python3 -m pytest tests/ -m "not network"
-
-# Uniquement les tests open data
-python3 -m pytest tests/ -m "network"
-
-# Verbose
+# Tous les tests (181 tests, ~75s)
+CEE_ENV=dev CEE_JWT_SECRET="$(openssl rand -hex 32)" \
+CEE_CONFORMITE_SECRET="$(openssl rand -hex 32)" \
 python3 -m pytest tests/ -v
+
+# Smoke test live post-deploy
+./scripts/smoke.sh https://cee-engine-v37.fly.dev
 ```
 
-Couverture actuelle :
-- ✅ 34 endpoints backend testés
-- ✅ Inputs invalides / edge cases
-- ✅ Règles métier critiques (commission 0%, filtre actifs)
-- ✅ Sécurité endpoints IA (400 sans clé, jamais 500)
+**Suite V37.1 (181 tests)** :
+- `tests/test_api.py` — 99 tests endpoints + intégration
+- `tests/test_auth.py` — 15 tests crypto, JWT roundtrip + détection altération + validation force secret
+- `tests/test_pncee.py` — 11 tests scoring dossier (GO/STOP/blockers)
+- `tests/test_conformite.py` — 16 tests structure 46 règles + executer_controles + horodatage HMAC
+- `tests/test_snapshot_ahbfc.py` — 9 tests verrouillant le dossier AHBFC vivant (BAT-EN-103 cumac, FOST, calcul prime témoin)
+- `tests/test_negociation.py` — 11 tests comparateur acheteurs (refus secteur/mixité, COFRAC, précarité)
+- `tests/test_pv_cotation.py` — 8 tests cotation PV (zones, modes, orientation, proportionnalité)
+- `tests/test_tunnel.py` — 12 tests orchestrateur commercial + KPI sales velocity
 
 ---
 

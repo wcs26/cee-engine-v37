@@ -1348,6 +1348,7 @@
       <button class="tk-tab" data-tab="docs" onclick="switchToolkitTab('docs')" style="flex:1;padding:10px 12px;background:transparent;border:none;color:var(--text-secondary);cursor:pointer;font-size:12px;border-bottom:2px solid transparent;">📝 Documents</button>
       <button class="tk-tab" data-tab="prospection" onclick="switchToolkitTab('prospection')" style="flex:1;padding:10px 12px;background:transparent;border:none;color:var(--text-secondary);cursor:pointer;font-size:12px;border-bottom:2px solid transparent;">🎯 Prospection</button>
       <button class="tk-tab" data-tab="formation" onclick="switchToolkitTab('formation')" style="flex:1;padding:10px 12px;background:transparent;border:none;color:var(--text-secondary);cursor:pointer;font-size:12px;border-bottom:2px solid transparent;">🎓 Formation</button>
+      <button class="tk-tab" data-tab="pipeline" onclick="switchToolkitTab('pipeline');loadSalesVelocity()" style="flex:1;padding:10px 12px;background:transparent;border:none;color:var(--text-secondary);cursor:pointer;font-size:12px;border-bottom:2px solid transparent;">📊 Pipeline</button>
     </div>
     <div id="tkTabClients" class="tk-pane" style="padding:16px 20px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -1426,6 +1427,26 @@
     <div id="tkTabFormation" class="tk-pane" style="padding:16px 20px;display:none;">
         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">QCM de formation vendeur — Méthode Maestro R1/R2/Closing</div>
         <div id="formationModules"></div>
+    </div>
+
+    <!-- V37.1 Pipeline : signatures/mois/vendor + objectif V38 +2/personne -->
+    <div id="tkTabPipeline" class="tk-pane" style="padding:16px 20px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary);">Pipeline & objectif V38</div>
+          <div style="font-size:11px;color:var(--text-secondary);">Signatures du mois par commercial · objectif +2 / personne · taux conversion R2 → signature</div>
+        </div>
+        <button onclick="loadSalesVelocity()" style="padding:6px 10px;font-size:11px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:6px;color:var(--text-secondary);cursor:pointer;">↻ Rafraîchir</button>
+      </div>
+      <div id="pipelineSummary" style="padding:12px;background:linear-gradient(135deg,rgba(0,212,170,0.06),rgba(188,140,255,0.06));border:1px solid rgba(0,212,170,0.2);border-radius:10px;margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Total signatures ce mois</div>
+        <div id="pipelineTotal" style="font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--accent-cyan);font-size:32px;line-height:1.1;">—</div>
+        <div id="pipelineTarget" style="font-size:11px;color:var(--text-secondary);margin-top:3px;">Chargement…</div>
+      </div>
+      <div id="pipelineVendors"></div>
+      <div id="pipelineEmpty" style="display:none;padding:14px;background:var(--bg-tertiary);border-radius:8px;font-size:12px;color:var(--text-secondary);text-align:center;">
+        Aucun tunnel actif ce mois. Crée un tunnel via <code>POST /tunnel</code> pour démarrer.
+      </div>
     </div>
   </aside>
 
@@ -11892,12 +11913,62 @@ document.addEventListener('DOMContentLoaded', function() {
       t.style.color = active ? 'var(--text-primary)' : 'var(--text-secondary)';
       t.classList.toggle('active', active);
     });
-    ['clients','acheteurs','docs','prospection','formation'].forEach(function(k) {
+    ['clients','acheteurs','docs','prospection','formation','pipeline'].forEach(function(k) {
       var pane = document.getElementById('tkTab' + k.charAt(0).toUpperCase() + k.slice(1));
       if (pane) pane.style.display = (k === tab) ? 'block' : 'none';
     });
     if (tab === 'docs') chargerDossierDansDrawer();
     if (tab === 'formation') chargerFormationModules();
+    if (tab === 'pipeline') loadSalesVelocity();
+  }
+
+  // V37.1 Pipeline — fetch /analytics/sales-velocity et rend le panel pipeline
+  async function loadSalesVelocity() {
+    var totalEl = document.getElementById('pipelineTotal');
+    var targetEl = document.getElementById('pipelineTarget');
+    var vendorsEl = document.getElementById('pipelineVendors');
+    var emptyEl = document.getElementById('pipelineEmpty');
+    if (!totalEl || !vendorsEl) return;
+    totalEl.textContent = '…';
+    targetEl.textContent = 'Chargement…';
+    vendorsEl.innerHTML = '';
+    if (emptyEl) emptyEl.style.display = 'none';
+    try {
+      var r = await fetch('/analytics/sales-velocity?objectif=2');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      totalEl.textContent = (d.total_signatures != null ? d.total_signatures : 0);
+      var vendorsCount = (d.vendors || []).length;
+      var objGlobal = d.objectif_global_calcule || (d.objectif_par_personne * vendorsCount);
+      targetEl.textContent = d.période + ' · objectif équipe ' + objGlobal + ' (= ' + d.objectif_par_personne + ' × ' + vendorsCount + ' commerciaux)';
+      if (!d.vendors || d.vendors.length === 0) {
+        if (emptyEl) emptyEl.style.display = 'block';
+        return;
+      }
+      var html = d.vendors.map(function(v) {
+        var ratio = v.signatures + ' / ' + d.objectif_par_personne;
+        var color = v.objectif_atteint ? 'var(--accent-green)' : 'var(--accent-orange)';
+        var icon = v.objectif_atteint ? '✓' : '↗';
+        var convR2 = v.conversion_r2_to_signature ? Math.round(v.conversion_r2_to_signature * 100) + '%' : '—';
+        var convLead = v.conversion_lead_to_signature ? Math.round(v.conversion_lead_to_signature * 100) + '%' : '—';
+        return '<div style="padding:10px 12px;background:var(--bg-tertiary);border:1px solid var(--border);border-left:3px solid ' + color + ';border-radius:8px;margin-bottom:6px;">'
+          + '<div style="display:flex;justify-content:space-between;align-items:center;">'
+          + '<span style="font-weight:700;font-size:13px;color:var(--text-primary);">' + (v.name || 'sans assigné') + '</span>'
+          + '<span style="font-family:\'JetBrains Mono\',monospace;font-weight:700;color:' + color + ';font-size:14px;">' + icon + ' ' + ratio + '</span>'
+          + '</div>'
+          + '<div style="display:flex;gap:14px;font-size:10px;color:var(--text-secondary);margin-top:4px;">'
+          + '<span>leads ' + (v.leads || 0) + '</span>'
+          + '<span>R1 ' + (v.r1 || 0) + '</span>'
+          + '<span>R2 ' + (v.r2 || 0) + '</span>'
+          + '<span>conv R2→sig <strong style="color:var(--accent-cyan);">' + convR2 + '</strong></span>'
+          + '<span>conv lead→sig ' + convLead + '</span>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+      vendorsEl.innerHTML = html;
+    } catch (e) {
+      vendorsEl.innerHTML = '<div style="padding:12px;background:var(--bg-tertiary);border-radius:8px;font-size:12px;color:var(--accent-orange);">Échec /analytics/sales-velocity : ' + e.message + '</div>';
+    }
   }
 
   async function lancerProspection() {
