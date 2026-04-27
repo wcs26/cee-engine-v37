@@ -487,31 +487,47 @@ def analyse():
     if "error" in result:
         return jsonify(result), 404
 
-    # V37.2 — Auto-création tunnel commercial à chaque audit SIRET (pont audit ↔ tunnel).
-    # Best-effort, jamais bloquant : si le tunnel existe déjà pour ce SIRET, skip.
-    # Si data["vendor"] fourni (par oracle.html), il est attaché.
+    # V37.2 → V37.3.10 — Auto-création tunnel + extraction data métier depuis /analyse.
+    # Format réel observé : entreprise.{naf, nom, departement, commune}, surface_estimee top-level,
+    # energie top-level, resultats (au lieu de oracle).
     if os.environ.get("CEE_TUNNEL_AUTO", "1") == "1":
         try:
             from tunnel import create_tunnel, list_tunnels, advance_tunnel
             existing = [t for t in list_tunnels() if t.get("siret") == siret]
-            if not existing:
-                vendor = data.get("vendor", "") or (result.get("vendor", "") if isinstance(result, dict) else "")
-                rs = (result.get("entreprise", {}) or {}).get("nom", "") if isinstance(result, dict) else ""
+            if not existing and isinstance(result, dict):
+                ent = result.get("entreprise", {}) or {}
+                vendor = data.get("vendor", "") or result.get("vendor", "")
+                rs = ent.get("nom", "") or ent.get("raison_sociale", "")
                 t = create_tunnel(siret=siret, vendor=vendor, source="oracle_audit", raison_sociale=rs)
-                # Advance to 'audit' avec la data métier extraite
-                fiches = []
-                if isinstance(result, dict):
-                    pack = (result.get("oracle") or {}).get("pack") or []
-                    fiches = [f.get("ref") for f in pack if isinstance(f, dict) and f.get("ref")]
+                # Extraction data métier — noms de champs réels du retour /analyse
+                naf = ent.get("naf", "") or ent.get("ape", "")
+                dpt = ent.get("departement", "") or (ent.get("cp", "") or "")[:2]
+                surface = (result.get("surface_estimee", 0) or
+                           ent.get("surface_estimee_m2", 0) or
+                           ent.get("surface", 0) or 0)
+                energie = result.get("energie") or ent.get("energie") or ""
+                # resultats peut être dict avec pack ou list — défensif
+                res_obj = result.get("resultats") or result.get("oracle") or {}
+                if isinstance(res_obj, dict):
+                    pack = res_obj.get("pack") or []
+                elif isinstance(res_obj, list):
+                    pack = res_obj
+                else:
+                    pack = []
+                fiches = [f.get("ref") or f.get("fiche") for f in pack
+                          if isinstance(f, dict) and (f.get("ref") or f.get("fiche"))]
                 advance_tunnel(t["tunnel_id"], target_stage="audit", data={
                     "fiches": fiches[:10],
-                    "surface": (result.get("entreprise", {}) or {}).get("surface_estimee_m2", 0) if isinstance(result, dict) else 0,
-                    "departement": ((result.get("entreprise", {}) or {}).get("cp", "") or "")[:2] if isinstance(result, dict) else "",
+                    "naf": naf,
+                    "ape": naf,
+                    "surface": float(surface) if surface else 0,
+                    "departement": dpt,
+                    "secteur": result.get("secteur", ""),
+                    "energie": energie,
                     "rge_installateur": False,
                     "date_engagement": "",
                 })
-                if isinstance(result, dict):
-                    result["tunnel_id"] = t["tunnel_id"]
+                result["tunnel_id"] = t["tunnel_id"]
         except Exception:
             pass  # ne casse jamais l'audit principal
 

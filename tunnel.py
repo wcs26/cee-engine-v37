@@ -291,10 +291,15 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
             hooks_log["prime_exacte"] = f"err: {type(e).__name__}: {str(e)[:80]}"
 
         # Cross-sell PV : tertiaire + surface > 100 m² → suggérer audit PV
+        # V37.3.11 — préfixes NAF tertiaire élargis (55=hébergement, 56=restauration,
+        # 47=commerce détail, 70=bureau, 85=enseignement, 86=santé, 87=social,
+        # 90=arts/spectacle, 91=biblio/musée, 93=sport, 96=services personnels)
         try:
             secteur = (d.get("secteur") or "").upper()
             surface = float(d.get("surface", 0) or 0)
-            tertiaire = secteur in ("BAT", "TRA", "BAR") or (d.get("naf", "") or "").startswith(("70", "85", "86", "47", "55"))
+            naf = (d.get("naf") or "").replace(".", "")[:2]
+            naf_tertiaire = naf in {"47","55","56","68","70","85","86","87","88","90","91","93","94","96"}
+            tertiaire = secteur in ("BAT", "TRA", "BAR") or naf_tertiaire
             if tertiaire and surface > 100 and not t.get("suggestions", {}).get("pv"):
                 # Estimation rapide : 1 kWc / 6 m² toiture, plafond raisonnable
                 kwc_estime = round(min(surface / 6, 250), 1)
