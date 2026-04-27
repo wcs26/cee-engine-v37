@@ -26,7 +26,7 @@ from __future__ import annotations
 import json
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -49,7 +49,7 @@ INDEX_FILE = TUNNEL_DIR / "_index.json"
 
 
 def _now() -> str:
-    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    return datetime.now(timezone.utc).replace(tzinfo=None).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def _new_id() -> str:
@@ -177,7 +177,7 @@ def sales_velocity(month: str | None = None, objectif_par_personne: int = 2) -> 
     month = "YYYY-MM" (défaut : mois courant)
     """
     if not month:
-        month = datetime.utcnow().strftime("%Y-%m")
+        month = datetime.now(timezone.utc).replace(tzinfo=None).strftime("%Y-%m")
     tunnels = list_tunnels()
     # Compter signatures = tunnels qui ont atteint stage 'signature' OU 'post_signature' dans le mois
     by_vendor: dict[str, dict] = {}
