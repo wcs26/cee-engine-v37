@@ -267,7 +267,22 @@ def register_monday_routes(app) -> None:
     @app.route("/monday/webhook", methods=["POST"])
     def _monday_webhook():
         """Callback webhook Monday (changement de statut).
-        À configurer dans Monday : Settings → Integrations → Webhooks."""
+        À configurer dans Monday : Settings → Integrations → Webhooks.
+
+        V37.1 sécu : vérification HMAC du header Authorization avec MONDAY_WEBHOOK_SECRET.
+        Sans secret côté serveur, l'endpoint reste ouvert (mode legacy / dev).
+        Avec secret, refuse toute requête sans signature valide.
+        """
+        import hmac as _hmac
+        import os as _os
+        webhook_secret = _os.environ.get("MONDAY_WEBHOOK_SECRET", "")
+        if webhook_secret:
+            provided = request.headers.get("Authorization", "")
+            if not provided or not _hmac.compare_digest(provided, webhook_secret):
+                return jsonify({"error": "Webhook signature invalide"}), 403
+        elif _os.environ.get("CEE_ENV", "dev") == "prod":
+            # En prod, refuser de traiter sans secret = vérité (pas de webhook silencieusement non-vérifié)
+            return jsonify({"error": "MONDAY_WEBHOOK_SECRET non configuré côté serveur"}), 503
         data = request.json or {}
         # Monday envoie un challenge pour vérification
         if "challenge" in data:

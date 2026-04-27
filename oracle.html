@@ -1478,7 +1478,7 @@
             <input type="text" id="siret" placeholder="123 456 789 00010" maxlength="17" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupSIRET()}" oninput="clearTimeout(window._siretDebounce);window._siretDebounce=setTimeout(function(){var v=document.getElementById('siret').value.replace(/\s/g,'');if(v.length===14&&/^\d{14}$/.test(v))lookupSIRET()},600)">
             <button class="hero-btn" id="siretBtn" onclick="lookupSIRET()">Lancer l'audit</button>
           </div>
-          <div class="field-why" style="max-width:500px;margin:12px auto 0;font-size:12px;">Le SIRET pré-remplit automatiquement raison sociale, adresse, code APE et zone climatique.</div>
+          <div class="field-why" style="max-width:500px;margin:12px auto 0;font-size:12px;">Le SIRET pré-remplit raison sociale, adresse, code APE et zone climatique.</div>
           <!-- V37.1 Patch A : mini-show "ludique + connaissances + vérité" pendant le loading SIRET. Chips cochent au fur et à mesure. Une source qui échoue passe en gris (vérité : on ne cache pas). -->
           <div id="lookupProgress" style="display:none;max-width:680px;margin:20px auto 0;padding:14px 16px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;">
             <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">🔎 Analyse en cours <span id="lookupProgressCount" style="float:right;font-weight:600;color:var(--accent-cyan);"></span></div>
@@ -1829,8 +1829,8 @@
 
       <!-- ÉTAPE 4: Résultats -->
       <div class="step-content" id="step4">
-        <h2>Résultats du diagnostic</h2>
-        <p class="subtitle">Récapitulatif des économies d'énergie et prime CEE</p>
+        <h2>Tes résultats</h2>
+        <p class="subtitle">Économies d'énergie + prime CEE consolidées, classées par impact €</p>
         
         <div class="kpi-grid">
           <div class="kpi-card">
@@ -1890,8 +1890,8 @@
         <div class="score-container" id="scoreContainer">
           <div class="score-header">
             <div>
-              <h3 style="font-size: 14px; margin-bottom: 4px;">Score de probabilité de validation PNCEE</h3>
-              <p style="font-size: 12px; color: var(--text-secondary);" id="scoreLabel">Calcul en cours...</p>
+              <h3 style="font-size: 14px; margin-bottom: 4px;">Probabilité d'acceptation PNCEE</h3>
+              <p style="font-size: 12px; color: var(--text-secondary);" id="scoreLabel">Calcul en cours…</p>
             </div>
             <div class="score-value" id="scoreValue">0/100</div>
           </div>
@@ -1944,8 +1944,8 @@
 
       <!-- ÉTAPE 5: Rapport -->
       <div class="step-content" id="step5">
-        <h2>Rapport de diagnostic</h2>
-        <p class="subtitle">Export et signature du diagnostic CEE</p>
+        <h2>Ton rapport CEE</h2>
+        <p class="subtitle">Export PDF + signature électronique, prêt à transmettre au client</p>
         
         <div class="alert alert-info">
           <svg class="alert-icon icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
