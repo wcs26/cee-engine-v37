@@ -23,7 +23,7 @@ import uuid
 import hmac
 import hashlib
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from flask import jsonify, request, Response
 
@@ -61,7 +61,7 @@ def _secret() -> str:
 
 
 def _now_iso() -> str:
-    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    return datetime.now(timezone.utc).replace(tzinfo=None).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def _new_id() -> str:

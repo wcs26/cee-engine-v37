@@ -692,6 +692,59 @@ def register_tunnel_routes(app) -> None:
             return jsonify({"error": "tunnel inconnu"}), 404
         return jsonify(t)
 
+    @app.route("/tunnel/<tunnel_id>/backdate", methods=["POST"])
+    def _tunnel_backdate(tunnel_id):
+        """V37.3.4 — Réécrit created_at/updated_at + dates des stages dans history.
+        Body : {"created_at":"YYYY-MM-DDTHH:MM:SSZ", "updated_at":"...",
+                "history_dates":[{"stage":"audit","ts":"..."},...]}
+        Permet de refléter la chronologie réelle quand on importe un dossier seedé."""
+        t = _load(tunnel_id)
+        if not t:
+            return jsonify({"error": "tunnel inconnu"}), 404
+        d = request.json or {}
+        if "created_at" in d:
+            t["created_at"] = d["created_at"]
+        if "updated_at" in d:
+            t["updated_at"] = d["updated_at"]
+        for new_h in d.get("history_dates", []) or []:
+            stage = new_h.get("stage")
+            ts = new_h.get("ts")
+            if not stage or not ts:
+                continue
+            for h in t.get("history", []):
+                if h.get("stage") == stage:
+                    h["ts"] = ts
+                    break
+        _save(t)
+        return jsonify(t)
+
+    @app.route("/tunnel/<tunnel_id>/link-post-signature", methods=["POST"])
+    def _tunnel_link_post_signature(tunnel_id):
+        """V37.3.4 — Lie un tunnel à un dossier post_signature existant
+        (cas AHBFC Magritte déjà persisté avant V37.3)."""
+        t = _load(tunnel_id)
+        if not t:
+            return jsonify({"error": "tunnel inconnu"}), 404
+        d = request.json or {}
+        ps_id = d.get("post_signature_dossier_id")
+        if not ps_id:
+            return jsonify({"error": "post_signature_dossier_id requis"}), 400
+        try:
+            import post_signature
+            existing = post_signature._load_dossier(ps_id)
+            if not existing:
+                return jsonify({"error": f"post_signature dossier {ps_id} introuvable"}), 404
+            # Cross-link
+            existing["tunnel_id"] = t["tunnel_id"]
+            existing.setdefault("vendor", t.get("vendor"))
+            post_signature._save_dossier(ps_id, existing)
+            t.setdefault("links", {})["post_signature_dossier_id"] = ps_id
+            t["links"]["post_signature_url"] = f"/post-signature/{ps_id}"
+            _save(t)
+            return jsonify({"ok": True, "tunnel_links": t.get("links"), "post_signature_tunnel_id": ps_id})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
     @app.route("/tunnel/<tunnel_id>/full", methods=["GET"])
     def _tunnel_full(tunnel_id):
         """V37.3 — Vue contextuelle complète : tunnel + prédictif + alertes + sources tracées.

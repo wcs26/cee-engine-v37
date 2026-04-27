@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Blueprint, jsonify
 
 # ---------------------------------------------------------------------------
@@ -199,7 +199,7 @@ def get_cycle_vie(siret):
             except (ValueError, TypeError):
                 pass
     if j0 is None:
-        j0 = datetime.utcnow()
+        j0 = datetime.now(timezone.utc).replace(tzinfo=None)
 
     timeline = [
         {

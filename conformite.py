@@ -24,7 +24,7 @@ import hmac
 import json
 import os
 import time
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from pathlib import Path
 from typing import Any
 
@@ -776,7 +776,7 @@ def horodater(data: dict) -> dict:
     """
     canonical = json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     ts = int(time.time())
-    ts_iso = datetime.utcfromtimestamp(ts).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts_iso = datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Hash SHA-256 du contenu
     content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
@@ -918,7 +918,7 @@ def verifier_integrite_archive() -> dict:
 def journal(action: str, details: dict, user: str = "system") -> None:
     """Append-only audit log, ne peut jamais être modifié."""
     entry = {
-        "ts": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+        "ts": datetime.now(timezone.utc).replace(tzinfo=None).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
         "user": user,
         "action": action,
         "details": details,

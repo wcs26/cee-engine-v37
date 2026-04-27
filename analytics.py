@@ -17,7 +17,7 @@ import json
 import os
 import time
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -206,7 +206,7 @@ def _build_forecast() -> dict:
 
     post_sigs = _load_all_post_signature()
     dossiers_by_id = {d.get("id"): d for d in _load_all_dossiers()}
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     j30 = now + timedelta(days=30)
     j60 = now + timedelta(days=60)
     j90 = now + timedelta(days=90)
@@ -380,7 +380,7 @@ def _build_activite(jours: int = 30) -> dict:
         return cached
 
     entries = _load_audit_log()
-    cutoff = datetime.utcnow() - timedelta(days=jours)
+    cutoff = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=jours)
 
     par_jour: dict[str, int] = defaultdict(int)
     par_type: Counter = Counter()
