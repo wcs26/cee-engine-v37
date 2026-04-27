@@ -746,6 +746,22 @@ def register_tunnel_routes(app) -> None:
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+    @app.route("/tunnel/<tunnel_id>/update", methods=["PATCH", "POST"])
+    def _tunnel_update(tunnel_id):
+        """V37.3.7 — Met à jour les champs identité d'un tunnel (siret, raison_sociale, vendor).
+        Utile pour remplacer un placeholder par les vraies infos une fois connues."""
+        t = _load(tunnel_id)
+        if not t:
+            return jsonify({"error": "tunnel inconnu"}), 404
+        d = request.json or {}
+        ALLOWED = {"siret", "raison_sociale", "vendor", "source"}
+        for k, v in d.items():
+            if k in ALLOWED and v is not None:
+                t[k] = v
+        t["updated_at"] = _now()
+        _save(t)
+        return jsonify(t)
+
     @app.route("/tunnel/<tunnel_id>/push-monday", methods=["POST"])
     def _tunnel_push_monday_now(tunnel_id):
         """V37.3.6 — Force le push d'un tunnel vers Monday board.
