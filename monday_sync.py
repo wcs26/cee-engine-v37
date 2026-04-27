@@ -264,27 +264,60 @@ def register_monday_routes(app) -> None:
             "group": group_id,
         }), 201
 
+    def _verify_monday_jwt(token: str, secret: str) -> bool:
+        """Verify a JWT HS256 signed by Monday using shared signature_secret.
+        Monday envoie Authorization: <jwt> sur chaque event si signature_secret
+        a été défini à la création du webhook (config: {signature_secret: ...}).
+        """
+        import hmac as _hmac
+        import hashlib as _hashlib
+        import base64 as _base64
+        try:
+            parts = token.split(".")
+            if len(parts) != 3:
+                return False
+            h, p, s = parts
+            expected = _hmac.new(secret.encode(), f"{h}.{p}".encode(), _hashlib.sha256).digest()
+            pad = "=" * (-len(s) % 4)
+            provided = _base64.urlsafe_b64decode(s + pad)
+            return _hmac.compare_digest(provided, expected)
+        except Exception:
+            return False
+
     @app.route("/monday/webhook", methods=["POST"])
     def _monday_webhook():
         """Callback webhook Monday (changement de statut).
-        À configurer dans Monday : Settings → Integrations → Webhooks.
 
-        V37.1 sécu : challenge Monday traité AVANT toute vérification (Monday ne
-        signe pas le challenge initial). Sur les events réels, vérification HMAC
-        Authorization si MONDAY_WEBHOOK_SECRET est set.
+        V37.1.1 sécu :
+        - Challenge Monday traité AVANT toute vérification (Monday ne signe pas le challenge initial)
+        - Sur events réels : 2 modes de validation acceptés
+            (a) JWT HS256 signé avec MONDAY_WEBHOOK_SECRET (Monday natif quand config.signature_secret est set)
+            (b) Authorization brut == MONDAY_WEBHOOK_SECRET (compat tests / clients custom)
         """
         import hmac as _hmac
         import os as _os
         data = request.json or {}
-        # 1. Monday envoie un challenge non signé à la création — on le retourne tel quel.
-        #    Ce path doit être ouvert sinon Monday refuse de créer le webhook.
+        # 1. Challenge Monday — non signé, doit passer pour que Monday accepte de créer le webhook.
         if "challenge" in data:
             return jsonify({"challenge": data["challenge"]})
-        # 2. Sur events réels, vérifier la signature si secret configuré.
+        # 2. Vérification token si secret configuré.
+        # Monday natif n'accepte pas signature_secret sur l'event change_column_value.
+        # Pattern utilisé : token en query param de l'URL configurée côté Monday
+        # (ex: https://cee-engine-v37.fly.dev/monday/webhook?token=<MONDAY_WEBHOOK_SECRET>).
+        # Acceptés aussi : Authorization brut (compat) et JWT signé (si Monday le supporte un jour).
         webhook_secret = _os.environ.get("MONDAY_WEBHOOK_SECRET", "")
         if webhook_secret:
-            provided = request.headers.get("Authorization", "")
-            if not provided or not _hmac.compare_digest(provided, webhook_secret):
+            url_token = request.args.get("token", "")
+            auth_header = request.headers.get("Authorization", "")
+            valid = False
+            if url_token and _hmac.compare_digest(url_token, webhook_secret):
+                valid = True  # mode URL ?token=...
+            elif auth_header:
+                if _verify_monday_jwt(auth_header, webhook_secret):
+                    valid = True  # mode JWT Monday (futur)
+                elif _hmac.compare_digest(auth_header, webhook_secret):
+                    valid = True  # mode header brut
+            if not valid:
                 return jsonify({"error": "Webhook signature invalide"}), 403
         elif _os.environ.get("CEE_ENV", "dev") == "prod":
             return jsonify({"error": "MONDAY_WEBHOOK_SECRET non configuré côté serveur"}), 503
