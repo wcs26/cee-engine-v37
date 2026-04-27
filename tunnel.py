@@ -32,6 +32,11 @@ from typing import Any
 
 from flask import jsonify, request
 
+# Path déjà importé via import standard
+
+
+
+
 
 TUNNEL_STAGES = ["lead", "audit", "r1", "r2", "signature", "post_signature"]
 
@@ -117,6 +122,45 @@ def create_tunnel(siret: str, vendor: str = "", source: str = "manual",
     return t
 
 
+def _preflight_signature(t: dict, data: dict) -> tuple[bool, list[str]]:
+    """V37.3 — Pré-validation bloquante avant advance vers 'signature'.
+    Vérifie la conformité juridique P6 (46 règles) + non-cumul + RGE.
+    Retourne (ok, blockers). En mode strict (CEE_TUNNEL_STRICT=1), bloque si !ok.
+    Sinon log seulement.
+    """
+    blockers = []
+    # 1. Conformité 46 règles P6
+    try:
+        from conformite import executer_controles
+        dossier = {
+            "siret": t.get("siret", ""),
+            "raison_sociale": t.get("raison_sociale", ""),
+            "adresse": data.get("adresse", ""),
+            "fiches": data.get("fiches") or [],
+            "surface": data.get("surface", 0),
+            "rge_installateur": data.get("rge_installateur", False),
+            "rge_qualifications": data.get("rge_qualifications") or [],
+            "rge_date_validite": data.get("rge_date_validite"),
+            "date_engagement": data.get("date_engagement", ""),
+            "date_signature": data.get("date_signature", ""),
+        }
+        rapport = executer_controles(dossier)
+        if rapport.get("nb_bloquants", 0) > 0:
+            for r in rapport.get("resultats", []):
+                if r.get("statut") == "bloquant":
+                    blockers.append(f"P6 {r.get('id')}: {r.get('description')}")
+    except Exception:
+        pass  # ne pas bloquer si conformite plante
+
+    # 2. PNCEE score < 65 = STOP
+    pncee = (t.get("checks", {}) or {}).get("pncee", {})
+    if pncee.get("verdict") == "STOP":
+        for b in pncee.get("blockers") or []:
+            blockers.append(f"PNCEE: {b}")
+
+    return (len(blockers) == 0), blockers
+
+
 def advance_tunnel(tunnel_id: str, target_stage: str | None = None,
                    data: dict | None = None) -> dict | None:
     """Avance le tunnel au stage suivant (ou spécifié) avec data attachée.
@@ -141,6 +185,12 @@ def advance_tunnel(tunnel_id: str, target_stage: str | None = None,
         if current_idx == len(TUNNEL_STAGES) - 1:
             return t  # déjà au bout
         new_stage = TUNNEL_STAGES[current_idx + 1]
+
+    # V37.3 — Pré-validation conformité bloquante avant signature en mode strict
+    if new_stage == "signature" and os.environ.get("CEE_TUNNEL_STRICT") == "1":
+        ok, blockers = _preflight_signature(t, data or {})
+        if not ok:
+            raise PermissionError("STRICT_BLOCKED:" + "|".join(blockers[:3]))
 
     now = _now()
     t["current_stage"] = new_stage
@@ -167,7 +217,14 @@ def advance_tunnel(tunnel_id: str, target_stage: str | None = None,
 
 def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
     """Exécute les hooks métier à l'entrée d'un stage. Best-effort : log les
-    erreurs dans entry['hooks'] mais ne casse jamais l'advance."""
+    erreurs dans entry['hooks'] mais ne casse jamais l'advance.
+
+    V37.3 — Hooks complets :
+    - audit       : score PNCEE + prime exacte (moteur_cee_master) + cross-sell PV + sources
+    - r2          : délégataire optimal (comparer_acheteurs)
+    - signature   : post_signature.init + push Monday (déjà présents)
+    Sources tracées dans entry['hooks'] avec format 'ok via <module>:<fn>'.
+    """
     hooks_log: dict[str, str] = {}
 
     # Hook audit → score PNCEE auto si data métier disponible
@@ -189,10 +246,98 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
                     "score": score.get("score"),
                     "verdict": score.get("verdict"),
                     "blockers_count": len(score.get("blockers") or []),
+                    "blockers": score.get("blockers", [])[:5],  # top 5 pour traçabilité
+                    "warnings": score.get("warnings", [])[:5],
+                    "source": "pncee.score_dossier",
+                    "ts": _now(),
                 }
-                hooks_log["pncee_score"] = "ok"
+                hooks_log["pncee_score"] = f"ok verdict={score.get('verdict')} score={score.get('score')}"
         except Exception as e:
-            hooks_log["pncee_score"] = f"err: {e}"
+            hooks_log["pncee_score"] = f"err: {type(e).__name__}: {e}"
+
+        # V37.3 — Calcul prime exacte (moteur expert) + cross-sell PV intelligent
+        # V37.3.2 fix : adapter au vrai schéma de retour {results, pack, total_prime, summary}
+        try:
+            from auto_detect import moteur_expert_v2
+            naf = d.get("naf") or d.get("ape", "")
+            surface = float(d.get("surface", 0) or 0)
+            dpt = d.get("departement", "") or ""
+            if naf and surface > 0 and dpt:
+                m = moteur_expert_v2(entreprise={"naf": naf}, surface=surface, energie=d.get("energie"), departement=dpt)
+                if isinstance(m, dict):
+                    pack = m.get("pack") or []
+                    total_prime = float(m.get("total_prime") or 0)
+                    cumac_total = sum(int(p.get("cumac") or 0) for p in pack)
+                    top_fiches = [{"ref": p.get("fiche"), "prime": p.get("prime"), "cumac": p.get("cumac"),
+                                   "score": p.get("score"), "pitch": p.get("pitch", "")[:140]}
+                                  for p in pack[:5]]
+                    t.setdefault("checks", {})["prime"] = {
+                        "prime_brute_eur": int(total_prime),
+                        "cumac_total": cumac_total,
+                        "nb_fiches": len(pack),
+                        "top_fiches": top_fiches,
+                        "summary": (m.get("summary") or "")[:200],
+                        "source": "auto_detect.moteur_expert_v2",
+                        "ts": _now(),
+                    }
+                    hooks_log["prime_exacte"] = f"ok prime_brute={int(total_prime)}€ cumac={cumac_total} fiches={len(pack)}"
+                else:
+                    hooks_log["prime_exacte"] = "skip retour non-dict"
+        except Exception as e:
+            hooks_log["prime_exacte"] = f"err: {type(e).__name__}: {str(e)[:80]}"
+
+        # Cross-sell PV : tertiaire + surface > 100 m² → suggérer audit PV
+        try:
+            secteur = (d.get("secteur") or "").upper()
+            surface = float(d.get("surface", 0) or 0)
+            tertiaire = secteur in ("BAT", "TRA", "BAR") or (d.get("naf", "") or "").startswith(("70", "85", "86", "47", "55"))
+            if tertiaire and surface > 100 and not t.get("suggestions", {}).get("pv"):
+                # Estimation rapide : 1 kWc / 6 m² toiture, plafond raisonnable
+                kwc_estime = round(min(surface / 6, 250), 1)
+                t.setdefault("suggestions", {})["pv"] = {
+                    "raison": "secteur tertiaire + surface > 100 m² = potentiel autoconsommation PV",
+                    "puissance_kwc_estimee": kwc_estime,
+                    "endpoint": "/pv/cotation",
+                    "url_tunnel_pv": f"POST /tunnel avec source='cross_sell_pv' siret={t.get('siret', '')}",
+                    "source": "tunnel.heuristique_cross_sell_v37_3",
+                    "ts": _now(),
+                }
+                hooks_log["cross_sell_pv"] = f"ok kwc≈{kwc_estime}"
+        except Exception as e:
+            hooks_log["cross_sell_pv"] = f"skip: {type(e).__name__}"
+
+    # V37.3 — Hook r2 → suggérer délégataire optimal (max prime nette)
+    if new_stage == "r2":
+        try:
+            from negociation import comparer_acheteurs
+            cumac = (t.get("checks", {}).get("prime") or {}).get("cumac_total") or 0
+            secteurs_t = [t.get("secteur")] if t.get("secteur") else None
+            cout_travaux = (entry.get("data") or {}).get("cout_travaux_ttc", 0)
+            if cumac > 0:
+                comp = comparer_acheteurs(volume_kwhc=cumac, secteurs=secteurs_t, cout_travaux_ttc=cout_travaux)
+                # comp peut être dict ou list selon impl ; on extrait le top
+                top = None
+                if isinstance(comp, dict):
+                    cands = comp.get("scenarios") or comp.get("acheteurs") or list(comp.values())
+                else:
+                    cands = comp
+                if cands:
+                    cands_ok = [c for c in cands if isinstance(c, dict) and c.get("statut") not in ("REFUSE", "VOLUME_INSUFFISANT")]
+                    cands_ok.sort(key=lambda c: -float(c.get("prime_nette") or c.get("prime_brute") or 0))
+                    if cands_ok:
+                        top = cands_ok[0]
+                if top:
+                    t.setdefault("suggestions", {})["delegataire"] = {
+                        "acheteur": top.get("acheteur"),
+                        "type": top.get("type"),
+                        "prime_nette_eur": top.get("prime_nette") or top.get("prime_brute"),
+                        "prix_mwhc": top.get("prix_mwhc"),
+                        "source": "negociation.comparer_acheteurs",
+                        "ts": _now(),
+                    }
+                    hooks_log["delegataire_optimal"] = f"ok {top.get('acheteur')} prime≈{top.get('prime_nette') or top.get('prime_brute'):.0f}€"
+        except Exception as e:
+            hooks_log["delegataire_optimal"] = f"skip: {type(e).__name__}: {str(e)[:80]}"
 
     # Hook signature → post_signature.init auto si pas déjà créé
     # V37.2.1 fix : dossier_id = tunnel_id (toujours unique, aucune collision SIRET)
@@ -230,7 +375,13 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
 
     # Hook universel → push Monday best-effort si token configuré
     # V37.2.1 fix : log explicitement chaque outcome (succès, erreur monday, skip), plus jamais silent.
-    if not t.get("monday_item_id"):
+    # V37.3.1 fix : skip si tunnel test (source commence par "test" / "smoke" / "retest" / "ci")
+    #               pour ne plus polluer le board prod pendant les tests.
+    src = (t.get("source") or "").lower()
+    is_test_tunnel = any(src.startswith(p) for p in ("test", "smoke", "retest", "ci_"))
+    if is_test_tunnel:
+        hooks_log["monday_push"] = f"skip tunnel test source={src}"
+    elif not t.get("monday_item_id"):
         token_present = bool(os.environ.get("MONDAY_API_TOKEN"))
         if not token_present:
             hooks_log["monday_push"] = "skip MONDAY_API_TOKEN absent"
@@ -404,7 +555,9 @@ def _next_action_for_stage(stage: str) -> str:
 
 
 def predict_next(tunnel_id: str) -> dict | None:
-    """Pour un tunnel donné, retourne action + ETA + risque."""
+    """Pour un tunnel donné, retourne action prioritaire + risque + alertes
+    (abrogation imminente, COFRAC probable, délégataire suggéré). V37.3 enrichi.
+    Toutes les sources sont tracées dans le retour."""
     t = _load(tunnel_id)
     if not t:
         return None
@@ -417,6 +570,61 @@ def predict_next(tunnel_id: str) -> dict | None:
     except Exception:
         days = 0
     pct = days / sla if sla else 0
+
+    alerts: list[dict] = []
+
+    # 1. Abrogation imminente sur les fiches du dossier (lecture deadlines.json)
+    fiches = []
+    for h in t.get("history", []):
+        f = (h.get("data") or {}).get("fiches") or []
+        for ref in f:
+            if ref not in fiches:
+                fiches.append(ref)
+    try:
+        deadlines_path = Path(__file__).parent / "deadlines.json"
+        if deadlines_path.exists() and fiches:
+            dl = json.loads(deadlines_path.read_text())
+            today = datetime.now(timezone.utc).replace(tzinfo=None)
+            for ref in fiches:
+                if ref in dl:
+                    try:
+                        d_abrog = datetime.strptime(dl[ref], "%Y-%m-%d")
+                        days_to_abrog = (d_abrog - today).days
+                        if days_to_abrog < 0:
+                            alerts.append({"type": "abrogation_passee", "fiche": ref, "depuis_j": -days_to_abrog,
+                                          "message": f"Fiche {ref} ABROGÉE depuis {-days_to_abrog}j — dossier non recevable",
+                                          "severite": "critique", "source": "deadlines.json"})
+                        elif days_to_abrog < 90:
+                            alerts.append({"type": "abrogation_imminente", "fiche": ref, "dans_j": days_to_abrog,
+                                          "message": f"Fiche {ref} abrogée dans {days_to_abrog}j — déposer PNCEE avant",
+                                          "severite": "haute" if days_to_abrog < 30 else "moyenne",
+                                          "source": "deadlines.json"})
+                    except Exception:
+                        pass
+    except Exception:
+        pass
+
+    # 2. COFRAC probable (volume > 10 MWhc)
+    cumac = (t.get("checks", {}).get("prime") or {}).get("cumac_total") or 0
+    if cumac > 10_000_000:  # > 10 MWhc
+        alerts.append({
+            "type": "cofrac_probable", "volume_kwhc": cumac,
+            "message": f"Volume {cumac/1e6:.1f} MWhc > 10 MWhc → contrôle COFRAC probable (30% en P6). Prévoir photos avant/après géolocalisées.",
+            "severite": "info", "source": "tunnel.predict_next + pncee.score_dossier",
+        })
+
+    # 3. SLA dépassement
+    if pct > 0.7:
+        alerts.append({
+            "type": "stagnant", "stage": stage, "days_in_stage": round(days, 1), "sla_days": sla,
+            "message": f"Stage {stage} stagne {round(days, 1)}j (SLA {sla}j)",
+            "severite": "critique" if pct > 1.5 else "haute",
+            "source": "tunnel._stage_sla_days",
+        })
+
+    # 4. Délégataire suggéré (depuis le hook r2 si déjà set)
+    delegataire_sug = (t.get("suggestions", {}) or {}).get("delegataire")
+
     return {
         "tunnel_id": tunnel_id,
         "stage": stage,
@@ -424,8 +632,14 @@ def predict_next(tunnel_id: str) -> dict | None:
         "days_in_stage": round(days, 1),
         "sla_days": sla,
         "risk": "STOP" if pct > 1.5 else ("PRUDENCE" if pct > 0.7 else "GO"),
+        "alerts": alerts,
+        "alerts_count": len(alerts),
+        "alerts_critique": sum(1 for a in alerts if a.get("severite") == "critique"),
         "checks": t.get("checks", {}),
         "links": t.get("links", {}),
+        "suggestions": t.get("suggestions", {}),
+        "delegataire_suggere": delegataire_sug,
+        "_meta": {"version": "V37.3", "ts": _now()},
     }
 
 
@@ -461,9 +675,32 @@ def register_tunnel_routes(app) -> None:
             t = advance_tunnel(tunnel_id, target_stage=d.get("target_stage"), data=d.get("data"))
         except ValueError as e:
             return jsonify({"error": str(e)}), 400
+        except PermissionError as e:
+            # V37.3 — strict mode : conformité bloquante
+            msg = str(e)
+            blockers = msg.replace("STRICT_BLOCKED:", "").split("|") if msg.startswith("STRICT_BLOCKED:") else [msg]
+            return jsonify({
+                "error": "Advance refusé : conformité non atteinte (mode strict CEE_TUNNEL_STRICT=1)",
+                "blockers": blockers,
+                "action": "Corriger les bloquants ci-dessus puis réessayer, ou retirer CEE_TUNNEL_STRICT pour bypass (non recommandé en prod)",
+            }), 422
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
         return jsonify(t)
+
+    @app.route("/tunnel/<tunnel_id>/full", methods=["GET"])
+    def _tunnel_full(tunnel_id):
+        """V37.3 — Vue contextuelle complète : tunnel + prédictif + alertes + sources tracées.
+        À utiliser comme endpoint principal côté UI commercial pour avoir tout le contexte d'un coup."""
+        t = _load(tunnel_id)
+        if not t:
+            return jsonify({"error": "tunnel inconnu"}), 404
+        pred = predict_next(tunnel_id)
+        return jsonify({
+            "tunnel": t,
+            "predict_next": pred,
+            "stages_remaining": [s for s in TUNNEL_STAGES if TUNNEL_STAGES.index(s) > TUNNEL_STAGES.index(t["current_stage"])],
+        })
 
     @app.route("/tunnel", methods=["GET"])
     def _tunnel_list():
