@@ -382,7 +382,8 @@ def _fire_stage_hooks(t: dict, new_stage: str, entry: dict) -> None:
     # V37.3.1 fix : skip si tunnel test (source commence par "test" / "smoke" / "retest" / "ci")
     #               pour ne plus polluer le board prod pendant les tests.
     src = (t.get("source") or "").lower()
-    is_test_tunnel = any(src.startswith(p) for p in ("test", "smoke", "retest", "ci_", "pipeline_seed"))
+    # V37.3.6 : skip seulement les tunnels VRAIMENT test (pas le seed pipeline réel)
+    is_test_tunnel = any(src.startswith(p) for p in ("test_", "smoke", "retest", "ci_"))
     if is_test_tunnel:
         hooks_log["monday_push"] = f"skip tunnel test source={src}"
     elif not t.get("monday_item_id"):
@@ -744,6 +745,36 @@ def register_tunnel_routes(app) -> None:
             return jsonify({"ok": True, "tunnel_links": t.get("links"), "post_signature_tunnel_id": ps_id})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+
+    @app.route("/tunnel/<tunnel_id>/push-monday", methods=["POST"])
+    def _tunnel_push_monday_now(tunnel_id):
+        """V37.3.6 — Force le push d'un tunnel vers Monday board.
+        Idempotent : retourne le monday_item_id existant si déjà pushé.
+        Utilisé pour seeding initial du pipeline + sync manuel ad-hoc."""
+        t = _load(tunnel_id)
+        if not t:
+            return jsonify({"error": "tunnel inconnu"}), 404
+        if t.get("monday_item_id"):
+            return jsonify({"ok": True, "skip": "déjà pushé", "monday_item_id": t["monday_item_id"]})
+        if not os.environ.get("MONDAY_API_TOKEN"):
+            return jsonify({"ok": False, "error": "MONDAY_API_TOKEN non configuré"}), 503
+        try:
+            from monday_sync import push_dossier_to_monday
+            payload = {
+                "client": {"raison_sociale": t.get("raison_sociale", ""), "siret": t.get("siret", "")},
+                "operation": {"nom_chantier": f"{t.get('raison_sociale') or t['tunnel_id'][:10]} ({t['current_stage']})"},
+                "calcul": {},
+                "admin": {},
+            }
+            r = push_dossier_to_monday(payload) or {}
+            if r.get("ok") and r.get("monday_item_id"):
+                t["monday_item_id"] = r["monday_item_id"]
+                t.setdefault("links", {})["monday_url"] = r.get("url", "")
+                _save(t)
+                return jsonify({"ok": True, "monday_item_id": r["monday_item_id"], "url": r.get("url")})
+            return jsonify({"ok": False, "error": r.get("error", str(r))}), 502
+        except Exception as e:
+            return jsonify({"ok": False, "error": f"{type(e).__name__}: {e}"}), 500
 
     @app.route("/tunnel/<tunnel_id>/full", methods=["GET"])
     def _tunnel_full(tunnel_id):

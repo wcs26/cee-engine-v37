@@ -331,4 +331,46 @@ def register_monday_routes(app) -> None:
             "column_id": column_id,
             "new_value": str(new_value)[:200],
         })
-        return jsonify({"ok": True, "processed": True})
+
+        # V37.3.6 — Monday → tunnel : MAJ stage tunnel correspondant
+        # Mapping group_id Monday → stage tunnel (depuis post_signature.MONDAY_GROUPS)
+        tunnel_synced = None
+        try:
+            if item_id:
+                from tunnel import list_tunnels, advance_tunnel, _load
+                # Trouver le tunnel avec ce monday_item_id
+                target_tunnel = None
+                for t_meta in list_tunnels():
+                    full = _load(t_meta["tunnel_id"])
+                    if full and str(full.get("monday_item_id", "")) == str(item_id):
+                        target_tunnel = full
+                        break
+                if target_tunnel:
+                    # Mapping group_id Monday → stage tunnel (basé sur post_signature.MONDAY_GROUPS inversé)
+                    new_group = (new_value or {}).get("value", {}) if isinstance(new_value, dict) else {}
+                    new_group_id = None
+                    if isinstance(new_value, dict):
+                        new_group_id = new_value.get("value", {}).get("post_id") if isinstance(new_value.get("value"), dict) else None
+                    # Mapping inversé : group monday → stage tunnel
+                    monday_group_to_stage = {
+                        "group_mm2hvk6b": "lead",        # R0
+                        "group_mm2hpegm": "r1",           # R1
+                        "group_mm2hqh5y": "r1",           # VT
+                        "group_mm2hegvh": "r2",           # R2
+                        "group_mm2hds6w": "signature",    # devis_signe
+                        "group_mm2hwd61": "post_signature",  # travaux_en_cours
+                        "group_mm2hrxfp": "post_signature",  # cofrac_pncee
+                        "group_mm2h6t12": "post_signature",  # commission_encaissee
+                    }
+                    target_stage = monday_group_to_stage.get(new_group_id)
+                    if target_stage and target_stage != target_tunnel.get("current_stage"):
+                        try:
+                            advance_tunnel(target_tunnel["tunnel_id"], target_stage=target_stage,
+                                          data={"source": "monday_webhook", "monday_item_id": item_id, "ts_event": data.get("event", {}).get("triggerTime")})
+                            tunnel_synced = {"tunnel_id": target_tunnel["tunnel_id"], "stage": target_stage}
+                        except Exception:
+                            pass
+        except Exception:
+            pass
+
+        return jsonify({"ok": True, "processed": True, "tunnel_synced": tunnel_synced})
