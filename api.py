@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.20",
+        "version": "V37.3.21",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -674,6 +674,266 @@ compte.</p>
 <p>Vous pouvez à tout moment vider le localStorage de votre navigateur (DevTools
 → Application → Storage → Clear). L'application continuera de fonctionner.</p>
 """
+
+
+@app.route("/qualite/dossier/<tunnel_id>", methods=["GET"])
+def qualite_dossier(tunnel_id):
+    """V37.3.21 — Score qualité d'UN dossier (vs scorecard global qui audite l'app).
+
+    10 dimensions appliquées au tunnel pour identifier les bloquants concrets
+    (SIRET fake, surface vide, RGE non confirmé, etc.). Permet à Jimmy de voir
+    en 1 coup d'œil s'il manque des infos critiques avant un RDV ou un dépôt
+    PNCEE.
+    """
+    try:
+        from tunnel import _load
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    t = _load(tunnel_id)
+    if not t:
+        return jsonify({"error": "tunnel inconnu"}), 404
+
+    # Agréger toutes les data des stages traversés
+    agg_data = {}
+    for h in t.get("history") or []:
+        d = h.get("data") or {}
+        for k, v in d.items():
+            if v not in (None, "", 0, [], {}):
+                agg_data[k] = v
+
+    siret = (t.get("siret") or "").strip()
+    siret_real = siret.isdigit() and len(siret) == 14
+
+    checks_dossier = []
+
+    # 1. SIRET réel
+    checks_dossier.append({
+        "dim": "siret_reel",
+        "label": "SIRET 14 chiffres réels (≠ placeholder)",
+        "weight": 15,
+        "score": 100 if siret_real else 0,
+        "ok": siret_real,
+        "evidence": siret,
+        "fix": "" if siret_real else "Remplacer le SIRET placeholder par le vrai SIRET 14 chiffres via /tunnel/<id>/update",
+    })
+
+    # 2. Raison sociale renseignée
+    rs = (t.get("raison_sociale") or "").strip()
+    rs_ok = bool(rs) and not rs.startswith("PIPE")
+    checks_dossier.append({
+        "dim": "raison_sociale",
+        "label": "Raison sociale entreprise",
+        "weight": 5,
+        "score": 100 if rs_ok else 30,
+        "ok": rs_ok,
+        "evidence": rs[:50] or "absent",
+        "fix": "" if rs_ok else "Ajouter raison_sociale via /tunnel/<id>/update",
+    })
+
+    # 3. NAF / APE
+    naf = agg_data.get("naf") or agg_data.get("ape") or ""
+    naf_ok = bool(naf) and len(naf) >= 4
+    checks_dossier.append({
+        "dim": "naf_ape",
+        "label": "Code APE/NAF identifié",
+        "weight": 10,
+        "score": 100 if naf_ok else 0,
+        "ok": naf_ok,
+        "evidence": naf or "absent",
+        "fix": "" if naf_ok else "Saisir le NAF complet (ex: 86.10Z) lors de l'advance vers audit",
+    })
+
+    # 4. Surface renseignée
+    surface = float(agg_data.get("surface") or 0)
+    surface_ok = surface > 0
+    checks_dossier.append({
+        "dim": "surface",
+        "label": "Surface bâti renseignée",
+        "weight": 10,
+        "score": 100 if surface_ok else 30,
+        "ok": surface_ok,
+        "evidence": f"{surface:.0f} m²" if surface_ok else "absente",
+        "fix": "" if surface_ok else "Saisir la surface réelle ou utiliser l'estimation NAF",
+    })
+
+    # 5. Département (zone H1/H2/H3)
+    dept = (agg_data.get("departement") or "").strip()
+    dept_ok = bool(dept) and len(dept) >= 2
+    checks_dossier.append({
+        "dim": "departement",
+        "label": "Département (zone climatique H1/H2/H3)",
+        "weight": 5,
+        "score": 100 if dept_ok else 50,
+        "ok": dept_ok,
+        "evidence": dept or "absent",
+        "fix": "" if dept_ok else "Saisir le département (2 chiffres)",
+    })
+
+    # 6. Énergie principale
+    energie = (agg_data.get("energie") or "").strip()
+    energie_ok = bool(energie) and energie != "DEFAULT"
+    checks_dossier.append({
+        "dim": "energie",
+        "label": "Énergie principale du site",
+        "weight": 10,
+        "score": 100 if energie_ok else 40,
+        "ok": energie_ok,
+        "evidence": energie or "default electricite",
+        "fix": "" if energie_ok else "Confirmer l'énergie principale (electricite/gaz/fioul/granules)",
+    })
+
+    # 7. RGE installateur
+    rge = agg_data.get("rge_installateur")
+    rge_ok = rge is True
+    checks_dossier.append({
+        "dim": "rge",
+        "label": "Installateur RGE confirmé (art. L.221-7)",
+        "weight": 15,
+        "score": 100 if rge_ok else 0,
+        "ok": rge_ok,
+        "evidence": "RGE confirmé" if rge_ok else "non confirmé (PNCEE STOP automatique)",
+        "fix": "" if rge_ok else "Confirmer que l'installateur est RGE Qualibat/Qualifelec — sinon dossier rejeté PNCEE",
+    })
+
+    # 8. Fiches éligibles présentes
+    fiches = agg_data.get("fiches") or []
+    fiches_ok = len(fiches) > 0
+    checks_dossier.append({
+        "dim": "fiches",
+        "label": "Fiches CEE éligibles identifiées",
+        "weight": 10,
+        "score": 100 if fiches_ok else 0,
+        "ok": fiches_ok,
+        "evidence": ", ".join(fiches[:3]) if fiches_ok else "aucune",
+        "fix": "" if fiches_ok else "Lancer un /analyse pour identifier les fiches probables",
+    })
+
+    # 9. Score PNCEE ≥ 60 (audit conformité)
+    pncee_score = (t.get("checks", {}).get("pncee", {}) or {}).get("score", 0)
+    pncee_verdict = (t.get("checks", {}).get("pncee", {}) or {}).get("verdict", "?")
+    pncee_ok = pncee_score >= 60
+    checks_dossier.append({
+        "dim": "pncee_score",
+        "label": "Score PNCEE conformité ≥ 60",
+        "weight": 15,
+        "score": min(100, int(pncee_score * 100 / 60)) if pncee_score else 0,
+        "ok": pncee_ok,
+        "evidence": f"score={pncee_score} verdict={pncee_verdict}",
+        "fix": "" if pncee_ok else "Voir checks.pncee.blockers du tunnel pour la liste des correctifs",
+    })
+
+    # 10. Push Monday réussi (visibilité reporting)
+    monday_id = t.get("monday_item_id")
+    monday_ok = bool(monday_id)
+    checks_dossier.append({
+        "dim": "monday_push",
+        "label": "Reporting Monday board CEE",
+        "weight": 5,
+        "score": 100 if monday_ok else 0,
+        "ok": monday_ok,
+        "evidence": f"item {monday_id}" if monday_ok else "non pushé",
+        "fix": "" if monday_ok else "POST /tunnel/<id>/push-monday pour créer l'item board",
+    })
+
+    # Score global pondéré
+    total_w = sum(c["weight"] for c in checks_dossier)
+    score_global = round(sum(c["score"] * c["weight"] for c in checks_dossier) / max(total_w, 1), 1)
+
+    if score_global >= 90:
+        verdict = "DOSSIER COMPLET — prêt PNCEE"
+    elif score_global >= 70:
+        verdict = "DOSSIER QUASI COMPLET — quelques compléments"
+    elif score_global >= 50:
+        verdict = "DOSSIER À RECTIFIER — gaps majeurs"
+    else:
+        verdict = "DOSSIER BLOQUÉ — informations critiques manquantes"
+
+    # Top 3 fixes prioritaires (ceux qui font perdre le plus de points)
+    fixes_prio = sorted(
+        [c for c in checks_dossier if not c["ok"] and c.get("fix")],
+        key=lambda c: -c["weight"]
+    )[:3]
+
+    return jsonify({
+        "tunnel_id": tunnel_id,
+        "raison_sociale": t.get("raison_sociale"),
+        "current_stage": t.get("current_stage"),
+        "score_dossier": score_global,
+        "verdict": verdict,
+        "checks": checks_dossier,
+        "fixes_prioritaires": [{"dim": c["dim"], "fix": c["fix"], "impact_pts": c["weight"]} for c in fixes_prio],
+        "_meta": {"version": "V37.3.21"},
+    })
+
+
+@app.route("/qualite/pipeline", methods=["GET"])
+def qualite_pipeline():
+    """V37.3.21 — Dashboard qualité pipeline-wide : score moyen + dossiers
+    sous-seuil + fixes les plus fréquents. Donne à Jimmy la priorité de
+    nettoyage du pipeline en 1 vue."""
+    try:
+        from tunnel import list_tunnels, _load
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    rows = []
+    fix_freq: dict = {}
+    total_score = 0.0
+    n = 0
+
+    for entry in list_tunnels():
+        # Re-call interne du score dossier
+        t = _load(entry["tunnel_id"])
+        if not t:
+            continue
+        # Réplique compacte de qualite_dossier (juste score global, sans détail)
+        agg_data = {}
+        for h in t.get("history") or []:
+            for k, v in (h.get("data") or {}).items():
+                if v not in (None, "", 0, [], {}):
+                    agg_data[k] = v
+        siret = (t.get("siret") or "").strip()
+        score = 0; w_total = 0
+        # Calcule en mini-version inline (alignée avec qualite_dossier)
+        items = [
+            (15, siret.isdigit() and len(siret) == 14, "siret_reel"),
+            (5, bool(t.get("raison_sociale")) and not (t.get("raison_sociale","")).startswith("PIPE"), "raison_sociale"),
+            (10, bool(agg_data.get("naf") or agg_data.get("ape")), "naf"),
+            (10, float(agg_data.get("surface") or 0) > 0, "surface"),
+            (5, bool(agg_data.get("departement")), "dept"),
+            (10, bool(agg_data.get("energie")) and agg_data.get("energie") != "DEFAULT", "energie"),
+            (15, agg_data.get("rge_installateur") is True, "rge"),
+            (10, len(agg_data.get("fiches") or []) > 0, "fiches"),
+            (15, ((t.get("checks",{}).get("pncee",{}) or {}).get("score",0)) >= 60, "pncee"),
+            (5, bool(t.get("monday_item_id")), "monday"),
+        ]
+        for w, ok, dim in items:
+            w_total += w
+            score += w * (100 if ok else 0)
+            if not ok:
+                fix_freq[dim] = fix_freq.get(dim, 0) + 1
+        sc = round(score / max(w_total, 1), 1)
+        rows.append({
+            "tunnel_id": entry["tunnel_id"],
+            "raison_sociale": t.get("raison_sociale"),
+            "stage": t.get("current_stage"),
+            "score_dossier": sc,
+        })
+        total_score += sc; n += 1
+
+    rows.sort(key=lambda r: r["score_dossier"])
+    avg = round(total_score / max(n, 1), 1)
+    sub_seuil = [r for r in rows if r["score_dossier"] < 70]
+    fix_top = sorted(fix_freq.items(), key=lambda kv: -kv[1])[:5]
+
+    return jsonify({
+        "n_tunnels": n,
+        "score_moyen_pipeline": avg,
+        "n_sous_seuil_70": len(sub_seuil),
+        "dossiers_faibles": sub_seuil[:10],
+        "fixes_frequents": [{"dim": k, "n_dossiers_concernes": v} for k, v in fix_top],
+        "_meta": {"version": "V37.3.21"},
+    })
 
 
 @app.route("/qualite/scorecard", methods=["GET"])
