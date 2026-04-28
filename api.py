@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.13",
+        "version": "V37.3.15",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),

@@ -798,6 +798,61 @@ def register_tunnel_routes(app) -> None:
         _save(t)
         return jsonify(t)
 
+    @app.route("/tunnel/<tunnel_id>", methods=["DELETE"])
+    def _tunnel_delete(tunnel_id):
+        """V37.3.15 — Supprime un tunnel (résidu test, doublon, erreur de seed).
+        Le fichier <tunnel_id>.json est effacé du volume + index rafraîchi.
+        Le monday_item_id éventuel n'est PAS supprimé côté Monday (à faire manuellement
+        ou via un futur hook monday_delete pour rester explicite côté board)."""
+        p = _path(tunnel_id)
+        if not p.exists():
+            return jsonify({"error": "tunnel inconnu"}), 404
+        try:
+            t_snapshot = json.loads(p.read_text())
+        except Exception:
+            t_snapshot = {"tunnel_id": tunnel_id}
+        p.unlink()
+        _refresh_index()
+        return jsonify({
+            "ok": True,
+            "deleted_tunnel_id": tunnel_id,
+            "raison_sociale": t_snapshot.get("raison_sociale"),
+            "monday_item_id": t_snapshot.get("monday_item_id"),
+            "note": "monday_item non supprimé (à faire manuellement si besoin)",
+        })
+
+    @app.route("/tunnel/<tunnel_id>/rollback-stage", methods=["POST"])
+    def _tunnel_rollback(tunnel_id):
+        """V37.3.15 — Recule current_stage à un stage antérieur dans la chronologie.
+        Body : {"target_stage": "r2"} — doit exister dans history et être < current_stage.
+        Truncate history aux events ≤ target_stage. Utile pour corriger un seed inventé
+        (ex: tunnel poussé en signature sans preuve)."""
+        t = _load(tunnel_id)
+        if not t:
+            return jsonify({"error": "tunnel inconnu"}), 404
+        d = request.json or {}
+        target = d.get("target_stage")
+        if target not in TUNNEL_STAGES:
+            return jsonify({"error": f"target_stage invalide. Valeurs : {TUNNEL_STAGES}"}), 400
+        cur_idx = TUNNEL_STAGES.index(t["current_stage"]) if t.get("current_stage") in TUNNEL_STAGES else -1
+        tgt_idx = TUNNEL_STAGES.index(target)
+        if tgt_idx >= cur_idx:
+            return jsonify({"error": f"rollback impossible : current={t.get('current_stage')} → target={target} (target doit être strictement antérieur)"}), 400
+        # Truncate history aux events dont stage est dans [stages 0..target]
+        allowed_stages = set(TUNNEL_STAGES[: tgt_idx + 1])
+        new_history = [h for h in t.get("history", []) if h.get("stage") in allowed_stages]
+        t["history"] = new_history
+        t["current_stage"] = target
+        t["updated_at"] = _now()
+        t.setdefault("rollbacks", []).append({
+            "from": TUNNEL_STAGES[cur_idx] if cur_idx >= 0 else None,
+            "to": target,
+            "ts": t["updated_at"],
+            "reason": d.get("reason", ""),
+        })
+        _save(t)
+        return jsonify(t)
+
     @app.route("/tunnel/<tunnel_id>/push-monday", methods=["POST"])
     def _tunnel_push_monday_now(tunnel_id):
         """V37.3.6 — Force le push d'un tunnel vers Monday board.
