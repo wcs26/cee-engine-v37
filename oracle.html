@@ -1317,12 +1317,21 @@
         <!-- Login panel -->
         <div id="loginPanel" style="display:none;position:absolute;top:60px;right:20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;padding:16px;min-width:280px;z-index:1000;box-shadow:0 8px 30px rgba(0,0,0,0.5);">
           <div id="loginNotConnected">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Se connecter</div>
-            <input id="loginEmail" type="email" placeholder="email" style="width:100%;padding:6px;margin-bottom:6px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:12px;">
-            <input id="loginPassword" type="password" placeholder="mot de passe" style="width:100%;padding:6px;margin-bottom:8px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:12px;">
-            <button onclick="doLogin()" style="width:100%;padding:6px;background:var(--accent-green);border:none;border-radius:4px;color:#000;font-weight:600;font-size:12px;cursor:pointer;">Connexion</button>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;padding:6px;background:var(--bg-tertiary);border:1px solid var(--accent-green);border-radius:4px;color:var(--text-primary);font-size:12px;font-weight:600;cursor:pointer;">Se connecter</button>
+              <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;padding:6px;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-secondary);font-size:12px;cursor:pointer;">Créer un compte</button>
+            </div>
+            <input id="loginName" type="text" placeholder="nom (ex: Jimmy)" style="display:none;width:100%;padding:6px;margin-bottom:6px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:12px;">
+            <input id="loginEmail" type="email" placeholder="email" autocomplete="username" style="width:100%;padding:6px;margin-bottom:6px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:12px;">
+            <input id="loginPassword" type="password" placeholder="mot de passe (min 8 chars)" autocomplete="current-password" style="width:100%;padding:6px;margin-bottom:8px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:12px;">
+            <button id="loginSubmit" onclick="doLogin()" style="width:100%;padding:6px;background:var(--accent-green);border:none;border-radius:4px;color:#000;font-weight:600;font-size:12px;cursor:pointer;">Connexion</button>
             <div id="loginError" style="font-size:11px;color:var(--accent-red);margin-top:6px;"></div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:10px;border-top:1px solid var(--border);padding-top:8px;">Pas de compte ? Le 1er user créé devient <strong>admin</strong> automatiquement (bootstrap).</div>
+            <div id="bootstrapHint" style="font-size:10px;color:var(--accent-green);margin-top:10px;border-top:1px solid var(--border);padding-top:8px;display:none;">
+              ✨ <strong>Aucun compte existant.</strong> Le 1er compte créé deviendra <strong>admin omniscient</strong> automatiquement.
+            </div>
+            <div id="bootstrapNo" style="font-size:10px;color:var(--text-muted);margin-top:10px;border-top:1px solid var(--border);padding-top:8px;">
+              Pas encore inscrit ? Demande à l'admin de créer ton compte.
+            </div>
           </div>
           <div id="loginConnected" style="display:none;">
             <div id="userInfo" style="font-size:12px;margin-bottom:10px;"></div>
@@ -1352,8 +1361,10 @@
           })();
           function toggleLoginPanel(){
             var p = document.getElementById('loginPanel');
-            p.style.display = (p.style.display === 'none' || !p.style.display) ? 'block' : 'none';
+            var open = (p.style.display === 'none' || !p.style.display);
+            p.style.display = open ? 'block' : 'none';
             renderUserBadge();
+            if (open && !window.CEE_USER) checkBootstrapStatus();
           }
           function renderUserBadge(){
             var b = document.getElementById('userBadgeText');
@@ -1375,6 +1386,58 @@
               if (c) c.style.display = 'none';
             }
           }
+          window.CEE_AUTH_MODE = 'login'; // 'login' | 'register'
+          function switchAuthTab(mode){
+            window.CEE_AUTH_MODE = mode;
+            var tabL = document.getElementById('tabLogin');
+            var tabR = document.getElementById('tabRegister');
+            var btn = document.getElementById('loginSubmit');
+            var nameInput = document.getElementById('loginName');
+            var err = document.getElementById('loginError');
+            err.textContent = '';
+            if (mode === 'register') {
+              tabL.style.background = 'transparent';
+              tabL.style.borderColor = 'var(--border)';
+              tabL.style.color = 'var(--text-secondary)';
+              tabL.style.fontWeight = 'normal';
+              tabR.style.background = 'var(--bg-tertiary)';
+              tabR.style.borderColor = 'var(--accent-green)';
+              tabR.style.color = 'var(--text-primary)';
+              tabR.style.fontWeight = '600';
+              btn.textContent = 'Créer mon compte';
+              btn.onclick = doRegister;
+              nameInput.style.display = 'block';
+            } else {
+              tabL.style.background = 'var(--bg-tertiary)';
+              tabL.style.borderColor = 'var(--accent-green)';
+              tabL.style.color = 'var(--text-primary)';
+              tabL.style.fontWeight = '600';
+              tabR.style.background = 'transparent';
+              tabR.style.borderColor = 'var(--border)';
+              tabR.style.color = 'var(--text-secondary)';
+              tabR.style.fontWeight = 'normal';
+              btn.textContent = 'Connexion';
+              btn.onclick = doLogin;
+              nameInput.style.display = 'none';
+            }
+          }
+          async function checkBootstrapStatus(){
+            try {
+              var r = await fetch('/auth/status');
+              var d = await r.json();
+              var hintYes = document.getElementById('bootstrapHint');
+              var hintNo = document.getElementById('bootstrapNo');
+              if (d.bootstrap_available) {
+                if (hintYes) hintYes.style.display = 'block';
+                if (hintNo) hintNo.style.display = 'none';
+                // Auto-bascule en mode "Créer un compte" si bootstrap dispo
+                switchAuthTab('register');
+              } else {
+                if (hintYes) hintYes.style.display = 'none';
+                if (hintNo) hintNo.style.display = 'block';
+              }
+            } catch(e) {}
+          }
           async function doLogin(){
             var email = document.getElementById('loginEmail').value.trim();
             var pwd = document.getElementById('loginPassword').value;
@@ -1389,6 +1452,33 @@
               try { localStorage.setItem('cee_jwt', d.token); localStorage.setItem('cee_user', JSON.stringify(d.user)); } catch(e){}
               renderUserBadge();
               setTimeout(function(){ document.getElementById('loginPanel').style.display = 'none'; }, 800);
+            } catch(e) { err.textContent = 'Erreur réseau : ' + e.message; }
+          }
+          async function doRegister(){
+            var name = document.getElementById('loginName').value.trim();
+            var email = document.getElementById('loginEmail').value.trim();
+            var pwd = document.getElementById('loginPassword').value;
+            var err = document.getElementById('loginError');
+            err.textContent = '';
+            if (!name) { err.textContent = 'Nom requis'; return; }
+            if (pwd.length < 8) { err.textContent = 'Mot de passe min 8 caractères'; return; }
+            try {
+              // 1. Register
+              var headers = {'Content-Type':'application/json'};
+              if (window.CEE_TOKEN) headers['Authorization'] = 'Bearer ' + window.CEE_TOKEN;
+              var r = await fetch('/auth/register', {method:'POST', headers: headers, body: JSON.stringify({email:email, password:pwd, name:name, role:'user'})});
+              var d = await r.json();
+              if (!r.ok) { err.textContent = d.error || 'Erreur création'; return; }
+              // 2. Auto-login direct après register
+              var r2 = await fetch('/auth/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email, password:pwd})});
+              var d2 = await r2.json();
+              if (!r2.ok) { err.textContent = 'Compte créé mais login échoué : ' + (d2.error || ''); return; }
+              window.CEE_TOKEN = d2.token;
+              window.CEE_USER = d2.user;
+              try { localStorage.setItem('cee_jwt', d2.token); localStorage.setItem('cee_user', JSON.stringify(d2.user)); } catch(e){}
+              if (d.bootstrap_admin) { err.style.color = 'var(--accent-green)'; err.textContent = '✨ Compte admin bootstrap créé · connecté'; }
+              renderUserBadge();
+              setTimeout(function(){ document.getElementById('loginPanel').style.display = 'none'; err.style.color=''; err.textContent=''; }, 1200);
             } catch(e) { err.textContent = 'Erreur réseau : ' + e.message; }
           }
           function doLogout(){
