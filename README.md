@@ -1,8 +1,8 @@
-# CEE Engine V37.1 PRO
+# CEE Engine V37.3 PRO
 
 **Audit CEE prédictif, proactif, intelligent** pour PME tertiaires, industries, multi-sites et copropriétés.
 
-> **V37.1 (2026-04-27)** — Boot guards sécu (JWT secret, CORS allowlist, origin guard `/ai/*`, webhook Monday HMAC), persistance Fly volume avec migration auto AHBFC, tunnel commercial unifié `lead → audit → R1 → R2 → signature → post_signature`, dashboard objectif V38 (`/analytics/sales-velocity`), widget Pipeline dans le drawer. **181 tests verts** (99 → 181). Détails déploiement : `JIMMY_TODO.md` + `SECURITE_RUNBOOK.md` + `scripts/smoke.sh`.
+> **V37.3 (2026-04-28)** — Tunnel commercial unifié `lead → audit → R1 → R2 → signature → post_signature` avec hooks auto (PNCEE score, prime exacte, cross-sell PV, push Monday), boot guards sécu (JWT secret, CORS allowlist, origin guard `/ai/*`, webhook Monday HMAC), sync bidirectionnelle Monday (URL token), persistance Fly volume `/data/`, dashboard objectif V38 (`/analytics/sales-velocity`), 5 IA orchestrées. **192 tests verts**. Détails déploiement : `JIMMY_TODO.md` + `SECURITE_RUNBOOK.md` + `scripts/smoke.sh`.
 
 ---
 

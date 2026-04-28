@@ -48,7 +48,7 @@ from auto_detect import get_siret, deduce_usage
 # CONSTANTES
 # ═══════════════════════════════════════════════
 
-VERSION = "V35-EXCELLENCE"
+VERSION = "V37.3-EXCELLENCE"
 
 # Section INSEE → profil métier
 SECTION_OVERRIDE = {

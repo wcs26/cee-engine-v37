@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEE Engine V37 PRO — Audit prédictif · proactif · intelligent</title>
+  <title>CEE Engine V37.3 PRO — Audit prédictif · proactif · intelligent</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <!-- V37 PWA : mobile ready, installable -->
   <link rel="manifest" href="/manifest.json">
@@ -1303,7 +1303,7 @@
       <div class="logo">
         <div class="logo-dot"></div>
         <div class="logo-text"><span>WCS</span> Oracle</div>
-        <span class="badge">V37 PRO</span>
+        <span class="badge">V37.3 PRO</span>
         <div style="display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg-primary);border:1px solid var(--accent-orange);border-radius:8px;" title="Votre prix de rachat CEE négocié avec votre délégataire/obligé. C'est CE prix qui détermine la prime versée au client. EMMY indicatif = 8.78 €/MWh en avril 2026.">
           <span style="font-size:10px;color:var(--accent-orange);font-weight:600;white-space:nowrap;">💰 Rachat</span>
           <input type="number" id="livePrixMwh" value="8.78" step="0.1" min="1" max="30" style="width:65px;padding:4px 6px;font-size:13px;font-family:'JetBrains Mono',monospace;background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;color:var(--accent-orange);text-align:center;font-weight:600;">
@@ -2557,7 +2557,7 @@
 
   <footer class="footer">
     <div class="container footer-content">
-      <div>WCS Ingénierie · Oracle V37 PRO — <span id="footerStats">220+ fiches · 700+ APE · 100 zones · FOST-vérifié · V37 PRO + IA + CEE ENGINE</span></div>
+      <div>WCS Ingénierie · Oracle V37.3 PRO — <span id="footerStats">220+ fiches · 700+ APE · 100 zones · FOST-vérifié · V37.3 PRO + IA + CEE ENGINE</span></div>
       <div style="display:flex;align-items:center;gap:12px;">
         <span>Estimation non contractuelle · Prix rachat: <span id="prixMWhDisplay" style="color:var(--accent-orange);font-weight:600;">8.78</span> €/MWh</span>
         <button onclick="toggleIntelligence()" style="padding:3px 10px;border-radius:6px;border:1px solid var(--accent-purple);background:rgba(188,140,255,0.1);color:var(--accent-purple);cursor:pointer;font-size:11px;font-weight:600;" title="Intelligence CEE multi-lentilles">INTEL</button>
@@ -2568,7 +2568,7 @@
 
   <script>
   // ════════════════════════════════════════════════════════════════
-  // WCS ORACLE V29.1 FINAL — MOTEUR CENTRALISÉ
+  // WCS ORACLE V37.3 — MOTEUR CENTRALISÉ
   // Architecture: getFullCalc() → tout le reste
   // ════════════════════════════════════════════════════════════════
 
@@ -2581,7 +2581,7 @@
     // Ex: 'https://wcs-oracle-proxy.VOTRE-COMPTE.workers.dev'
     // Mode direct (sans proxy) si vide
     PROXY_BASE: 'https://wcs-oracle-proxy.gmeet-mameilleureenergie.workers.dev',
-    VERSION: 'V37 PRO'
+    VERSION: 'V37.3 PRO'
   };
 
   var ATEE_URLS = {
@@ -9310,7 +9310,7 @@
       return Math.abs(a - b) / Math.max(Math.abs(b), 1) < tolerance;
     }
 
-    (console.group || console.log).call(console, '🧪 WCS ORACLE V29 — Tests anti-régression');
+    (console.group || console.log).call(console, '🧪 WCS ORACLE V37.3 — Tests anti-régression');
 
     // ── T1: Normalisation fiches ──
     const allFiches = FICHES_CATALOGUE;
@@ -12636,7 +12636,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   })();
 
-  console.log('🚀 WCS ORACLE V37 PRO chargé — Diagnostic CEE + CRM historique + Comparateur acheteurs + Mandat PDF + Tri-IA + Headline proactive + mini-show sources V37.1 + tunnel V37.3 live');
+  console.log('🚀 WCS ORACLE V37.3 PRO chargé — Diagnostic CEE + CRM historique + Comparateur acheteurs + Mandat PDF + Tri-IA + Headline proactive + mini-show sources + tunnel V37.3 live');
 
   // V37.3.5 — Live pipeline badge dans le header (compteurs depuis /health)
   (function loadLivePipelineBadge(){

@@ -446,8 +446,8 @@ def health():
 
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
-        "service": "CEE Engine (Oracle-Fused)",
-        "version": "V37.3.5",
+        "service": "CEE Engine V37.3",
+        "version": "V37.3.13",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -2511,7 +2511,7 @@ def status_dashboard():
     html = f"""<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CEE Engine V37 — Status</title>
+<title>CEE Engine V37.3 — Status</title>
 <meta http-equiv="refresh" content="30">
 <style>
   body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; margin: 0; padding: 30px; }}
@@ -2527,7 +2527,7 @@ def status_dashboard():
   .muted {{ color: #8b949e; font-size: 12px; }}
 </style></head>
 <body><div class="container">
-<h1>CEE Engine V37 <span class="badge">{'✓ OPERATIONAL' if overall_ok else '⚠ DEGRADED'}</span></h1>
+<h1>CEE Engine V37.3 <span class="badge">{'✓ OPERATIONAL' if overall_ok else '⚠ DEGRADED'}</span></h1>
 <p class="muted">Auto-refresh toutes les 30 s · Heure serveur : {_time.strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
 
 <div class="section">
