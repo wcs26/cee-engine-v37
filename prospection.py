@@ -328,20 +328,24 @@ def _enrich_with_pipeline_context(prospects: list) -> list:
         if grp_strict:
             p["groupement_possible"] = grp_strict[:3]
 
-        # Speech commercial auto (1 phrase prête à dire au prospect)
+        # V37.3.19 — Speech commercial : QUE DES FAITS, plus de % inventés.
+        # Les "70 % seul → 100 % groupé" précédents étaient faux : la prime CEE est en
+        # €/MWhc, pas un %. Reformulé en valeur absolue + argument groupement réel
+        # (mutualisation frais fixes : étude/COFRAC/mobilisation).
         pitch_parts = []
         if p.get("references_abouties"):
             n = len(refs_by_key.get(key, [])) or len(p["references_abouties"])
             ref0 = p["references_abouties"][0]
             pitch_parts.append(
-                f"📍 {n} dossier{'s' if n>1 else ''} déjà livré{'s' if n>1 else ''} dans votre secteur "
-                f"(ex : {ref0.get('raison_sociale','')[:35]}) — référence client à votre disposition"
+                f"📍 {n} site{'s' if n>1 else ''} déjà livré{'s' if n>1 else ''} dans votre secteur "
+                f"(ex : {ref0.get('raison_sociale','')[:35]}) — référence vérifiable à votre disposition"
             )
         if p.get("groupement_possible"):
             n = len(grp_by_key.get(key, [])) or len(p["groupement_possible"])
             pitch_parts.append(
-                f"🤝 {n} chantier{'s' if n>1 else ''} en cours sur même APE+dept — "
-                f"groupement = mutualisation des coûts (prise en charge passe de 70 % seul à ~100 %)"
+                f"🤝 {n} chantier{'s' if n>1 else ''} en cours sur même APE+département — "
+                f"groupement = mutualisation des frais fixes (étude, COFRAC, mobilisation chantier) "
+                f"qui réduit le reste à charge en valeur absolue"
             )
         if pitch_parts:
             p["pitch_argument"] = " · ".join(pitch_parts)
