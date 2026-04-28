@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.21",
+        "version": "V37.3.23",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -933,6 +933,245 @@ def qualite_pipeline():
         "dossiers_faibles": sub_seuil[:10],
         "fixes_frequents": [{"dim": k, "n_dossiers_concernes": v} for k, v in fix_top],
         "_meta": {"version": "V37.3.21"},
+    })
+
+
+@app.route("/audit/ocr-dpe", methods=["POST"])
+def audit_ocr_dpe():
+    """V37.3.22 — Wrapper OCR DPE : photo/page DPE → données extraites + injection
+    optionnelle dans un tunnel existant via tunnel_id.
+
+    Body : {"image_base64":"...", "mime_type":"image/jpeg|image/png|application/pdf",
+            "tunnel_id": "T-xxx"  // optionnel, injecte la data extraite dans audit
+           }
+    """
+    body = request.json or {}
+    image_b64 = body.get("image_base64", "")
+    mime = body.get("mime_type", "image/jpeg")
+    tunnel_id = body.get("tunnel_id", "")
+
+    if not image_b64:
+        return jsonify({"error": "image_base64 requis (photo ou page DPE)"}), 400
+
+    # Forward sur /ai/vision avec mode dpe
+    with app.test_request_context(
+        "/ai/vision",
+        method="POST",
+        json={"mode": "dpe", "image_base64": image_b64, "mime_type": mime},
+    ):
+        ocr_resp = ai_vision()
+        # Récupérer le payload (Flask Response → JSON)
+        try:
+            ocr_data = _json.loads(ocr_resp.get_data(as_text=True))
+        except Exception:
+            ocr_data = {"error": "réponse OCR illisible"}
+
+    if ocr_data.get("error"):
+        return jsonify(ocr_data), 502
+
+    # Si tunnel_id fourni, injecter les données dans le stage audit
+    tunnel_updated = None
+    if tunnel_id:
+        try:
+            from tunnel import _load, advance_tunnel
+            t = _load(tunnel_id)
+            if t:
+                # Map OCR fields → tunnel data attendus
+                inject = {
+                    "ocr_dpe_source": "/ai/vision mode=dpe",
+                    "ocr_dpe_confidence": ocr_data.get("confiance"),
+                }
+                if ocr_data.get("surface_m2"):
+                    inject["surface"] = float(ocr_data["surface_m2"])
+                if ocr_data.get("energie_chauffage"):
+                    inject["energie"] = ocr_data["energie_chauffage"]
+                if ocr_data.get("classe_energie"):
+                    inject["classe_dpe"] = ocr_data["classe_energie"]
+                if ocr_data.get("annee_construction"):
+                    inject["annee_construction"] = ocr_data["annee_construction"]
+                if ocr_data.get("fiches_cee_suggerees"):
+                    inject["fiches_dpe_suggerees"] = ocr_data["fiches_cee_suggerees"]
+                # On n'avance PAS le stage automatiquement — juste enrichit le tunnel
+                # via une note dans history (pas d'effet de bord côté hooks)
+                t.setdefault("ocr_data", {}).update({
+                    "dpe": ocr_data,
+                    "injected": inject,
+                    "ts": _time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                })
+                from tunnel import _save
+                _save(t)
+                tunnel_updated = tunnel_id
+        except Exception as e:
+            ocr_data["_tunnel_error"] = str(e)[:200]
+
+    return jsonify({
+        "ocr_dpe": ocr_data,
+        "tunnel_updated": tunnel_updated,
+        "_meta": {"version": "V37.3.22"},
+    })
+
+
+@app.route("/closing/speech", methods=["POST"])
+def closing_speech():
+    """V37.3.22 — Speech commercial dynamique adapté au profil du contact.
+
+    Body : {
+      "tunnel_id": "T-xxx",                           // pour récupérer contexte dossier
+      "role": "DG|directeur|financier|technique|operations|achats|patrimoine",
+      "objection": "trop cher|pas le moment|installateur déjà|...",   // optionnel
+      "ton": "formel|direct|chaleureux"               // optionnel défaut "direct"
+    }
+
+    Sortie : 3 angles d'argumentation choisis parmi 12, adaptés au profil + références
+    pipeline + speech rédigé prêt à dire.
+    """
+    body = request.json or {}
+    tunnel_id = body.get("tunnel_id", "")
+    role = (body.get("role") or "DG").lower().strip()
+    objection = (body.get("objection") or "").strip()
+    ton = body.get("ton", "direct")
+
+    # Charger contexte dossier
+    ctx = {"raison_sociale": "", "naf": "", "departement": "", "fiches": [], "stage": "", "prime": 0}
+    references = []
+    groupement = []
+    if tunnel_id:
+        try:
+            from tunnel import _load, get_pipeline_context
+            t = _load(tunnel_id)
+            if t:
+                ctx["raison_sociale"] = t.get("raison_sociale", "")
+                ctx["stage"] = t.get("current_stage", "")
+                # Extraire data audit
+                for h in t.get("history", []) or []:
+                    d = h.get("data") or {}
+                    if d.get("naf"): ctx["naf"] = d["naf"]
+                    if d.get("departement"): ctx["departement"] = d["departement"]
+                    if d.get("fiches"): ctx["fiches"] = d["fiches"]
+                # Cross-ref pipeline — V37.3.23 : EXCLURE le tunnel courant
+                # (sinon EAM Gray "se groupe avec lui-même")
+                pctx = get_pipeline_context()
+                naf2 = ctx["naf"][:2]
+                key = f"{naf2}|{ctx['departement'][:2]}"
+                references = [r for r in pctx.get("references_by_naf_dept", {}).get(key, [])
+                              if r.get("tunnel_id") != tunnel_id]
+                groupement = [r for r in pctx.get("groupement_by_naf_dept", {}).get(key, [])
+                              if r.get("tunnel_id") != tunnel_id]
+        except Exception:
+            pass
+
+    # V37.3.23 — Formulation intro propre selon contexte
+    # raison_sociale = nom d'entreprise → pas de "M./Mme" devant
+    rs = (ctx.get("raison_sociale") or "").strip()
+    # Tronquer proprement avec ellipsis si > 60 chars (pas couper en plein mot/parenthèse)
+    def _trim(s, n=60):
+        if len(s) <= n: return s
+        cut = s[:n].rstrip()
+        # éviter de couper en plein milieu d'un mot
+        if " " in cut:
+            cut = cut.rsplit(" ", 1)[0]
+        return cut + "…"
+    rs_display = _trim(rs, 60) if rs else "votre site"
+
+    # 12 angles d'argumentation, choix selon role
+    role_angles = {
+        "dg":          ["roi_strategique", "image_rse", "valorisation_patrimoine", "reference_sectorielle"],
+        "directeur":   ["roi_strategique", "image_rse", "valorisation_patrimoine", "reference_sectorielle"],
+        "financier":   ["roi_strategique", "cashflow", "defiscalisation", "mutualisation_cout"],
+        "technique":   ["spec_produit", "conformite_reglementaire", "reduction_maintenance", "continuite_service"],
+        "operations":  ["continuite_service", "confort_utilisateurs", "reduction_maintenance", "conformite_reglementaire"],
+        "achats":      ["mutualisation_cout", "reference_sectorielle", "cashflow", "defiscalisation"],
+        "patrimoine":  ["valorisation_patrimoine", "image_rse", "obsolescence_equipement", "conformite_reglementaire"],
+    }
+    angles = role_angles.get(role, role_angles["dg"])[:3]
+
+    # Bibliothèque de phrases courtes par angle (rédigées avec faits, pas de % bidons)
+    phrases_lib = {
+        "roi_strategique": "L'opération est financée intégralement ou en grande partie par la prime CEE versée par l'obligé. Le reste à charge éventuel est amorti par l'économie d'énergie réalisée dès la première année.",
+        "cashflow": "Aucun avance de trésorerie côté entreprise : la prime CEE est valorisée directement par le délégataire (mécanisme tiers payeur). Vous touchez le bénéfice énergétique sans peser sur le BFR.",
+        "defiscalisation": "La prime CEE n'est pas une subvention : elle est traitée comptablement comme une réduction du coût de l'opération. Pas d'imposition supplémentaire, pas de complexité fiscale.",
+        "image_rse": "Affichage immédiat sur votre rapport extra-financier : kWh économisés, CO₂ évité, classe énergétique post-travaux. Élément factuel pour vos communications RSE et appels d'offres publics.",
+        "valorisation_patrimoine": "Travaux qui rehaussent durablement la valeur du bâtiment et son DPE — utile à la revente, au refinancement, ou à l'évaluation immobilière annuelle.",
+        "spec_produit": "Matériaux conformes ACERMI/CSTB, mise en œuvre par installateur RGE Qualibat avec contrôle COFRAC final. Garantie décennale incluse.",
+        "conformite_reglementaire": "Vous anticipez les futures exigences DEET (Décret tertiaire) qui imposent –40 % de consommation d'ici 2030 sur les bâtiments tertiaires > 1 000 m². Prendre les CEE avant 2026 = se mettre à l'abri.",
+        "reduction_maintenance": "Équipements neufs (chaudière condensation, PAC, isolation neuve) → moins de pannes, garantie constructeur 5-10 ans, pas de remplacement à prévoir avant 15-20 ans.",
+        "continuite_service": "Chantier organisé par phases pour ne pas interrompre l'activité. Méthodologie SIRAT 6 phases déjà rodée sur dossiers similaires.",
+        "confort_utilisateurs": "Température homogène, moins de courants d'air, isolation acoustique améliorée. Pour les sites occupés (résidents EHPAD, élèves, salariés bureaux), c'est un gain perçu immédiatement.",
+        "obsolescence_equipement": "Si l'équipement existant est en fin de vie, le remplacement aurait été une dépense incontournable hors CEE. Avec le dispositif, c'est partiellement ou totalement pris en charge.",
+        "mutualisation_cout": "Plus le groupement est large, plus les frais fixes (étude technique, COFRAC, mobilisation chantier) se diluent. Concrètement, le reste à charge de chaque participant baisse en valeur absolue.",
+        "reference_sectorielle": "Nous avons déjà livré des dossiers identiques dans votre secteur — référence vérifiable à votre disposition.",
+    }
+
+    # Construction speech — V37.3.23 : intro adaptée au type de profil ET au stade dossier.
+    # Pas de "M./Mme" devant un nom d'entreprise.
+    speech_lines = []
+    if rs:
+        intro_dossier = f"Concernant {rs_display},"
+    else:
+        intro_dossier = "Concernant votre site,"
+    intro_role = {
+        "dg":          "voici 3 angles stratégiques à votre disposition :",
+        "directeur":   "voici 3 angles stratégiques à votre disposition :",
+        "financier":   "voici 3 angles strictement économiques et vérifiables :",
+        "technique":   "voici 3 points techniques et réglementaires à vérifier :",
+        "operations":  "voici comment l'opération est organisée pour préserver l'exploitation :",
+        "achats":      "voici 3 angles côté achats et mutualisation :",
+        "patrimoine":  "voici 3 angles côté valorisation et conformité patrimoniale :",
+    }.get(role, "voici 3 angles d'argumentation :")
+    speech_lines.append(f"{intro_dossier} {intro_role}")
+    speech_lines.append("")
+    for i, angle in enumerate(angles, 1):
+        phrase = phrases_lib.get(angle, "")
+        speech_lines.append(f"{i}. {phrase}")
+    # Référence pipeline si dispo
+    if references:
+        ref0 = references[0]
+        speech_lines.append("")
+        speech_lines.append(
+            f"📍 À titre concret : nous avons livré « {ref0.get('raison_sociale','?')} » "
+            f"(secteur APE {ref0.get('naf','?')}, département {ref0.get('departement','?')}) "
+            f"en utilisant les mêmes fiches CEE ({', '.join(ref0.get('fiches', [])[:2])}). "
+            "Référence vérifiable sur demande."
+        )
+    if groupement:
+        n = len(groupement)
+        speech_lines.append(
+            f"🤝 Et nous avons {n} chantier{'s' if n>1 else ''} en cours dans votre secteur — "
+            "groupement possible pour mutualiser les frais fixes (étude, COFRAC, mobilisation)."
+        )
+    # Réponse à objection si fournie
+    objection_response = ""
+    if objection:
+        obj_lower = objection.lower()
+        if "cher" in obj_lower or "prix" in obj_lower:
+            objection_response = (
+                "Sur le coût : l'opération CEE est en grande partie financée par la prime versée "
+                "par l'obligé (Économie d'Énergie SAS, Abokine ou autre selon arbitrage). Si vous "
+                "souhaitez, je vous montre le détail de la prime exacte calculée pour votre site "
+                "— c'est en €/MWhc et tracé sur audit-opendata ADEME."
+            )
+        elif "moment" in obj_lower or "tard" in obj_lower or "plus tard" in obj_lower:
+            objection_response = (
+                "Sur le timing : le prix de rachat cumac évolue chaque trimestre. Aujourd'hui à "
+                f"~8,78 €/MWhc EMMY. Plus tard, c'est de la spéculation sur le marché obligé. "
+                "Sécuriser le devis maintenant fige le prix de rachat à la date de signature."
+            )
+        elif "installateur" in obj_lower or "deja" in obj_lower:
+            objection_response = (
+                "Sur l'installateur : nous travaillons avec votre installateur si il est RGE "
+                "Qualibat. Sinon nous proposons SIRAT (95117449900016, Lattes 34) qui est notre "
+                "partenaire historique sur les dossiers santé H1. Vous restez décisionnaire."
+            )
+
+    return jsonify({
+        "context": ctx,
+        "role_detecte": role,
+        "angles": angles,
+        "speech": "\n".join(speech_lines),
+        "objection_response": objection_response,
+        "references_count": len(references),
+        "groupement_count": len(groupement),
+        "_meta": {"version": "V37.3.22", "ton": ton},
     })
 
 
@@ -3304,8 +3543,36 @@ def ai_vision():
             '{"fournisseur":"...","kwh_annuel":0,"cout_eur_annuel":0,"puissance_kva":0,'
             '"periode":"AAAA-MM à AAAA-MM","site_adresse":"...","site_cp":"","confiance":0-100}'
         )
+    elif mode == "dpe":
+        # V37.3.22 — OCR DPE auto : extrait surface, conso, énergie, classe, équipements,
+        # année construction, type bâtiment depuis une photo ou export PDF de DPE.
+        system = (
+            "Tu es un expert OCR DPE (Diagnostic de Performance Énergétique) français. "
+            "Analyse cette image/page de DPE (résidentiel ou tertiaire) et extrais les données "
+            "clés à utiliser pour qualifier un audit CEE : surface utile (m²), consommation "
+            "énergie primaire annuelle (kWh/m²/an et total kWh/an), énergie principale chauffage "
+            "et ECS (gaz/fioul/électricité/granulés/PAC), classe énergétique (A-G), étiquette "
+            "GES (A-G), année de construction, type de bâtiment (maison/appartement/bureau/"
+            "commerce/santé/enseignement/industrie), équipements présents (chaudière, PAC, "
+            "isolation murs/combles/plancher, double vitrage, VMC). "
+            "Si une donnée est illisible ou absente, mets null — n'invente pas. "
+            "Réponds UNIQUEMENT en JSON strict."
+        )
+        schema = (
+            '{"surface_m2":0,"conso_ep_kwh_m2_an":0,"conso_ep_kwh_an":0,'
+            '"energie_chauffage":"gaz|fioul|electricite|granules|pac|reseau_chaleur|null",'
+            '"energie_ecs":"gaz|fioul|electricite|null",'
+            '"classe_energie":"A|B|C|D|E|F|G|null","etiquette_ges":"A|B|C|D|E|F|G|null",'
+            '"annee_construction":0,'
+            '"type_batiment":"maison|appartement|bureau|commerce|sante|enseignement|industrie|null",'
+            '"equipements":{"isolation_murs":true,"isolation_combles":true,'
+            '"isolation_plancher":true,"double_vitrage":true,"vmc":true,'
+            '"chaudiere":"condensation|standard|null","pac":"air_eau|air_air|null"},'
+            '"fiches_cee_suggerees":["BAT-EN-103","BAT-TH-127"],'
+            '"confiance":0-100,"commentaire":"..."}'
+        )
     else:
-        return jsonify({"error": "mode doit être 'equipement' ou 'facture'"}), 400
+        return jsonify({"error": "mode doit être 'equipement', 'facture' ou 'dpe'"}), 400
 
     user_prompt = f"{system}\n\n{prompt_extra}\n\nFormat JSON strict attendu : {schema}"
 
