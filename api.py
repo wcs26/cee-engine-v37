@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.30",
+        "version": "V37.3.31",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -468,6 +468,48 @@ def health():
         "modules": modules_ok,
         "log_format": _os.environ.get("LOG_FORMAT", "text"),
     })
+
+
+@app.route("/rnb/contribute", methods=["POST"])
+def rnb_contribute():
+    """V37.3.31 — Signale une anomalie RNB en tant que contributeur authentifié.
+
+    Body :
+      {
+        "rnb_id": "TSQCP5PA7KX8",
+        "motif": "Bâtiment démoli observé sur audit terrain 2026-04-28",
+        "comment": "Photo + adresse complète",
+        "new_status": "demolished"   // optionnel
+      }
+
+    Nécessite la variable d'env RNB_API_TOKEN (générée sur
+    https://rnb.beta.gouv.fr/login → Mon compte → Mes Clés API).
+    """
+    body = request.json or {}
+    rnb_id = (body.get("rnb_id") or "").strip()
+    motif = (body.get("motif") or "").strip()
+    comment = (body.get("comment") or "").strip()
+    new_status = body.get("new_status")
+    if not rnb_id or not motif:
+        return jsonify({"error": "rnb_id et motif requis"}), 400
+    try:
+        from rnb_client import signal_anomalie
+        result = signal_anomalie(rnb_id, motif, comment, new_status)
+        if result.get("_error"):
+            return jsonify(result), 502
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": f"{type(e).__name__}: {str(e)[:200]}"}), 500
+
+
+@app.route("/rnb/status", methods=["GET"])
+def rnb_status():
+    """V37.3.31 — Diagnostic du mode contributeur RNB (token configuré ou pas)."""
+    try:
+        from rnb_client import is_contributeur_actif
+        return jsonify(is_contributeur_actif())
+    except Exception as e:
+        return jsonify({"error": str(e)[:200]}), 500
 
 
 @app.route("/rnb/lookup", methods=["GET"])

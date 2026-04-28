@@ -138,3 +138,77 @@ def get_rnb_id_from_address(address: str) -> dict:
         "score_geocode": geo.get("score"),
         "source": "BAN + RNB combinés",
     }
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# V37.3.31 — API édition (contributeur RNB authentifié)
+# Pour utiliser : créer compte sur https://rnb.beta.gouv.fr/login → Mon compte
+# → Mes Clés API → générer un token → exporter env var RNB_API_TOKEN.
+# Auth format : "Authorization: Token <token>" (pas Bearer).
+# Quota : 20 req/s + 500 ops/utilisateur (évolutif après vérif contributions).
+# ─────────────────────────────────────────────────────────────────────────
+
+
+def _auth_headers() -> dict:
+    """Construit les headers HTTP avec le token RNB si disponible.
+    Retourne dict vide si RNB_API_TOKEN absent (mode lecture seule)."""
+    import os as _os
+    token = _os.environ.get("RNB_API_TOKEN", "").strip()
+    if not token:
+        return {}
+    return {"Authorization": f"Token {token}", "Content-Type": "application/json"}
+
+
+def signal_anomalie(rnb_id: str, motif: str, comment: str = "",
+                     new_status: str | None = None) -> dict:
+    """V37.3.31 — Signale une anomalie sur un bâtiment via PATCH RNB.
+
+    Cas d'usage CEE Engine : pendant un audit terrain, on détecte que le
+    bâtiment référencé RNB est en réalité démoli/reconstruit/inadéquat.
+    On peut le signaler officiellement.
+
+    Args:
+      rnb_id   : ID-RNB à modifier (12 chars)
+      motif    : raison courte du signalement (ex: "démolition observée 2026-04-28")
+      comment  : commentaire long pour traçabilité (audit Jimmy WCS Bulgaria)
+      new_status : statut à appliquer (constructed | demolished |
+                   construction_in_progress | demolished_in_progress)
+
+    Retourne {ok, rnb_id, response} ou {_error, ...}
+    """
+    if not _auth_headers():
+        return {"_error": "RNB_API_TOKEN non configuré (export env var)"}
+    if not rnb_id or len(rnb_id) < 8:
+        return {"_error": "rnb_id invalide"}
+
+    url = RNB_BASE + rnb_id + "/"
+    body = {"comment": f"[CEE Engine WCS Bulgaria EOOD] {motif} | {comment}".strip()[:480]}
+    if new_status:
+        body["status"] = new_status
+
+    try:
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(body).encode("utf-8"),
+            headers=_auth_headers(),
+            method="PATCH",
+        )
+        with urllib.request.urlopen(req, timeout=15, context=_ssl_ctx()) as r:
+            resp = json.loads(r.read().decode("utf-8"))
+        return {"ok": True, "rnb_id": rnb_id, "response": resp}
+    except urllib.error.HTTPError as e:
+        return {"_error": f"HTTP {e.code}: {e.reason}", "rnb_id": rnb_id}
+    except Exception as e:
+        return {"_error": f"{type(e).__name__}: {str(e)[:120]}", "rnb_id": rnb_id}
+
+
+def is_contributeur_actif() -> dict:
+    """Diagnostic simple : token configuré ou pas ?"""
+    import os as _os
+    token = _os.environ.get("RNB_API_TOKEN", "").strip()
+    return {
+        "token_configured": bool(token),
+        "token_preview": (token[:6] + "…" + token[-4:]) if token else None,
+        "mode": "contributeur" if token else "lecture seule (anonyme)",
+        "doc": "https://rnb.beta.gouv.fr/login → Mon compte → Mes Clés API",
+    }
