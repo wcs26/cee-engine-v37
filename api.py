@@ -516,6 +516,9 @@ def analyse():
                     pack = []
                 fiches = [f.get("ref") or f.get("fiche") for f in pack
                           if isinstance(f, dict) and (f.get("ref") or f.get("fiche"))]
+                # V37.3.12 — par défaut rge_installateur=True (cas le plus fréquent en CEE pro).
+                # Le commercial corrige manuellement si l'installateur n'est pas RGE.
+                # Sinon le verdict PNCEE est systématiquement STOP par défaut, pénalisant l'audit initial.
                 advance_tunnel(t["tunnel_id"], target_stage="audit", data={
                     "fiches": fiches[:10],
                     "naf": naf,
@@ -524,7 +527,7 @@ def analyse():
                     "departement": dpt,
                     "secteur": result.get("secteur", ""),
                     "energie": energie,
-                    "rge_installateur": False,
+                    "rge_installateur": True,  # défaut optimiste, ajustable
                     "date_engagement": "",
                 })
                 result["tunnel_id"] = t["tunnel_id"]
