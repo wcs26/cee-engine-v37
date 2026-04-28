@@ -11981,10 +11981,18 @@ document.addEventListener('DOMContentLoaded', function() {
     var depts = document.getElementById('prospDepts').value.split(',').map(function(s){return s.trim()}).filter(Boolean);
     document.getElementById('prospResults').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">Scan en cours...</div>';
     try {
-        var nafMap = {sante:'86',commerce_alimentaire:'47',industrie:'25',enseignement:'85',hotellerie:'55',bureaux:'70'};
+        // V37.3.14 — NAF complets (préfixes 2 chiffres rejetés par recherche-entreprises.api.gouv.fr)
+        var nafMap = {
+          sante: '86.10Z,87.10A,87.10B',         // hôpitaux + EHPAD
+          commerce_alimentaire: '47.11D,47.11F', // supermarchés + hypermarchés
+          industrie: '25.11Z,10.71B,22.21Z',     // charpente méta + boulangerie indus + plasturgie
+          enseignement: '85.31Z,85.32Z,85.42Z',  // collège + lycée pro + supérieur
+          hotellerie: '55.10Z,55.20Z',           // hôtels + résidences
+          bureaux: '68.20A,68.20B,70.10Z'        // immo bureaux + sièges sociaux
+        };
         var r = await fetch('/prospection/scan-secteur', {
             method:'POST', headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({naf_prefix: nafMap[secteur]||'70', departements: depts, limit: 20})
+            body:JSON.stringify({naf: nafMap[secteur]||'70.10Z', departements: depts, limit: 20})
         });
         var d = await r.json();
         var prospects = d.prospects || d.results || [];
