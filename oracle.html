@@ -2916,16 +2916,16 @@
 
   const COUT_TRAVAUX = {
     // === AGRICULTURE ===
-    "AGRI-EQ-101":{min:2500,max:4500,moy:3500,u:"bâtiment"},
+    "AGRI-EQ-101":{min:2500,max:4500,moy:3500,u:"unité"},
     "AGRI-EQ-102":{min:80,max:150,moy:115,u:"m²"},
     "AGRI-EQ-103":{min:45,max:75,moy:60,u:"m²"},
     "AGRI-EQ-104":{min:3500,max:6500,moy:5000,u:"bâtiment"},
-    "AGRI-EQ-105":{min:4500,max:8000,moy:6250,u:"installation"},
-    "AGRI-EQ-106":{min:5500,max:9500,moy:7500,u:"installation"},
+    "AGRI-EQ-105":{min:4500,max:8000,moy:6250,u:"unité"},
+    "AGRI-EQ-106":{min:5500,max:9500,moy:7500,u:"unité"},
     "AGRI-EQ-107":{min:2800,max:4500,moy:3650,u:"installation"},
     "AGRI-EQ-108":{min:35,max:55,moy:45,u:"m²"},
     "AGRI-EQ-109":{min:25,max:40,moy:32,u:"m²"},
-    "AGRI-EQ-110":{min:3500,max:5500,moy:4500,u:"installation"},
+    "AGRI-EQ-110":{min:3500,max:5500,moy:4500,u:"unité"},
     "AGRI-EQ-111":{min:18,max:30,moy:24,u:"m²"},
     "AGRI-EQ-112":{min:28,max:45,moy:36,u:"m²"},
     "AGRI-TH-101":{min:450,max:750,moy:600,u:"kW"},
@@ -2961,7 +2961,7 @@
     "BAT-TH-119":{min:2200,max:3800,moy:3000,u:"installation"}, // Régulation
     "BAT-TH-120":{min:12000,max:30000,moy:21000,u:"installation"}, // GTB complète
     "BAT-TH-121":{min:130,max:250,moy:190,u:"kW"},    // Déstratificateurs
-    "BAT-TH-122":{min:3000,max:5500,moy:4250,u:"installation"}, // VMC DF
+    "BAT-TH-122":{min:3000,max:5500,moy:4250,u:"unité"}, // VMC DF
     "BAT-TH-124":{min:700,max:1300,moy:1000,u:"kW"},  // Réseau chaleur
     "BAT-TH-125":{min:2500,max:4200,moy:3350,u:"installation"}, // CET
     "BAT-TH-126":{min:800,max:1400,moy:1100,u:"m²"},  // Capteur solaire
@@ -2983,7 +2983,7 @@
     "BAT-EQ-127":{min:80,max:150,moy:115,u:"point"},   // LED général
     "BAT-EQ-129":{min:400,max:700,moy:550,u:"m²"},     // Lanterneaux
     "BAT-EQ-131":{min:350,max:600,moy:475,u:"m²"},     // Conduits lumière
-    "BAT-EQ-133":{min:25,max:50,moy:37,u:"point"},     // Hydro-économes
+    "BAT-EQ-133":{min:25,max:50,moy:37,u:"point d'eau"},     // Hydro-économes
     // === INDUSTRIE ===
     "IND-BA-101":{min:200,max:350,moy:275,u:"m²"},     // Isolation four
     "IND-BA-102":{min:130,max:250,moy:190,u:"ml"},     // Isolation tuyauterie
@@ -3005,10 +3005,10 @@
     "IND-UT-136":{min:350,max:600,moy:475,u:"kW"},     // Mise en veille
     "IND-UT-140":{min:300,max:520,moy:410,u:"kW"},     // Veille AC
     // === TRANSPORT ===
-    "TRA-EQ-101":{min:1000,max:1800,moy:1400,u:"véhicule"},
-    "TRA-EQ-108":{min:3500,max:6500,moy:5000,u:"véhicule"},
-    "TRA-EQ-111":{min:1500,max:2800,moy:2150,u:"véhicule"},
-    "TRA-EQ-113":{min:50,max:120,moy:85,u:"véhicule"},
+    "TRA-EQ-101":{min:1000,max:1800,moy:1400,u:"unité"},
+    "TRA-EQ-108":{min:3500,max:6500,moy:5000,u:"unité"},
+    "TRA-EQ-111":{min:1500,max:2800,moy:2150,u:"unité"},
+    "TRA-EQ-113":{min:50,max:120,moy:85,u:"unité"},
     "TRA-EQ-118":{min:800,max:1500,moy:1150,u:"unité"},
     "TRA-EQ-125":{min:25000,max:60000,moy:42500,u:"unité"},
     "TRA-EQ-127":{min:35000,max:55000,moy:45000,u:"unité"},
@@ -3022,7 +3022,7 @@
     "TRA-SE-116":{min:2,max:5,moy:3,u:"UTI.km"},
     "TRA-SE-117":{min:1,max:3,moy:2,u:"t.km"},
     "AGRI-EQ-113":{min:150,max:280,moy:215,u:"point"},
-    "AGRI-SE-101":{min:200,max:400,moy:300,u:"bâtiment"},
+    "AGRI-SE-101":{min:200,max:400,moy:300,u:"unité"},
     "AGRI-TH-103":{min:350,max:600,moy:475,u:"kW"},
     "AGRI-TH-105":{min:1200,max:2000,moy:1600,u:"kW"},
     "AGRI-TH-108":{min:50,max:90,moy:70,u:"m²"},
@@ -3032,13 +3032,13 @@
     "AGRI-TH-114":{min:200,max:350,moy:275,u:"kW"},
     "AGRI-TH-117":{min:120,max:220,moy:170,u:"kW"},
     "AGRI-TH-118":{min:90,max:170,moy:130,u:"kW"},
-    "AGRI-TH-119":{min:2000,max:3500,moy:2750,u:"installation"},
+    "AGRI-TH-119":{min:2000,max:3500,moy:2750,u:"unité"},
     "AGRI-UT-101":{min:400,max:700,moy:550,u:"kW"},
     "AGRI-UT-102":{min:500,max:900,moy:700,u:"kW"},
     "AGRI-UT-103":{min:350,max:600,moy:475,u:"kW"},
     "AGRI-UT-104":{min:150,max:280,moy:215,u:"kW"},
     "BAT-EQ-117":{min:500,max:900,moy:700,u:"kW froid"},
-    "BAT-EQ-124":{min:300,max:550,moy:425,u:"ml"},
+    "BAT-EQ-124":{min:300,max:550,moy:425,u:"m linéaire"},
     "BAT-EQ-125":{min:120,max:220,moy:170,u:"point"},
     "BAT-EQ-130":{min:200,max:380,moy:290,u:"point"},
     "BAT-EQ-134":{min:400,max:700,moy:550,u:"m²"},
@@ -3053,7 +3053,7 @@
     "BAT-TH-115":{min:1400,max:2400,moy:1900,u:"kW"},
     "BAT-TH-134":{min:500,max:900,moy:700,u:"kW"},
     "BAT-TH-135":{min:600,max:1000,moy:800,u:"kW"},
-    "BAT-TH-142":{min:2000,max:3500,moy:2750,u:"installation"},
+    "BAT-TH-142":{min:2000,max:3500,moy:2750,u:"unité"},
     "BAT-TH-143":{min:1500,max:2800,moy:2150,u:"installation"},
     "BAT-TH-145":{min:120,max:220,moy:170,u:"kW"},
     "BAT-TH-153":{min:800,max:1400,moy:1100,u:"kW"},
@@ -3083,12 +3083,12 @@
     "IND-UT-137":{min:600,max:1000,moy:800,u:"kW"},
     "IND-UT-138":{min:350,max:600,moy:475,u:"kW"},
     "IND-UT-139":{min:450,max:800,moy:625,u:"kW"},
-    "TRA-EQ-103":{min:2000,max:3500,moy:2750,u:"véhicule"},
-    "TRA-EQ-104":{min:1500,max:2800,moy:2150,u:"véhicule"},
-    "TRA-EQ-106":{min:500,max:900,moy:700,u:"véhicule"},
-    "TRA-EQ-107":{min:3000,max:5500,moy:4250,u:"véhicule"},
-    "TRA-EQ-109":{min:2500,max:4500,moy:3500,u:"véhicule"},
-    "TRA-EQ-110":{min:4000,max:7000,moy:5500,u:"véhicule"},
+    "TRA-EQ-103":{min:2000,max:3500,moy:2750,u:"unité"},
+    "TRA-EQ-104":{min:1500,max:2800,moy:2150,u:"unité"},
+    "TRA-EQ-106":{min:500,max:900,moy:700,u:"unité"},
+    "TRA-EQ-107":{min:3000,max:5500,moy:4250,u:"unité"},
+    "TRA-EQ-109":{min:2500,max:4500,moy:3500,u:"unité"},
+    "TRA-EQ-110":{min:4000,max:7000,moy:5500,u:"unité"},
     "TRA-EQ-114":{min:800,max:1400,moy:1100,u:"unité"},
     "TRA-EQ-115":{min:600,max:1100,moy:850,u:"unité"},
     "TRA-EQ-117":{min:350,max:600,moy:475,u:"unité"},
@@ -3108,7 +3108,7 @@
     "TRA-SE-109":{min:2000,max:3500,moy:2750,u:"site"},
     "TRA-SE-110":{min:1500,max:2800,moy:2150,u:"site"},
     "TRA-SE-111":{min:5000,max:9000,moy:7000,u:"site"},
-    "TRA-SE-112":{min:4000,max:7000,moy:5500,u:"site"},
+    "TRA-SE-112":{min:4000,max:7000,moy:5500,u:"unité"},
     "TRA-SE-113":{min:3000,max:5500,moy:4250,u:"site"},
     // === RÉSIDENTIEL (BAR) - ajout V30 ===
     "BAR-EN-101":{min:14,max:28,moy:20,u:"m²"},
@@ -3165,7 +3165,7 @@
     "RES-CH-103":{min:150,max:280,moy:215,u:"ml"},
     "RES-CH-104":{min:200,max:350,moy:275,u:"ml"},
     "RES-CH-105":{min:80,max:150,moy:115,u:"m²"},
-    "RES-CH-106":{min:120,max:220,moy:170,u:"ml"},
+    "RES-CH-106":{min:120,max:220,moy:170,u:"m"},
     "RES-CH-108":{min:180,max:320,moy:250,u:"ml"},
     "RES-EC-104":{min:60,max:120,moy:90,u:"point"},
     "RES-EC-107":{min:2000,max:4000,moy:3000,u:"unité"},
@@ -4458,13 +4458,39 @@
     // 4) Coût travaux
     const ct = COUT_TRAVAUX[fiche.ref] || null;
     let costHT;
+    let unitFactor = 1; // V37.3.35 — facteur de conversion unité coût → unité fiche
     if (ct) {
-      // Prix marché négocié (50% du prix moyen)
-      costHT = ct.moy * qty * CONFIG.PRIX_NEGOCIE;
+      // V37.3.35 — Stratégie 2 : conversion automatique selon table UNIT_CONVERSION
+      // Permet de comparer prime/unité_fiche avec coût/unité_coût quand l'unité
+      // de coût est plus granulaire (ex: kW puissance vs unité installation).
+      // Format clé : "<cost.u>→<fiche.unit>" → multiplicateur applicable au cost
+      const UNIT_CONVERSION = {
+        'kW→unité': 25,           'kW→logement': 8,         'kW→m²': 0.05,
+        'point→unité': 10,        'point→logement': 5,      'point→m²': 0.01,
+        'ml→unité': 30,           'ml→logement': 15,        'ml→m²': 0.5,
+        'm linéaire→unité': 30,   'm linéaire→m²': 0.5,
+        'véhicule→unité': 1,      'site→unité': 1,
+        'installation→unité': 1,  'bâtiment→unité': 1,      'bâtiment→m²': 0.005,
+      };
+      const cu = (ct.u || '').toLowerCase();
+      const fu = (fiche.unit || '').toLowerCase();
+      if (cu === fu) {
+        unitFactor = 1;
+      } else {
+        const key = cu + '→' + fu;
+        unitFactor = UNIT_CONVERSION[key] || null;
+      }
+      if (unitFactor !== null) {
+        // qty est exprimée dans l'unité de la FICHE → on multiplie par le facteur
+        // pour obtenir la quantité en unité de COÛT, puis on multiplie par le moy.
+        costHT = ct.moy * qty * unitFactor * CONFIG.PRIX_NEGOCIE;
+      } else {
+        // Pas de conversion possible : on garde le calcul brut (le badge UI
+        // "⚠ unités hétérogènes" prévient l'utilisateur que le ratio est approximatif).
+        costHT = ct.moy * qty * CONFIG.PRIX_NEGOCIE;
+      }
     } else {
       // Fallback: estimation inverse depuis la prime
-      // Si zeroEuro attendu: coût ≈ prime / 0.9 (couverture 90%)
-      // Sinon: coût ≈ prime / 0.5 (couverture 50%)
       const ratioEstim = fiche.zeroEuro ? 0.9 : 0.5;
       costHT = primeBrute > 0 ? (primeBrute / ratioEstim) : 0;
     }
@@ -4500,7 +4526,8 @@
       rac,
       covLevel,
       hasCoutMarche: !!ct,
-      coutMarche: ct
+      coutMarche: ct,
+      unitFactor: unitFactor // V37.3.35 — exposé pour badge UI ratio
     };
   }
 
@@ -8438,12 +8465,17 @@
               ${ct ? '<span>vs ' + ct.moy + ' €/' + ct.u + ' cout</span>' : ''}
               ${(function(){
                 if (!ct) return '';
-                // V37.3.34 — masquer ratio si unités incohérentes (prime/unité ≠ coût/unité)
-                var unitMismatch = (ct.u || '').toLowerCase() !== (fiche.unit || '').toLowerCase();
-                if (unitMismatch) {
-                  return '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:#d2992233;color:#d29922;font-weight:700;" title="Unités hétérogènes (prime par '+fiche.unit+' vs coût par '+ct.u+') — ratio non comparable directement, audit en cours sur la cohérence des 94 fiches concernées">⚠ unités hétérogènes</span>';
+                // V37.3.35 — affiner : ratio fiable si même unité OU conversion connue.
+                // Si non convertible → badge orange "⚠ unités hétérogènes".
+                var cu = (ct.u || '').toLowerCase();
+                var fu = (fiche.unit || '').toLowerCase();
+                var converted = (calc.unitFactor !== null && calc.unitFactor !== undefined && cu !== fu);
+                var converted_factor = calc.unitFactor;
+                if (cu !== fu && (calc.unitFactor === null || calc.unitFactor === undefined)) {
+                  return '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:#d2992233;color:#d29922;font-weight:700;" title="Unités hétérogènes (prime par '+fiche.unit+' vs coût par '+ct.u+') — pas de facteur de conversion connu. Audit AUDIT_COUTS_FICHES.md.">⚠ unités hétérogènes</span>';
                 }
-                return '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:' + (calc.coverage>=100?'#23863622':'#f8514922') + ';color:' + (calc.coverage>=100?'#238636':'#f85149') + ';font-weight:700;" title="Ratio prime nette / coût TTC (prix négocié 75% + TVA 20% tertiaire)">ratio ' + calc.coverage.toFixed(0) + '%</span>';
+                var convertedHint = converted ? ' (×'+converted_factor+' '+ct.u+'/'+fiche.unit+')' : '';
+                return '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:' + (calc.coverage>=100?'#23863622':'#f8514922') + ';color:' + (calc.coverage>=100?'#238636':'#f85149') + ';font-weight:700;" title="Ratio prime nette / coût TTC (prix négocié 75% + TVA 20%'+convertedHint+')">ratio ' + calc.coverage.toFixed(0) + '%</span>';
               })()}
             </div>
             <div style="margin-top:6px;padding:6px 10px;background:rgba(59,130,246,0.04);border-radius:6px;font-size:11px;color:var(--text-secondary);line-height:1.4;">
