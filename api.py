@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.31",
+        "version": "V37.3.32",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -468,6 +468,72 @@ def health():
         "modules": modules_ok,
         "log_format": _os.environ.get("LOG_FORMAT", "text"),
     })
+
+
+@app.route("/admin/dashboard", methods=["GET"])
+def admin_dashboard():
+    """V37.3.32 — Dashboard omniscient Jimmy (admin only) :
+    - Liste users + leur nb de tunnels + leurs signatures
+    - Score qualité moyen par user
+    - KPIs cross-vendor
+    - Activité récente cross-pipeline
+    """
+    from auth import jwt_verify, _load_users
+    auth_h = request.headers.get("Authorization", "")
+    if not auth_h.lower().startswith("bearer "):
+        return jsonify({"error": "JWT Bearer requis"}), 401
+    token = auth_h[7:].strip()
+    payload = jwt_verify(token)
+    if not payload or payload.get("role") != "admin":
+        return jsonify({"error": "admin only"}), 403
+
+    try:
+        from tunnel import list_tunnels, _load
+        all_t = list_tunnels()
+        users_db = _load_users()
+
+        # KPI par vendor
+        by_vendor = {}
+        for t_idx in all_t:
+            v = (t_idx.get("vendor") or "non_assigné").strip() or "non_assigné"
+            entry = by_vendor.setdefault(v, {
+                "vendor": v, "n_tunnels": 0, "by_stage": {}, "monday_pushed": 0, "with_rnb": 0,
+            })
+            entry["n_tunnels"] += 1
+            entry["by_stage"][t_idx.get("current_stage", "?")] = entry["by_stage"].get(t_idx.get("current_stage", "?"), 0) + 1
+            if t_idx.get("monday_item_id"):
+                entry["monday_pushed"] += 1
+            # Charger pour vérif rnb_id
+            full = _load(t_idx.get("tunnel_id", "")) or {}
+            for h in full.get("history") or []:
+                if (h.get("data") or {}).get("rnb_id"):
+                    entry["with_rnb"] += 1
+                    break
+
+        # Cross-référencement avec users.json (qui a un compte vs qui n'en a pas)
+        users_view = []
+        for email, u in users_db.items():
+            name = u.get("name", "")
+            stats = by_vendor.get(name) or by_vendor.get(email) or {"n_tunnels": 0, "by_stage": {}}
+            users_view.append({
+                "email": email,
+                "name": name,
+                "role": u.get("role"),
+                "created_at": u.get("created_at"),
+                "n_tunnels": stats.get("n_tunnels", 0),
+                "by_stage": stats.get("by_stage", {}),
+            })
+
+        return jsonify({
+            "type": "admin_dashboard",
+            "n_tunnels_total": len(all_t),
+            "n_users": len(users_db),
+            "users": users_view,
+            "vendors_with_tunnels": list(by_vendor.values()),
+            "_meta": {"version": "V37.3.32", "scope": "omniscient admin"},
+        })
+    except Exception as e:
+        return jsonify({"error": f"{type(e).__name__}: {str(e)[:200]}"}), 500
 
 
 @app.route("/rnb/contribute", methods=["POST"])

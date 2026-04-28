@@ -471,6 +471,50 @@ def list_tunnels(stage: str | None = None, vendor: str | None = None) -> list:
     return idx
 
 
+# V37.3.32 — Helper multi-tenant : extrait l'utilisateur courant via JWT (optionnel)
+def _current_user() -> dict | None:
+    """Retourne {role, name, sub} depuis le JWT Authorization header, ou None.
+    Utilisé par les endpoints pour appliquer le filtrage propriétaire."""
+    try:
+        from flask import request as _req
+        from auth import jwt_verify
+        auth_h = _req.headers.get("Authorization", "")
+        if not auth_h.lower().startswith("bearer "):
+            return None
+        token = auth_h[7:].strip()
+        payload = jwt_verify(token)
+        if not payload:
+            return None
+        return {
+            "sub": payload.get("sub"),
+            "name": payload.get("name") or payload.get("sub", "").split("@")[0],
+            "role": payload.get("role", "user"),
+        }
+    except Exception:
+        return None
+
+
+def _filter_for_user(tunnels: list, user: dict | None) -> list:
+    """V37.3.32 — Multi-tenant filter :
+    - admin → voit tous les tunnels (omniscient)
+    - user / readonly → voit uniquement ses tunnels (vendor == user.name OR user.sub)
+    - aucun user → comportement legacy (tout visible) — mode dev uniquement
+    """
+    if user is None:
+        # Mode legacy : si CEE_AUTH_REQUIRED=1, rien n'est visible sans token
+        if os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+            return []
+        return tunnels
+    if user.get("role") == "admin":
+        return tunnels  # omniscient
+    name = (user.get("name") or "").lower()
+    sub = (user.get("sub") or "").lower()
+    return [
+        t for t in tunnels
+        if (t.get("vendor") or "").lower() in (name, sub)
+    ]
+
+
 # V37.3.16 → V37.3.18 — Contexte pipeline pour prospection (4 couleurs commerciales + groupement).
 WON_DELIVERED_STAGES = {"post_signature"}            # 🟢 référence aboutie = preuve de foi
 WON_IN_PROGRESS_STAGES = {"signature"}                # 🟡 chantier en cours = argument groupement
@@ -768,6 +812,16 @@ def predict_next(tunnel_id: str) -> dict | None:
 def register_tunnel_routes(app) -> None:
     """Enregistre les routes /tunnel/* + /analytics/sales-velocity."""
 
+    def _can_access_tunnel(t: dict, user: dict | None) -> bool:
+        """V37.3.32 — Vérifie si user peut accéder à ce tunnel."""
+        if user is None:
+            return os.environ.get("CEE_AUTH_REQUIRED", "0") != "1"
+        if user.get("role") == "admin":
+            return True
+        name = (user.get("name") or "").lower()
+        sub = (user.get("sub") or "").lower()
+        return (t.get("vendor") or "").lower() in (name, sub)
+
     @app.route("/tunnel", methods=["POST"])
     def _tunnel_create():
         d = request.json or {}
@@ -775,7 +829,8 @@ def register_tunnel_routes(app) -> None:
         try:
             t = create_tunnel(
                 siret=siret,
-                vendor=d.get("vendor", ""),
+                # V37.3.32 — auto-assign vendor depuis JWT si non fourni
+                vendor=d.get("vendor") or (_current_user() or {}).get("name", ""),
                 source=d.get("source", "manual"),
                 raison_sociale=d.get("raison_sociale", ""),
             )
@@ -788,6 +843,9 @@ def register_tunnel_routes(app) -> None:
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.32 — contrôle accès propriétaire
+        if not _can_access_tunnel(t, _current_user()):
+            return jsonify({"error": "tunnel non accessible (réservé propriétaire ou admin)"}), 403
         return jsonify(t)
 
     @app.route("/tunnel/<tunnel_id>/advance", methods=["POST"])
@@ -980,12 +1038,19 @@ def register_tunnel_routes(app) -> None:
 
     @app.route("/tunnel", methods=["GET"])
     def _tunnel_list():
+        # V37.3.32 — multi-tenant : non-admin ne voit que ses tunnels
+        user = _current_user()
+        all_t = list_tunnels(stage=request.args.get("stage"), vendor=request.args.get("vendor"))
+        visible = _filter_for_user(all_t, user)
         return jsonify({
             "stages": TUNNEL_STAGES,
-            "tunnels": list_tunnels(
-                stage=request.args.get("stage"),
-                vendor=request.args.get("vendor"),
-            ),
+            "tunnels": visible,
+            "_filter": {
+                "user": user["name"] if user else "anonyme",
+                "role": user["role"] if user else "anonyme",
+                "total": len(all_t),
+                "visible": len(visible),
+            },
         })
 
     @app.route("/analytics/sales-velocity", methods=["GET"])
@@ -994,10 +1059,17 @@ def register_tunnel_routes(app) -> None:
             obj = int(request.args.get("objectif", 2))
         except Exception:
             obj = 2
-        return jsonify(sales_velocity(
-            month=request.args.get("month"),
-            objectif_par_personne=obj,
-        ))
+        # V37.3.32 — admin voit tous les vendors, vendor non-admin voit seulement le sien
+        full = sales_velocity(month=request.args.get("month"), objectif_par_personne=obj)
+        user = _current_user()
+        if user and user.get("role") != "admin":
+            name = (user.get("name") or "").lower()
+            full["vendors"] = [v for v in full.get("vendors", [])
+                               if (v.get("name") or "").lower() == name]
+            full["_scope"] = f"vendor {user['name']} uniquement"
+        else:
+            full["_scope"] = "admin / omniscient" if user else "anonyme"
+        return jsonify(full)
 
     @app.route("/tunnel/alerts", methods=["GET"])
     def _tunnel_alerts():
