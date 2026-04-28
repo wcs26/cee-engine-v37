@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.26",
+        "version": "V37.3.28",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -763,8 +763,15 @@ préparer les rendez-vous commerciaux.</p>
 <em>« Autoliquidation — article 44 Directive 2006/112/CE »</em>.</p>
 
 <h2>Contact</h2>
-<p>E-mail : <code>gmeet.mameilleureenergie@gmail.com</code><br>
-Téléphone : 07 80 94 20 00</p>
+<p>E-mail : <code>gmeet.mameilleureenergie@gmail.com</code></p>
+
+<h2>Champ d'application territorial</h2>
+<p>WCS Bulgaria EOOD est une société de droit bulgare opérant en B2B dans les
+États membres de l'Union européenne et au Royaume-Uni au titre des dispositifs
+nationaux d'économies d'énergie (CEE en France, Certificati Bianchi en Italie,
+CAE en Espagne, ECO au Royaume-Uni, etc.). La société n'a aucun établissement
+ni présence permanente en dehors de la Bulgarie. Le service est fourni en
+mode SaaS sans déplacement physique nécessaire.</p>
 """
 
 

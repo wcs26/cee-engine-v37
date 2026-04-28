@@ -60,8 +60,11 @@ Adresse complète : 132 rue Mimi Balkanska, Sofia 1540, Bulgarie
 Pays : BG (Bulgarie)
 Représentant légal : M. Jimmy Jackie Joseph WILNER, gérant
 E-mail correspondance : gmeet.mameilleureenergie@gmail.com
-Téléphone : +33 7 80 94 20 00
 ```
+
+⚠️ **Pas de téléphone français** dans le formulaire EUIPO — Jimmy est résident
+Cambodge, société à Sofia. Si besoin contact, utiliser uniquement email ou
+numéro bulgare/cambodgien (jamais +33).
 
 ### Type de marque
 - ☑ Marque verbale (le nom seul, en caractères standards)
