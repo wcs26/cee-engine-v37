@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.16",
+        "version": "V37.3.17",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -494,6 +494,10 @@ def analyse():
         try:
             from tunnel import create_tunnel, list_tunnels, advance_tunnel
             existing = [t for t in list_tunnels() if t.get("siret") == siret]
+            if existing and isinstance(result, dict):
+                # V37.3.17 — expose le tunnel existant à l'UI (sinon Jimmy croit qu'il n'a rien)
+                result["tunnel_id"] = existing[0]["tunnel_id"]
+                result["tunnel_existing_stage"] = existing[0].get("current_stage")
             if not existing and isinstance(result, dict):
                 ent = result.get("entreprise", {}) or {}
                 vendor = data.get("vendor", "") or result.get("vendor", "")
