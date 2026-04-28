@@ -20,7 +20,7 @@
 | **France Num** label PME numérique | 30 min | 0 € | x1,05 |
 | **ADEME annuaire conseil** énergie | 1 h candidature | 0 € | x1,1 |
 | **Référencement French Tech Bpifrance** | 1 h | 0 € | x1,05 |
-| **Déclaration établissement secondaire France** WCS Bulgaria (URSSAF / SIE) | 2 h | 0 € | x1,2 (crédibilité FR) |
+| ⚠️ ~~Établissement secondaire France~~ → **domiciliation postale France** (Les Tricolores, ~30 €/mois) | 30 min | ~30 €/mois | x1,2 (crédibilité FR sans établissement stable) |
 | **Page Transparency publique** (`/transparency`) | fait V37.3.26 | 0 € | x1,1 |
 | **Étude de cas AHBFC publiée** (`/case-study/ahbfc`) | fait V37.3.26 | 0 € | x1,15 |
 | **API publique documentée OpenAPI 3.0** (`/api/docs`) | déjà | 0 € | x1,1 |
@@ -46,8 +46,10 @@
 5. **Demander avis Google à AHBFC** (Frédéric Bonnet, Apolonia Durand) → social proof
 
 ### Ce mois (effort ~2 j cumulé)
-6. **Établissement secondaire France WCS Bulgaria** (formulaire URSSAF/SIE)
-   → enlève l'objection "société bulgare = pas sérieux" pour les gros comptes français
+6. ⚠️ **REMPLACÉ — domiciliation postale France** (PAS établissement secondaire)
+   → adresse de boîte aux lettres légale (~30 €/mois Les Tricolores, Sedomicilier)
+   → ne crée PAS d'établissement stable, donc PAS imposable en France
+   → ❌ NE PAS faire d'établissement secondaire URSSAF — voir FISCALITE_BULGARIE_FRANCE.md
 7. **GitHub repo public** + badges CI / tests / audit qualité
 8. **Page LinkedIn Company** WCS Bulgaria / CEE Engine + 5 posts hebdo
 9. **Inscription registre national opérateurs CEE** (Ministère de la Transition)
