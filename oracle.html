@@ -11997,12 +11997,39 @@ document.addEventListener('DOMContentLoaded', function() {
         var d = await r.json();
         var prospects = d.prospects || d.results || [];
         if (!prospects.length) { document.getElementById('prospResults').innerHTML = '<p style="color:var(--text-muted);">Aucun prospect trouvé.</p>'; return; }
+        // V37.3.16 — Rouge si déjà en pipeline (chantier réalisé/en cours), suggestions fiches CEE basées sur sites déjà gagnés
         var html = prospects.map(function(p) {
-            return '<div style="padding:8px;margin:4px 0;background:var(--bg-tertiary);border-radius:6px;border-left:3px solid ' + (p.score >= 70 ? 'var(--accent-green)' : p.score >= 40 ? 'var(--accent-orange)' : 'var(--border)') + ';cursor:pointer;" onclick="document.getElementById(\'siret\').value=\'' + (p.siret||'') + '\';closeToolkit();lookupSIRET();">' +
-            '<div style="display:flex;justify-content:space-between;"><strong style="font-size:12px;">' + (p.nom||p.nom_complet||'?') + '</strong><span style="font-size:11px;font-weight:700;color:' + (p.score >= 70 ? 'var(--accent-green)' : 'var(--accent-orange)') + ';">' + (p.score||'?') + '/100</span></div>' +
-            '<div style="font-size:10px;color:var(--text-muted);">' + (p.siret||'') + ' · ' + (p.commune||p.ville||'') + ' · ' + (p.qualification||'') + '</div></div>';
+            var inPipe = p.already_in_pipeline_stage;
+            var stageBadge = inPipe ? ('<span style="font-size:10px;font-weight:700;color:#fff;background:#dc2626;padding:2px 6px;border-radius:4px;margin-left:6px;">⚠ DÉJÀ ' + inPipe.toUpperCase() + '</span>') : '';
+            var borderColor = inPipe ? '#dc2626' : (p.score >= 70 ? 'var(--accent-green)' : p.score >= 40 ? 'var(--accent-orange)' : 'var(--border)');
+            var bg = inPipe ? 'rgba(220,38,38,0.10)' : 'var(--bg-tertiary)';
+            var scoreColor = inPipe ? '#dc2626' : (p.score >= 70 ? 'var(--accent-green)' : 'var(--accent-orange)');
+            var clickHandler = inPipe ? '' : 'document.getElementById(\'siret\').value=\'' + (p.siret||'') + '\';closeToolkit();lookupSIRET();';
+            var cursor = inPipe ? 'not-allowed' : 'pointer';
+            var titleAttr = inPipe ? ('title="Déjà en pipeline (stage ' + inPipe + ') — ne pas re-prospecter"') : '';
+            // Suggestions fiches CEE = ce qui marche sur ton secteur APE déjà gagné
+            var fichesBlock = '';
+            if (p.fiches_suggerees && p.fiches_suggerees.length) {
+                fichesBlock = '<div style="font-size:10px;color:var(--accent-green);margin-top:3px;">📚 ' + p.fiches_suggerees.join(' · ') +
+                              ' <span style="color:var(--text-muted);">(' + (p.naf_prefix_won_count||0) + ' déjà gagné sur APE ' + (p.naf||'').slice(0,2) + ')</span></div>';
+            }
+            // Prime estimée + raisons (top 2) à côté du nom
+            var primeFmt = p.prime_estimee ? (p.prime_estimee >= 1000 ? Math.round(p.prime_estimee/1000) + 'k€' : p.prime_estimee + '€') : '';
+            var raisonsTop = (p.raisons || []).slice(0, 2).join(' · ');
+            return '<div ' + titleAttr + ' style="padding:10px;margin:4px 0;background:' + bg + ';border-radius:6px;border-left:3px solid ' + borderColor + ';cursor:' + cursor + ';" ' + (clickHandler ? 'onclick="' + clickHandler + '"' : '') + '>' +
+                '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
+                  '<div style="flex:1;"><strong style="font-size:12px;' + (inPipe?'text-decoration:line-through;color:var(--text-muted);':'') + '">' + (p.nom||p.nom_complet||'?') + '</strong>' + stageBadge + '</div>' +
+                  '<span style="font-size:11px;font-weight:700;color:' + scoreColor + ';white-space:nowrap;">' + (p.score||'?') + '/100' + (primeFmt ? ' · ' + primeFmt : '') + '</span>' +
+                '</div>' +
+                '<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">' + (p.siret||'') + ' · ' + (p.commune||p.ville||'') + ' · APE ' + (p.naf||'?') + ' · effectif ' + (p.effectif||'?') + ' · ' + (p.qualification||'') + '</div>' +
+                (raisonsTop ? '<div style="font-size:10px;color:var(--text-secondary);margin-top:2px;">' + raisonsTop + '</div>' : '') +
+                fichesBlock +
+            '</div>';
         }).join('');
-        document.getElementById('prospResults').innerHTML = html;
+        // Légende rouge si au moins un prospect déjà en pipeline
+        var nbDejaEnPipe = prospects.filter(function(p){return p.already_in_pipeline_stage}).length;
+        var legende = nbDejaEnPipe ? '<div style="font-size:10px;color:#dc2626;margin-bottom:6px;">⚠ ' + nbDejaEnPipe + ' déjà en pipeline (rouge) — éviter de re-prospecter</div>' : '';
+        document.getElementById('prospResults').innerHTML = legende + html;
     } catch(e) { document.getElementById('prospResults').innerHTML = '<p style="color:var(--accent-red);">Erreur: ' + e.message + '</p>'; }
   }
 

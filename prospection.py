@@ -237,7 +237,7 @@ def scan_zone(lat: float, lon: float, rayon_km: float = 30,
             **lead,
         })
     scored.sort(key=lambda x: x["score"], reverse=True)
-    return scored[:limit]
+    return _enrich_with_pipeline_context(scored[:limit])
 
 
 def scan_secteur(naf: str, departements: list[str], limit: int = 50) -> list:
@@ -267,7 +267,35 @@ def scan_secteur(naf: str, departements: list[str], limit: int = 50) -> list:
             **lead,
         })
     scored.sort(key=lambda x: x["score"], reverse=True)
-    return scored[:limit]
+    return _enrich_with_pipeline_context(scored[:limit])
+
+
+def _enrich_with_pipeline_context(prospects: list) -> list:
+    """V37.3.16 — Enrichit chaque prospect avec :
+    - already_in_pipeline_stage : si SIREN déjà dans un tunnel actif (audit→post_signature)
+                                  → l'UI le rendra ROUGE pour signaler "ne pas re-prospecter"
+    - fiches_suggerees : top fiches CEE déjà gagnées sur le même préfixe NAF (2 digits)
+                         → "ce qui marche déjà sur le secteur APE"
+    - naf_prefix_won_count : nb de tunnels gagnés sur le même secteur
+    """
+    try:
+        from tunnel import get_pipeline_context
+        ctx = get_pipeline_context()
+    except Exception:
+        return prospects  # fallback silencieux : prospects bruts si tunnel indispo
+    siren_to_stage = ctx.get("siren_to_stage", {})
+    naf_to_fiches = ctx.get("naf_prefix_to_fiches", {})
+    naf_to_won = ctx.get("naf_prefix_to_won_count", {})
+
+    for p in prospects:
+        siren = (p.get("siren") or "").strip()
+        naf_prefix = (p.get("naf") or "")[:2]
+        if siren and siren in siren_to_stage:
+            p["already_in_pipeline_stage"] = siren_to_stage[siren]
+        if naf_prefix and naf_prefix in naf_to_fiches:
+            p["fiches_suggerees"] = naf_to_fiches[naf_prefix][:3]
+            p["naf_prefix_won_count"] = naf_to_won.get(naf_prefix, 0)
+    return prospects
 
 
 def batch_audit(sirets: list[str]) -> list:

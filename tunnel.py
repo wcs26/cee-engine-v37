@@ -471,6 +471,58 @@ def list_tunnels(stage: str | None = None, vendor: str | None = None) -> list:
     return idx
 
 
+# V37.3.16 — Contexte pipeline pour prospection (cross-référencement).
+WON_STAGES = {"signature", "post_signature"}
+ACTIVE_STAGES = {"audit", "r1", "r2", "signature", "post_signature"}
+
+
+def get_pipeline_context() -> dict:
+    """Retourne le contexte du pipeline pour enrichir la prospection.
+
+    - `siren_to_stage` : {siren_9_digits: stage} — pour flag rouge "déjà en pipeline"
+    - `naf_prefix_to_fiches` : {naf_2_digits: [fiches]} agrégé sur tunnels gagnés
+    - `naf_prefix_to_won_count` : {naf_2_digits: nb} — pertinence du préfixe NAF
+
+    Permet à l'UI prospection :
+    1. de griser/rouge les prospects déjà dans le pipeline (déjà en cours/réalisé)
+    2. de suggérer les fiches CEE pertinentes basées sur les ventes réelles précédentes
+    """
+    siren_to_stage: dict[str, str] = {}
+    naf_to_fiches: dict[str, set] = {}
+    naf_to_won_count: dict[str, int] = {}
+
+    for f in TUNNEL_DIR.glob("T-*.json"):
+        try:
+            t = json.loads(f.read_text())
+        except Exception:
+            continue
+        siret = (t.get("siret") or "").strip()
+        stage = t.get("current_stage", "")
+        # Index siren → stage (uniquement si actif dans pipeline, ignore les leads froids)
+        if siret and stage in ACTIVE_STAGES:
+            # Garder seulement SIRET 14 chiffres réels (pas les placeholders PIPE-...)
+            digits_only = "".join(c for c in siret if c.isdigit())
+            if len(digits_only) >= 9:
+                siren_to_stage[digits_only[:9]] = stage
+        # Agrégation NAF → fiches (tunnels gagnés uniquement)
+        if stage in WON_STAGES:
+            for h in t.get("history", []) or []:
+                d = (h.get("data") or {})
+                naf_full = (d.get("naf") or "").strip()
+                fiches = d.get("fiches") or []
+                if naf_full and fiches:
+                    prefix = naf_full[:2]
+                    naf_to_fiches.setdefault(prefix, set()).update(fiches)
+                    naf_to_won_count[prefix] = naf_to_won_count.get(prefix, 0) + 1
+                    break  # une seule occurrence par tunnel
+
+    return {
+        "siren_to_stage": siren_to_stage,
+        "naf_prefix_to_fiches": {k: sorted(v) for k, v in naf_to_fiches.items()},
+        "naf_prefix_to_won_count": naf_to_won_count,
+    }
+
+
 def sales_velocity(month: str | None = None, objectif_par_personne: int = 2) -> dict:
     """KPI dashboard pour objectif V38 +2 signatures/mois/personne.
 
