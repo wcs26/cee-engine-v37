@@ -1304,12 +1304,49 @@
         <div class="logo-dot"></div>
         <div class="logo-text"><span>WCS</span> Oracle</div>
         <span class="badge">V37.3 PRO</span>
+        <!-- V37.3.20 — Sélecteur de langue (drapeaux FR/EN/BG) -->
+        <div style="display:flex;gap:4px;align-items:center;padding:4px 8px;background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;" title="Choisir la langue d'affichage">
+          <button onclick="setLang('fr')" id="flagFR" style="background:transparent;border:none;padding:2px 4px;cursor:pointer;font-size:14px;opacity:1;" title="Français">🇫🇷</button>
+          <button onclick="setLang('en')" id="flagEN" style="background:transparent;border:none;padding:2px 4px;cursor:pointer;font-size:14px;opacity:0.5;" title="English">🇬🇧</button>
+          <button onclick="setLang('bg')" id="flagBG" style="background:transparent;border:none;padding:2px 4px;cursor:pointer;font-size:14px;opacity:0.5;" title="Български">🇧🇬</button>
+        </div>
         <div style="display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg-primary);border:1px solid var(--accent-orange);border-radius:8px;" title="Votre prix de rachat CEE négocié avec votre délégataire/obligé. C'est CE prix qui détermine la prime versée au client. EMMY indicatif = 8.78 €/MWh en avril 2026.">
           <span style="font-size:10px;color:var(--accent-orange);font-weight:600;white-space:nowrap;">💰 Rachat</span>
           <input type="number" id="livePrixMwh" value="8.78" step="0.1" min="1" max="30" style="width:65px;padding:4px 6px;font-size:13px;font-family:'JetBrains Mono',monospace;background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;color:var(--accent-orange);text-align:center;font-weight:600;">
           <span style="font-size:10px;color:var(--text-secondary);">€/MWh</span>
         </div>
       </div>
+      <script>
+        // V37.3.20 — Persistance langue (légère — strings critiques sont en français,
+        // EN/BG basculent les CTAs principaux et le bandeau RGPD)
+        (function(){
+          try {
+            var lang = localStorage.getItem('cee_lang') || (navigator.language || '').slice(0,2).toLowerCase();
+            if (['fr','en','bg'].indexOf(lang) === -1) lang = 'fr';
+            window.CEE_LANG = lang;
+            document.documentElement.setAttribute('lang', lang);
+          } catch(e) { window.CEE_LANG = 'fr'; }
+        })();
+        function setLang(l){
+          try { localStorage.setItem('cee_lang', l); } catch(e){}
+          ['FR','EN','BG'].forEach(function(c){
+            var el = document.getElementById('flag'+c);
+            if (el) el.style.opacity = (l === c.toLowerCase()) ? '1' : '0.5';
+          });
+          window.CEE_LANG = l;
+          document.documentElement.setAttribute('lang', l);
+          // Bascule rapide des labels-clés (textes courts)
+          var i18n = {
+            fr: { audit:'Lancer l\'audit', loading:'Chargement…', cookies:'Cookies essentiels uniquement — pas de tracker tiers' },
+            en: { audit:'Run audit',          loading:'Loading…',     cookies:'Essential cookies only — no third-party tracker' },
+            bg: { audit:'Стартирайте одита',  loading:'Зарежда се…',   cookies:'Само основни бисквитки — без трети страни' }
+          };
+          var t = i18n[l] || i18n.fr;
+          document.querySelectorAll('[data-i18n="audit"]').forEach(function(el){ el.textContent = t.audit; });
+        }
+        // Sync flags au boot
+        document.addEventListener('DOMContentLoaded', function(){ setLang(window.CEE_LANG || 'fr'); });
+      </script>
       <div class="header-controls">
         <div class="stepper">
           <div class="step active" data-step="1"></div>
@@ -2591,16 +2628,62 @@
     <div id="intelligenceContent" style="padding:16px;font-size:12px;color:var(--text-secondary);">Chargement...</div>
   </div>
 
+  <!-- V37.3.20 — Bandeau "Ils nous font confiance" par SECTEUR (pas de logos sans autorisation) -->
+  <div style="background:var(--bg-secondary);border-top:1px solid var(--border);padding:18px 0;">
+    <div class="container" style="text-align:center;">
+      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Ils nous font confiance · 7 sites livrés AHBFC + dossiers en cours</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:12px;">
+        <span style="padding:6px 12px;background:var(--bg-tertiary);border-radius:6px;border:1px solid var(--border);color:var(--text-secondary);">🏥 Santé / médico-social (AHBFC : 7 sites)</span>
+        <span style="padding:6px 12px;background:var(--bg-tertiary);border-radius:6px;border:1px solid var(--border);color:var(--text-secondary);">🛒 Retail alimentaire</span>
+        <span style="padding:6px 12px;background:var(--bg-tertiary);border-radius:6px;border:1px solid var(--border);color:var(--text-secondary);">⚡ Énergie / IRVE</span>
+        <span style="padding:6px 12px;background:var(--bg-tertiary);border-radius:6px;border:1px solid var(--border);color:var(--text-secondary);">🏭 Industrie tertiaire</span>
+        <span style="padding:6px 12px;background:var(--bg-tertiary);border-radius:6px;border:1px solid var(--border);color:var(--text-secondary);">🌾 Agriculture / serres</span>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
-    <div class="container footer-content">
-      <div>WCS Ingénierie · Oracle V37.3 PRO — <span id="footerStats">220+ fiches · 700+ APE · 100 zones · FOST-vérifié · V37.3 PRO + IA + CEE ENGINE</span></div>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <span>Estimation non contractuelle · Prix rachat: <span id="prixMWhDisplay" style="color:var(--accent-orange);font-weight:600;">8.78</span> €/MWh</span>
-        <button onclick="toggleIntelligence()" style="padding:3px 10px;border-radius:6px;border:1px solid var(--accent-purple);background:rgba(188,140,255,0.1);color:var(--accent-purple);cursor:pointer;font-size:11px;font-weight:600;" title="Intelligence CEE multi-lentilles">INTEL</button>
-        <span id="syncIndicator" style="font-size:11px;color:var(--text-secondary);cursor:pointer;" onclick="toggleChangelog()" title="Cliquer pour voir le changelog">Sync...</span>
+    <div class="container footer-content" style="flex-direction:column;gap:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:10px;">
+        <div>WCS Ingénierie · Oracle V37.3 PRO — <span id="footerStats">220+ fiches · 700+ APE · 100 zones · FOST-vérifié</span></div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span>Estimation non contractuelle · Prix rachat: <span id="prixMWhDisplay" style="color:var(--accent-orange);font-weight:600;">8.78</span> €/MWh</span>
+          <button onclick="toggleIntelligence()" style="padding:3px 10px;border-radius:6px;border:1px solid var(--accent-purple);background:rgba(188,140,255,0.1);color:var(--accent-purple);cursor:pointer;font-size:11px;font-weight:600;" title="Intelligence CEE multi-lentilles">INTEL</button>
+          <span id="syncIndicator" style="font-size:11px;color:var(--text-secondary);cursor:pointer;" onclick="toggleChangelog()" title="Cliquer pour voir le changelog">Sync...</span>
+        </div>
+      </div>
+      <!-- V37.3.20 — Mentions légales WCS Bulgaria EOOD + RGPD + CGU -->
+      <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:12px;width:100%;justify-content:center;">
+        <a href="/legal/mentions" style="color:var(--text-secondary);text-decoration:none;border-bottom:1px dotted var(--border);">Mentions légales</a>
+        <a href="/legal/cgu" style="color:var(--text-secondary);text-decoration:none;border-bottom:1px dotted var(--border);">CGU</a>
+        <a href="/legal/rgpd" style="color:var(--text-secondary);text-decoration:none;border-bottom:1px dotted var(--border);">Politique RGPD</a>
+        <a href="/legal/cookies" style="color:var(--text-secondary);text-decoration:none;border-bottom:1px dotted var(--border);">Cookies</a>
+        <a href="/qualite/scorecard" target="_blank" style="color:var(--text-secondary);text-decoration:none;border-bottom:1px dotted var(--border);" title="Audit qualité auto-exécuté méthodo COFRAC/ISO 9001">📊 Audit qualité</a>
+        <span style="color:var(--text-muted);">© 2026 WCS Bulgaria EOOD · EIK 207143227 · Sofia 1540</span>
       </div>
     </div>
   </footer>
+
+  <!-- V37.3.20 — Bandeau cookies minimal (consentement préalable RGPD/ePrivacy) -->
+  <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:2px solid var(--accent-green);padding:14px 20px;z-index:9999;font-size:12px;">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;">
+      <div style="color:var(--text-secondary);flex:1;min-width:280px;">
+        🍪 <strong>Cookies essentiels uniquement</strong> — pas de tracker tiers, pas de revente. Cache technique 24 h pour les recherches SIRENE/ADEME.
+        <a href="/legal/cookies" style="color:var(--accent-green);">En savoir plus</a>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="acceptCookies()" style="padding:8px 18px;background:var(--accent-green);border:none;border-radius:6px;color:#000;font-weight:600;cursor:pointer;">J'ai compris</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      try {
+        if (!localStorage.getItem('cookies_ack')) document.getElementById('cookieBanner').style.display = 'block';
+      } catch(e) {}
+    })();
+    function acceptCookies(){ try { localStorage.setItem('cookies_ack', '1'); document.getElementById('cookieBanner').style.display='none'; } catch(e){} }
+  </script>
 
   <script>
   // ════════════════════════════════════════════════════════════════

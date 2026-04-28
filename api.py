@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.19",
+        "version": "V37.3.20",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -468,6 +468,212 @@ def health():
         "modules": modules_ok,
         "log_format": _os.environ.get("LOG_FORMAT", "text"),
     })
+
+
+@app.route("/legal/<page>", methods=["GET"])
+def legal_pages(page):
+    """V37.3.20 — Pages légales WCS Bulgaria EOOD (mentions, CGU, RGPD, cookies).
+
+    Statut juridique vérifié :
+    - WCS Bulgaria EOOD = société bulgare immatriculée, EIK 207143227, siège Sofia.
+    - Bulgarie = État membre de l'UE depuis 2007 → soumise pleinement au RGPD.
+    - Activité commerciale en France → application du RGPD art. 3 (champ territorial).
+    - Tribunal compétent : Sofia (clause attribution dans CGU) avec exception consommateurs
+      français qui peuvent saisir tribunal du domicile.
+    """
+    pages = {
+        "mentions": ("Mentions légales", _legal_mentions()),
+        "cgu":      ("Conditions Générales d'Utilisation", _legal_cgu()),
+        "rgpd":     ("Politique de protection des données (RGPD)", _legal_rgpd()),
+        "cookies":  ("Politique cookies", _legal_cookies()),
+    }
+    if page not in pages:
+        return jsonify({"error": "page inconnue", "available": list(pages.keys())}), 404
+    title, body_md = pages[page]
+    # Rendu HTML simple, lisible, dans le thème
+    html = f"""<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title} — CEE Engine</title>
+<style>
+  body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; margin: 0; padding: 30px; line-height:1.7; }}
+  .container {{ max-width: 820px; margin: 0 auto; }}
+  h1 {{ font-size: 28px; margin-top: 0; color: #fff; }}
+  h2 {{ font-size: 18px; color:#7ee2c2; margin-top: 28px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }}
+  h3 {{ font-size: 14px; color:#bfae8d; margin-top: 18px; }}
+  p, li {{ font-size: 14px; }}
+  a {{ color: #7ee2c2; }}
+  code {{ background:#161b22; padding:2px 6px; border-radius:3px; font-size:13px; }}
+  .meta {{ font-size:12px; color:#8b949e; margin-bottom:20px; }}
+  .back {{ display:inline-block; margin-top:30px; padding:8px 14px; background:#21262d; border-radius:6px; text-decoration:none; }}
+</style></head>
+<body><div class="container">
+<h1>{title}</h1>
+<div class="meta">Dernière mise à jour : 2026-04-28 · Version V37.3.20</div>
+{body_md}
+<a class="back" href="/">← Retour à l'application</a>
+</div></body></html>"""
+    return app.response_class(html, content_type="text/html; charset=utf-8")
+
+
+def _legal_mentions():
+    return """
+<h2>Éditeur du site</h2>
+<p><strong>WCS Bulgaria EOOD</strong> (Wilner Consulting Services EOOD)<br>
+Société à responsabilité limitée unipersonnelle de droit bulgare<br>
+EIK (équivalent SIREN) : <code>207143227</code><br>
+Siège social : 132 rue Mimi Balkanska, Sofia 1540, Bulgarie<br>
+Gérant : M. Jimmy Jackie Joseph WILNER</p>
+
+<h2>Hébergement</h2>
+<p><strong>Fly.io, Inc.</strong> · 2261 Market Street #4990, San Francisco CA 94114, USA<br>
+Région d'hébergement applicative : <code>cdg</code> (Paris-Roissy, France)<br>
+Données métier persistées sur volume Fly chiffré au repos (région UE).</p>
+
+<h2>Directeur de publication</h2>
+<p>M. Jimmy WILNER, gérant de WCS Bulgaria EOOD.</p>
+
+<h2>Activité</h2>
+<p>WCS Bulgaria EOOD exerce une activité de courtage en énergie et conseil en efficacité
+énergétique (CEE — Certificats d'Économie d'Énergie). L'outil <em>CEE Engine</em> est
+un outil interne d'audit prédictif utilisé pour qualifier les opportunités CEE et
+préparer les rendez-vous commerciaux.</p>
+
+<h2>Numéro de TVA</h2>
+<p>TVA intracommunautaire bulgare en cours d'activation. Mention sur factures à clients UE :
+<em>« Autoliquidation — article 44 Directive 2006/112/CE »</em>.</p>
+
+<h2>Contact</h2>
+<p>E-mail : <code>gmeet.mameilleureenergie@gmail.com</code><br>
+Téléphone : 07 80 94 20 00</p>
+"""
+
+
+def _legal_cgu():
+    return """
+<h2>1. Objet</h2>
+<p>Les présentes Conditions Générales d'Utilisation (« CGU ») régissent l'accès et
+l'utilisation de l'outil CEE Engine, édité par WCS Bulgaria EOOD. L'outil propose
+une estimation prédictive de potentiel CEE basée sur des données ouvertes
+(SIRENE, ADEME, ATEE) et un moteur de calcul propriétaire.</p>
+
+<h2>2. Caractère non contractuel des estimations</h2>
+<p><strong>Les chiffres affichés sont des estimations indicatives, non contractuelles.</strong>
+Le montant réel d'une prime CEE dépend du contrat signé avec le délégataire ou
+l'obligé, du contrôle COFRAC, de la validation PNCEE, de la conformité du dossier
+et du prix de rachat de marché à la date d'engagement. WCS Bulgaria EOOD ne saurait
+être tenue responsable d'un écart entre l'estimation et le montant final perçu.</p>
+
+<h2>3. Limitation de responsabilité</h2>
+<p>L'outil est mis à disposition « en l'état » (<em>as-is</em>). WCS Bulgaria EOOD ne
+garantit ni l'absence d'interruption, ni l'exhaustivité du catalogue de fiches
+CEE (l'outil est synchronisé avec les arrêtés ADEME au mieux possible mais peut
+présenter un décalage de quelques jours). En aucun cas WCS Bulgaria EOOD ne
+peut être tenue responsable d'un préjudice direct, indirect, ou commercial
+résultant de l'usage des chiffres affichés sans validation par un délégataire
+agréé.</p>
+
+<h2>4. Propriété intellectuelle</h2>
+<p>L'outil CEE Engine, son code source, ses moteurs de calcul et ses contenus sont
+la propriété exclusive de WCS Bulgaria EOOD. Toute reproduction, copie, ou
+extraction substantielle est interdite sans autorisation écrite préalable.</p>
+
+<h2>5. Données utilisées</h2>
+<p>Voir <a href="/legal/rgpd">Politique RGPD</a>.</p>
+
+<h2>6. Droit applicable et juridiction</h2>
+<p>Les présentes CGU sont soumises au droit bulgare. Tout litige relève de la
+compétence exclusive des tribunaux de Sofia (Bulgarie), sauf disposition d'ordre
+public contraire (notamment le droit des consommateurs français qui pourraient
+saisir le tribunal de leur domicile).</p>
+
+<h2>7. Modification</h2>
+<p>WCS Bulgaria EOOD se réserve la possibilité de modifier les présentes CGU à tout
+moment. La version en vigueur est celle accessible à l'adresse <code>/legal/cgu</code>.</p>
+"""
+
+
+def _legal_rgpd():
+    return """
+<h2>Statut RGPD</h2>
+<p><strong>WCS Bulgaria EOOD est pleinement soumise au Règlement Général sur la
+Protection des Données (RGPD, règlement UE 2016/679)</strong> au titre de :</p>
+<ul>
+  <li>son siège situé en Bulgarie, État membre de l'Union européenne depuis 2007 ;</li>
+  <li>l'article 3 du RGPD (champ d'application territorial) qui s'applique dès lors
+  que les données concernent des personnes situées dans l'UE — ce qui est le cas
+  des prospects et clients français.</li>
+</ul>
+
+<h2>Responsable du traitement</h2>
+<p>WCS Bulgaria EOOD, Sofia 1540, Bulgarie. Contact : <code>gmeet.mameilleureenergie@gmail.com</code></p>
+
+<h2>Données collectées</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead><tr style="background:#21262d;"><th style="text-align:left;padding:8px;">Catégorie</th><th style="text-align:left;padding:8px;">Source</th><th style="text-align:left;padding:8px;">Finalité</th><th style="text-align:left;padding:8px;">Durée</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">SIRET, raison sociale, NAF, adresse</td><td style="padding:8px;">API SIRENE (open data publique)</td><td style="padding:8px;">Audit CEE prédictif</td><td style="padding:8px;">Cache 24h max</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Contact référent</td><td style="padding:8px;">Saisie commerciale Jimmy</td><td style="padding:8px;">Suivi pipeline commercial</td><td style="padding:8px;">Durée relation + 3 ans</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Historique audit</td><td style="padding:8px;">Calculs internes</td><td style="padding:8px;">Cohérence dossier CEE</td><td style="padding:8px;">3 ans</td></tr>
+</tbody>
+</table>
+
+<h2>Catégorie de données</h2>
+<p>L'outil ne traite <strong>aucune donnée sensible</strong> au sens de l'article 9 RGPD
+(pas de données de santé, religion, orientation, syndicat, biométrique, etc.).
+Uniquement des données <strong>professionnelles</strong> (entreprise, dirigeant,
+référent technique) et des données techniques de bâtiments.</p>
+
+<h2>Destinataires</h2>
+<p>Les données sont accessibles uniquement à WCS Bulgaria EOOD et à ses sous-traitants
+techniques (Fly.io pour l'hébergement, sur volume chiffré). Aucune revente, aucun
+profilage publicitaire, aucun transfert vers pays tiers hors UE pour les données
+métier (Fly applique la région UE Paris).</p>
+
+<h2>Droits des personnes</h2>
+<p>Conformément aux articles 15 à 22 du RGPD, vous disposez d'un droit d'accès,
+de rectification, d'effacement, de portabilité, de limitation et d'opposition.
+Pour l'exercer, écrivez à <code>gmeet.mameilleureenergie@gmail.com</code>. Une
+réponse sera apportée dans le délai légal d'un mois.</p>
+<p>Vous pouvez également introduire une réclamation auprès de la
+<a href="https://www.cnil.fr/fr/plaintes" target="_blank">CNIL (France)</a>
+ou de la <a href="https://www.cpdp.bg/" target="_blank">КЗЛД (autorité bulgare)</a>.</p>
+
+<h2>Sécurité</h2>
+<p>Authentification JWT HS256 (clé ≥ 32 caractères), connexions HTTPS
+obligatoires, secrets stockés en variables d'environnement chiffrées Fly.
+Politique de moindre privilège : seuls les comptes commerciaux WCS accèdent
+au pipeline. Audits de sécurité automatisés via <a href="/qualite/scorecard">
+scorecard qualité</a>.</p>
+"""
+
+
+def _legal_cookies():
+    return """
+<h2>Cookies et stockage local utilisés</h2>
+<p>L'application n'utilise <strong>aucun cookie publicitaire ni traceur tiers</strong>
+(pas de Google Analytics, pas de Meta Pixel, pas de Hotjar, pas de Doubleclick).</p>
+
+<h2>Stockage local du navigateur (localStorage)</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead><tr style="background:#21262d;"><th style="text-align:left;padding:8px;">Clé</th><th style="text-align:left;padding:8px;">Finalité</th><th style="text-align:left;padding:8px;">Durée</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;"><code>cookies_ack</code></td><td style="padding:8px;">Mémoriser que l'utilisateur a vu le bandeau</td><td style="padding:8px;">Permanent (effaçable)</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;"><code>cee_lang</code></td><td style="padding:8px;">Langue d'affichage choisie (FR/EN/BG)</td><td style="padding:8px;">Permanent</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;"><code>cee_session_*</code></td><td style="padding:8px;">État de l'audit en cours (brouillon)</td><td style="padding:8px;">Tant que onglet ouvert</td></tr>
+</tbody>
+</table>
+
+<h2>Cookies techniques</h2>
+<p>Lorsque l'utilisateur authentifié utilise le pipeline commercial, un cookie de
+session JWT (HttpOnly, Secure, SameSite=Lax) peut être déposé. Durée : session.
+Aucune information personnelle ne transite par ce cookie au-delà du nom du
+compte.</p>
+
+<h2>Refus / suppression</h2>
+<p>Vous pouvez à tout moment vider le localStorage de votre navigateur (DevTools
+→ Application → Storage → Clear). L'application continuera de fonctionner.</p>
+"""
 
 
 @app.route("/qualite/scorecard", methods=["GET"])
