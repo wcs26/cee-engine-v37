@@ -447,7 +447,7 @@ def health():
     return jsonify({
         "status": "ok" if modules_healthy else "degraded",
         "service": "CEE Engine V37.3",
-        "version": "V37.3.28",
+        "version": "V37.3.30",
         "fiches": len(fiches),
         "fiches_actives": fiches_actives,
         "uptime_seconds": int(_time.time() - _APP_BOOT_TS),
@@ -468,6 +468,33 @@ def health():
         "modules": modules_ok,
         "log_format": _os.environ.get("LOG_FORMAT", "text"),
     })
+
+
+@app.route("/rnb/lookup", methods=["GET"])
+def rnb_lookup():
+    """V37.3.30 — Cherche l'ID-RNB d'un bâtiment depuis une adresse texte.
+
+    Usage : GET /rnb/lookup?address=132+rue+de+rivoli+75001+paris
+
+    Retourne :
+    - rnb_id (12 caractères alphanumériques, ex: TSQCP5PA7KX8)
+    - status (constructed / demolished / construction_in_progress)
+    - ban_label (adresse normalisée BAN)
+    - cle_interop_ban
+    - score_geocode (0-1, qualité du géocodage BAN)
+
+    Usage commercial : intégrer l'ID-RNB sur chaque dossier audit pour
+    interopérabilité avec les 60+ bases publiques (DPE-ADEME, cadastre, BDNB...).
+    """
+    address = request.args.get("address", "").strip()
+    if not address:
+        return jsonify({"error": "paramètre ?address= requis"}), 400
+    try:
+        from rnb_client import get_rnb_id_from_address
+        result = get_rnb_id_from_address(address)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"error": f"{type(e).__name__}: {str(e)[:200]}"}), 500
 
 
 @app.route("/transparency", methods=["GET"])
@@ -1428,6 +1455,19 @@ def qualite_dossier(tunnel_id):
         "fix": "" if monday_ok else "POST /tunnel/<id>/push-monday pour créer l'item board",
     })
 
+    # 11. V37.3.30 — ID-RNB officiel (Référentiel National des Bâtiments)
+    rnb_id = agg_data.get("rnb_id") or ""
+    rnb_ok = bool(rnb_id) and len(rnb_id) >= 8
+    checks_dossier.append({
+        "dim": "rnb_id",
+        "label": "ID-RNB officiel (Référentiel National des Bâtiments)",
+        "weight": 5,
+        "score": 100 if rnb_ok else 0,
+        "ok": rnb_ok,
+        "evidence": f"ID-RNB {rnb_id}" if rnb_ok else "absent — interopérabilité 60+ bases publiques manquante",
+        "fix": "" if rnb_ok else "Appeler GET /rnb/lookup?address=<adresse_complète> et injecter rnb_id via /tunnel/<id>/update",
+    })
+
     # Score global pondéré
     total_w = sum(c["weight"] for c in checks_dossier)
     score_global = round(sum(c["score"] * c["weight"] for c in checks_dossier) / max(total_w, 1), 1)
@@ -2008,6 +2048,34 @@ def analyse():
     # V37.2 → V37.3.10 — Auto-création tunnel + extraction data métier depuis /analyse.
     # Format réel observé : entreprise.{naf, nom, departement, commune}, surface_estimee top-level,
     # energie top-level, resultats (au lieu de oracle).
+    # V37.3.30 — Enrichissement RNB (Référentiel National des Bâtiments) :
+    # Récupère l'ID-RNB officiel du bâtiment de l'entreprise → interopérable
+    # avec 60+ bases publiques (DPE, cadastre, BAN, BDNB, RIAL).
+    if isinstance(result, dict):
+        try:
+            ent = result.get("entreprise") or {}
+            adr_parts = [
+                ent.get("adresse_ligne_1") or ent.get("adresse"),
+                ent.get("code_postal") or ent.get("cp"),
+                ent.get("commune") or ent.get("ville"),
+            ]
+            adr = " ".join(p for p in adr_parts if p)
+            if adr:
+                from rnb_client import get_rnb_id_from_address
+                rnb = get_rnb_id_from_address(adr)
+                if rnb.get("rnb_id"):
+                    result["rnb"] = {
+                        "rnb_id": rnb["rnb_id"],
+                        "status": rnb.get("rnb_status"),
+                        "ban_label": rnb.get("ban_label"),
+                        "cle_interop_ban": rnb.get("cle_interop_ban"),
+                        "score_geocode": rnb.get("score_geocode"),
+                        "source": "rnb.beta.gouv.fr (Référentiel National des Bâtiments)",
+                    }
+        except Exception as e:
+            # Ne casse jamais l'audit principal
+            result["rnb"] = {"_error": str(e)[:120]}
+
     if os.environ.get("CEE_TUNNEL_AUTO", "1") == "1":
         try:
             from tunnel import create_tunnel, list_tunnels, advance_tunnel
@@ -2051,6 +2119,9 @@ def analyse():
                     "energie": energie,
                     "rge_installateur": True,  # défaut optimiste, ajustable
                     "date_engagement": "",
+                    # V37.3.30 — propagation ID-RNB officiel dans le tunnel
+                    "rnb_id": (result.get("rnb") or {}).get("rnb_id", ""),
+                    "rnb_ban_key": (result.get("rnb") or {}).get("cle_interop_ban", ""),
                 })
                 result["tunnel_id"] = t["tunnel_id"]
         except Exception:
