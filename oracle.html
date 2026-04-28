@@ -1413,12 +1413,48 @@
             <div>
                 <label style="font-size:11px;color:var(--text-muted);">Secteur cible</label>
                 <select id="prospSecteur" style="width:100%;padding:6px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-primary);font-size:12px;">
-                    <option value="sante">Santé / EHPAD</option>
-                    <option value="commerce_alimentaire">Commerce alimentaire</option>
-                    <option value="industrie">Industrie</option>
-                    <option value="enseignement">Enseignement</option>
-                    <option value="hotellerie">Hôtellerie</option>
-                    <option value="bureaux">Bureaux</option>
+                    <optgroup label="🏥 Santé / médico-social">
+                      <option value="sante_hopital">Hôpital · clinique (86.10Z)</option>
+                      <option value="sante_ehpad">EHPAD (87.10A)</option>
+                      <option value="sante_foyer">Foyer logement / résidence senior (87.30A)</option>
+                      <option value="sante_handicap">Hébergement handicap (87.10B)</option>
+                      <option value="sante_all">Santé toutes activités</option>
+                    </optgroup>
+                    <optgroup label="🌾 Agriculture / élevage">
+                      <option value="agri_bovin_lait">Élevage bovin lait (01.41Z)</option>
+                      <option value="agri_bovin_viande">Élevage bovin viande / ovin (01.42Z, 01.45Z)</option>
+                      <option value="agri_porc_volaille">Élevage porcin / volaille (01.46Z, 01.47Z)</option>
+                      <option value="agri_serres">Cultures sous serres (01.13Z, 01.19Z, 01.28Z)</option>
+                      <option value="agri_viticulture">Viticulture / chai (01.21Z)</option>
+                      <option value="agri_cooperative">Coopérative / soutien (01.61Z, 01.62Z)</option>
+                      <option value="agri_all">Agriculture toutes activités</option>
+                    </optgroup>
+                    <optgroup label="🛒 Commerce alimentaire">
+                      <option value="commerce_super">Supermarché (47.11D)</option>
+                      <option value="commerce_hyper">Hypermarché (47.11F)</option>
+                      <option value="commerce_superette">Supérette / proximité (47.11C)</option>
+                      <option value="commerce_boulangerie">Boulangerie / pâtisserie (10.71B, 47.24Z)</option>
+                      <option value="commerce_alimentaire">Commerce alimentaire toutes activités</option>
+                    </optgroup>
+                    <optgroup label="🏭 Industrie">
+                      <option value="industrie_agro">Industrie agro-alimentaire (10.*)</option>
+                      <option value="industrie_metallurgie">Métallurgie / fonderie (24.*)</option>
+                      <option value="industrie_plasturgie">Plasturgie (22.21Z, 22.29A)</option>
+                      <option value="industrie">Industrie toutes activités</option>
+                    </optgroup>
+                    <optgroup label="🎓 Enseignement">
+                      <option value="ens_college">Collège / lycée (85.31Z, 85.32Z)</option>
+                      <option value="ens_superieur">Enseignement supérieur (85.42Z)</option>
+                      <option value="enseignement">Enseignement toutes activités</option>
+                    </optgroup>
+                    <optgroup label="🏨 Hôtellerie / restauration">
+                      <option value="hotellerie">Hôtels (55.10Z)</option>
+                      <option value="hotel_residence">Résidences de tourisme (55.20Z)</option>
+                      <option value="restauration">Restauration (56.10A, 56.10C)</option>
+                    </optgroup>
+                    <optgroup label="🏢 Bureaux / immobilier">
+                      <option value="bureaux">Sièges sociaux / bureaux (68.20A, 68.20B, 70.10Z)</option>
+                    </optgroup>
                 </select>
             </div>
             <div>
@@ -11981,14 +12017,44 @@ document.addEventListener('DOMContentLoaded', function() {
     var depts = document.getElementById('prospDepts').value.split(',').map(function(s){return s.trim()}).filter(Boolean);
     document.getElementById('prospResults').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">Scan en cours...</div>';
     try {
-        // V37.3.14 — NAF complets (préfixes 2 chiffres rejetés par recherche-entreprises.api.gouv.fr)
+        // V37.3.18 — NAF complets par sous-activité (granulaire) + agriculture + restauration
         var nafMap = {
-          sante: '86.10Z,87.10A,87.10B',         // hôpitaux + EHPAD
-          commerce_alimentaire: '47.11D,47.11F', // supermarchés + hypermarchés
-          industrie: '25.11Z,10.71B,22.21Z',     // charpente méta + boulangerie indus + plasturgie
-          enseignement: '85.31Z,85.32Z,85.42Z',  // collège + lycée pro + supérieur
-          hotellerie: '55.10Z,55.20Z',           // hôtels + résidences
-          bureaux: '68.20A,68.20B,70.10Z'        // immo bureaux + sièges sociaux
+          // Santé / médico-social
+          sante_hopital: '86.10Z',
+          sante_ehpad: '87.10A',
+          sante_foyer: '87.30A',
+          sante_handicap: '87.10B',
+          sante_all: '86.10Z,87.10A,87.10B,87.30A,86.21Z,86.22A',
+          sante: '86.10Z,87.10A,87.10B',
+          // Agriculture / élevage
+          agri_bovin_lait: '01.41Z',
+          agri_bovin_viande: '01.42Z,01.45Z',
+          agri_porc_volaille: '01.46Z,01.47Z',
+          agri_serres: '01.13Z,01.19Z,01.28Z',
+          agri_viticulture: '01.21Z',
+          agri_cooperative: '01.61Z,01.62Z',
+          agri_all: '01.41Z,01.42Z,01.45Z,01.46Z,01.47Z,01.13Z,01.21Z,01.61Z,01.62Z',
+          // Commerce alimentaire
+          commerce_super: '47.11D',
+          commerce_hyper: '47.11F',
+          commerce_superette: '47.11C',
+          commerce_boulangerie: '10.71B,47.24Z',
+          commerce_alimentaire: '47.11D,47.11F,47.11C',
+          // Industrie
+          industrie_agro: '10.13A,10.51A,10.51B,10.71B,10.85Z',
+          industrie_metallurgie: '24.10Z,24.51Z,24.52Z',
+          industrie_plasturgie: '22.21Z,22.29A',
+          industrie: '25.11Z,10.71B,22.21Z',
+          // Enseignement
+          ens_college: '85.31Z,85.32Z',
+          ens_superieur: '85.42Z',
+          enseignement: '85.31Z,85.32Z,85.42Z',
+          // Hôtellerie / restauration
+          hotellerie: '55.10Z',
+          hotel_residence: '55.20Z',
+          restauration: '56.10A,56.10C',
+          // Bureaux / immo
+          bureaux: '68.20A,68.20B,70.10Z'
         };
         var r = await fetch('/prospection/scan-secteur', {
             method:'POST', headers:{'Content-Type':'application/json'},
@@ -11997,38 +12063,82 @@ document.addEventListener('DOMContentLoaded', function() {
         var d = await r.json();
         var prospects = d.prospects || d.results || [];
         if (!prospects.length) { document.getElementById('prospResults').innerHTML = '<p style="color:var(--text-muted);">Aucun prospect trouvé.</p>'; return; }
-        // V37.3.16 — Rouge si déjà en pipeline (chantier réalisé/en cours), suggestions fiches CEE basées sur sites déjà gagnés
+        // V37.3.18 — 4 couleurs commerciales + speech argumenté (groupement, référence aboutie)
+        // 🔴 ROUGE  = déjà en pipeline (ne pas re-prospecter)
+        // 🟢 VERT   = référence aboutie (post_signature) sur même APE+dept = preuve sociale
+        // 🟡 JAUNE  = chantier en cours (signature) sur même APE+dept = pitch groupement
+        // 🔵 BLEU   = prospect normal (pas de match contextuel)
         var html = prospects.map(function(p) {
             var inPipe = p.already_in_pipeline_stage;
-            var stageBadge = inPipe ? ('<span style="font-size:10px;font-weight:700;color:#fff;background:#dc2626;padding:2px 6px;border-radius:4px;margin-left:6px;">⚠ DÉJÀ ' + inPipe.toUpperCase() + '</span>') : '';
-            var borderColor = inPipe ? '#dc2626' : (p.score >= 70 ? 'var(--accent-green)' : p.score >= 40 ? 'var(--accent-orange)' : 'var(--border)');
-            var bg = inPipe ? 'rgba(220,38,38,0.10)' : 'var(--bg-tertiary)';
+            var hasRefs = (p.references_abouties || []).length > 0;
+            var hasGrp  = (p.groupement_possible || []).length > 0;
+            // Choix couleur (priorité : rouge > vert > jaune > bleu)
+            var color, label, bg;
+            if (inPipe) {
+              color = '#dc2626'; label = '⚠ DÉJÀ ' + inPipe.toUpperCase();
+              bg = 'rgba(220,38,38,0.10)';
+            } else if (hasRefs) {
+              color = '#16a34a'; label = '🟢 RÉFÉRENCE ABOUTIE secteur';
+              bg = 'rgba(22,163,74,0.08)';
+            } else if (hasGrp) {
+              color = '#eab308'; label = '🟡 GROUPEMENT POSSIBLE';
+              bg = 'rgba(234,179,8,0.10)';
+            } else {
+              color = (p.score >= 70 ? 'var(--accent-green)' : p.score >= 40 ? 'var(--accent-orange)' : 'var(--border)');
+              label = '';
+              bg = 'var(--bg-tertiary)';
+            }
+            var stageBadge = label ? ('<span style="font-size:10px;font-weight:700;color:#fff;background:' + (color.startsWith('#')?color:'#3b82f6') + ';padding:2px 6px;border-radius:4px;margin-left:6px;">' + label + '</span>') : '';
             var scoreColor = inPipe ? '#dc2626' : (p.score >= 70 ? 'var(--accent-green)' : 'var(--accent-orange)');
             var clickHandler = inPipe ? '' : 'document.getElementById(\'siret\').value=\'' + (p.siret||'') + '\';closeToolkit();lookupSIRET();';
             var cursor = inPipe ? 'not-allowed' : 'pointer';
-            var titleAttr = inPipe ? ('title="Déjà en pipeline (stage ' + inPipe + ') — ne pas re-prospecter"') : '';
-            // Suggestions fiches CEE = ce qui marche sur ton secteur APE déjà gagné
+            var titleAttr = inPipe ? ('title="Déjà en pipeline (stage ' + inPipe + ') — ne pas re-prospecter"')
+                          : (hasRefs ? 'title="Référence aboutie sur même secteur+dept — preuve sociale dispo"'
+                          : (hasGrp ? 'title="Chantier en cours même secteur+dept — propose groupement = mutualisation"' : ''));
+            // Bloc fiches suggérées
             var fichesBlock = '';
             if (p.fiches_suggerees && p.fiches_suggerees.length) {
-                fichesBlock = '<div style="font-size:10px;color:var(--accent-green);margin-top:3px;">📚 ' + p.fiches_suggerees.join(' · ') +
+                fichesBlock = '<div style="font-size:10px;color:var(--accent-green);margin-top:4px;">📚 ' + p.fiches_suggerees.join(' · ') +
                               ' <span style="color:var(--text-muted);">(' + (p.naf_prefix_won_count||0) + ' déjà gagné sur APE ' + (p.naf||'').slice(0,2) + ')</span></div>';
             }
-            // Prime estimée + raisons (top 2) à côté du nom
+            // Speech commercial pré-construit
+            var pitchBlock = '';
+            if (p.pitch_argument && !inPipe) {
+                pitchBlock = '<div style="font-size:11px;color:' + color + ';margin-top:6px;padding:6px 8px;background:rgba(255,255,255,0.03);border-radius:4px;border-left:2px solid ' + color + ';">💬 ' + p.pitch_argument + '</div>';
+            }
+            // Liste compacte des références (1 ligne, top 2)
+            var refsBlock = '';
+            if (hasRefs) {
+                var refNames = p.references_abouties.slice(0,2).map(function(r){return r.raison_sociale||'?'}).join(', ');
+                refsBlock = '<div style="font-size:10px;color:#16a34a;margin-top:3px;">✅ Aboutis : ' + refNames + (p.references_abouties.length>2?' (+'+(p.references_abouties.length-2)+')':'') + '</div>';
+            }
+            if (hasGrp) {
+                var grpNames = p.groupement_possible.slice(0,2).map(function(r){return r.raison_sociale||'?'}).join(', ');
+                refsBlock += '<div style="font-size:10px;color:#eab308;margin-top:3px;">🤝 En cours mutualisable : ' + grpNames + (p.groupement_possible.length>2?' (+'+(p.groupement_possible.length-2)+')':'') + '</div>';
+            }
             var primeFmt = p.prime_estimee ? (p.prime_estimee >= 1000 ? Math.round(p.prime_estimee/1000) + 'k€' : p.prime_estimee + '€') : '';
             var raisonsTop = (p.raisons || []).slice(0, 2).join(' · ');
-            return '<div ' + titleAttr + ' style="padding:10px;margin:4px 0;background:' + bg + ';border-radius:6px;border-left:3px solid ' + borderColor + ';cursor:' + cursor + ';" ' + (clickHandler ? 'onclick="' + clickHandler + '"' : '') + '>' +
+            return '<div ' + titleAttr + ' style="padding:10px;margin:4px 0;background:' + bg + ';border-radius:6px;border-left:3px solid ' + color + ';cursor:' + cursor + ';" ' + (clickHandler ? 'onclick="' + clickHandler + '"' : '') + '>' +
                 '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
                   '<div style="flex:1;"><strong style="font-size:12px;' + (inPipe?'text-decoration:line-through;color:var(--text-muted);':'') + '">' + (p.nom||p.nom_complet||'?') + '</strong>' + stageBadge + '</div>' +
                   '<span style="font-size:11px;font-weight:700;color:' + scoreColor + ';white-space:nowrap;">' + (p.score||'?') + '/100' + (primeFmt ? ' · ' + primeFmt : '') + '</span>' +
                 '</div>' +
                 '<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">' + (p.siret||'') + ' · ' + (p.commune||p.ville||'') + ' · APE ' + (p.naf||'?') + ' · effectif ' + (p.effectif||'?') + ' · ' + (p.qualification||'') + '</div>' +
                 (raisonsTop ? '<div style="font-size:10px;color:var(--text-secondary);margin-top:2px;">' + raisonsTop + '</div>' : '') +
+                refsBlock +
                 fichesBlock +
+                pitchBlock +
             '</div>';
         }).join('');
-        // Légende rouge si au moins un prospect déjà en pipeline
-        var nbDejaEnPipe = prospects.filter(function(p){return p.already_in_pipeline_stage}).length;
-        var legende = nbDejaEnPipe ? '<div style="font-size:10px;color:#dc2626;margin-bottom:6px;">⚠ ' + nbDejaEnPipe + ' déjà en pipeline (rouge) — éviter de re-prospecter</div>' : '';
+        // Légende complète des 4 couleurs si pertinent
+        var nbRouge = prospects.filter(function(p){return p.already_in_pipeline_stage}).length;
+        var nbVert  = prospects.filter(function(p){return !p.already_in_pipeline_stage && (p.references_abouties||[]).length}).length;
+        var nbJaune = prospects.filter(function(p){return !p.already_in_pipeline_stage && !(p.references_abouties||[]).length && (p.groupement_possible||[]).length}).length;
+        var legendeParts = [];
+        if (nbRouge) legendeParts.push('<span style="color:#dc2626;">🔴 ' + nbRouge + ' déjà en pipeline</span>');
+        if (nbVert)  legendeParts.push('<span style="color:#16a34a;">🟢 ' + nbVert + ' réf. abouties (preuve)</span>');
+        if (nbJaune) legendeParts.push('<span style="color:#eab308;">🟡 ' + nbJaune + ' groupement possible (mutualisation)</span>');
+        var legende = legendeParts.length ? '<div style="font-size:11px;margin-bottom:8px;display:flex;gap:10px;flex-wrap:wrap;">' + legendeParts.join('') + '</div>' : '';
         document.getElementById('prospResults').innerHTML = legende + html;
     } catch(e) { document.getElementById('prospResults').innerHTML = '<p style="color:var(--accent-red);">Erreur: ' + e.message + '</p>'; }
   }

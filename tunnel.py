@@ -471,25 +471,36 @@ def list_tunnels(stage: str | None = None, vendor: str | None = None) -> list:
     return idx
 
 
-# V37.3.16 — Contexte pipeline pour prospection (cross-référencement).
-WON_STAGES = {"signature", "post_signature"}
-ACTIVE_STAGES = {"audit", "r1", "r2", "signature", "post_signature"}
+# V37.3.16 → V37.3.18 — Contexte pipeline pour prospection (4 couleurs commerciales + groupement).
+WON_DELIVERED_STAGES = {"post_signature"}            # 🟢 référence aboutie = preuve de foi
+WON_IN_PROGRESS_STAGES = {"signature"}                # 🟡 chantier en cours = argument groupement
+WON_STAGES = WON_DELIVERED_STAGES | WON_IN_PROGRESS_STAGES
+ACTIVE_STAGES = {"audit", "r1", "r2"} | WON_STAGES
 
 
 def get_pipeline_context() -> dict:
     """Retourne le contexte du pipeline pour enrichir la prospection.
 
-    - `siren_to_stage` : {siren_9_digits: stage} — pour flag rouge "déjà en pipeline"
-    - `naf_prefix_to_fiches` : {naf_2_digits: [fiches]} agrégé sur tunnels gagnés
-    - `naf_prefix_to_won_count` : {naf_2_digits: nb} — pertinence du préfixe NAF
+    Mappage 4 couleurs commerciales (V37.3.18) :
+    - 🔴 ROUGE   : déjà en pipeline (audit→post_sig) — ne pas re-prospecter
+    - 🟢 VERT    : référence aboutie (post_signature) sur même APE/zone — preuve de foi
+    - 🟡 JAUNE   : chantier en cours (signature) sur même APE/zone — propose groupement
+    - 🔵 BLEU    : prospect normal (pas de match contextuel)
 
-    Permet à l'UI prospection :
-    1. de griser/rouge les prospects déjà dans le pipeline (déjà en cours/réalisé)
-    2. de suggérer les fiches CEE pertinentes basées sur les ventes réelles précédentes
+    Sortie :
+    - `siren_to_stage` : {siren9: stage}
+    - `naf_prefix_to_fiches` : {naf2: [fiches]} agrégé sur gagnés
+    - `naf_prefix_to_won_count` : {naf2: nb gagnés}
+    - `references_by_naf_dept` : {(naf2, dept): [{tunnel_id, raison_sociale, fiches}, ...]}
+                                 → dossiers ABOUTIS à citer comme preuve sociale
+    - `groupement_by_naf_dept` : {(naf2, dept): [{tunnel_id, raison_sociale, fiches}, ...]}
+                                 → chantiers EN COURS pour pitch mutualisation
     """
     siren_to_stage: dict[str, str] = {}
     naf_to_fiches: dict[str, set] = {}
     naf_to_won_count: dict[str, int] = {}
+    references_by_naf_dept: dict[str, list] = {}     # clé "NAF2|DEPT2"
+    groupement_by_naf_dept: dict[str, list] = {}
 
     for f in TUNNEL_DIR.glob("T-*.json"):
         try:
@@ -498,28 +509,46 @@ def get_pipeline_context() -> dict:
             continue
         siret = (t.get("siret") or "").strip()
         stage = t.get("current_stage", "")
-        # Index siren → stage (uniquement si actif dans pipeline, ignore les leads froids)
         if siret and stage in ACTIVE_STAGES:
-            # Garder seulement SIRET 14 chiffres réels (pas les placeholders PIPE-...)
             digits_only = "".join(c for c in siret if c.isdigit())
             if len(digits_only) >= 9:
                 siren_to_stage[digits_only[:9]] = stage
-        # Agrégation NAF → fiches (tunnels gagnés uniquement)
+
         if stage in WON_STAGES:
+            naf_full = ""
+            dept = ""
+            fiches: list = []
             for h in t.get("history", []) or []:
                 d = (h.get("data") or {})
-                naf_full = (d.get("naf") or "").strip()
-                fiches = d.get("fiches") or []
-                if naf_full and fiches:
-                    prefix = naf_full[:2]
-                    naf_to_fiches.setdefault(prefix, set()).update(fiches)
-                    naf_to_won_count[prefix] = naf_to_won_count.get(prefix, 0) + 1
-                    break  # une seule occurrence par tunnel
+                if not naf_full:
+                    naf_full = (d.get("naf") or "").strip()
+                if not dept:
+                    dept = (d.get("departement") or "").strip()[:2]
+                if not fiches:
+                    fiches = list(d.get("fiches") or [])
+                if naf_full and dept and fiches:
+                    break
+            if naf_full and fiches:
+                prefix = naf_full[:2]
+                naf_to_fiches.setdefault(prefix, set()).update(fiches)
+                naf_to_won_count[prefix] = naf_to_won_count.get(prefix, 0) + 1
+                key = f"{prefix}|{dept}"
+                bucket = references_by_naf_dept if stage in WON_DELIVERED_STAGES else groupement_by_naf_dept
+                bucket.setdefault(key, []).append({
+                    "tunnel_id": t.get("tunnel_id"),
+                    "raison_sociale": t.get("raison_sociale"),
+                    "fiches": fiches[:5],
+                    "naf": naf_full,
+                    "departement": dept,
+                    "stage": stage,
+                })
 
     return {
         "siren_to_stage": siren_to_stage,
         "naf_prefix_to_fiches": {k: sorted(v) for k, v in naf_to_fiches.items()},
         "naf_prefix_to_won_count": naf_to_won_count,
+        "references_by_naf_dept": references_by_naf_dept,
+        "groupement_by_naf_dept": groupement_by_naf_dept,
     }
 
 

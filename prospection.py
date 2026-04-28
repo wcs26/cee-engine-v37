@@ -271,12 +271,17 @@ def scan_secteur(naf: str, departements: list[str], limit: int = 50) -> list:
 
 
 def _enrich_with_pipeline_context(prospects: list) -> list:
-    """V37.3.16 — Enrichit chaque prospect avec :
-    - already_in_pipeline_stage : si SIREN déjà dans un tunnel actif (audit→post_signature)
-                                  → l'UI le rendra ROUGE pour signaler "ne pas re-prospecter"
-    - fiches_suggerees : top fiches CEE déjà gagnées sur le même préfixe NAF (2 digits)
-                         → "ce qui marche déjà sur le secteur APE"
-    - naf_prefix_won_count : nb de tunnels gagnés sur le même secteur
+    """V37.3.16 → V37.3.18 — Enrichit chaque prospect avec 4 couleurs commerciales.
+
+    Champs injectés (selon match avec l'historique) :
+    - already_in_pipeline_stage   → 🔴 rouge : déjà en cours, ne pas re-prospecter
+    - references_abouties         → 🟢 vert  : dossiers post_signature même APE+dept
+                                              = preuve sociale ("voilà qui s'est fait, en zone X")
+    - groupement_possible         → 🟡 jaune : chantiers signature en cours même APE+dept
+                                              = pitch "rejoignez le groupement, mutualisation"
+    - fiches_suggerees            → fiches CEE qui ont marché sur le préfixe APE
+    - naf_prefix_won_count        → nb dossiers gagnés sur même préfixe APE
+    - pitch_argument              → speech commercial pré-construit (string court UI)
     """
     try:
         from tunnel import get_pipeline_context
@@ -286,15 +291,61 @@ def _enrich_with_pipeline_context(prospects: list) -> list:
     siren_to_stage = ctx.get("siren_to_stage", {})
     naf_to_fiches = ctx.get("naf_prefix_to_fiches", {})
     naf_to_won = ctx.get("naf_prefix_to_won_count", {})
+    refs_by_key = ctx.get("references_by_naf_dept", {})
+    grp_by_key = ctx.get("groupement_by_naf_dept", {})
 
     for p in prospects:
         siren = (p.get("siren") or "").strip()
-        naf_prefix = (p.get("naf") or "")[:2]
+        naf_full = (p.get("naf") or "")
+        naf_prefix = naf_full[:2]
+        dept = (p.get("departement") or "")[:2]
+        key = f"{naf_prefix}|{dept}"
+
         if siren and siren in siren_to_stage:
             p["already_in_pipeline_stage"] = siren_to_stage[siren]
+
         if naf_prefix and naf_prefix in naf_to_fiches:
             p["fiches_suggerees"] = naf_to_fiches[naf_prefix][:3]
             p["naf_prefix_won_count"] = naf_to_won.get(naf_prefix, 0)
+
+        # 🟢 références abouties (preuve sociale) — même APE + même dept en priorité,
+        # fallback même APE seul si pas de dept matché
+        refs_strict = refs_by_key.get(key, [])
+        if not refs_strict:
+            # Élargir au préfixe NAF national si rien dans le dept
+            for k, lst in refs_by_key.items():
+                if k.startswith(naf_prefix + "|"):
+                    refs_strict = refs_strict + lst
+        if refs_strict:
+            p["references_abouties"] = refs_strict[:3]
+
+        # 🟡 groupement possible — même logique
+        grp_strict = grp_by_key.get(key, [])
+        if not grp_strict:
+            for k, lst in grp_by_key.items():
+                if k.startswith(naf_prefix + "|"):
+                    grp_strict = grp_strict + lst
+        if grp_strict:
+            p["groupement_possible"] = grp_strict[:3]
+
+        # Speech commercial auto (1 phrase prête à dire au prospect)
+        pitch_parts = []
+        if p.get("references_abouties"):
+            n = len(refs_by_key.get(key, [])) or len(p["references_abouties"])
+            ref0 = p["references_abouties"][0]
+            pitch_parts.append(
+                f"📍 {n} dossier{'s' if n>1 else ''} déjà livré{'s' if n>1 else ''} dans votre secteur "
+                f"(ex : {ref0.get('raison_sociale','')[:35]}) — référence client à votre disposition"
+            )
+        if p.get("groupement_possible"):
+            n = len(grp_by_key.get(key, [])) or len(p["groupement_possible"])
+            pitch_parts.append(
+                f"🤝 {n} chantier{'s' if n>1 else ''} en cours sur même APE+dept — "
+                f"groupement = mutualisation des coûts (prise en charge passe de 70 % seul à ~100 %)"
+            )
+        if pitch_parts:
+            p["pitch_argument"] = " · ".join(pitch_parts)
+
     return prospects
 
 
