@@ -3043,9 +3043,12 @@
     "BAT-EQ-130":{min:200,max:380,moy:290,u:"point"},
     "BAT-EQ-134":{min:400,max:700,moy:550,u:"m²"},
     "BAT-EQ-135":{min:350,max:600,moy:475,u:"m²"},
-    "BAT-SE-103":{min:15,max:30,moy:22,u:"radiateur"},
-    "BAT-SE-104":{min:20,max:40,moy:30,u:"radiateur"},
-    "BAT-SE-105":{min:25,max:45,moy:35,u:"radiateur"},
+    // V37.3.34 — FIX cohérence unité : BAT-SE-103 prime par "unité" (installation entière),
+    // donc coût aussi par unité, pas par radiateur (sinon ratio délirant 428%).
+    // Coût installation = ~30 radiateurs × 15-30 €/rad × main d'œuvre + diagnostic.
+    "BAT-SE-103":{min:300,max:900,moy:600,u:"unité",note:"équilibrage réseau ~30 rad"},
+    "BAT-SE-104":{min:400,max:1200,moy:800,u:"m²",note:"équilibrage avec sondes - prime par m²"},
+    "BAT-SE-105":{min:500,max:1500,moy:1000,u:"logement",note:"équilibrage + télégestion - prime par logement"},
     "BAT-TH-101":{min:100,max:180,moy:140,u:"kW"},
     "BAT-TH-115":{min:1400,max:2400,moy:1900,u:"kW"},
     "BAT-TH-134":{min:500,max:900,moy:700,u:"kW"},
@@ -8433,7 +8436,15 @@
               <span>·</span>
               <span style="color:var(--accent-orange);font-weight:600;">${(calc.kwhcUnit * CONFIG.PRIX_MWH / 1000 * (fiche.p6Bonus||1)).toFixed(0)} €/${fiche.unit} prime</span>
               ${ct ? '<span>vs ' + ct.moy + ' €/' + ct.u + ' cout</span>' : ''}
-              ${ct ? '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:' + (calc.coverage>=100?'#23863622':'#f8514922') + ';color:' + (calc.coverage>=100?'#238636':'#f85149') + ';font-weight:700;">ratio ' + calc.coverage.toFixed(0) + '%</span>' : ''}
+              ${(function(){
+                if (!ct) return '';
+                // V37.3.34 — masquer ratio si unités incohérentes (prime/unité ≠ coût/unité)
+                var unitMismatch = (ct.u || '').toLowerCase() !== (fiche.unit || '').toLowerCase();
+                if (unitMismatch) {
+                  return '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:#d2992233;color:#d29922;font-weight:700;" title="Unités hétérogènes (prime par '+fiche.unit+' vs coût par '+ct.u+') — ratio non comparable directement, audit en cours sur la cohérence des 94 fiches concernées">⚠ unités hétérogènes</span>';
+                }
+                return '<span style="font-size:10px;padding:1px 5px;border-radius:3px;background:' + (calc.coverage>=100?'#23863622':'#f8514922') + ';color:' + (calc.coverage>=100?'#238636':'#f85149') + ';font-weight:700;" title="Ratio prime nette / coût TTC (prix négocié 75% + TVA 20% tertiaire)">ratio ' + calc.coverage.toFixed(0) + '%</span>';
+              })()}
             </div>
             <div style="margin-top:6px;padding:6px 10px;background:rgba(59,130,246,0.04);border-radius:6px;font-size:11px;color:var(--text-secondary);line-height:1.4;">
               ${(function(){var g=GESTE_EXP[fiche.cat]||GESTE_EXP['Autre'];return '<div>'+g.ico+' <span style="color:var(--accent-red);">Avant:</span> '+g.avant+'</div><div style="margin-top:4px;"><span style="color:var(--accent-green);">Apres:</span> '+g.apres+'</div><div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;"><span style="background:#23863622;color:#238636;padding:2px 8px;border-radius:4px;font-weight:600;">📉 -'+g.economies+' facture'+(function(){var fe=STATE.diagnostic.factureElec||0;var fc=STATE.diagnostic.factureChauff||0;var cat=fiche.cat;var pct=parseInt(g.economies)||20;if(cat==='Thermique'||cat==='Enveloppe'||cat==='Isolation'||cat==='Régulation'||cat==='Ventilation'){if(fc>0) return ' = <strong>'+Math.round(fc*pct/100).toLocaleString('fr-FR')+' €/an</strong>';} else {if(fe>0) return ' = <strong>'+Math.round(fe*pct/100).toLocaleString('fr-FR')+' €/an</strong>';}return '';}())+'</span><span style="background:#3b82f622;color:#3b82f6;padding:2px 8px;border-radius:4px;">⏱️ '+g.dureeVie+'</span><a href="'+g.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--accent-cyan);font-size:10px;padding:2px 6px;border:1px solid var(--accent-cyan);border-radius:4px;text-decoration:none;">'+g.urlLabel+' ↗</a><a href="'+g.urlApave+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--accent-orange);font-size:10px;padding:2px 6px;border:1px solid var(--accent-orange);border-radius:4px;text-decoration:none;">'+g.urlApaveLabel+' ↗</a>'+(g.urlAdeme?'<a href="'+g.urlAdeme+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--accent-purple);font-size:10px;padding:2px 6px;border:1px solid var(--accent-purple);border-radius:4px;text-decoration:none;">'+g.urlAdemeLabel+' ↗</a>':'')+'</div>';})()}
