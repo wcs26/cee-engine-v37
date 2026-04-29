@@ -311,7 +311,7 @@ def _notify_admin_pending(new_user: dict) -> None:
         f"Ou via UI : panel Admin (👑) → onglet Comptes en attente"
     )
 
-    # 1. Webhook (Slack/Discord/Telegram via webhook URL)
+    # 1. Webhook générique (Slack/Discord — payload {"text":...})
     webhook = os.environ.get("CEE_NOTIFY_WEBHOOK", "").strip()
     if webhook:
         try:
@@ -324,6 +324,22 @@ def _notify_admin_pending(new_user: dict) -> None:
             log.info("admin notify webhook ok")
         except Exception as e:
             log.warning("admin notify webhook err: %s", e)
+
+    # 1bis. V37.3.38 — Telegram natif (plus fiable que WhatsApp CallMeBot)
+    tg_token = os.environ.get("CEE_TELEGRAM_BOT_TOKEN", "").strip()
+    tg_chat = os.environ.get("CEE_TELEGRAM_CHAT_ID", "").strip()
+    if tg_token and tg_chat:
+        try:
+            import urllib.request as _req
+            import urllib.parse as _parse
+            url = f"https://api.telegram.org/bot{tg_token}/sendMessage"
+            data = _parse.urlencode({"chat_id": tg_chat, "text": msg, "parse_mode": "Markdown"}).encode()
+            r = _req.Request(url, data=data, headers={"Content-Type": "application/x-www-form-urlencoded"}, method="POST")
+            with _req.urlopen(r, timeout=6) as resp:
+                resp.read()
+            log.info("telegram notify sent to chat %s", tg_chat)
+        except Exception as e:
+            log.warning("telegram notify err: %s", e)
 
     # 1bis. V37.3.37 — WhatsApp (3 modes au choix selon env vars configurées)
     try:
