@@ -199,6 +199,98 @@ def list_users_with_status(status_filter: str | None = None) -> list:
     return sorted(out, key=lambda x: x.get("created_at", 0), reverse=True)
 
 
+def _send_whatsapp_notification(message: str, new_user: dict, log) -> None:
+    """V37.3.37 — Envoie notification WhatsApp via 3 modes au choix.
+
+    Modes (sélectionnés automatiquement selon env vars présentes) :
+
+    A) CallMeBot (gratuit, MVP, sans API officielle)
+       env: CEE_WA_CALLMEBOT_PHONE (+855xxx), CEE_WA_CALLMEBOT_APIKEY
+       Setup: WhatsApp +34 644 51 95 23 → message "I allow callmebot to send me messages"
+              → reçois apikey gratuit
+
+    B) Twilio WhatsApp Sandbox (test gratuit, prod ~$0.005/msg)
+       env: CEE_WA_TWILIO_SID, CEE_WA_TWILIO_TOKEN,
+            CEE_WA_TWILIO_FROM (whatsapp:+14155238886 sandbox par défaut),
+            CEE_WA_TO (whatsapp:+855xxx)
+       Setup: console.twilio.com → WhatsApp Sandbox
+
+    C) Meta WhatsApp Cloud API (officielle, gratuit < 1000 conv/mois)
+       env: CEE_WA_META_PHONE_ID, CEE_WA_META_TOKEN, CEE_WA_TO (+855xxx)
+       Setup: developers.facebook.com → WhatsApp Business → numéro test gratuit
+    """
+    import urllib.request as _req
+    import urllib.parse as _parse
+    import json as _json
+    import base64 as _b64
+
+    # Tronquer le message pour WhatsApp (limite ~4096 chars, mais on aime court)
+    short = message[:1500]
+
+    # ── Mode A : CallMeBot ───────────────────────────────────
+    cmb_phone = os.environ.get("CEE_WA_CALLMEBOT_PHONE", "").strip()
+    cmb_key = os.environ.get("CEE_WA_CALLMEBOT_APIKEY", "").strip()
+    if cmb_phone and cmb_key:
+        try:
+            url = (
+                "https://api.callmebot.com/whatsapp.php?"
+                + _parse.urlencode({"phone": cmb_phone, "text": short, "apikey": cmb_key})
+            )
+            req = _req.Request(url, headers={"User-Agent": "CEE-Engine/V37.3"})
+            with _req.urlopen(req, timeout=8) as resp:
+                resp.read()
+            log.info("whatsapp callmebot sent to %s", cmb_phone)
+            return
+        except Exception as e:
+            log.warning("whatsapp callmebot err: %s", e)
+
+    # ── Mode B : Twilio ───────────────────────────────────────
+    tw_sid = os.environ.get("CEE_WA_TWILIO_SID", "").strip()
+    tw_tok = os.environ.get("CEE_WA_TWILIO_TOKEN", "").strip()
+    tw_from = os.environ.get("CEE_WA_TWILIO_FROM", "whatsapp:+14155238886").strip()
+    tw_to = os.environ.get("CEE_WA_TO", "").strip()
+    if tw_sid and tw_tok and tw_to:
+        try:
+            url = f"https://api.twilio.com/2010-04-01/Accounts/{tw_sid}/Messages.json"
+            data = _parse.urlencode({"From": tw_from, "To": tw_to, "Body": short}).encode()
+            auth = _b64.b64encode(f"{tw_sid}:{tw_tok}".encode()).decode()
+            req = _req.Request(url, data=data, headers={
+                "Authorization": f"Basic {auth}",
+                "Content-Type": "application/x-www-form-urlencoded",
+            }, method="POST")
+            with _req.urlopen(req, timeout=8) as resp:
+                resp.read()
+            log.info("whatsapp twilio sent to %s", tw_to)
+            return
+        except Exception as e:
+            log.warning("whatsapp twilio err: %s", e)
+
+    # ── Mode C : Meta Cloud API ──────────────────────────────
+    meta_pid = os.environ.get("CEE_WA_META_PHONE_ID", "").strip()
+    meta_tok = os.environ.get("CEE_WA_META_TOKEN", "").strip()
+    meta_to = os.environ.get("CEE_WA_TO", "").strip().lstrip("+")
+    if meta_pid and meta_tok and meta_to:
+        try:
+            url = f"https://graph.facebook.com/v18.0/{meta_pid}/messages"
+            payload = {
+                "messaging_product": "whatsapp",
+                "to": meta_to,
+                "type": "text",
+                "text": {"body": short},
+            }
+            data = _json.dumps(payload).encode()
+            req = _req.Request(url, data=data, headers={
+                "Authorization": f"Bearer {meta_tok}",
+                "Content-Type": "application/json",
+            }, method="POST")
+            with _req.urlopen(req, timeout=8) as resp:
+                resp.read()
+            log.info("whatsapp meta sent to %s", meta_to)
+            return
+        except Exception as e:
+            log.warning("whatsapp meta err: %s", e)
+
+
 def _notify_admin_pending(new_user: dict) -> None:
     """V37.3.36 — Notifie l'admin d'un nouveau compte en attente.
 
@@ -232,6 +324,12 @@ def _notify_admin_pending(new_user: dict) -> None:
             log.info("admin notify webhook ok")
         except Exception as e:
             log.warning("admin notify webhook err: %s", e)
+
+    # 1bis. V37.3.37 — WhatsApp (3 modes au choix selon env vars configurées)
+    try:
+        _send_whatsapp_notification(msg, new_user, log)
+    except Exception as e:
+        log.warning("whatsapp notify err: %s", e)
 
     # 2. Email SMTP
     host = os.environ.get("CEE_SMTP_HOST", "").strip()
