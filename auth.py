@@ -147,7 +147,13 @@ def _save_users(users: dict) -> None:
     USERS_FILE.write_text(json.dumps(users, indent=2, ensure_ascii=False))
 
 
-def create_user(email: str, password: str, name: str = "", role: str = "user") -> dict:
+def create_user(email: str, password: str, name: str = "", role: str = "user",
+                status: str = "active") -> dict:
+    """V37.3.36 — Crée un user avec status :
+    - 'active' : peut se logger (admin créé via bootstrap, ou validé par admin)
+    - 'pending' : créé par self-service, en attente de validation admin
+    - 'rejected' : refusé par l'admin
+    """
     users = _load_users()
     if email in users:
         raise ValueError("user déjà existant")
@@ -155,23 +161,117 @@ def create_user(email: str, password: str, name: str = "", role: str = "user") -
         "email": email,
         "name": name or email.split("@")[0],
         "role": role,  # 'admin' | 'user' | 'readonly'
+        "status": status,
         "password_hash": hash_password(password),
         "created_at": int(time.time()),
     }
     users[email] = user
     _save_users(users)
-    # Ne pas renvoyer le hash
     return {k: v for k, v in user.items() if k != "password_hash"}
 
 
 def authenticate(email: str, password: str) -> dict | None:
+    """V37.3.36 — Login refusé si status != active.
+    Retourne user si OK, None sinon. Lève ValueError si compte non-validé pour
+    permettre à l'UI d'afficher un message dédié."""
     users = _load_users()
     user = users.get(email)
     if not user:
         return None
     if not verify_password(password, user["password_hash"]):
         return None
+    status = user.get("status", "active")  # users existants pré-V37.3.36 = active
+    if status == "pending":
+        raise PermissionError("Compte en attente de validation par l'admin")
+    if status == "rejected":
+        raise PermissionError("Compte refusé par l'admin")
     return {k: v for k, v in user.items() if k != "password_hash"}
+
+
+def list_users_with_status(status_filter: str | None = None) -> list:
+    """V37.3.36 — Liste users (sans password_hash). Filtre optionnel par status."""
+    users = _load_users()
+    out = []
+    for email, u in users.items():
+        if status_filter and u.get("status", "active") != status_filter:
+            continue
+        out.append({k: v for k, v in u.items() if k != "password_hash"})
+    return sorted(out, key=lambda x: x.get("created_at", 0), reverse=True)
+
+
+def _notify_admin_pending(new_user: dict) -> None:
+    """V37.3.36 — Notifie l'admin d'un nouveau compte en attente.
+
+    Mécaniques actives selon les env vars configurées (best-effort, en fallback
+    on logue juste — ne casse jamais le register) :
+
+    1. Email SMTP : si CEE_SMTP_HOST + CEE_SMTP_USER + CEE_SMTP_PASS + CEE_ADMIN_EMAIL
+    2. Webhook URL : si CEE_NOTIFY_WEBHOOK (POST JSON, compatible Slack/Discord)
+    3. Sinon : log de niveau INFO (visible dans `fly logs`)
+    """
+    import logging
+    log = logging.getLogger("cee_auth")
+    msg = (
+        f"[CEE Engine] Nouveau compte en attente de validation\n"
+        f"Email : {new_user.get('email')}\n"
+        f"Nom : {new_user.get('name')}\n"
+        f"Action : aller sur /admin/users/pending et POST /admin/users/<email>/approve\n"
+        f"Ou via UI : panel Admin (👑) → onglet Comptes en attente"
+    )
+
+    # 1. Webhook (Slack/Discord/Telegram via webhook URL)
+    webhook = os.environ.get("CEE_NOTIFY_WEBHOOK", "").strip()
+    if webhook:
+        try:
+            import urllib.request as _req
+            import json as _json
+            payload = _json.dumps({"text": msg, "user": new_user}).encode()
+            r = _req.Request(webhook, data=payload, headers={"Content-Type": "application/json"}, method="POST")
+            with _req.urlopen(r, timeout=4) as resp:
+                resp.read()
+            log.info("admin notify webhook ok")
+        except Exception as e:
+            log.warning("admin notify webhook err: %s", e)
+
+    # 2. Email SMTP
+    host = os.environ.get("CEE_SMTP_HOST", "").strip()
+    admin_email = os.environ.get("CEE_ADMIN_EMAIL", "").strip()
+    if host and admin_email:
+        try:
+            import smtplib
+            from email.message import EmailMessage
+            em = EmailMessage()
+            em["Subject"] = f"[CEE Engine] Nouveau compte en attente : {new_user.get('email')}"
+            em["From"] = os.environ.get("CEE_SMTP_FROM", admin_email)
+            em["To"] = admin_email
+            em.set_content(msg)
+            port = int(os.environ.get("CEE_SMTP_PORT", "587"))
+            with smtplib.SMTP(host, port, timeout=8) as s:
+                s.starttls()
+                user_smtp = os.environ.get("CEE_SMTP_USER", "")
+                pass_smtp = os.environ.get("CEE_SMTP_PASS", "")
+                if user_smtp and pass_smtp:
+                    s.login(user_smtp, pass_smtp)
+                s.send_message(em)
+            log.info("admin notify email sent to %s", admin_email)
+        except Exception as e:
+            log.warning("admin notify email err: %s", e)
+
+    # 3. Log fallback (toujours)
+    log.info("PENDING_USER %s", msg.replace("\n", " | "))
+
+
+def update_user_status(email: str, new_status: str) -> dict | None:
+    """V37.3.36 — Admin met à jour le status d'un user (approve / reject / suspend)."""
+    if new_status not in ("active", "pending", "rejected"):
+        raise ValueError("status invalide")
+    users = _load_users()
+    if email not in users:
+        return None
+    users[email]["status"] = new_status
+    users[email]["status_updated_at"] = int(time.time())
+    _save_users(users)
+    return {k: v for k, v in users[email].items() if k != "password_hash"}
 
 
 # ─────────────────────────────────────────────────────────────
@@ -216,9 +316,12 @@ def register_auth_routes(app) -> None:
         password = data.get("password") or ""
         if not email or not password:
             return jsonify({"error": "email et password requis"}), 400
-        user = authenticate(email, password)
+        try:
+            user = authenticate(email, password)
+        except PermissionError as e:
+            # V37.3.36 — compte pending ou rejected
+            return jsonify({"error": str(e), "status": "pending_or_rejected"}), 403
         if not user:
-            # Délai fixe anti-bruteforce (pauvre mais mieux que rien)
             time.sleep(0.3)
             return jsonify({"error": "identifiants invalides"}), 401
         token = jwt_sign({"sub": user["email"], "role": user["role"], "name": user["name"]})
@@ -226,6 +329,11 @@ def register_auth_routes(app) -> None:
 
     @app.route("/auth/register", methods=["POST"])
     def _register():
+        """V37.3.36 — Self-service register avec validation admin :
+        - 1er user créé = admin automatique status=active (bootstrap)
+        - Sans token : compte créé en status=pending → admin doit approuver
+        - Avec token admin : peut créer directement en status=active + role choisi
+        """
         if not JWT_SECRET:
             return jsonify({"error": "CEE_JWT_SECRET non configuré côté serveur"}), 500
         data = request.json or {}
@@ -234,25 +342,73 @@ def register_auth_routes(app) -> None:
         name = data.get("name", "")
         role = data.get("role", "user")
 
-        users = _load_users()
-        # Premier utilisateur = admin automatique (bootstrap)
-        is_bootstrap = len(users) == 0
-        if not is_bootstrap:
-            # Sinon exige un token admin
-            token = _extract_token()
-            payload = jwt_verify(token) if token else None
-            if not payload or payload.get("role") != "admin":
-                return jsonify({"error": "admin requis pour créer des utilisateurs"}), 403
-
         if not email or not password or len(password) < 8:
             return jsonify({"error": "email + password (min 8 chars) requis"}), 400
 
+        users = _load_users()
+        is_bootstrap = len(users) == 0
+        token = _extract_token()
+        payload = jwt_verify(token) if token else None
+        is_admin = payload and payload.get("role") == "admin"
+
         try:
-            new_role = "admin" if is_bootstrap else role
-            u = create_user(email, password, name, new_role)
-            return jsonify({"user": u, "bootstrap_admin": is_bootstrap})
+            if is_bootstrap:
+                # Bootstrap : 1er user = admin actif
+                u = create_user(email, password, name, "admin", status="active")
+                return jsonify({"user": u, "bootstrap_admin": True})
+            elif is_admin:
+                # Admin crée directement un compte actif
+                u = create_user(email, password, name, role, status="active")
+                return jsonify({"user": u, "created_by_admin": True})
+            else:
+                # Self-service public : compte créé en pending
+                u = create_user(email, password, name, "user", status="pending")
+                # Hook notification admin (best-effort, ne casse pas le register)
+                try:
+                    _notify_admin_pending(u)
+                except Exception:
+                    pass
+                return jsonify({
+                    "user": u,
+                    "status": "pending",
+                    "message": "Compte créé avec succès. Il sera activé après validation par l'administrateur. Vous recevrez confirmation par email.",
+                }), 202
         except ValueError as e:
             return jsonify({"error": str(e)}), 409
+
+    @app.route("/admin/users/pending", methods=["GET"])
+    @require_auth(role="admin")
+    def _admin_pending(current_user=None):
+        """V37.3.36 — Liste les comptes en attente de validation."""
+        return jsonify({"pending": list_users_with_status("pending")})
+
+    @app.route("/admin/users/all", methods=["GET"])
+    @require_auth(role="admin")
+    def _admin_users_all(current_user=None):
+        """V37.3.36 — Liste tous les comptes (active + pending + rejected)."""
+        return jsonify({
+            "active": list_users_with_status("active"),
+            "pending": list_users_with_status("pending"),
+            "rejected": list_users_with_status("rejected"),
+        })
+
+    @app.route("/admin/users/<email>/approve", methods=["POST"])
+    @require_auth(role="admin")
+    def _admin_approve(email, current_user=None):
+        """V37.3.36 — Approuve un compte pending → status=active."""
+        u = update_user_status(email.lower(), "active")
+        if not u:
+            return jsonify({"error": "user inconnu"}), 404
+        return jsonify({"ok": True, "user": u, "action": "approved"})
+
+    @app.route("/admin/users/<email>/reject", methods=["POST"])
+    @require_auth(role="admin")
+    def _admin_reject(email, current_user=None):
+        """V37.3.36 — Rejette un compte pending ou suspend un actif."""
+        u = update_user_status(email.lower(), "rejected")
+        if not u:
+            return jsonify({"error": "user inconnu"}), 404
+        return jsonify({"ok": True, "user": u, "action": "rejected"})
 
     @app.route("/auth/me", methods=["GET"])
     @require_auth()

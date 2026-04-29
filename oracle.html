@@ -1330,14 +1330,19 @@
               ✨ <strong>Aucun compte existant.</strong> Le 1er compte créé deviendra <strong>admin omniscient</strong> automatiquement.
             </div>
             <div id="bootstrapNo" style="font-size:10px;color:var(--text-muted);margin-top:10px;border-top:1px solid var(--border);padding-top:8px;">
-              Pas encore inscrit ? Demande à l'admin de créer ton compte.
+              ℹ️ Self-service ouvert : ton compte sera créé en mode <strong>« en attente »</strong> et activé après validation de l'admin.
             </div>
           </div>
           <div id="loginConnected" style="display:none;">
             <div id="userInfo" style="font-size:12px;margin-bottom:10px;"></div>
             <button onclick="doLogout()" style="width:100%;padding:6px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-secondary);font-size:12px;cursor:pointer;">Déconnexion</button>
-            <div id="adminLink" style="display:none;margin-top:8px;">
-              <a href="/admin/dashboard" target="_blank" style="font-size:11px;color:var(--accent-purple);">📊 Dashboard admin (API)</a>
+            <!-- V37.3.36 — Section admin : comptes en attente de validation -->
+            <div id="adminPanel" style="display:none;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
+              <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--accent-purple);">👑 Espace admin</div>
+              <a href="/admin/dashboard" target="_blank" style="display:block;font-size:11px;color:var(--accent-purple);margin-bottom:8px;">📊 Dashboard cross-vendor (API)</a>
+              <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">⏳ Comptes en attente :</div>
+              <div id="adminPendingBox" style="max-height:240px;overflow-y:auto;"></div>
+              <button onclick="loadPendingUsers()" style="width:100%;margin-top:8px;padding:4px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:4px;color:var(--text-secondary);font-size:11px;cursor:pointer;">↻ Rafraîchir</button>
             </div>
           </div>
         </div>
@@ -1371,7 +1376,7 @@
             var nc = document.getElementById('loginNotConnected');
             var c = document.getElementById('loginConnected');
             var info = document.getElementById('userInfo');
-            var adm = document.getElementById('adminLink');
+            var adm = document.getElementById('adminPanel');
             if (window.CEE_USER) {
               var r = window.CEE_USER.role || 'user';
               var icon = r === 'admin' ? '👑' : '👤';
@@ -1379,7 +1384,10 @@
               if (nc) nc.style.display = 'none';
               if (c) c.style.display = 'block';
               if (info) info.innerHTML = '<strong>' + (window.CEE_USER.name || '?') + '</strong><br><span style="color:var(--text-muted);">' + window.CEE_USER.email + ' · ' + r + '</span>';
-              if (adm) adm.style.display = (r === 'admin') ? 'block' : 'none';
+              if (adm) {
+                if (r === 'admin') { adm.style.display = 'block'; loadPendingUsers(); }
+                else { adm.style.display = 'none'; }
+              }
             } else {
               b.textContent = '👤 Anonyme';
               if (nc) nc.style.display = 'block';
@@ -1459,17 +1467,23 @@
             var email = document.getElementById('loginEmail').value.trim();
             var pwd = document.getElementById('loginPassword').value;
             var err = document.getElementById('loginError');
-            err.textContent = '';
+            err.textContent = ''; err.style.color = '';
             if (!name) { err.textContent = 'Nom requis'; return; }
             if (pwd.length < 8) { err.textContent = 'Mot de passe min 8 caractères'; return; }
             try {
-              // 1. Register
               var headers = {'Content-Type':'application/json'};
               if (window.CEE_TOKEN) headers['Authorization'] = 'Bearer ' + window.CEE_TOKEN;
               var r = await fetch('/auth/register', {method:'POST', headers: headers, body: JSON.stringify({email:email, password:pwd, name:name, role:'user'})});
               var d = await r.json();
-              if (!r.ok) { err.textContent = d.error || 'Erreur création'; return; }
-              // 2. Auto-login direct après register
+              if (!r.ok && r.status !== 202) { err.textContent = d.error || 'Erreur création'; return; }
+              // V37.3.36 — Cas pending : compte créé mais en attente validation admin
+              if (r.status === 202 || d.status === 'pending') {
+                err.style.color = 'var(--accent-orange)';
+                err.innerHTML = '✓ Compte créé.<br>Il sera activé après validation par l\'admin (notification envoyée).<br>Tu recevras un email à la confirmation.';
+                document.getElementById('loginPassword').value = '';
+                return;
+              }
+              // Cas bootstrap (1er user admin) ou compte créé par admin → auto-login
               var r2 = await fetch('/auth/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email, password:pwd})});
               var d2 = await r2.json();
               if (!r2.ok) { err.textContent = 'Compte créé mais login échoué : ' + (d2.error || ''); return; }
@@ -1480,6 +1494,38 @@
               renderUserBadge();
               setTimeout(function(){ document.getElementById('loginPanel').style.display = 'none'; err.style.color=''; err.textContent=''; }, 1200);
             } catch(e) { err.textContent = 'Erreur réseau : ' + e.message; }
+          }
+          // V37.3.36 — Panneau admin "Comptes en attente" intégré au panel login
+          async function loadPendingUsers(){
+            try {
+              var r = await fetch('/admin/users/pending');
+              if (!r.ok) return;
+              var d = await r.json();
+              var list = d.pending || [];
+              var box = document.getElementById('adminPendingBox');
+              if (!box) return;
+              if (!list.length) {
+                box.innerHTML = '<div style="font-size:11px;color:var(--text-muted);">Aucun compte en attente.</div>';
+                return;
+              }
+              box.innerHTML = '<div style="font-size:11px;font-weight:600;color:var(--accent-orange);margin-bottom:6px;">' + list.length + ' compte(s) en attente :</div>' + list.map(function(u){
+                return '<div style="padding:6px;margin:3px 0;background:var(--bg-tertiary);border-radius:4px;font-size:11px;">' +
+                       '<div><strong>' + (u.name||'?') + '</strong> · ' + u.email + '</div>' +
+                       '<div style="display:flex;gap:4px;margin-top:4px;">' +
+                         '<button onclick="approveUser(\'' + u.email + '\')" style="flex:1;padding:3px;background:var(--accent-green);border:none;border-radius:3px;color:#000;font-size:11px;font-weight:600;cursor:pointer;">✓ Approuver</button>' +
+                         '<button onclick="rejectUser(\'' + u.email + '\')" style="flex:1;padding:3px;background:var(--accent-red);border:none;border-radius:3px;color:#fff;font-size:11px;cursor:pointer;">✗ Rejeter</button>' +
+                       '</div></div>';
+              }).join('');
+            } catch(e) {}
+          }
+          async function approveUser(email){
+            await fetch('/admin/users/' + encodeURIComponent(email) + '/approve', {method:'POST'});
+            loadPendingUsers();
+          }
+          async function rejectUser(email){
+            if (!confirm('Rejeter le compte ' + email + ' ?')) return;
+            await fetch('/admin/users/' + encodeURIComponent(email) + '/reject', {method:'POST'});
+            loadPendingUsers();
           }
           function doLogout(){
             window.CEE_TOKEN = ''; window.CEE_USER = null;
