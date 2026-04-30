@@ -589,8 +589,9 @@ def doc_ah(client: ClientHeader, op: Operation, em: Emetteur,
       pour le compte de {_e(disp.obligé_nom or '(obligé à renseigner)')} ;</li>
   <li>certifier l'exactitude des informations communiquées (surface, performance technique,
       dates) ;</li>
-  <li>conserver pendant <b>6 ans</b> tous les documents justificatifs (devis, facture,
-      DOE, photos avant/après).</li>
+  <li>conserver pendant <b>9 ans</b> à compter de la délivrance des CEE
+      (arrêté du 4 septembre 2014 art. 6, avis PNCEE) tous les documents
+      justificatifs (devis, facture, DOE, photos avant/après).</li>
 </ul>
 
 <h2>Partie C — Engagements du professionnel</h2>

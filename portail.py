@@ -30,7 +30,15 @@ def _b64url_decode(s: str) -> bytes:
 
 
 def _secret() -> str:
-    return os.environ.get("CEE_PORTAL_SECRET") or os.environ.get("CEE_JWT_SECRET") or "dev-secret-change-me"
+    s = os.environ.get("CEE_PORTAL_SECRET") or os.environ.get("CEE_JWT_SECRET")
+    if s:
+        return s
+    if os.environ.get("CEE_ENV", "").lower() == "prod":
+        raise RuntimeError(
+            "CEE_PORTAL_SECRET (or CEE_JWT_SECRET) must be set in prod — "
+            "refusing to use weak fallback secret"
+        )
+    return "dev-secret-change-me"
 
 
 def encode_token(dossier: dict, ttl_days: int = 30) -> str:

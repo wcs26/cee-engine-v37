@@ -985,11 +985,28 @@ Protection des Données (RGPD, règlement UE 2016/679)</strong> au titre de :</p
 Uniquement des données <strong>professionnelles</strong> (entreprise, dirigeant,
 référent technique) et des données techniques de bâtiments.</p>
 
-<h2>Destinataires</h2>
-<p>Les données sont accessibles uniquement à WCS Bulgaria EOOD et à ses sous-traitants
-techniques (Fly.io pour l'hébergement, sur volume chiffré). Aucune revente, aucun
-profilage publicitaire, aucun transfert vers pays tiers hors UE pour les données
-métier (Fly applique la région UE Paris).</p>
+<h2>Destinataires et sous-traitants</h2>
+<p>Les données sont accessibles à WCS Bulgaria EOOD et à ses sous-traitants techniques.
+Hébergement principal en région UE (Fly.io, Paris CDG, volume chiffré). Aucune revente,
+aucun profilage publicitaire.</p>
+<p><strong>Transferts hors UE encadrés par les Clauses Contractuelles Types
+(décision UE 2021/914)</strong> pour les services techniques suivants, utilisés sur les
+fonctions IA et notifications du produit :</p>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead><tr style="background:#21262d;"><th style="text-align:left;padding:8px;">Sous-traitant</th><th style="text-align:left;padding:8px;">Pays</th><th style="text-align:left;padding:8px;">Finalité</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Anthropic</td><td style="padding:8px;">États-Unis</td><td style="padding:8px;">Analyse IA Claude (synthèse audit)</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">OpenAI</td><td style="padding:8px;">États-Unis</td><td style="padding:8px;">Analyse IA GPT (synthèse audit)</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Google (Gemini)</td><td style="padding:8px;">États-Unis</td><td style="padding:8px;">Analyse IA + extraction documents</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Groq</td><td style="padding:8px;">États-Unis</td><td style="padding:8px;">Analyse IA Llama (consensus)</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Moonshot</td><td style="padding:8px;">Chine</td><td style="padding:8px;">Analyse IA Kimi (consensus)</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Twilio / Meta WhatsApp / Telegram</td><td style="padding:8px;">UE / États-Unis</td><td style="padding:8px;">Notifications administrateur (validation comptes)</td></tr>
+<tr style="border-bottom:1px solid #30363d;"><td style="padding:8px;">Monday.com</td><td style="padding:8px;">Israël (décision adéquation UE)</td><td style="padding:8px;">CRM commercial Jimmy</td></tr>
+</tbody>
+</table>
+<p style="margin-top:8px;font-size:12px;color:#8b949e;">Pour exclure votre dossier des
+traitements IA tiers, contactez <code>gmeet.mameilleureenergie@gmail.com</code> — un mode
+local (Llama Groq UE uniquement) peut être activé sur demande.</p>
 
 <h2>Droits des personnes</h2>
 <p>Conformément aux articles 15 à 22 du RGPD, vous disposez d'un droit d'accès,
