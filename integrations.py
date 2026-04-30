@@ -30,8 +30,39 @@ PROJECT_ROOT = Path(__file__).parent
 def register_integrations_routes(app, require_auth_fn) -> None:
     """Enregistre les routes d'intégrations externes sur l'app."""
 
+    # V37.3.40 — Gate JWT activé seulement si CEE_AUTH_REQUIRED=1.
+    from functools import wraps as _wraps
+
+    def _gate(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                ah = request.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                if not tok or not jwt_verify(tok):
+                    return jsonify({"error": "Unauthorized — JWT Bearer requis"}), 401
+            return f(*a, **k)
+        return _w
+
+    def _gate_admin(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                ah = request.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                payload = jwt_verify(tok) if tok else None
+                if not payload:
+                    return jsonify({"error": "Unauthorized — JWT Bearer requis"}), 401
+                if payload.get("role") != "admin":
+                    return jsonify({"error": "Forbidden — admin requis"}), 403
+            return f(*a, **k)
+        return _w
+
     # ── Yousign ──
     @app.route("/signature/request", methods=["POST"])
+    @_gate
     def _yousign_request():
         """Envoie une demande de signature électronique Yousign.
 
@@ -152,13 +183,13 @@ def register_integrations_routes(app, require_auth_fn) -> None:
 
     # ── ATEE scraper refresh (relance parse_atee.py en tâche) ──
     @app.route("/admin/refresh-fiches", methods=["POST"])
+    @_gate_admin
     def _refresh_fiches():
         """Relance parse_atee.py pour rafraîchir le catalogue fiches CEE.
 
-        Sécurité : protégé par JWT admin. Limite : 1 run par heure (cooldown).
+        Sécurité V37.3.40 : @_gate_admin actif si CEE_AUTH_REQUIRED=1
+        (rôle admin requis dans le JWT). Cooldown : 1 run par heure.
         """
-        # NOTE: On ne décore pas avec @require_auth pour ne pas bloquer si JWT_SECRET absent,
-        # mais on le teste manuellement ici.
         import time
         _last = _refresh_fiches._last if hasattr(_refresh_fiches, '_last') else 0
         if time.time() - _last < 3600:

@@ -177,7 +177,25 @@ def _recalculer(dossier: dict) -> dict:
 
 def register_dossiers_routes(app) -> None:
 
+    # V37.3.40 — Gate JWT activé seulement si CEE_AUTH_REQUIRED=1.
+    # No-op par défaut → zéro régression si Jimmy n'a pas activé la sécu.
+    # Active : `fly secrets set CEE_AUTH_REQUIRED=1 --app cee-engine-v37`
+    from functools import wraps as _wraps
+
+    def _gate(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                ah = request.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                if not tok or not jwt_verify(tok):
+                    return jsonify({"error": "Unauthorized — JWT Bearer requis"}), 401
+            return f(*a, **k)
+        return _w
+
     @app.route("/dossiers", methods=["POST"])
+    @_gate
     def _create():
         """Crée un dossier. Body = mêmes champs que /documents/pack (client/operation/...)."""
         body = request.json or {}
@@ -207,6 +225,7 @@ def register_dossiers_routes(app) -> None:
         }), 201
 
     @app.route("/dossiers", methods=["GET"])
+    @_gate
     def _list():
         entries = _read_index()
         # filtres
@@ -219,6 +238,7 @@ def register_dossiers_routes(app) -> None:
         return jsonify({"count": len(entries), "entries": entries})
 
     @app.route("/dossiers/<dossier_id>", methods=["GET"])
+    @_gate
     def _get(dossier_id):
         d = _load(dossier_id)
         if d is None:
@@ -226,6 +246,7 @@ def register_dossiers_routes(app) -> None:
         return jsonify(d)
 
     @app.route("/dossiers/<dossier_id>", methods=["PUT"])
+    @_gate
     def _update(dossier_id):
         d = _load(dossier_id)
         if d is None:
@@ -240,6 +261,7 @@ def register_dossiers_routes(app) -> None:
         return jsonify(d)
 
     @app.route("/dossiers/<dossier_id>", methods=["DELETE"])
+    @_gate
     def _delete(dossier_id):
         d = _load(dossier_id)
         if d is None:
@@ -250,6 +272,7 @@ def register_dossiers_routes(app) -> None:
         return jsonify({"ok": True, "id": dossier_id, "statut": "archive"})
 
     @app.route("/dossiers/<dossier_id>/recalculer", methods=["POST"])
+    @_gate
     def _recalc(dossier_id):
         d = _load(dossier_id)
         if d is None:
@@ -260,6 +283,7 @@ def register_dossiers_routes(app) -> None:
         return jsonify({"id": dossier_id, "calcul": d["calcul"]})
 
     @app.route("/dossiers/<dossier_id>/pack", methods=["GET"])
+    @_gate
     def _pack(dossier_id):
         """Renvoie les 4 docs HTML d'un dossier (vue=client par défaut, ?vue=interne pour mode vendeur)."""
         d = _load(dossier_id)
@@ -329,6 +353,7 @@ def register_dossiers_routes(app) -> None:
         })
 
     @app.route("/dossiers/synthese", methods=["GET"])
+    @_gate
     def _synthese():
         """Dashboard mandataire — totaux multi-dossiers."""
         entries = [e for e in _read_index() if e.get("statut") != "archive"]

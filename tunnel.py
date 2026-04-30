@@ -812,6 +812,23 @@ def predict_next(tunnel_id: str) -> dict | None:
 def register_tunnel_routes(app) -> None:
     """Enregistre les routes /tunnel/* + /analytics/sales-velocity."""
 
+    # V37.3.40 — Gate JWT activé seulement si CEE_AUTH_REQUIRED=1.
+    # No-op par défaut → zéro régression.
+    from functools import wraps as _wraps
+
+    def _gate(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                ah = request.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                if not tok or not jwt_verify(tok):
+                    return jsonify({"error": "Unauthorized — JWT Bearer requis"}), 401
+            return f(*a, **k)
+        return _w
+
+
     def _can_access_tunnel(t: dict, user: dict | None) -> bool:
         """V37.3.32 — Vérifie si user peut accéder à ce tunnel."""
         if user is None:
@@ -823,6 +840,7 @@ def register_tunnel_routes(app) -> None:
         return (t.get("vendor") or "").lower() in (name, sub)
 
     @app.route("/tunnel", methods=["POST"])
+    @_gate
     def _tunnel_create():
         d = request.json or {}
         siret = d.get("siret", "")
@@ -839,6 +857,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(t), 201
 
     @app.route("/tunnel/<tunnel_id>", methods=["GET"])
+    @_gate
     def _tunnel_get(tunnel_id):
         t = _load(tunnel_id)
         if not t:
@@ -849,6 +868,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(t)
 
     @app.route("/tunnel/<tunnel_id>/advance", methods=["POST"])
+    @_gate
     def _tunnel_advance(tunnel_id):
         d = request.json or {}
         try:
@@ -869,6 +889,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(t)
 
     @app.route("/tunnel/<tunnel_id>/backdate", methods=["POST"])
+    @_gate
     def _tunnel_backdate(tunnel_id):
         """V37.3.4 — Réécrit created_at/updated_at + dates des stages dans history.
         Body : {"created_at":"YYYY-MM-DDTHH:MM:SSZ", "updated_at":"...",
@@ -895,6 +916,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(t)
 
     @app.route("/tunnel/<tunnel_id>/link-post-signature", methods=["POST"])
+    @_gate
     def _tunnel_link_post_signature(tunnel_id):
         """V37.3.4 — Lie un tunnel à un dossier post_signature existant
         (cas AHBFC Magritte déjà persisté avant V37.3)."""
@@ -922,6 +944,7 @@ def register_tunnel_routes(app) -> None:
             return jsonify({"error": str(e)}), 500
 
     @app.route("/tunnel/<tunnel_id>/update", methods=["PATCH", "POST"])
+    @_gate
     def _tunnel_update(tunnel_id):
         """V37.3.7 — Met à jour les champs identité d'un tunnel (siret, raison_sociale, vendor).
         Utile pour remplacer un placeholder par les vraies infos une fois connues."""
@@ -938,6 +961,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(t)
 
     @app.route("/tunnel/<tunnel_id>", methods=["DELETE"])
+    @_gate
     def _tunnel_delete(tunnel_id):
         """V37.3.15 — Supprime un tunnel (résidu test, doublon, erreur de seed).
         Le fichier <tunnel_id>.json est effacé du volume + index rafraîchi.
@@ -961,6 +985,7 @@ def register_tunnel_routes(app) -> None:
         })
 
     @app.route("/tunnel/<tunnel_id>/rollback-stage", methods=["POST"])
+    @_gate
     def _tunnel_rollback(tunnel_id):
         """V37.3.15 — Recule current_stage à un stage antérieur dans la chronologie.
         Body : {"target_stage": "r2"} — doit exister dans history et être < current_stage.
@@ -993,6 +1018,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(t)
 
     @app.route("/tunnel/<tunnel_id>/push-monday", methods=["POST"])
+    @_gate
     def _tunnel_push_monday_now(tunnel_id):
         """V37.3.6 — Force le push d'un tunnel vers Monday board.
         Idempotent : retourne le monday_item_id existant si déjà pushé.
@@ -1023,6 +1049,7 @@ def register_tunnel_routes(app) -> None:
             return jsonify({"ok": False, "error": f"{type(e).__name__}: {e}"}), 500
 
     @app.route("/tunnel/<tunnel_id>/full", methods=["GET"])
+    @_gate
     def _tunnel_full(tunnel_id):
         """V37.3 — Vue contextuelle complète : tunnel + prédictif + alertes + sources tracées.
         À utiliser comme endpoint principal côté UI commercial pour avoir tout le contexte d'un coup."""
@@ -1037,6 +1064,7 @@ def register_tunnel_routes(app) -> None:
         })
 
     @app.route("/tunnel", methods=["GET"])
+    @_gate
     def _tunnel_list():
         # V37.3.32 — multi-tenant : non-admin ne voit que ses tunnels
         user = _current_user()
@@ -1054,6 +1082,7 @@ def register_tunnel_routes(app) -> None:
         })
 
     @app.route("/analytics/sales-velocity", methods=["GET"])
+    @_gate
     def _tunnel_velocity():
         try:
             obj = int(request.args.get("objectif", 2))
@@ -1072,6 +1101,7 @@ def register_tunnel_routes(app) -> None:
         return jsonify(full)
 
     @app.route("/tunnel/alerts", methods=["GET"])
+    @_gate
     def _tunnel_alerts():
         """Tunnels stagnants au-delà du SLA par stage. Source : SLA codé + env CEE_TUNNEL_SLA_<STAGE>_D."""
         alerts = detect_stagnants()
@@ -1084,6 +1114,7 @@ def register_tunnel_routes(app) -> None:
         })
 
     @app.route("/tunnel/<tunnel_id>/predict-next", methods=["GET"])
+    @_gate
     def _tunnel_predict(tunnel_id):
         """Recommandation prédictive : prochaine action + ETA + niveau de risque."""
         r = predict_next(tunnel_id)

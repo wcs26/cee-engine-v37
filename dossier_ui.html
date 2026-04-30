@@ -277,6 +277,25 @@
 </div>
 
 <script>
+// V37.3.40 — Wrap fetch global pour injecter JWT Bearer si présent en localStorage.
+// Compat avec CEE_AUTH_REQUIRED=1 côté serveur. No-op si pas de token (mode legacy).
+(function(){
+  try {
+    window.CEE_TOKEN = localStorage.getItem('cee_jwt') || '';
+  } catch(e) { window.CEE_TOKEN = ''; }
+  const _origFetch = window.fetch;
+  window.fetch = function(input, init){
+    init = init || {};
+    if (window.CEE_TOKEN) {
+      init.headers = init.headers || {};
+      if (!init.headers['Authorization'] && !init.headers['authorization']) {
+        init.headers['Authorization'] = 'Bearer ' + window.CEE_TOKEN;
+      }
+    }
+    return _origFetch.call(this, input, init);
+  };
+})();
+
 const $ = id => document.getElementById(id);
 let CURRENT_DOSSIER_ID = null;
 let CURRENT_LIEN_INTERNE = null, CURRENT_LIEN_CLIENT = null;

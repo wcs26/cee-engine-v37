@@ -637,7 +637,26 @@ def _build_models(d: dict) -> tuple[ClientHeader, Operation, Emetteur, Dispositi
 
 def register_documents_routes(app) -> None:
 
+    # V37.3.40 — Gate JWT activé seulement si CEE_AUTH_REQUIRED=1.
+    from functools import wraps as _wraps
+    import os as _os
+
+    def _gate(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if _os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                from flask import request as _req, jsonify as _jsn
+                ah = _req.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                if not tok or not jwt_verify(tok):
+                    return _jsn({"error": "Unauthorized — JWT Bearer requis"}), 401
+            return f(*a, **k)
+        return _w
+
+
     @app.route("/documents/schema", methods=["GET"])
+    @_gate
     def _doc_schema():
         """Renvoie le schéma JSON attendu pour générer un pack."""
         return jsonify({
@@ -673,6 +692,7 @@ def register_documents_routes(app) -> None:
         })
 
     @app.route("/documents/pack", methods=["POST"])
+    @_gate
     def _doc_pack():
         """Génère les 4 documents (gisement, devis, convention, AH) en JSON HTML."""
         d = request.json or {}
@@ -730,6 +750,7 @@ def register_documents_routes(app) -> None:
         })
 
     @app.route("/documents/<doc_type>.html", methods=["POST"])
+    @_gate
     def _doc_single(doc_type):
         """Génère 1 document HTML standalone : gisement | devis | convention | ah."""
         if doc_type not in {"gisement", "devis", "convention", "ah"}:
@@ -763,6 +784,7 @@ def register_documents_routes(app) -> None:
         return Response(gen, mimetype="text/html; charset=utf-8")
 
     @app.route("/documents/preremplir/<siret>", methods=["GET"])
+    @_gate
     def _doc_preremplir(siret):
         """Pré-remplit un ClientHeader à partir d'un SIRET via le moteur /siret/search.
         Param `?cible=client|emetteur|obligé|delegataire` (sémantique uniquement)."""

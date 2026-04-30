@@ -185,7 +185,25 @@ def _get_alertes(dossier: dict) -> list[dict]:
 def register_post_signature_routes(app: Flask):
     """Enregistre les routes post-signature sur l'app Flask."""
 
+    # V37.3.40 — Gate JWT activé seulement si CEE_AUTH_REQUIRED=1.
+    from functools import wraps as _wraps
+    import os as _os
+
+    def _gate(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if _os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                from flask import request as _req, jsonify as _jsn
+                ah = _req.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                if not tok or not jwt_verify(tok):
+                    return _jsn({"error": "Unauthorized — JWT Bearer requis"}), 401
+            return f(*a, **k)
+        return _w
+
     @app.route("/post-signature/init", methods=["POST"])
+    @_gate
     def post_signature_init():
         data = request.get_json(force=True)
         dossier_id = data.get("dossier_id")
@@ -222,6 +240,7 @@ def register_post_signature_routes(app: Flask):
         })
 
     @app.route("/post-signature/<dossier_id>", methods=["GET"])
+    @_gate
     def post_signature_etat(dossier_id: str):
         dossier = _load_dossier(dossier_id)
         if not dossier:
@@ -256,6 +275,7 @@ def register_post_signature_routes(app: Flask):
         })
 
     @app.route("/post-signature/<dossier_id>/etape/<etape>", methods=["PUT"])
+    @_gate
     def post_signature_marquer(dossier_id: str, etape: str):
         if etape not in ETAPES_ORDRE:
             return jsonify({"error": f"Étape inconnue: {etape}. Valides: {ETAPES_ORDRE}"}), 400
@@ -284,6 +304,7 @@ def register_post_signature_routes(app: Flask):
         })
 
     @app.route("/post-signature/<dossier_id>/alertes", methods=["GET"])
+    @_gate
     def post_signature_alertes(dossier_id: str):
         dossier = _load_dossier(dossier_id)
         if not dossier:
@@ -297,6 +318,7 @@ def register_post_signature_routes(app: Flask):
         })
 
     @app.route("/post-signature/dashboard", methods=["GET"])
+    @_gate
     def post_signature_dashboard():
         _ensure_data_dir()
         files = [f for f in os.listdir(DATA_DIR) if f.endswith(".json")]
@@ -351,6 +373,7 @@ def register_post_signature_routes(app: Flask):
         })
 
     @app.route("/post-signature/<dossier_id>/push-monday", methods=["POST"])
+    @_gate
     def post_signature_push_monday(dossier_id: str):
         dossier = _load_dossier(dossier_id)
         if not dossier:
