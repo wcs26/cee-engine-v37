@@ -30,13 +30,20 @@ def _b64url_decode(s: str) -> bytes:
 
 
 def _secret() -> str:
+    """V37.3.42 — fail-closed sauf si CEE_ENV est explicitement un environnement dev.
+
+    Avant : `== "prod"` strict laissait passer "production", "PROD ", "staging", unset.
+    Maintenant : whitelist dev/test/local, tout le reste exige un secret fort.
+    """
     s = os.environ.get("CEE_PORTAL_SECRET") or os.environ.get("CEE_JWT_SECRET")
     if s:
         return s
-    if os.environ.get("CEE_ENV", "").lower() == "prod":
+    env = os.environ.get("CEE_ENV", "").strip().lower()
+    DEV_ENVS = ("", "dev", "development", "test", "local")
+    if env not in DEV_ENVS:
         raise RuntimeError(
-            "CEE_PORTAL_SECRET (or CEE_JWT_SECRET) must be set in prod — "
-            "refusing to use weak fallback secret"
+            f"CEE_PORTAL_SECRET (or CEE_JWT_SECRET) must be set when CEE_ENV={env!r} — "
+            f"refusing to use weak fallback secret. Whitelist dev envs: {DEV_ENVS!r}"
         )
     return "dev-secret-change-me"
 

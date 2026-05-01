@@ -2093,7 +2093,7 @@
             <span class="hero-badge-dot" aria-hidden="true">
               <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 6.2 5 8.5 9.5 3.5"/></svg>
             </span>
-            <span>Indépendant&nbsp;·&nbsp;0&nbsp;% commission&nbsp;·&nbsp;Inscrit registre des audits</span>
+            <span>Indépendant&nbsp;·&nbsp;0&nbsp;% commission&nbsp;·&nbsp;Sources publiques traçables</span>
           </div>
 
           <h2 class="hero-title">
@@ -2167,7 +2167,9 @@
                 if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); }
               });
             },{threshold:.4});
-            els.forEach(function(el){ el.textContent = '0'; io.observe(el); });
+            // V37.3.42 — ne PAS reset textContent : la valeur statique est juste, animate() lit data-target.
+            // Évite le flash 5/234 → 0 et les SEO-snapshots stuck à 0/0/0% si offscreen au load.
+            els.forEach(function(el){ io.observe(el); });
           })();
         </script>
 

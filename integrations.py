@@ -131,6 +131,7 @@ def register_integrations_routes(app, require_auth_fn) -> None:
 
     # ── Webhook ERP (Sage, Cegid, Salesforce, HubSpot) ──
     @app.route("/webhook/erp", methods=["POST"])
+    @_gate
     def _webhook_erp():
         """Poste les données d'un diagnostic CEE vers l'ERP configuré.
 
