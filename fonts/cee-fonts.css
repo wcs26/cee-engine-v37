@@ -1,0 +1,58 @@
+/* CEE Engine — fonts self-hosted (V37.3.43)
+ *
+ * Origine : Fraunces, Geist, JetBrains Mono — fonts variables OFL (Open Font License)
+ *           téléchargées une fois depuis fontsource (CDN jsdelivr) et servies
+ *           depuis ce serveur Fly.io région CDG (UE).
+ *
+ * Pourquoi self-host : éviter le transfert d'IP/User-Agent à Google LLC (US)
+ *                       à chaque page load (CJEU Breyer C-582/14, LG München 3 O 17493/20).
+ *                       Conformité RGPD + gain perf first-paint.
+ *
+ * Licences :
+ *   - Fraunces      : SIL OFL 1.1 (Undercase Type / Phaedra Charles)
+ *   - Geist         : SIL OFL 1.1 (Vercel)
+ *   - JetBrains Mono: SIL OFL 1.1 (JetBrains)
+ *
+ * font-display: swap — affiche le fallback système immédiatement,
+ *                       swap quand la WOFF2 est chargée. Évite le FOIT.
+ */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/fraunces-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/fraunces-italic-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-variable.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
