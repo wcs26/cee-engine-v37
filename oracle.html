@@ -2185,6 +2185,97 @@
           </button>
         </div>
 
+        <!-- V37.3.46 — Prospection lookalike : trouver entreprises similaires au SIRET courant -->
+        <div id="prospectionLookalikeWrap" style="margin:10px 0 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button id="btnSireneLookalike" type="button" onclick="ceeFindLookalike()"
+                  style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(200,255,107,.08);border:1px solid rgba(200,255,107,.3);border-radius:10px;color:#C8FF6B;font-weight:600;font-size:13px;cursor:pointer;font-family:'Geist',-apple-system,sans-serif;transition:all .2s cubic-bezier(.16,1,.3,1);">
+            🎯 Trouver 20 prospects similaires (Sirene · gratuit)
+          </button>
+          <button id="btnApifyMaps" type="button" onclick="ceeApifyGoogleMaps()"
+                  style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.3);border-radius:10px;color:#58a6ff;font-weight:600;font-size:13px;cursor:pointer;font-family:'Geist',-apple-system,sans-serif;transition:all .2s cubic-bezier(.16,1,.3,1);">
+            🗺️ Google Maps Apify (payant ~$0.20/1k)
+          </button>
+          <span id="prospectionStatus" style="font-size:12px;color:var(--text-muted);"></span>
+        </div>
+        <div id="prospectionResults" style="display:none;margin-bottom:16px;padding:14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;max-height:480px;overflow-y:auto;"></div>
+        <script>
+          // V37.3.46 — Prospection lookalike client-side handlers
+          window.ceeFindLookalike = async function(){
+            var siret = (document.getElementById('siret') || {}).value || '';
+            siret = siret.replace(/\s/g, '');
+            var status = document.getElementById('prospectionStatus');
+            var results = document.getElementById('prospectionResults');
+            if (siret.length !== 14) {
+              status.textContent = '⚠️ Saisis et valide d\'abord un SIRET (Step 1)';
+              return;
+            }
+            status.textContent = '🔎 Recherche en cours…';
+            results.style.display = 'none';
+            try {
+              var r = await fetch('/prospection/sirene-lookalike/' + siret + '?per_page=20');
+              var d = await r.json();
+              if (!r.ok) {
+                status.textContent = '❌ ' + (d.error || ('HTTP ' + r.status));
+                return;
+              }
+              status.textContent = '✅ ' + d.nb_resultats + ' prospects similaires (NAF ' + d.criteres_lookalike.naf + ', dept ' + (d.criteres_lookalike.departement || '?') + ')';
+              var html = '<div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Source : <strong>' + (d.source.nom || '?') + '</strong> (' + d.source.naf + ') · ' + d.rgpd + '</div><table style="width:100%;font-size:13px;border-collapse:collapse;">' +
+                '<thead><tr style="border-bottom:1px solid var(--border);text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;"><th style="padding:6px 8px;">Nom</th><th style="padding:6px 8px;">SIRET</th><th style="padding:6px 8px;">Ville</th><th style="padding:6px 8px;">Action</th></tr></thead><tbody>';
+              (d.prospects || []).forEach(function(p){
+                html += '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">' +
+                  '<td style="padding:8px;font-weight:500;">' + (p.nom || '—') + '</td>' +
+                  '<td style="padding:8px;font-family:monospace;font-size:12px;">' + (p.siret || '—') + '</td>' +
+                  '<td style="padding:8px;color:var(--text-muted);">' + (p.code_postal || '') + ' ' + (p.ville || '') + '</td>' +
+                  '<td style="padding:8px;"><button onclick="document.getElementById(\'siret\').value=\'' + (p.siret || '') + '\';lookupSIRET();window.scrollTo({top:0,behavior:\'smooth\'});" style="padding:4px 10px;background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.3);border-radius:6px;color:#58a6ff;font-size:11px;cursor:pointer;">→ Auditer</button></td>' +
+                  '</tr>';
+              });
+              html += '</tbody></table>';
+              results.innerHTML = html;
+              results.style.display = 'block';
+            } catch (e) {
+              status.textContent = '❌ Erreur réseau : ' + e.message;
+            }
+          };
+          window.ceeApifyGoogleMaps = async function(){
+            var query = prompt('Recherche Google Maps (ex: chauffage industriel) :', '');
+            if (!query) return;
+            var location = prompt('Localisation (ex: Lyon, France) — laisse vide pour France entière :', '') || '';
+            var status = document.getElementById('prospectionStatus');
+            var results = document.getElementById('prospectionResults');
+            status.textContent = '🗺️ Apify scrape en cours… (~10-30 sec)';
+            results.style.display = 'none';
+            try {
+              var r = await fetch('/prospection/apify/google-maps', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query: query, location: location, limit: 20, language: 'fr'}),
+              });
+              var d = await r.json();
+              if (!r.ok) {
+                status.textContent = '❌ ' + (d.error || ('HTTP ' + r.status)) + (d.activation ? ' — ' + d.activation : '');
+                return;
+              }
+              status.textContent = '✅ ' + d.nb_resultats + ' résultats Google Maps · coût estimé $' + (d.cout_estime_usd || 0);
+              var html = '<table style="width:100%;font-size:13px;border-collapse:collapse;">' +
+                '<thead><tr style="border-bottom:1px solid var(--border);text-align:left;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;"><th style="padding:6px 8px;">Nom</th><th style="padding:6px 8px;">Adresse</th><th style="padding:6px 8px;">Tel</th><th style="padding:6px 8px;">Web</th><th style="padding:6px 8px;">Note</th></tr></thead><tbody>';
+              (d.prospects || []).forEach(function(p){
+                html += '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">' +
+                  '<td style="padding:8px;font-weight:500;">' + (p.nom || '—') + '</td>' +
+                  '<td style="padding:8px;color:var(--text-muted);font-size:12px;">' + (p.adresse || '') + '</td>' +
+                  '<td style="padding:8px;font-family:monospace;font-size:12px;">' + (p.tel || '—') + '</td>' +
+                  '<td style="padding:8px;font-size:12px;">' + (p.site_web ? '<a href="' + p.site_web + '" target="_blank" rel="noopener" style="color:#58a6ff;">↗</a>' : '—') + '</td>' +
+                  '<td style="padding:8px;">' + (p.rating ? p.rating + ' ★ (' + (p.nb_avis || 0) + ')' : '—') + '</td>' +
+                  '</tr>';
+              });
+              html += '</tbody></table>';
+              results.innerHTML = html;
+              results.style.display = 'block';
+            } catch (e) {
+              status.textContent = '❌ Erreur réseau : ' + e.message;
+            }
+          };
+        </script>
+
         <div class="card">
           <div class="card-header">
             <h3>🏢 Informations entreprise</h3>
