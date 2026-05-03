@@ -401,9 +401,27 @@ def batch_audit(sirets: list[str]) -> list:
 # ---------------------------------------------------------------------------
 
 def register_prospection_routes(app) -> None:
-    """Enregistre les endpoints de prospection active."""
+    """Enregistre les endpoints de prospection active.
+    V37.3.48 — @_gate ajouté (oublié dans le rollout V37.3.40 sur 35 routes).
+    sirene-lookalike reste PUBLIC (données open data, RGPD-clean, gratuit)."""
+
+    # V37.3.48 — Gate JWT activé seulement si CEE_AUTH_REQUIRED=1.
+    from functools import wraps as _wraps
+
+    def _gate(f):
+        @_wraps(f)
+        def _w(*a, **k):
+            if os.environ.get("CEE_AUTH_REQUIRED", "0") == "1":
+                from auth import jwt_verify
+                ah = request.headers.get("Authorization", "")
+                tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+                if not tok or not jwt_verify(tok):
+                    return jsonify({"error": "Unauthorized — JWT Bearer requis"}), 401
+            return f(*a, **k)
+        return _w
 
     @app.route("/prospection/scan-zone", methods=["POST"])
+    @_gate
     def prospection_scan_zone():
         body = request.get_json(force=True, silent=True) or {}
         lat = body.get("lat")
@@ -426,6 +444,7 @@ def register_prospection_routes(app) -> None:
         })
 
     @app.route("/prospection/scan-secteur", methods=["POST"])
+    @_gate
     def prospection_scan_secteur():
         body = request.get_json(force=True, silent=True) or {}
         naf = body.get("naf")
@@ -447,6 +466,7 @@ def register_prospection_routes(app) -> None:
         })
 
     @app.route("/prospection/batch-audit", methods=["POST"])
+    @_gate
     def prospection_batch_audit():
         body = request.get_json(force=True, silent=True) or {}
         sirets = body.get("sirets", [])
@@ -464,6 +484,7 @@ def register_prospection_routes(app) -> None:
         })
 
     @app.route("/prospection/score-lead/<siret>", methods=["GET"])
+    @_gate
     def prospection_score_lead(siret: str):
         _journal("score-lead", {"siret": siret})
 
@@ -585,6 +606,7 @@ def register_prospection_routes(app) -> None:
     # ───────────────────────────────────────────────────────────────────────
 
     @app.route("/prospection/apify/google-maps", methods=["POST"])
+    @_gate
     def prospection_apify_google_maps():
         """Scrape Google Maps via Apify Actor compass/crawler-google-places.
         Body : {query: "chauffage industriel", location: "Lyon, France", limit: 20, language: "fr"}
