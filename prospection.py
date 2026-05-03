@@ -6,18 +6,22 @@ via l'API recherche-entreprises.api.gouv.fr, scorer les leads et lancer des
 audits batch.
 
 Endpoints :
-  POST /prospection/scan-zone        — scan géographique (lat/lon/rayon)
-  POST /prospection/scan-secteur     — scan sectoriel national (NAF + départements)
-  POST /prospection/batch-audit      — audit batch depuis liste SIRET (max 20)
-  GET  /prospection/score-lead/<siret> — score lead prédictif d'un SIRET
+  POST /prospection/scan-zone               — scan géographique (lat/lon/rayon)
+  POST /prospection/scan-secteur            — scan sectoriel national (NAF + départements)
+  POST /prospection/batch-audit             — audit batch depuis liste SIRET (max 20)
+  GET  /prospection/score-lead/<siret>      — score lead prédictif d'un SIRET
+  GET  /prospection/sirene-lookalike/<siret> — V37.3.45 lookalike RGPD-clean (gratuit Sirene)
+  POST /prospection/apify/google-maps       — V37.3.45 scraping Google Maps via Apify (token requis)
 """
 
 from __future__ import annotations
 
 import json
+import os
 import ssl
 import urllib.request
 import urllib.parse
+import urllib.error
 import logging
 from datetime import datetime
 from flask import jsonify, request
@@ -478,3 +482,219 @@ def register_prospection_routes(app) -> None:
             "naf": ent.get("activite_principale", ""),
             **lead,
         })
+
+    # ───────────────────────────────────────────────────────────────────────
+    # V37.3.45 — Lookalike RGPD-clean (Sirene gratuit, instant, zéro API tier)
+    # ───────────────────────────────────────────────────────────────────────
+
+    @app.route("/prospection/sirene-lookalike/<siret>", methods=["GET"])
+    def prospection_sirene_lookalike(siret: str):
+        """Trouve N prospects similaires au SIRET source via Sirene open data.
+        Critères : même code NAF + même département + même tranche d'effectifs.
+        ?per_page=20 (default), ?dept_only=1 pour restreindre au département source.
+        Données 100 % open data publique, RGPD-clean (aucun email/tel).
+        """
+        try:
+            per_page = min(int(request.args.get("per_page", "20")), 100)
+        except (ValueError, TypeError):
+            per_page = 20
+        _journal("sirene-lookalike", {"siret": siret, "per_page": per_page})
+
+        # 1. Récupérer le SIRET source
+        url_src = f"{RECHERCHE_API}?q={urllib.parse.quote(siret)}&per_page=1"
+        try:
+            data = _fetch_json(url_src)
+        except Exception as e:
+            return jsonify({"error": f"Sirene API error: {e}"}), 502
+        entreprises = data.get("results", [])
+        if not entreprises:
+            return jsonify({"error": "SIRET non trouvé", "siret": siret}), 404
+        src = entreprises[0]
+        naf = src.get("activite_principale", "")
+        nom_src = src.get("nom_complet", "")
+        # extraire dept depuis le siège social
+        siege = src.get("siege") or {}
+        cp = siege.get("code_postal") or ""
+        dept = cp[:2] if len(cp) >= 2 else ""
+        tranche = src.get("tranche_effectif_salarie")
+
+        if not naf:
+            return jsonify({"error": "NAF source absent — lookalike impossible"}), 422
+
+        # 2. Cherche similaires : même NAF + même département (par défaut)
+        params = {
+            "activite_principale": naf,
+            "per_page": str(per_page + 5),  # +5 pour buffer après exclusion source
+            "minimal": "true",
+            "include": "siege",
+        }
+        if dept:
+            params["departement"] = dept
+        if tranche:
+            params["tranche_effectif_salarie"] = tranche
+        url_sim = f"{RECHERCHE_API}?{urllib.parse.urlencode(params)}"
+        try:
+            data_sim = _fetch_json(url_sim)
+        except Exception as e:
+            return jsonify({"error": f"Sirene API error: {e}"}), 502
+
+        results = data_sim.get("results", [])
+        # 3. Exclure SIRET source + normaliser
+        siren_source = siret[:9]
+        prospects = []
+        for ent in results:
+            ent_siren = ent.get("siren", "")
+            if ent_siren == siren_source:
+                continue
+            siege_e = ent.get("siege") or {}
+            prospects.append({
+                "siret": siege_e.get("siret", ""),
+                "siren": ent_siren,
+                "nom": ent.get("nom_complet", ""),
+                "naf": ent.get("activite_principale", ""),
+                "tranche_effectif": ent.get("tranche_effectif_salarie"),
+                "adresse": siege_e.get("adresse", ""),
+                "code_postal": siege_e.get("code_postal", ""),
+                "ville": siege_e.get("libelle_commune", ""),
+                "etat_administratif": siege_e.get("etat_administratif", ""),
+            })
+            if len(prospects) >= per_page:
+                break
+
+        return jsonify({
+            "source": {
+                "siret": siret,
+                "nom": nom_src,
+                "naf": naf,
+                "departement": dept,
+                "tranche_effectif": tranche,
+            },
+            "criteres_lookalike": {
+                "naf": naf,
+                "departement": dept,
+                "tranche_effectif_salarie": tranche,
+            },
+            "nb_resultats": len(prospects),
+            "prospects": prospects,
+            "source_data": "Sirene open data (recherche-entreprises.api.gouv.fr)",
+            "rgpd": "Données pro publiques uniquement — aucun email/tel/contact.",
+        })
+
+    # ───────────────────────────────────────────────────────────────────────
+    # V37.3.45 — Apify Google Maps (consomme APIFY_TOKEN, payant ~$0.20/1k)
+    # ───────────────────────────────────────────────────────────────────────
+
+    @app.route("/prospection/apify/google-maps", methods=["POST"])
+    def prospection_apify_google_maps():
+        """Scrape Google Maps via Apify Actor compass/crawler-google-places.
+        Body : {query: "chauffage industriel", location: "Lyon, France", limit: 20, language: "fr"}
+        Coût ~$0.20 / 1000 places sur ton compte Apify.
+        """
+        token = _apify_token()
+        if not token:
+            return jsonify({
+                "error": "APIFY_TOKEN non configuré côté serveur",
+                "activation": "fly secrets set APIFY_TOKEN=apify_api_xxx --app cee-engine-v37",
+                "doc": "https://console.apify.com/account/integrations",
+                "status": "stub",
+            }), 503
+
+        body = request.get_json(force=True, silent=True) or {}
+        query = (body.get("query") or "").strip()
+        location = (body.get("location") or "").strip()
+        if not query:
+            return jsonify({"error": "query requis (ex: 'chauffage industriel')"}), 400
+
+        # Cap dur pour éviter blowup coût
+        try:
+            limit = min(int(body.get("limit", 20)), 100)
+        except (ValueError, TypeError):
+            limit = 20
+        language = body.get("language", "fr")
+
+        _journal("apify-google-maps", {"query": query, "location": location, "limit": limit})
+
+        actor_input = {
+            "searchStringsArray": [query],
+            "maxCrawledPlacesPerSearch": limit,
+            "language": language,
+            "includeImages": False,
+            "includeReviews": False,
+        }
+        if location:
+            actor_input["locationQuery"] = location
+
+        try:
+            items = _apify_run_actor("compass~crawler-google-places", actor_input, token)
+        except urllib.error.HTTPError as he:
+            return jsonify({"error": f"Apify HTTP {he.code}: {he.reason}"}), 502
+        except Exception as e:
+            return jsonify({"error": f"Apify run error: {type(e).__name__}: {e}"}), 502
+
+        # Normaliser les résultats Google Maps en format CEE Engine
+        prospects = []
+        for it in (items or [])[:limit]:
+            prospects.append({
+                "nom": it.get("title") or it.get("name", ""),
+                "adresse": it.get("address", ""),
+                "code_postal": it.get("postalCode", ""),
+                "ville": it.get("city", ""),
+                "departement": (it.get("postalCode") or "")[:2],
+                "tel": it.get("phone", ""),
+                "site_web": it.get("website", ""),
+                "categorie": it.get("categoryName", ""),
+                "rating": it.get("totalScore"),
+                "nb_avis": it.get("reviewsCount"),
+                "google_place_id": it.get("placeId", ""),
+                "google_maps_url": it.get("url", ""),
+            })
+
+        return jsonify({
+            "query": query,
+            "location": location,
+            "nb_resultats": len(prospects),
+            "prospects": prospects,
+            "source_data": f"Apify Actor compass/crawler-google-places (limit={limit})",
+            "cout_estime_usd": round(0.0002 * len(prospects), 4),
+            "next_step": "Cross-check chaque prospect avec Sirene via /siret/search?q=<nom>",
+        })
+
+
+# ===========================================================================
+# V37.3.45 — Apify integration helpers (module-level)
+# ===========================================================================
+
+def _apify_token() -> str:
+    """Retourne le token Apify depuis l'env, ou string vide si absent.
+    Ne JAMAIS log le token — on retourne juste sa présence/absence."""
+    return os.environ.get("APIFY_TOKEN", "").strip()
+
+
+def _apify_run_actor(actor_id: str, input_payload: dict, token: str,
+                     timeout: int = 120) -> list:
+    """Lance un Actor Apify en mode synchrone et retourne les items du dataset.
+
+    Utilise l'endpoint REST `run-sync-get-dataset-items` qui :
+    - démarre l'actor avec input_payload (JSON)
+    - attend la fin (timeout côté serveur Apify aussi)
+    - renvoie directement le contenu du dataset par défaut
+
+    actor_id : slug Apify avec '~' comme séparateur (ex: 'compass~crawler-google-places').
+    """
+    url = (
+        f"https://api.apify.com/v2/acts/{actor_id}/run-sync-get-dataset-items"
+        f"?token={urllib.parse.quote(token)}"
+    )
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(input_payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    ctx = _ssl_ctx()
+    with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
+        raw = resp.read()
+    try:
+        return json.loads(raw.decode("utf-8"))
+    except json.JSONDecodeError:
+        return []
