@@ -100,6 +100,7 @@ def _refresh_index() -> None:
             d = json.loads(p.read_text(encoding="utf-8"))
             entries.append({
                 "id": d.get("id"),
+                "owner": d.get("owner"),  # V37.3.44 — ownership field for multi-tenant filter
                 "client_raison_sociale": (d.get("client") or {}).get("raison_sociale", ""),
                 "client_siret": (d.get("client") or {}).get("siret", ""),
                 "operation_fiche": (d.get("operation") or {}).get("fiche", ""),
@@ -194,15 +195,48 @@ def register_dossiers_routes(app) -> None:
             return f(*a, **k)
         return _w
 
+    # V37.3.44 — IDOR fix : helpers ownership multi-tenant
+    def _current_user():
+        """Décode JWT Bearer en payload (sub, role, name) sans bloquer.
+        Retourne None si CEE_AUTH_REQUIRED!=1 ou pas de token valide."""
+        if os.environ.get("CEE_AUTH_REQUIRED", "0") != "1":
+            return None
+        try:
+            from auth import jwt_verify
+            ah = request.headers.get("Authorization", "")
+            tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+            return jwt_verify(tok) if tok else None
+        except Exception:
+            return None
+
+    def _owner_check(d):
+        """Vérifie qu'un dossier appartient au current_user (ou admin omniscient).
+        Retourne None si OK, sinon (jsonify, code) prêt à être returned.
+        Backward-compat : si auth OFF → bypass total (mode legacy)."""
+        if os.environ.get("CEE_AUTH_REQUIRED", "0") != "1":
+            return None
+        user = _current_user()
+        if not user:
+            return jsonify({"error": "Unauthorized"}), 401
+        if user.get("role") == "admin":
+            return None  # admin omniscient
+        owner = d.get("owner")
+        if owner and owner == user.get("sub"):
+            return None
+        return jsonify({"error": "Forbidden — dossier non accessible (réservé propriétaire ou admin)"}), 403
+
     @app.route("/dossiers", methods=["POST"])
     @_gate
     def _create():
-        """Crée un dossier. Body = mêmes champs que /documents/pack (client/operation/...)."""
+        """Crée un dossier. Body = mêmes champs que /documents/pack (client/operation/...).
+        V37.3.44 — owner = current_user.sub stocké pour filtrage multi-tenant."""
         body = request.json or {}
         did = _new_id()
         now = _now_iso()
+        _u = _current_user()
         dossier = {
             "id": did,
+            "owner": (_u.get("sub") if _u else None),  # V37.3.44 — ownership
             "created_at": now,
             "updated_at": now,
             "statut": body.get("statut", "brouillon"),
@@ -235,7 +269,16 @@ def register_dossiers_routes(app) -> None:
         siret = request.args.get("siret")
         if siret:
             entries = [e for e in entries if siret in (e.get("client_siret") or "")]
-        return jsonify({"count": len(entries), "entries": entries})
+        # V37.3.44 — multi-tenant filter : non-admin ne voit que ses propres dossiers
+        _u = _current_user()
+        if _u and _u.get("role") != "admin":
+            sub = _u.get("sub")
+            entries = [e for e in entries if e.get("owner") == sub]
+        return jsonify({
+            "count": len(entries),
+            "entries": entries,
+            "_scope": (_u["name"] if _u and _u.get("role") != "admin" else "admin/all" if _u else "anonymous"),
+        })
 
     @app.route("/dossiers/<dossier_id>", methods=["GET"])
     @_gate
@@ -243,6 +286,8 @@ def register_dossiers_routes(app) -> None:
         d = _load(dossier_id)
         if d is None:
             return jsonify({"error": "dossier introuvable"}), 404
+        _err = _owner_check(d)
+        if _err: return _err
         return jsonify(d)
 
     @app.route("/dossiers/<dossier_id>", methods=["PUT"])
@@ -251,6 +296,8 @@ def register_dossiers_routes(app) -> None:
         d = _load(dossier_id)
         if d is None:
             return jsonify({"error": "dossier introuvable"}), 404
+        _err = _owner_check(d)
+        if _err: return _err
         body = request.json or {}
         for k in ("client", "operation", "emetteur", "dispositif", "admin", "statut", "vue_par_defaut"):
             if k in body:
@@ -266,6 +313,8 @@ def register_dossiers_routes(app) -> None:
         d = _load(dossier_id)
         if d is None:
             return jsonify({"error": "dossier introuvable"}), 404
+        _err = _owner_check(d)
+        if _err: return _err
         d["statut"] = "archive"
         d["updated_at"] = _now_iso()
         _save(dossier_id, d)
@@ -277,6 +326,8 @@ def register_dossiers_routes(app) -> None:
         d = _load(dossier_id)
         if d is None:
             return jsonify({"error": "dossier introuvable"}), 404
+        _err = _owner_check(d)
+        if _err: return _err
         d["calcul"] = _recalculer(d)
         d["updated_at"] = _now_iso()
         _save(dossier_id, d)
@@ -285,10 +336,13 @@ def register_dossiers_routes(app) -> None:
     @app.route("/dossiers/<dossier_id>/pack", methods=["GET"])
     @_gate
     def _pack(dossier_id):
-        """Renvoie les 4 docs HTML d'un dossier (vue=client par défaut, ?vue=interne pour mode vendeur)."""
+        """Renvoie les 4 docs HTML d'un dossier (vue=client par défaut, ?vue=interne pour mode vendeur).
+        V37.3.44 — vue=interne réservée propriétaire ou admin (expose cout_reel/marge/commission)."""
         d = _load(dossier_id)
         if d is None:
             return jsonify({"error": "dossier introuvable"}), 404
+        _err = _owner_check(d)
+        if _err: return _err
         from documents_client import (
             ClientHeader, Operation, Emetteur, DispositifCEE, Admin,
             doc_gisement, doc_devis, doc_convention, doc_ah,
@@ -355,8 +409,13 @@ def register_dossiers_routes(app) -> None:
     @app.route("/dossiers/synthese", methods=["GET"])
     @_gate
     def _synthese():
-        """Dashboard mandataire — totaux multi-dossiers."""
+        """Dashboard mandataire — totaux multi-dossiers.
+        V37.3.44 — multi-tenant : non-admin ne voit que ses propres dossiers."""
         entries = [e for e in _read_index() if e.get("statut") != "archive"]
+        _u = _current_user()
+        if _u and _u.get("role") != "admin":
+            sub = _u.get("sub")
+            entries = [e for e in entries if e.get("owner") == sub]
         total_prime = sum((e.get("prime_obligé_eur") or 0) for e in entries)
         total_commission = sum((e.get("commission_jimmy_eur") or 0) for e in entries
                                if e.get("commission_jimmy_eur") is not None)

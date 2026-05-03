@@ -870,6 +870,10 @@ def register_tunnel_routes(app) -> None:
     @app.route("/tunnel/<tunnel_id>/advance", methods=["POST"])
     @_gate
     def _tunnel_advance(tunnel_id):
+        # V37.3.44 — IDOR fix : vérif ownership avant advance.
+        _t_check = _load(tunnel_id)
+        if _t_check and not _can_access_tunnel(_t_check, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible (réservé propriétaire ou admin)"}), 403
         d = request.json or {}
         try:
             t = advance_tunnel(tunnel_id, target_stage=d.get("target_stage"), data=d.get("data"))
@@ -898,6 +902,9 @@ def register_tunnel_routes(app) -> None:
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.44 — IDOR fix
+        if not _can_access_tunnel(t, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         d = request.json or {}
         if "created_at" in d:
             t["created_at"] = d["created_at"]
@@ -923,6 +930,9 @@ def register_tunnel_routes(app) -> None:
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.44 — IDOR fix
+        if not _can_access_tunnel(t, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         d = request.json or {}
         ps_id = d.get("post_signature_dossier_id")
         if not ps_id:
@@ -947,12 +957,20 @@ def register_tunnel_routes(app) -> None:
     @_gate
     def _tunnel_update(tunnel_id):
         """V37.3.7 — Met à jour les champs identité d'un tunnel (siret, raison_sociale, vendor).
-        Utile pour remplacer un placeholder par les vraies infos une fois connues."""
+        Utile pour remplacer un placeholder par les vraies infos une fois connues.
+        V37.3.44 — vendor réservé admin (sinon attaquant pourrait s'auto-attribuer un tunnel)."""
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.44 — IDOR fix
+        user = _current_user()
+        if not _can_access_tunnel(t, user):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         d = request.json or {}
         ALLOWED = {"siret", "raison_sociale", "vendor", "source"}
+        # V37.3.44 — non-admin ne peut PAS changer vendor (sinon self-promotion bypass)
+        if user and user.get("role") != "admin":
+            ALLOWED = ALLOWED - {"vendor"}
         for k, v in d.items():
             if k in ALLOWED and v is not None:
                 t[k] = v
@@ -966,7 +984,8 @@ def register_tunnel_routes(app) -> None:
         """V37.3.15 — Supprime un tunnel (résidu test, doublon, erreur de seed).
         Le fichier <tunnel_id>.json est effacé du volume + index rafraîchi.
         Le monday_item_id éventuel n'est PAS supprimé côté Monday (à faire manuellement
-        ou via un futur hook monday_delete pour rester explicite côté board)."""
+        ou via un futur hook monday_delete pour rester explicite côté board).
+        V37.3.44 — owner check : seul propriétaire ou admin peut supprimer."""
         p = _path(tunnel_id)
         if not p.exists():
             return jsonify({"error": "tunnel inconnu"}), 404
@@ -974,6 +993,9 @@ def register_tunnel_routes(app) -> None:
             t_snapshot = json.loads(p.read_text())
         except Exception:
             t_snapshot = {"tunnel_id": tunnel_id}
+        # V37.3.44 — IDOR fix : check ownership avant suppression
+        if not _can_access_tunnel(t_snapshot, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         p.unlink()
         _refresh_index()
         return jsonify({
@@ -994,6 +1016,9 @@ def register_tunnel_routes(app) -> None:
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.44 — IDOR fix
+        if not _can_access_tunnel(t, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         d = request.json or {}
         target = d.get("target_stage")
         if target not in TUNNEL_STAGES:
@@ -1026,6 +1051,9 @@ def register_tunnel_routes(app) -> None:
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.44 — IDOR fix
+        if not _can_access_tunnel(t, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         if t.get("monday_item_id"):
             return jsonify({"ok": True, "skip": "déjà pushé", "monday_item_id": t["monday_item_id"]})
         if not os.environ.get("MONDAY_API_TOKEN"):
@@ -1056,6 +1084,9 @@ def register_tunnel_routes(app) -> None:
         t = _load(tunnel_id)
         if not t:
             return jsonify({"error": "tunnel inconnu"}), 404
+        # V37.3.44 — IDOR fix
+        if not _can_access_tunnel(t, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         pred = predict_next(tunnel_id)
         return jsonify({
             "tunnel": t,
@@ -1103,20 +1134,26 @@ def register_tunnel_routes(app) -> None:
     @app.route("/tunnel/alerts", methods=["GET"])
     @_gate
     def _tunnel_alerts():
-        """Tunnels stagnants au-delà du SLA par stage. Source : SLA codé + env CEE_TUNNEL_SLA_<STAGE>_D."""
-        alerts = detect_stagnants()
+        """Tunnels stagnants au-delà du SLA par stage. Source : SLA codé + env CEE_TUNNEL_SLA_<STAGE>_D.
+        V37.3.44 — multi-tenant : non-admin ne voit que ses propres alertes (sinon enumeration leak)."""
+        all_alerts = detect_stagnants()
+        visible = _filter_for_user(all_alerts, _current_user())
         return jsonify({
-            "count": len(alerts),
-            "critique": sum(1 for a in alerts if a["severity"] == "critique"),
-            "haute": sum(1 for a in alerts if a["severity"] == "haute"),
-            "alerts": alerts,
+            "count": len(visible),
+            "critique": sum(1 for a in visible if a["severity"] == "critique"),
+            "haute": sum(1 for a in visible if a["severity"] == "haute"),
+            "alerts": visible,
             "sla": {s: _stage_sla_days(s) for s in TUNNEL_STAGES},
         })
 
     @app.route("/tunnel/<tunnel_id>/predict-next", methods=["GET"])
     @_gate
     def _tunnel_predict(tunnel_id):
-        """Recommandation prédictive : prochaine action + ETA + niveau de risque."""
+        """Recommandation prédictive : prochaine action + ETA + niveau de risque.
+        V37.3.44 — IDOR fix : check ownership avant la prédiction (sinon enumeration leak)."""
+        _t_check = _load(tunnel_id)
+        if _t_check and not _can_access_tunnel(_t_check, _current_user()):
+            return jsonify({"error": "Forbidden — tunnel non accessible"}), 403
         r = predict_next(tunnel_id)
         if not r:
             return jsonify({"error": "tunnel inconnu"}), 404

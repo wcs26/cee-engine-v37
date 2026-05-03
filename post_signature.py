@@ -202,6 +202,31 @@ def register_post_signature_routes(app: Flask):
             return f(*a, **k)
         return _w
 
+    # V37.3.44 — IDOR fix : helpers ownership multi-tenant (même pattern que dossiers.py)
+    def _current_user():
+        if _os.environ.get("CEE_AUTH_REQUIRED", "0") != "1":
+            return None
+        try:
+            from auth import jwt_verify
+            ah = request.headers.get("Authorization", "")
+            tok = ah[7:].strip() if ah.lower().startswith("bearer ") else ""
+            return jwt_verify(tok) if tok else None
+        except Exception:
+            return None
+
+    def _owner_check(d):
+        if _os.environ.get("CEE_AUTH_REQUIRED", "0") != "1":
+            return None
+        user = _current_user()
+        if not user:
+            return jsonify({"error": "Unauthorized"}), 401
+        if user.get("role") == "admin":
+            return None
+        owner = d.get("owner")
+        if owner and owner == user.get("sub"):
+            return None
+        return jsonify({"error": "Forbidden — dossier non accessible"}), 403
+
     @app.route("/post-signature/init", methods=["POST"])
     @_gate
     def post_signature_init():
@@ -217,8 +242,10 @@ def register_post_signature_routes(app: Flask):
 
         dates_cibles = _compute_dates_cibles(date_signature)
 
+        _u = _current_user()
         dossier = {
             "dossier_id": dossier_id,
+            "owner": (_u.get("sub") if _u else None),  # V37.3.44 — ownership
             "date_signature": date_signature,
             "installateur": installateur,
             "delegataire": delegataire,
@@ -245,6 +272,8 @@ def register_post_signature_routes(app: Flask):
         dossier = _load_dossier(dossier_id)
         if not dossier:
             return jsonify({"error": f"Dossier {dossier_id} introuvable"}), 404
+        _err = _owner_check(dossier)
+        if _err: return _err
 
         etapes_avec_statut = []
         for etape_key in ETAPES_ORDRE:
@@ -277,6 +306,11 @@ def register_post_signature_routes(app: Flask):
     @app.route("/post-signature/<dossier_id>/etape/<etape>", methods=["PUT"])
     @_gate
     def post_signature_marquer(dossier_id: str, etape: str):
+        # V37.3.44 — IDOR fix : pré-load + check owner avant mutation
+        _d_check = _load_dossier(dossier_id)
+        if _d_check is not None:
+            _err = _owner_check(_d_check)
+            if _err: return _err
         if etape not in ETAPES_ORDRE:
             return jsonify({"error": f"Étape inconnue: {etape}. Valides: {ETAPES_ORDRE}"}), 400
 
@@ -306,6 +340,11 @@ def register_post_signature_routes(app: Flask):
     @app.route("/post-signature/<dossier_id>/alertes", methods=["GET"])
     @_gate
     def post_signature_alertes(dossier_id: str):
+        # V37.3.44 — IDOR fix
+        _d_check = _load_dossier(dossier_id)
+        if _d_check is not None:
+            _err = _owner_check(_d_check)
+            if _err: return _err
         dossier = _load_dossier(dossier_id)
         if not dossier:
             return jsonify({"error": f"Dossier {dossier_id} introuvable"}), 404
@@ -323,16 +362,25 @@ def register_post_signature_routes(app: Flask):
         _ensure_data_dir()
         files = [f for f in os.listdir(DATA_DIR) if f.endswith(".json")]
 
+        # V37.3.44 — multi-tenant : non-admin ne voit que ses propres dossiers
+        _u = _current_user()
+        _scope_sub = (_u.get("sub") if _u and _u.get("role") != "admin" else None)
+
         stats = {k: 0 for k in ETAPES_ORDRE}
-        stats["total"] = len(files)
+        stats["total"] = 0  # set après filter
         dossiers_en_retard = []
         montant_attente = 0.0
         prochain_paiement = None
+        _filtered_count = 0
 
         for fname in files:
             path = os.path.join(DATA_DIR, fname)
             with open(path, "r", encoding="utf-8") as f:
                 dossier = json.load(f)
+            # V37.3.44 — skip si pas owner et pas admin
+            if _scope_sub is not None and dossier.get("owner") != _scope_sub:
+                continue
+            _filtered_count += 1
 
             # Trouver l'étape courante (première non faite)
             etape_courante = None
@@ -363,6 +411,8 @@ def register_post_signature_routes(app: Flask):
                     if prochain_paiement is None or date_paie < prochain_paiement:
                         prochain_paiement = date_paie
 
+        # V37.3.44 — total reflète seulement les dossiers visibles par le user (multi-tenant)
+        stats["total"] = _filtered_count
         return jsonify({
             "total_dossiers": stats["total"],
             "par_etape": {ETAPES_LABELS.get(k, k): v for k, v in stats.items() if k != "total"},
@@ -370,11 +420,17 @@ def register_post_signature_routes(app: Flask):
             "dossiers_en_retard": dossiers_en_retard,
             "nb_en_retard": len(dossiers_en_retard),
             "prochain_paiement_attendu": prochain_paiement,
+            "_scope": ("admin/all" if _u and _u.get("role") == "admin" else (_u["name"] if _u else "anonymous")),
         })
 
     @app.route("/post-signature/<dossier_id>/push-monday", methods=["POST"])
     @_gate
     def post_signature_push_monday(dossier_id: str):
+        # V37.3.44 — IDOR fix
+        _d_check = _load_dossier(dossier_id)
+        if _d_check is not None:
+            _err = _owner_check(_d_check)
+            if _err: return _err
         dossier = _load_dossier(dossier_id)
         if not dossier:
             return jsonify({"error": f"Dossier {dossier_id} introuvable"}), 404
