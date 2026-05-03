@@ -1,6 +1,7 @@
 # CEE Engine V37 — runtime dependencies
-flask>=3.0
-gunicorn>=22.0
-python-dotenv>=1.0
+# V37.3.47 — upper bounds pinned pour éviter break silencieux à un major bump.
+flask>=3.0,<4.0
+gunicorn>=22.0,<24.0
+python-dotenv>=1.0,<2.0
 # groq SDK (optionnel — si absent, l'endpoint /ai/groq renvoie une erreur d'install propre)
-groq>=0.11
+groq>=0.11,<1.0
