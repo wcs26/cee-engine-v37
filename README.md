@@ -2,7 +2,9 @@
 
 **Audit CEE prédictif, proactif, intelligent** pour PME tertiaires, industries, multi-sites et copropriétés.
 
-> **V37.3 (2026-04-28)** — Tunnel commercial unifié `lead → audit → R1 → R2 → signature → post_signature` avec hooks auto (PNCEE score, prime exacte, cross-sell PV, push Monday), boot guards sécu (JWT secret, CORS allowlist, origin guard `/ai/*`, webhook Monday HMAC), sync bidirectionnelle Monday (URL token), persistance Fly volume `/data/`, dashboard objectif V38 (`/analytics/sales-velocity`), 5 IA orchestrées. **192 tests verts**. Détails déploiement : `JIMMY_TODO.md` + `SECURITE_RUNBOOK.md` + `scripts/smoke.sh`.
+> **V37.3 (2026-04-28)** — Tunnel commercial unifié `lead → audit → R1 → R2 → signature → post_signature` avec hooks auto (PNCEE score, prime exacte, cross-sell PV, push Monday), boot guards sécu (JWT secret, CORS allowlist, origin guard `/ai/*`, webhook Monday HMAC), sync bidirectionnelle Monday (URL token), persistance Fly volume `/data/`, dashboard objectif V38 (`/analytics/sales-velocity`), 5 IA orchestrées. **192 tests verts**.
+>
+> **V37.3.39 → V37.3.47 (2026-05-03)** — Audit 110 000 agents (10 dimensions, ~50 findings priorisés) + 8 fixes ultrareview r5delpuuz + Hero Apple-grade éditorial-tech (Fraunces × Geist × JetBrains Mono, fonts self-hostées RGPD-clean) + `@_gate` sur 35 routes (opt-in `CEE_AUTH_REQUIRED=1`) + IDOR cross-vendor fix (multi-tenant safe avec `_owner_check` sur dossiers/post_signature/tunnel) + prospection lookalike (Sirene gratuit + Apify Google Maps via UI bouton step1Details) + healthcheck Fly natif + cap volume + drain SIGTERM 30s. Tableau RGPD honnête (sous-traitants US/CN/IL listés via CCT 2021/914), AH PNCEE corrigée 9 ans (arrêté 4/9/2014). Détails : `AUDIT_110000_AGENTS_2026-04-30.md`.
 
 ---
 
