@@ -5180,29 +5180,52 @@
   // NAVIGATION ÉTAPES
   // ════════════════════════════════════════════════════════════════
   function showStep(step) {
-    document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
-    document.getElementById('step' + step).classList.add('active');
-    document.querySelectorAll('.step').forEach((el, i) => {
-      el.classList.remove('active', 'completed');
-      if (i + 1 < step) el.classList.add('completed');
-      if (i + 1 === step) el.classList.add('active');
-    });
-    STATE.currentStep = step;
-    // V29 FIX: Actualiser l'UI en entrant dans chaque étape
-    if (step === 2) {
-      renderMicroActivity();
-      renderGisements();
-      renderUniversalQuestionnaire();
-      // Si une micro-activité est déjà auto-détectée, afficher le questionnaire
-      if (STATE.microActivity) {
-        const primarySector = STATE.detectedSectors.find(s => MICRO_ACTIVITIES[s] && MICRO_ACTIVITIES[s][STATE.microActivity]) || STATE.detectedSectors[0];
-        if (primarySector) renderQuestionnaire(primarySector, STATE.microActivity);
+    // V37.3.52 — try/catch verbose pour diagnostiquer le bug bloquant Step 1 → 2.
+    // Chaque sous-étape attrape ses exceptions individuellement ET continue, pour
+    // que la transition complete même si une fonction render crash.
+    try {
+      document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+      var target = document.getElementById('step' + step);
+      if (!target) {
+        console.error('[showStep] ❌ #step' + step + ' introuvable dans le DOM. Transition impossible.');
+        alert('Bug technique : page #' + step + ' introuvable. Recharge la page.');
+        return;
       }
+      target.classList.add('active');
+      document.querySelectorAll('.step').forEach((el, i) => {
+        el.classList.remove('active', 'completed');
+        if (i + 1 < step) el.classList.add('completed');
+        if (i + 1 === step) el.classList.add('active');
+      });
+      STATE.currentStep = step;
+      console.log('[showStep] ✓ Activé #step' + step + ', currentStep=' + STATE.currentStep);
+    } catch (e) {
+      console.error('[showStep] ❌ erreur activation Step ' + step + ' :', e);
+      alert('Bug Step ' + step + ' (activation) : ' + e.message);
+      return;
     }
-    if (step === 3) renderFiches();
-    if (step === 5) updateRecap();
+    // V29 FIX: Actualiser l'UI en entrant dans chaque étape — chaque render isolé
+    if (step === 2) {
+      try { renderMicroActivity(); console.log('[showStep] ✓ renderMicroActivity OK'); }
+      catch (e) { console.error('[showStep] ❌ renderMicroActivity :', e); }
+      try { renderGisements(); console.log('[showStep] ✓ renderGisements OK'); }
+      catch (e) { console.error('[showStep] ❌ renderGisements :', e); }
+      try { renderUniversalQuestionnaire(); console.log('[showStep] ✓ renderUniversalQuestionnaire OK'); }
+      catch (e) { console.error('[showStep] ❌ renderUniversalQuestionnaire :', e); }
+      try {
+        if (STATE.microActivity) {
+          const primarySector = (STATE.detectedSectors || []).find(s => MICRO_ACTIVITIES[s] && MICRO_ACTIVITIES[s][STATE.microActivity]) || (STATE.detectedSectors || [])[0];
+          if (primarySector) { renderQuestionnaire(primarySector, STATE.microActivity); console.log('[showStep] ✓ renderQuestionnaire(' + primarySector + ', ' + STATE.microActivity + ')'); }
+        }
+      } catch (e) { console.error('[showStep] ❌ renderQuestionnaire :', e); }
+    }
+    if (step === 3) { try { renderFiches(); } catch (e) { console.error('[showStep] ❌ renderFiches :', e); alert('Bug Step 3 (renderFiches) : ' + e.message); } }
+    if (step === 5) { try { updateRecap(); } catch (e) { console.error('[showStep] ❌ updateRecap :', e); alert('Bug Step 5 (updateRecap) : ' + e.message); } }
   }
-  function nextStep() { if (STATE.currentStep < 5) showStep(STATE.currentStep + 1); }
+  function nextStep() {
+    console.log('[nextStep] currentStep=' + STATE.currentStep + ' → ' + (STATE.currentStep + 1));
+    if (STATE.currentStep < 5) showStep(STATE.currentStep + 1);
+  }
   function prevStep() { if (STATE.currentStep > 1) showStep(STATE.currentStep - 1); }
 
   // ════════════════════════════════════════════════════════════════
