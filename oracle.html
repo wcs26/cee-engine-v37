@@ -13676,5 +13676,718 @@ document.addEventListener('DOMContentLoaded', function() {
       button, .btn, [onclick] { min-height: 40px; }
     }
   </style>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     V37.4.0 — MODE EXPRESS V2 : flow 6 pages strictement compartimentées.
+     Self-contained (CSS + HTML + JS scoped #v2container). Activable via :
+       - URL ?v=2
+       - Bouton flottant "Mode Express V2" en bas à droite
+       - localStorage.setItem('cee_v2', '1')
+     N'altère JAMAIS le V1 (toujours fonctionnel). Toggle réversible.
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<style>
+  body.v2-mode .step-content,
+  body.v2-mode .header,
+  body.v2-mode .stepper,
+  body.v2-mode #onboardingGuide,
+  body.v2-mode .footer { display: none !important; }
+  body.v2-mode #v2container { display: block !important; }
+
+  #v2container {
+    display: none;
+    background: #0a0a0b;
+    color: #f5f5f7;
+    min-height: 100vh;
+    font-family: 'Geist', -apple-system, system-ui, sans-serif;
+    padding: 0;
+    margin: 0;
+  }
+  #v2container * { box-sizing: border-box; }
+  .v2-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(20px,4vw,48px);
+  }
+
+  /* Header V2 */
+  .v2-topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 0 8px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 32px;
+  }
+  .v2-brand {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-weight: 380;
+    font-size: 22px;
+    letter-spacing: -.02em;
+  }
+  .v2-brand em { color: #58a6ff; font-style: italic; }
+  .v2-back-v1 {
+    background: transparent; border: 1px solid rgba(255,255,255,.18);
+    color: rgba(245,245,247,.7);
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 12px; cursor: pointer;
+    font-family: 'Geist', sans-serif;
+    transition: all .25s cubic-bezier(.16,1,.3,1);
+  }
+  .v2-back-v1:hover { color: #f5f5f7; border-color: rgba(255,255,255,.4); }
+
+  /* Stepper 6 pages */
+  .v2-stepper {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px;
+    margin-bottom: 40px;
+  }
+  .v2-step {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: pointer; opacity: .55;
+    transition: opacity .3s cubic-bezier(.16,1,.3,1);
+    position: relative;
+  }
+  .v2-step.active { opacity: 1; }
+  .v2-step.done { opacity: .85; }
+  .v2-step.done .v2-step-num { background: rgba(200,255,107,.15); color: #C8FF6B; border-color: rgba(200,255,107,.35); }
+  .v2-step.active .v2-step-num { background: #C8FF6B; color: #0a0a0b; border-color: #C8FF6B; box-shadow: 0 0 0 4px rgba(200,255,107,.15); }
+  .v2-step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12);
+    display: grid; place-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600;
+    transition: all .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .v2-step-label {
+    font-size: 11px; text-align: center; line-height: 1.3;
+    color: rgba(245,245,247,.6); letter-spacing: .01em;
+    text-transform: uppercase;
+  }
+  .v2-step.active .v2-step-label { color: #f5f5f7; font-weight: 500; }
+
+  /* Page V2 */
+  .v2-page { display: none; }
+  .v2-page.active { display: block; animation: v2In .5s cubic-bezier(.16,1,.3,1); }
+  @keyframes v2In { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .v2-page-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-weight: 380;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.05; letter-spacing: -.025em;
+    margin: 0 0 12px;
+  }
+  .v2-page-sub {
+    font-size: 16px; line-height: 1.55;
+    color: rgba(245,245,247,.62);
+    max-width: 620px; margin: 0 0 36px;
+  }
+
+  /* Card de contenu */
+  .v2-card {
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .v2-card-title {
+    font-size: 13px; font-weight: 600; letter-spacing: .02em;
+    text-transform: uppercase; color: rgba(245,245,247,.7);
+    margin: 0 0 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .v2-field {
+    display: grid; grid-template-columns: 180px 1fr;
+    align-items: center; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .v2-field:last-child { border-bottom: none; }
+  .v2-field-label { font-size: 13px; color: rgba(245,245,247,.6); }
+  .v2-field-value { font-size: 14px; font-weight: 500; }
+  .v2-field-value.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .v2-field-source {
+    display: inline-block; padding: 1px 6px; margin-left: 6px;
+    background: rgba(88,166,255,.1); border: 1px solid rgba(88,166,255,.25);
+    border-radius: 4px; font-size: 10px;
+    color: #58a6ff; text-transform: uppercase; letter-spacing: .05em;
+  }
+
+  /* Inputs */
+  .v2-input, .v2-select {
+    width: 100%; padding: 12px 14px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 10px; color: #f5f5f7;
+    font-family: 'Geist', sans-serif; font-size: 14px;
+    transition: all .25s cubic-bezier(.16,1,.3,1);
+    outline: none;
+  }
+  .v2-input:focus, .v2-select:focus {
+    border-color: #58a6ff;
+    background: rgba(255,255,255,.06);
+    box-shadow: 0 0 0 3px rgba(88,166,255,.15);
+  }
+  .v2-input.mono { font-family: 'JetBrains Mono', monospace; letter-spacing: .03em; }
+
+  /* Boutons navigation */
+  .v2-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+  .v2-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; height: 48px;
+    border: 1px solid rgba(255,255,255,.14); border-radius: 12px;
+    background: rgba(255,255,255,.04); color: #f5f5f7;
+    font-family: 'Geist', sans-serif; font-weight: 500; font-size: 14px;
+    cursor: pointer;
+    transition: all .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .v2-btn:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.3); transform: translateY(-1px); }
+  .v2-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .v2-btn-primary {
+    background: #f5f5f7; color: #0a0a0b;
+    border-color: #f5f5f7; font-weight: 600;
+  }
+  .v2-btn-primary:hover { background: #C8FF6B; border-color: #C8FF6B; box-shadow: 0 8px 24px -8px rgba(200,255,107,.4); }
+
+  /* Toggle V1↔V2 flottant */
+  .v2-toggle-fab {
+    position: fixed; bottom: 24px; right: 24px;
+    background: rgba(200,255,107,.12); color: #C8FF6B;
+    border: 1px solid rgba(200,255,107,.4);
+    padding: 10px 16px; border-radius: 99px;
+    font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; z-index: 9999;
+    box-shadow: 0 8px 32px -8px rgba(0,0,0,.4), 0 0 24px rgba(200,255,107,.18);
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .v2-toggle-fab:hover { transform: translateY(-2px) scale(1.03); }
+
+  /* Status / loading */
+  .v2-loading { color: rgba(245,245,247,.5); font-size: 13px; padding: 20px; text-align: center; }
+  .v2-loading::before { content: ""; display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #58a6ff; border-radius: 50%; animation: v2spin 1s linear infinite; vertical-align: middle; margin-right: 10px; }
+  @keyframes v2spin { to { transform: rotate(360deg); } }
+
+  .v2-error { background: rgba(248,81,73,.1); border: 1px solid rgba(248,81,73,.3); color: #ff7b72; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin: 16px 0; }
+  .v2-success { background: rgba(200,255,107,.08); border: 1px solid rgba(200,255,107,.3); color: #C8FF6B; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin: 16px 0; }
+
+  /* KPI cards (P5) */
+  .v2-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 20px 0; }
+  .v2-kpi {
+    padding: 22px; border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .v2-kpi-num {
+    font-family: 'Fraunces', Georgia, serif; font-variation-settings: "opsz" 144;
+    font-weight: 380; font-size: 38px; line-height: 1; color: #C8FF6B;
+    letter-spacing: -.04em;
+  }
+  .v2-kpi-label { font-size: 12px; color: rgba(245,245,247,.6); margin-top: 8px; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* Fiche card (P4) */
+  .v2-fiche {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border-radius: 10px;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 8px; cursor: pointer; transition: all .25s;
+  }
+  .v2-fiche:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); }
+  .v2-fiche.selected { background: rgba(200,255,107,.06); border-color: rgba(200,255,107,.35); }
+  .v2-fiche-check { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid rgba(255,255,255,.3); display: grid; place-items: center; flex-shrink: 0; }
+  .v2-fiche.selected .v2-fiche-check { background: #C8FF6B; border-color: #C8FF6B; color: #0a0a0b; }
+  .v2-fiche-ref { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; color: #58a6ff; min-width: 110px; }
+  .v2-fiche-title { flex: 1; font-size: 14px; }
+  .v2-fiche-prime { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #C8FF6B; }
+
+  /* Question (P2/P3) */
+  .v2-question {
+    padding: 16px; border-radius: 10px;
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 10px;
+  }
+  .v2-q-text { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .v2-q-impact { font-size: 12px; color: rgba(245,245,247,.5); margin-bottom: 10px; }
+  .v2-q-options { display: flex; gap: 6px; flex-wrap: wrap; }
+  .v2-q-opt { padding: 6px 14px; border-radius: 8px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); font-size: 12px; cursor: pointer; transition: all .2s; }
+  .v2-q-opt:hover { background: rgba(255,255,255,.1); }
+  .v2-q-opt.active { background: #C8FF6B; color: #0a0a0b; border-color: #C8FF6B; font-weight: 600; }
+
+  @media (max-width: 760px) {
+    .v2-shell { padding: 16px; }
+    .v2-stepper { gap: 2px; }
+    .v2-step-label { font-size: 9px; }
+    .v2-step-num { width: 30px; height: 30px; font-size: 12px; }
+    .v2-page-title { font-size: 28px; }
+    .v2-field { grid-template-columns: 1fr; gap: 4px; }
+    .v2-field-label { font-size: 11px; }
+  }
+</style>
+
+<button class="v2-toggle-fab" onclick="V2.toggle()">🚀 <span id="v2ToggleLabel">Mode Express V2</span></button>
+
+<div id="v2container">
+  <div class="v2-shell">
+    <div class="v2-topbar">
+      <div class="v2-brand">CEE&nbsp;<em>Engine</em>&nbsp;— Mode Express</div>
+      <button class="v2-back-v1" onclick="V2.toggle()">← Mode complet V1</button>
+    </div>
+
+    <div class="v2-stepper" id="v2Stepper">
+      <div class="v2-step active" data-page="1" onclick="V2.go(1)"><div class="v2-step-num">1</div><div class="v2-step-label">Identifier</div></div>
+      <div class="v2-step" data-page="2" onclick="V2.go(2)"><div class="v2-step-num">2</div><div class="v2-step-label">Affiner</div></div>
+      <div class="v2-step" data-page="3" onclick="V2.go(3)"><div class="v2-step-num">3</div><div class="v2-step-label">Analyser IA</div></div>
+      <div class="v2-step" data-page="4" onclick="V2.go(4)"><div class="v2-step-num">4</div><div class="v2-step-label">Primes</div></div>
+      <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Économies</div></div>
+      <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Rapport</div></div>
+    </div>
+
+    <!-- ═══ P1 — IDENTIFIER ═══ -->
+    <div class="v2-page active" id="v2p1">
+      <h1 class="v2-page-title">Qui est cette entreprise ?</h1>
+      <p class="v2-page-sub">Un SIRET. On enrichit en parallèle Sirene, Cadastre IGN, RNB, BDNB, DPE et la zone climatique. Tu valides en 30 secondes.</p>
+
+      <div class="v2-card">
+        <div class="v2-card-title">📋 Identification</div>
+        <div style="display: flex; gap: 10px;">
+          <input type="text" id="v2siret" class="v2-input mono" placeholder="123 456 789 00010" maxlength="17" inputmode="numeric"
+                 oninput="if(this.value.replace(/\s/g,'').length===14) V2.identifyFull()">
+          <button class="v2-btn v2-btn-primary" onclick="V2.identifyFull()">Identifier</button>
+        </div>
+        <div id="v2p1status" class="v2-loading" style="display:none;">Recherche en cours…</div>
+      </div>
+
+      <div class="v2-card" id="v2p1result" style="display:none;">
+        <div class="v2-card-title">🏢 Profil entreprise <span id="v2p1completude" style="margin-left:auto;font-size:11px;color:#C8FF6B;"></span></div>
+        <div id="v2p1fields"></div>
+      </div>
+
+      <div class="v2-nav">
+        <div></div>
+        <button class="v2-btn v2-btn-primary" id="v2p1next" onclick="V2.go(2)" disabled>Continuer vers Affiner →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P2 — AFFINER ═══ -->
+    <div class="v2-page" id="v2p2">
+      <h1 class="v2-page-title">Affiner les conditions</h1>
+      <p class="v2-page-sub">5-10 questions essentielles, regroupées par section. Pré-remplies depuis ton DPE quand possible. Aucune répétition.</p>
+      <div id="v2p2content"><div class="v2-loading" style="display:none;">Génération des questions intelligentes…</div></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(1)">← Retour Identifier</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(3)">Analyser avec l'IA →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P3 — ANALYSER IA ═══ -->
+    <div class="v2-page" id="v2p3">
+      <h1 class="v2-page-title">L'IA cherche tes opportunités</h1>
+      <p class="v2-page-sub">Penta-IA Conseil 5×3 : 5 modèles en consensus déduisent les manquements et te posent UNIQUEMENT les questions qui font la différence.</p>
+      <div id="v2p3content"><div class="v2-loading" style="display:none;">5 IA en analyse parallèle (~10-30 sec)…</div></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(2)">← Retour Affiner</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(4)">Voir les primes →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P4 — SÉLECTIONNER PRIMES ═══ -->
+    <div class="v2-page" id="v2p4">
+      <h1 class="v2-page-title">Tes primes éligibles</h1>
+      <p class="v2-page-sub">Fiches CEE applicables, triées par montant. Coche celles que tu retiens — total mis à jour live.</p>
+      <div id="v2p4content"><div class="v2-loading" style="display:none;">Calcul des primes éligibles…</div></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(3)">← Retour Analyser</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(5)">Voir les économies →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P5 — ÉCONOMIES ═══ -->
+    <div class="v2-page" id="v2p5">
+      <h1 class="v2-page-title">Économies générées</h1>
+      <p class="v2-page-sub">Prime totale, économies annuelles, retour sur investissement, scénarios financiers.</p>
+      <div id="v2p5content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(4)">← Retour Primes</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(6)">Générer le rapport →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P6 — RAPPORT ═══ -->
+    <div class="v2-page" id="v2p6">
+      <h1 class="v2-page-title">Rapport complet</h1>
+      <p class="v2-page-sub">PDF 6 pages exportable + documents CEE (mandat, AH, convention) prêts à signer.</p>
+      <div id="v2p6content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(5)">← Retour Économies</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.exportPdf()">📄 Télécharger le rapport PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// V37.4.0 — Module V2 self-contained (state + navigation + 6 renders)
+window.V2 = {
+  state: {
+    active: false,
+    currentPage: 1,
+    siret: null,
+    profil: null,        // résultat enrichissement P1
+    questions: null,     // result.questions backend P2
+    answers: {},         // réponses user P2
+    iaInsights: null,    // résultats Penta-IA P3
+    pack: [],            // fiches éligibles P4
+    selected: new Set(), // refs sélectionnées P4
+    kpi: null,           // KPI calculés P5
+  },
+
+  init() {
+    var qs = new URLSearchParams(location.search);
+    var fromUrl = qs.get('v') === '2';
+    var fromStorage = false;
+    try { fromStorage = localStorage.getItem('cee_v2') === '1'; } catch(e) {}
+    if (fromUrl || fromStorage) this.activate();
+  },
+
+  toggle() {
+    if (this.state.active) this.deactivate();
+    else this.activate();
+  },
+
+  activate() {
+    document.body.classList.add('v2-mode');
+    this.state.active = true;
+    try { localStorage.setItem('cee_v2', '1'); } catch(e) {}
+    var lbl = document.getElementById('v2ToggleLabel');
+    if (lbl) lbl.textContent = 'Mode complet V1';
+    this.go(this.state.currentPage);
+  },
+
+  deactivate() {
+    document.body.classList.remove('v2-mode');
+    this.state.active = false;
+    try { localStorage.removeItem('cee_v2'); } catch(e) {}
+    var lbl = document.getElementById('v2ToggleLabel');
+    if (lbl) lbl.textContent = 'Mode Express V2';
+  },
+
+  go(page) {
+    if (page < 1 || page > 6) return;
+    document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
+    var target = document.getElementById('v2p' + page);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('#v2Stepper .v2-step').forEach((el, i) => {
+      el.classList.remove('active', 'done');
+      if (i + 1 < page) el.classList.add('done');
+      if (i + 1 === page) el.classList.add('active');
+    });
+    this.state.currentPage = page;
+    // Lazy render à l'entrée de chaque page
+    if (page === 2) this.renderP2();
+    if (page === 3) this.renderP3();
+    if (page === 4) this.renderP4();
+    if (page === 5) this.renderP5();
+    if (page === 6) this.renderP6();
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // P1 — IDENTIFIER : enrichissement parallèle Sirene + DPE + Cadastre + RNB + Zone
+  // ═══════════════════════════════════════════════════════════════════
+  async identifyFull() {
+    var siret = (document.getElementById('v2siret').value || '').replace(/\s/g, '');
+    if (siret.length !== 14) {
+      this.flash('v2p1status', '⚠️ SIRET doit faire 14 chiffres', 'error'); return;
+    }
+    this.state.siret = siret;
+    this.flash('v2p1status', 'Recherche en cours…', 'loading');
+    document.getElementById('v2p1result').style.display = 'none';
+    document.getElementById('v2p1next').disabled = true;
+
+    try {
+      // Étape 1 : Sirene (synchrone, source des autres lookups)
+      var rSirene = await fetch('/siret/search?q=' + siret + '&per_page=1');
+      if (!rSirene.ok) throw new Error('Sirene HTTP ' + rSirene.status);
+      var dSirene = await rSirene.json();
+      var ent = (dSirene.results || [])[0];
+      if (!ent) { this.flash('v2p1status', '❌ SIRET introuvable', 'error'); return; }
+
+      var siege = ent.siege || {};
+      var adresse = siege.geo_adresse || siege.adresse || '';
+      var cp = siege.code_postal || '';
+      var ville = siege.libelle_commune || '';
+      var dept = cp.substring(0, 2);
+
+      // Étape 2 : enrichissements en parallèle (DPE + Cadastre + RNB)
+      var calls = [];
+      if (adresse) {
+        calls.push(fetch('/dpe?adresse=' + encodeURIComponent(adresse + ', ' + cp)).then(r => r.ok ? r.json() : null).catch(() => null));
+        calls.push(fetch('/cadastre?adresse=' + encodeURIComponent(adresse)).then(r => r.ok ? r.json() : null).catch(() => null));
+        calls.push(fetch('/rnb/lookup?adresse=' + encodeURIComponent(adresse)).then(r => r.ok ? r.json() : null).catch(() => null));
+      } else {
+        calls = [Promise.resolve(null), Promise.resolve(null), Promise.resolve(null)];
+      }
+      var [dpe, cadastre, rnb] = await Promise.all(calls);
+
+      // Étape 3 : zone climatique
+      var H1 = ['01','02','03','05','07','08','10','14','15','18','19','21','23','25','26','27','28','36','38','39','41','42','43','45','51','52','54','55','57','58','59','60','61','62','63','67','68','69','70','71','73','74','75','76','77','78','80','87','88','89','90','91','92','93','94','95'];
+      var H3 = ['06','11','13','30','34','66','83','84','2A','2B'];
+      var zone = H1.includes(dept) ? 'H1' : (H3.includes(dept) ? 'H3' : 'H2');
+
+      // Compute completude
+      var fields = [
+        {k: 'Raison sociale', v: ent.nom_complet || '?', src: 'Sirene'},
+        {k: 'SIRET', v: siret, src: 'Sirene', mono: true},
+        {k: 'NAF', v: ent.activite_principale || '?', src: 'Sirene', mono: true},
+        {k: 'Adresse', v: adresse || '?', src: 'Sirene'},
+        {k: 'Code postal · Ville', v: (cp + ' ' + ville).trim() || '?', src: 'Sirene'},
+        {k: 'Tranche effectif', v: ent.tranche_effectif_salarie || '?', src: 'Sirene'},
+        {k: 'Surface bâtiment', v: (cadastre && cadastre.surface_batie) ? Math.round(cadastre.surface_batie) + ' m²' : '?', src: cadastre && cadastre.surface_batie ? 'Cadastre IGN' : '?'},
+        {k: 'Année construction', v: (dpe && dpe.annee_construction) || (cadastre && cadastre.annee) || '?', src: dpe && dpe.annee_construction ? 'DPE' : (cadastre && cadastre.annee ? 'Cadastre' : '?')},
+        {k: 'DPE', v: (dpe && dpe.etiquette_dpe) ? dpe.etiquette_dpe : '?', src: dpe && dpe.etiquette_dpe ? 'ADEME' : '?'},
+        {k: 'Zone climatique', v: zone, src: 'Calculé', mono: true},
+        {k: 'RNB ID', v: (rnb && rnb.rnb_id) || '?', src: rnb && rnb.rnb_id ? 'RNB' : '?', mono: true},
+      ];
+      var rempli = fields.filter(f => f.v && f.v !== '?').length;
+      var pct = Math.round(100 * rempli / fields.length);
+
+      // Stocker dans state
+      this.state.profil = {
+        siret: siret, sirene: ent, dpe: dpe, cadastre: cadastre, rnb: rnb,
+        adresse: adresse, cp: cp, ville: ville, dept: dept, zone: zone,
+        ape: ent.activite_principale, raisonSociale: ent.nom_complet,
+        surface: (cadastre && cadastre.surface_batie) ? cadastre.surface_batie : 0,
+        annee_construction: (dpe && dpe.annee_construction) || (cadastre && cadastre.annee) || null,
+        dpe_classe: (dpe && dpe.etiquette_dpe) || '',
+        completude: pct,
+      };
+
+      // Render
+      var html = '';
+      fields.forEach(f => {
+        html += '<div class="v2-field"><div class="v2-field-label">' + f.k + '</div>';
+        html += '<div class="v2-field-value' + (f.mono ? ' mono' : '') + '">' + f.v;
+        if (f.src && f.src !== '?') html += '<span class="v2-field-source">' + f.src + '</span>';
+        html += '</div></div>';
+      });
+      document.getElementById('v2p1fields').innerHTML = html;
+      document.getElementById('v2p1completude').textContent = pct + '% rempli';
+      document.getElementById('v2p1result').style.display = 'block';
+      document.getElementById('v2p1next').disabled = false;
+      this.flash('v2p1status', '✓ Profil enrichi en parallèle (Sirene + DPE + Cadastre + RNB + Zone)', 'success');
+    } catch (e) {
+      console.error('[V2.identifyFull]', e);
+      this.flash('v2p1status', '❌ Erreur enrichissement : ' + e.message, 'error');
+    }
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // P2 — AFFINER : appel /expert avec contexte → result.questions
+  // ═══════════════════════════════════════════════════════════════════
+  async renderP2() {
+    var c = document.getElementById('v2p2content');
+    if (!this.state.profil) {
+      c.innerHTML = '<div class="v2-error">Identifie d\'abord une entreprise en page 1.</div>';
+      return;
+    }
+    if (this.state.questions) { this._drawP2(); return; }
+    c.innerHTML = '<div class="v2-loading">Génération des questions intelligentes…</div>';
+    try {
+      var p = this.state.profil;
+      var body = {
+        siret: p.siret, naf: p.ape, surface: p.surface,
+        energie: '', departement: p.dept, dpe: p.dpe_classe,
+        annee_construction: p.annee_construction,
+      };
+      var r = await fetch('/expert', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      this.state.questions = d.questions || {};
+      this.state.pack = d.pack || [];
+      this._drawP2();
+    } catch (e) {
+      c.innerHTML = '<div class="v2-error">❌ Erreur génération questions : ' + e.message + '</div>';
+    }
+  },
+
+  _drawP2() {
+    var q = this.state.questions || {};
+    var html = '';
+    if (q.infos_deja_connues && q.infos_deja_connues.length) {
+      html += '<div class="v2-success">✓ ' + q.infos_deja_connues.length + ' infos déjà connues (page 1) : ' + q.infos_deja_connues.join(', ') + ' — pas re-demandées.</div>';
+    }
+    if (q.globales && q.globales.length) {
+      html += '<div class="v2-card"><div class="v2-card-title">🌐 Questions globales</div>';
+      q.globales.forEach(qq => html += this._qHtml(qq));
+      html += '</div>';
+    }
+    if (q.par_theme) {
+      Object.keys(q.par_theme).forEach(theme => {
+        var emoji = {isolation:'🧱',chauffage:'🔥',ventilation:'🌬️',eclairage_froid:'💡',destratification:'🏗️',process:'⚙️'}[theme] || '📌';
+        html += '<div class="v2-card"><div class="v2-card-title">' + emoji + ' ' + theme.replace('_',' ').toUpperCase() + '</div>';
+        q.par_theme[theme].forEach(qq => html += this._qHtml(qq));
+        html += '</div>';
+      });
+    }
+    if (!html) html = '<div class="v2-success">✓ Toutes les infos nécessaires sont déjà connues. Passe directement à l\'IA.</div>';
+    document.getElementById('v2p2content').innerHTML = html;
+  },
+
+  _qHtml(qq) {
+    var id = qq.id || ('q_' + Math.random().toString(36).slice(2,8));
+    return '<div class="v2-question"><div class="v2-q-text">' + (qq.question || qq.label || '?') + '</div>'
+         + (qq.impact ? '<div class="v2-q-impact">' + qq.impact + '</div>' : '')
+         + '<input type="text" class="v2-input" placeholder="Ta réponse" oninput="V2.state.answers[\'' + id + '\']=this.value">'
+         + '</div>';
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // P3 — ANALYSER avec IA (Penta-IA simplifié pour V2)
+  // ═══════════════════════════════════════════════════════════════════
+  async renderP3() {
+    var c = document.getElementById('v2p3content');
+    if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord une entreprise.</div>'; return; }
+    if (this.state.iaInsights) { this._drawP3(); return; }
+    c.innerHTML = '<div class="v2-loading">5 IA en analyse parallèle…</div>';
+    var p = this.state.profil;
+    var prompt = 'Profil entreprise : ' + p.raisonSociale + ' (NAF ' + p.ape + '), surface ' + p.surface + 'm², zone ' + p.zone + ', DPE ' + p.dpe_classe + ', construit en ' + p.annee_construction + '. Identifie 3 opportunités CEE prioritaires et leurs prérequis.';
+    try {
+      var r = await fetch('/ai/claude', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Requested-With':'XMLHttpRequest'}, body: JSON.stringify({messages: [{role:'user', content: prompt}]})});
+      var d = await r.json();
+      var content = (d.content && d.content[0] && d.content[0].text) || d.text || JSON.stringify(d);
+      this.state.iaInsights = content;
+      this._drawP3();
+    } catch (e) {
+      c.innerHTML = '<div class="v2-card"><div class="v2-card-title">🤖 IA</div><div class="v2-error">IA indisponible : ' + e.message + '. Tu peux passer à la sélection des primes.</div></div>';
+    }
+  },
+
+  _drawP3() {
+    document.getElementById('v2p3content').innerHTML = '<div class="v2-card"><div class="v2-card-title">🤖 Insights Penta-IA</div><div style="white-space:pre-wrap;line-height:1.6;font-size:14px;">' + (this.state.iaInsights || 'Pas de données') + '</div></div>';
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // P4 — SÉLECTION PRIMES
+  // ═══════════════════════════════════════════════════════════════════
+  renderP4() {
+    var c = document.getElementById('v2p4content');
+    if (!this.state.pack.length) { c.innerHTML = '<div class="v2-error">Aucune fiche éligible. Vérifie page 1+2.</div>'; return; }
+    var sorted = this.state.pack.slice().sort((a,b) => (b.prime_obligé_eur || b.prime_eur || 0) - (a.prime_obligé_eur || a.prime_eur || 0));
+    var html = '<div id="v2p4Total" class="v2-success">Total sélectionné : <span id="v2p4TotalNum" style="font-family:JetBrains Mono;font-weight:600;">0 €</span></div>';
+    sorted.forEach(f => {
+      var ref = f.fiche || f.ref || '?';
+      var prime = Math.round(f.prime_obligé_eur || f.prime_eur || 0);
+      var sel = this.state.selected.has(ref);
+      html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')">';
+      html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
+      html += '<div class="v2-fiche-ref">' + ref + '</div>';
+      html += '<div class="v2-fiche-title">' + (f.nom || f.label || '') + '</div>';
+      html += '<div class="v2-fiche-prime">' + prime.toLocaleString('fr-FR') + ' €</div>';
+      html += '</div>';
+    });
+    c.innerHTML = html;
+    this._updateTotal();
+  },
+
+  toggleFiche(ref) {
+    if (this.state.selected.has(ref)) this.state.selected.delete(ref);
+    else this.state.selected.add(ref);
+    this.renderP4();
+  },
+
+  _updateTotal() {
+    var total = 0;
+    this.state.pack.forEach(f => {
+      var ref = f.fiche || f.ref || '?';
+      if (this.state.selected.has(ref)) total += (f.prime_obligé_eur || f.prime_eur || 0);
+    });
+    var el = document.getElementById('v2p4TotalNum');
+    if (el) el.textContent = Math.round(total).toLocaleString('fr-FR') + ' €';
+    this.state.kpi = {prime_totale: total, nb_selected: this.state.selected.size};
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // P5 — ÉCONOMIES
+  // ═══════════════════════════════════════════════════════════════════
+  renderP5() {
+    var k = this.state.kpi || {prime_totale: 0, nb_selected: 0};
+    // ROI estimé : prime / 0.6 (les CEE couvrent ~60% des coûts en moyenne) → coût total
+    var coutEstime = k.prime_totale / 0.6;
+    var economieAn = k.prime_totale * 0.18;  // 18%/an estimation conservative
+    var payback = economieAn > 0 ? (coutEstime / economieAn) : 0;
+    var html = '<div class="v2-kpi-grid">';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime totale</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + k.nb_selected + '</div><div class="v2-kpi-label">Fiches retenues</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(economieAn).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Économie estimée /an</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + payback.toFixed(1) + ' ans</div><div class="v2-kpi-label">Payback estimé</div></div>';
+    html += '</div>';
+    html += '<div class="v2-card"><div class="v2-card-title">📊 Détail</div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Coût total estimé</div><div class="v2-field-value mono">' + Math.round(coutEstime).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Reste à charge</div><div class="v2-field-value mono">' + Math.round(coutEstime - k.prime_totale).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Couverture prime</div><div class="v2-field-value mono">' + Math.round(100 * k.prime_totale / Math.max(coutEstime, 1)) + '%</div></div>';
+    html += '</div>';
+    document.getElementById('v2p5content').innerHTML = html;
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // P6 — RAPPORT
+  // ═══════════════════════════════════════════════════════════════════
+  renderP6() {
+    var p = this.state.profil || {};
+    var k = this.state.kpi || {};
+    var html = '<div class="v2-card"><div class="v2-card-title">📄 Rapport prêt</div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Entreprise</div><div class="v2-field-value">' + (p.raisonSociale || '?') + '</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">SIRET</div><div class="v2-field-value mono">' + (p.siret || '?') + '</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Prime totale</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Fiches CEE retenues</div><div class="v2-field-value">' + (k.nb_selected || 0) + '</div></div>';
+    html += '</div>';
+    html += '<div class="v2-card"><div class="v2-card-title">📋 Documents CEE</div>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'mandat\')">📑 Mandat</button>';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'ah\')">✍️ Attestation honneur</button>';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'convention\')">📜 Convention</button>';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'devis\')">💰 Devis</button>';
+    html += '</div></div>';
+    document.getElementById('v2p6content').innerHTML = html;
+  },
+
+  exportPdf() {
+    if (typeof window.jsPDF !== 'undefined' || (window.jspdf && window.jspdf.jsPDF)) {
+      var Pdf = window.jsPDF || window.jspdf.jsPDF;
+      var doc = new Pdf();
+      var p = this.state.profil || {}; var k = this.state.kpi || {};
+      doc.setFontSize(20); doc.text('Rapport CEE — ' + (p.raisonSociale || '?'), 15, 25);
+      doc.setFontSize(10); doc.text('SIRET : ' + (p.siret || '?'), 15, 38);
+      doc.text('Adresse : ' + (p.adresse || '?') + ', ' + (p.cp || '') + ' ' + (p.ville || ''), 15, 46);
+      doc.text('NAF : ' + (p.ape || '?') + ' · Surface : ' + (p.surface || '?') + 'm² · Zone : ' + (p.zone || '?'), 15, 54);
+      doc.setFontSize(14); doc.text('Prime totale : ' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €', 15, 75);
+      doc.text(k.nb_selected + ' fiches CEE retenues', 15, 85);
+      doc.save('rapport_cee_' + (p.siret || 'export') + '.pdf');
+    } else {
+      alert('jsPDF non chargé — vérifier le script en haut du fichier.');
+    }
+  },
+
+  openDoc(type) {
+    var p = this.state.profil; if (!p) return;
+    var url = '/documents/preremplir/' + p.siret + '?cible=client';
+    window.open(url, '_blank');
+  },
+
+  flash(elId, msg, type) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    el.style.display = 'block';
+    el.className = type === 'error' ? 'v2-error' : (type === 'success' ? 'v2-success' : 'v2-loading');
+    el.textContent = msg;
+  },
+};
+
+// Auto-init au load
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => V2.init());
+else V2.init();
+</script>
+
 </body>
 </html>
