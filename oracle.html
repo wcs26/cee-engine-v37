@@ -14177,50 +14177,81 @@ window.V2 = {
       var H3 = ['06','11','13','30','34','66','83','84','2A','2B'];
       var zone = H1.includes(dept) ? 'H1' : (H3.includes(dept) ? 'H3' : 'H2');
 
-      // Compute completude
-      var fields = [
-        {k: 'Raison sociale', v: ent.nom_complet || '?', src: 'Sirene'},
-        {k: 'SIRET', v: siret, src: 'Sirene', mono: true},
-        {k: 'NAF', v: ent.activite_principale || '?', src: 'Sirene', mono: true},
-        {k: 'Adresse', v: adresse || '?', src: 'Sirene'},
-        {k: 'Code postal · Ville', v: (cp + ' ' + ville).trim() || '?', src: 'Sirene'},
-        {k: 'Tranche effectif', v: ent.tranche_effectif_salarie || '?', src: 'Sirene'},
-        {k: 'Surface bâtiment', v: (cadastre && cadastre.surface_batie) ? Math.round(cadastre.surface_batie) + ' m²' : '?', src: cadastre && cadastre.surface_batie ? 'Cadastre IGN' : '?'},
-        {k: 'Année construction', v: (dpe && dpe.annee_construction) || (cadastre && cadastre.annee) || '?', src: dpe && dpe.annee_construction ? 'DPE' : (cadastre && cadastre.annee ? 'Cadastre' : '?')},
-        {k: 'DPE', v: (dpe && dpe.etiquette_dpe) ? dpe.etiquette_dpe : '?', src: dpe && dpe.etiquette_dpe ? 'ADEME' : '?'},
-        {k: 'Zone climatique', v: zone, src: 'Calculé', mono: true},
-        {k: 'RNB ID', v: (rnb && rnb.rnb_id) || '?', src: rnb && rnb.rnb_id ? 'RNB' : '?', mono: true},
-      ];
-      var rempli = fields.filter(f => f.v && f.v !== '?').length;
-      var pct = Math.round(100 * rempli / fields.length);
-
-      // Stocker dans state
+      // Stocker dans state — édition manuelle gérée par P1 ci-dessous
       this.state.profil = {
         siret: siret, sirene: ent, dpe: dpe, cadastre: cadastre, rnb: rnb,
         adresse: adresse, cp: cp, ville: ville, dept: dept, zone: zone,
-        ape: ent.activite_principale, raisonSociale: ent.nom_complet,
-        surface: (cadastre && cadastre.surface_batie) ? cadastre.surface_batie : 0,
+        ape: ent.activite_principale || '',
+        raisonSociale: ent.nom_complet || '',
+        surface: (cadastre && cadastre.surface_batie) ? Math.round(cadastre.surface_batie) : 0,
         annee_construction: (dpe && dpe.annee_construction) || (cadastre && cadastre.annee) || null,
         dpe_classe: (dpe && dpe.etiquette_dpe) || '',
-        completude: pct,
+        tranche_effectif: ent.tranche_effectif_salarie || '',
+        rnb_id: (rnb && rnb.rnb_id) || '',
       };
-
-      // Render
-      var html = '';
-      fields.forEach(f => {
-        html += '<div class="v2-field"><div class="v2-field-label">' + f.k + '</div>';
-        html += '<div class="v2-field-value' + (f.mono ? ' mono' : '') + '">' + f.v;
-        if (f.src && f.src !== '?') html += '<span class="v2-field-source">' + f.src + '</span>';
-        html += '</div></div>';
-      });
-      document.getElementById('v2p1fields').innerHTML = html;
-      document.getElementById('v2p1completude').textContent = pct + '% rempli';
-      document.getElementById('v2p1result').style.display = 'block';
-      document.getElementById('v2p1next').disabled = false;
-      this.flash('v2p1status', '✓ Profil enrichi en parallèle (Sirene + DPE + Cadastre + RNB + Zone)', 'success');
+      this._renderP1Fields();
+      this._updateP1Validity();
+      this.flash('v2p1status', '✓ Enrichissement parallèle terminé. Complète les champs manquants ci-dessous si besoin.', 'success');
     } catch (e) {
       console.error('[V2.identifyFull]', e);
       this.flash('v2p1status', '❌ Erreur enrichissement : ' + e.message, 'error');
+    }
+  },
+
+  // V37.4.2a — Helpers P1 : render éditable + validation pour Continuer
+  _renderP1Fields() {
+    var p = this.state.profil; if (!p) return;
+    var f = (label, key, type, mandatory, src, options) => {
+      var val = p[key]; var hasVal = val !== null && val !== undefined && val !== '' && val !== 0;
+      var srcBadge = (hasVal && src) ? '<span class="v2-field-source">' + src + '</span>' : '';
+      var mandBadge = mandatory && !hasVal ? '<span style="color:#ff7b72;font-size:11px;margin-left:6px;">requis</span>' : '';
+      var input;
+      if (type === 'select') {
+        input = '<select class="v2-select" onchange="V2.state.profil.' + key + '=this.value;V2._updateP1Validity()">';
+        input += '<option value="">— choisir —</option>';
+        options.forEach(o => { input += '<option value="' + o + '"' + (val === o ? ' selected' : '') + '>' + o + '</option>'; });
+        input += '</select>';
+      } else if (type === 'number') {
+        input = '<input type="number" class="v2-input mono" value="' + (hasVal ? val : '') + '" placeholder="ex: 800" oninput="V2.state.profil.' + key + '=this.value?Number(this.value):0;V2._updateP1Validity()">';
+      } else {
+        input = '<input type="text" class="v2-input' + (type === 'mono' ? ' mono' : '') + '" value="' + (hasVal ? String(val).replace(/"/g, '&quot;') : '') + '" oninput="V2.state.profil.' + key + '=this.value;V2._updateP1Validity()">';
+      }
+      return '<div class="v2-field"><div class="v2-field-label">' + label + mandBadge + '</div><div>' + input + srcBadge + '</div></div>';
+    };
+    var srcSurface = (p.cadastre && p.cadastre.surface_batie) ? 'Cadastre IGN' : '';
+    var srcAnnee = (p.dpe && p.dpe.annee_construction) ? 'DPE' : ((p.cadastre && p.cadastre.annee) ? 'Cadastre' : '');
+    var srcDpe = (p.dpe && p.dpe.etiquette_dpe) ? 'ADEME' : '';
+    var html = '';
+    html += f('Raison sociale', 'raisonSociale', 'text', true, 'Sirene');
+    html += f('SIRET', 'siret', 'mono', true, 'Sirene');
+    html += f('Code APE / NAF', 'ape', 'text', true, 'Sirene');
+    html += f('Adresse', 'adresse', 'text', false, 'Sirene');
+    html += f('Code postal', 'cp', 'mono', false, 'Sirene');
+    html += f('Ville', 'ville', 'text', false, 'Sirene');
+    html += f('Surface bâtiment (m²)', 'surface', 'number', true, srcSurface);
+    html += f('Année construction', 'annee_construction', 'number', false, srcAnnee);
+    html += f('DPE actuel', 'dpe_classe', 'select', false, srcDpe, ['A','B','C','D','E','F','G','non_disponible']);
+    html += f('Zone climatique', 'zone', 'select', true, 'Calculé', ['H1','H2','H3']);
+    html += f('Tranche effectif salarié', 'tranche_effectif', 'text', false, 'Sirene');
+    html += f('RNB ID (bâtiment)', 'rnb_id', 'mono', false, 'RNB');
+    document.getElementById('v2p1fields').innerHTML = html;
+    document.getElementById('v2p1result').style.display = 'block';
+  },
+
+  _updateP1Validity() {
+    var p = this.state.profil; if (!p) return;
+    var mandatory = ['raisonSociale', 'siret', 'ape', 'surface', 'zone'];
+    var missing = mandatory.filter(k => !p[k] || p[k] === 0 || p[k] === '');
+    var rempli = ['raisonSociale','siret','ape','adresse','cp','ville','surface','annee_construction','dpe_classe','zone','tranche_effectif','rnb_id'].filter(k => p[k] && p[k] !== '' && p[k] !== 0).length;
+    var pct = Math.round(100 * rempli / 12);
+    var compEl = document.getElementById('v2p1completude');
+    if (compEl) compEl.textContent = pct + '% complet';
+    var nextBtn = document.getElementById('v2p1next');
+    if (nextBtn) {
+      nextBtn.disabled = missing.length > 0;
+      nextBtn.textContent = missing.length > 0
+        ? '⚠ Complète : ' + missing.join(', ') + ' →'
+        : 'Continuer vers Affiner →';
     }
   },
 
@@ -14235,12 +14266,22 @@ window.V2 = {
     }
     if (this.state.questions) { this._drawP2(); return; }
     if (!this._checkAuth()) { c.innerHTML = this._authModal('La page Affiner appelle /expert qui requiert une session JWT'); return; }
+    var p = this.state.profil;
+    // V37.4.2a — Validation params requis avant /expert (sinon HTTP 400)
+    var miss = [];
+    if (!p.ape) miss.push('NAF');
+    if (!p.surface || p.surface === 0) miss.push('Surface');
+    if (!p.dept && (!p.cp || p.cp.length < 2)) miss.push('Département (via CP)');
+    if (miss.length > 0) {
+      c.innerHTML = '<div class="v2-error">⚠ Champs manquants pour analyser : <strong>' + miss.join(', ') + '</strong>. Retourne à la page 1 pour les renseigner.</div>';
+      return;
+    }
+    if (!p.dept && p.cp) p.dept = p.cp.substring(0, 2);
     c.innerHTML = '<div class="v2-loading">Génération des questions intelligentes…</div>';
     try {
-      var p = this.state.profil;
       var body = {
         siret: p.siret, naf: p.ape, surface: p.surface,
-        energie: '', departement: p.dept, dpe: p.dpe_classe,
+        energie: p.energie || '', departement: p.dept, dpe: p.dpe_classe,
         annee_construction: p.annee_construction,
       };
       var r = await this._fetch('/expert', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
