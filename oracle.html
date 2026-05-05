@@ -14238,6 +14238,49 @@ window.V2 = {
     document.getElementById('v2p1result').style.display = 'block';
   },
 
+  // V37.4.3 — Sync V2.state vers STATE V1 + selectedFiches Map.
+  // Permet à P5 (getGlobalCalc) et P6 (exportPDF) d'utiliser les calculs V1
+  // exactement (zone, energyType, factureChauff, FICHES catalogue, _estimateQtyFromEngine).
+  _syncToV1State() {
+    if (typeof STATE === 'undefined' || typeof FICHES === 'undefined') {
+      console.warn('[V2._syncToV1State] STATE/FICHES V1 non disponibles');
+      return false;
+    }
+    var p = this.state.profil; var a = this.state.answers || {};
+    if (!p) return false;
+    STATE.diagnostic = STATE.diagnostic || {};
+    STATE.diagnostic.siret = p.siret || '';
+    STATE.diagnostic.raisonSociale = p.raisonSociale || '';
+    STATE.diagnostic.ape = p.ape || '';
+    STATE.diagnostic.adresse = p.adresse || '';
+    STATE.diagnostic.cp = p.cp || '';
+    STATE.diagnostic.ville = p.ville || '';
+    STATE.diagnostic.surface = Number(p.surface) || 0;
+    STATE.diagnostic.zone = p.zone || 'H2';
+    STATE.diagnostic.energyType = a.energie || '';
+    STATE.diagnostic.factureChauff = Number(a.facture_chauffage) || 0;
+    STATE.diagnostic.dpe = p.dpe_classe || '';
+    STATE.diagnostic.anneeBat = p.annee_construction || null;
+    // selectedFiches : reconstruit depuis pack ∩ selected, format V1 attendu par getGlobalCalc
+    STATE.selectedFiches = STATE.selectedFiches || new Map();
+    STATE.selectedFiches.clear();
+    var found = 0, missing = 0;
+    (this.state.pack || []).forEach(packItem => {
+      var ref = packItem.fiche || packItem.ref;
+      if (!this.state.selected.has(ref)) return;
+      var fiche = FICHES.find(f => f.ref === ref);
+      if (!fiche) { missing++; return; }
+      var qty = 1;
+      if (typeof _estimateQtyFromEngine === 'function') {
+        try { qty = _estimateQtyFromEngine(packItem, p.surface) || 1; } catch(e) {}
+      }
+      STATE.selectedFiches.set(ref, {fiche: fiche, qty: qty});
+      found++;
+    });
+    console.log('[V2._syncToV1State] sync OK — ' + found + ' fiches V1 mappées, ' + missing + ' refs V2 introuvables dans FICHES catalogue');
+    return true;
+  },
+
   _updateP1Validity() {
     var p = this.state.profil; if (!p) return;
     var mandatory = ['raisonSociale', 'siret', 'ape', 'surface', 'zone'];
@@ -14544,60 +14587,114 @@ window.V2 = {
   // P5 — ÉCONOMIES
   // ═══════════════════════════════════════════════════════════════════
   renderP5() {
-    var k = this.state.kpi || {prime_totale: 0, nb_selected: 0};
-    var p = this.state.profil || {};
-    // Cumac total des fiches sélectionnées
-    var cumacTotal = 0;
-    (this.state.pack || []).forEach(f => {
-      var ref = f.fiche || f.ref;
-      if (this.state.selected.has(ref)) cumacTotal += (f.kwh_cumac || 0);
+    // V37.4.3 — utilise getGlobalCalc() V1 (mêmes calculs que step 4 V1)
+    var c = document.getElementById('v2p5content');
+    if (!this._syncToV1State()) { c.innerHTML = '<div class="v2-error">Calculs V1 indisponibles. Vérifie P1+P2+P4 d\'abord.</div>'; return; }
+    if (typeof window.getGlobalCalc !== 'function') { c.innerHTML = '<div class="v2-error">getGlobalCalc V1 introuvable.</div>'; return; }
+    var gc;
+    try { gc = window.getGlobalCalc(); }
+    catch (e) { c.innerHTML = '<div class="v2-error">Erreur calcul V1 : ' + e.message + '</div>'; return; }
+    if (!gc.details || gc.details.length === 0) {
+      c.innerHTML = '<div class="v2-error">Aucune fiche valide trouvée dans le catalogue V1. Vérifie la sélection P4 — certaines refs backend peuvent ne pas exister dans FICHES catalogue inline.</div>';
+      return;
+    }
+
+    var p = this.state.profil; var a = this.state.answers || {};
+    var fc = Number(a.facture_chauffage) || 0;
+    var fe = Number(a.facture_elec) || 0;
+    var eType = a.energie || '';
+    var chauffElec = ['electricite','electrique','elec'].includes(eType);
+    var factureAnnuelle = fc + fe;
+
+    // Économie annuelle V1 — calcul par catégorie de fiche (même formule que exportPDF V1)
+    var ecoAn = 0;
+    gc.details.forEach(function(d){
+      var cat = d.fiche.cat;
+      if (['Thermique','Enveloppe','Isolation','Régulation','Ventilation'].includes(cat)) {
+        ecoAn += chauffElec && fe > 0 ? fe*0.40*0.15 : (fc>0 ? fc*0.15 : 0);
+      } else {
+        ecoAn += fe > 0 ? fe*0.08 : 0;
+      }
     });
-    // 3 scénarios financiers : optimiste / réaliste / pessimiste
-    var scenarios = [
-      {nom: 'Optimiste', pctCouv: 0.85, ecoPct: 0.25, color: '#C8FF6B'},
-      {nom: 'Réaliste', pctCouv: 0.60, ecoPct: 0.18, color: '#58a6ff'},
-      {nom: 'Pessimiste', pctCouv: 0.40, ecoPct: 0.10, color: '#ff7b72'},
-    ];
+    if (factureAnnuelle > 0) ecoAn = Math.min(ecoAn, factureAnnuelle*0.80);
+    var rac = gc.totalRac;
+    // Projections V1 : gain N ans = primes + ecoAn × N - rac
+    var gain5 = gc.totalPrimeBrute - rac + (ecoAn * 5);
+    var gain10 = gc.totalPrimeBrute - rac + (ecoAn * 10);
+    var gain15 = gc.totalPrimeBrute - rac + (ecoAn * 15);
+    var roiMois = (rac > 0 && ecoAn > 0) ? Math.round(rac / (ecoAn / 12)) : 0;
+
     var html = '';
-    // KPI principaux
+    // KPI principaux (vrais nombres V1)
     html += '<div class="v2-kpi-grid">';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime totale brute</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + (k.nb_selected || 0) + '</div><div class="v2-kpi-label">Fiches retenues</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (cumacTotal / 1000).toFixed(0) + ' k</div><div class="v2-kpi-label">kWh cumac</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (p.surface || '?') + '</div><div class="v2-kpi-label">m² bâtiment</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime brute (V1)</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (gc.totalKwhc/1000).toFixed(0) + ' k</div><div class="v2-kpi-label">kWh cumac</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(gc.totalCostTTC).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Coût travaux TTC</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:' + gc.globalCovLevel.color + ';">' + gc.totalCoverage.toFixed(0) + '%</div><div class="v2-kpi-label">Couverture · ' + gc.globalCovLevel.label.replace(/[🚀✓◐◔✗]\s*/g,'') + '</div></div>';
     html += '</div>';
 
-    // 3 scénarios financiers
-    html += '<div class="v2-card"><div class="v2-card-title">📈 Scénarios financiers — coût travaux estimé selon couverture prime</div>';
+    // Verdict ROI
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
+    html += '<div class="v2-card-title">⏱️ Verdict ROI</div>';
+    if (rac <= 0) {
+      html += '<div style="font-size:18px;font-weight:600;color:#C8FF6B;">✅ Projet entièrement financé (RAC = 0 €)</div>';
+    } else if (roiMois > 0 && roiMois <= 36) {
+      html += '<div style="font-size:18px;font-weight:600;color:#C8FF6B;">🚀 Projet très rentable — ROI ' + roiMois + ' mois (' + (roiMois/12).toFixed(1) + ' ans)</div>';
+    } else if (roiMois > 0) {
+      html += '<div style="font-size:16px;font-weight:600;color:#58a6ff;">📊 ROI ' + roiMois + ' mois (' + (roiMois/12).toFixed(1) + ' ans) — projet à étudier</div>';
+    } else {
+      html += '<div style="font-size:14px;color:rgba(245,245,247,.7);">💡 Renseigne ta facture chauffage en P2 pour calculer le ROI</div>';
+    }
+    html += '</div>';
+
+    // Projection 5/10/15 ans (formule V1)
+    html += '<div class="v2-card"><div class="v2-card-title">📈 Projection financière 5 / 10 / 15 ans</div>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
-    html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,.12);text-align:left;color:rgba(245,245,247,.5);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">';
-    html += '<th style="padding:10px 8px;">Scénario</th><th style="padding:10px 8px;text-align:right;">Couverture prime</th><th style="padding:10px 8px;text-align:right;">Coût travaux</th><th style="padding:10px 8px;text-align:right;">Reste à charge</th><th style="padding:10px 8px;text-align:right;">Économie /an</th><th style="padding:10px 8px;text-align:right;">Payback</th>';
+    html += '<tbody>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Prime brute</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</td></tr>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Coût travaux TTC</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(gc.totalCostTTC).toLocaleString('fr-FR') + ' €</td></tr>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Reste à charge</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;' + (rac<=0?'color:#C8FF6B;':'') + '">' + (rac<=0 ? '0 € (financé)' : Math.round(rac).toLocaleString('fr-FR') + ' €') + '</td></tr>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Économie annuelle estimée</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + (ecoAn>0 ? '+' + Math.round(ecoAn).toLocaleString('fr-FR') + ' €/an' : '— renseigner facture') + '</td></tr>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;font-weight:600;">Gain cumulé 5 ans</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:600;color:' + (gain5>0?'#C8FF6B':'#ff7b72') + ';">' + (gain5>0?'+':'') + Math.round(gain5).toLocaleString('fr-FR') + ' €</td></tr>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;font-weight:600;">Gain cumulé 10 ans</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:600;color:' + (gain10>0?'#C8FF6B':'#ff7b72') + ';">' + (gain10>0?'+':'') + Math.round(gain10).toLocaleString('fr-FR') + ' €</td></tr>';
+    html += '<tr><td style="padding:10px 8px;font-weight:600;">Gain cumulé 15 ans</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:600;color:' + (gain15>0?'#C8FF6B':'#ff7b72') + ';">' + (gain15>0?'+':'') + Math.round(gain15).toLocaleString('fr-FR') + ' €</td></tr>';
+    html += '</tbody></table></div>';
+
+    // Détail par opération (vraies données V1)
+    html += '<div class="v2-card"><div class="v2-card-title">📋 Détail des ' + gc.details.length + ' opérations sélectionnées</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,.12);text-align:left;color:rgba(245,245,247,.5);font-size:10px;text-transform:uppercase;letter-spacing:.05em;">';
+    html += '<th style="padding:8px;">Réf</th><th style="padding:8px;">Opération</th><th style="padding:8px;text-align:right;">Quantité</th><th style="padding:8px;text-align:right;">Prime</th><th style="padding:8px;text-align:right;">Coût TTC</th><th style="padding:8px;text-align:right;">Couv.</th>';
     html += '</tr></thead><tbody>';
-    scenarios.forEach(s => {
-      var cout = k.prime_totale / Math.max(s.pctCouv, 0.01);
-      var rac = cout - k.prime_totale;
-      var ecoAn = k.prime_totale * s.ecoPct;
-      var payback = ecoAn > 0 ? (rac / ecoAn) : 0;
+    gc.details.forEach(d => {
+      var cov = d.calc.coverage; var covColor = cov>=100?'#C8FF6B':(cov>=70?'#58a6ff':(cov>=40?'#d29922':'#ff7b72'));
       html += '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">';
-      html += '<td style="padding:12px 8px;font-weight:600;color:' + s.color + ';">' + s.nom + '</td>';
-      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(s.pctCouv * 100) + ' %</td>';
-      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(cout).toLocaleString('fr-FR') + ' €</td>';
-      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(Math.max(rac,0)).toLocaleString('fr-FR') + ' €</td>';
-      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(ecoAn).toLocaleString('fr-FR') + ' €</td>';
-      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + (payback > 0 ? payback.toFixed(1) + ' ans' : 'instant') + '</td>';
+      html += '<td style="padding:10px 8px;font-family:JetBrains Mono,monospace;color:#58a6ff;font-weight:600;">' + d.fiche.ref + '</td>';
+      html += '<td style="padding:10px 8px;">' + (d.fiche.label || '').slice(0, 50) + '</td>';
+      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + d.qty + ' ' + (d.fiche.unit || '') + '</td>';
+      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(d.calc.primeBrute).toLocaleString('fr-FR') + ' €</td>';
+      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(d.calc.costTTC).toLocaleString('fr-FR') + ' €</td>';
+      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:600;color:' + covColor + ';">' + cov.toFixed(0) + '%</td>';
       html += '</tr>';
     });
-    html += '</tbody></table>';
-    html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:14px;line-height:1.6;">Hypothèses : couverture prime estimée selon contexte marché tertiaire/industriel · économies annuelles calculées sur facture chauffage moyenne · payback = (reste à charge / économie annuelle).</div>';
+    html += '</tbody></table></div>';
+
+    // Détail commercial 0%
+    html += '<div class="v2-card"><div class="v2-card-title">💼 Détail commercial — Tiers de confiance 0% commission</div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Prime brute (obligé)</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Commission CEE Engine</div><div class="v2-field-value mono">0 % par défaut</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Prime nette bénéficiaire</div><div class="v2-field-value mono" style="color:#C8FF6B;font-size:16px;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:10px;">Effy/Hellio/Drapo : 10–20 % de commission. CEE Engine = la prime intégrale au client.</div>';
     html += '</div>';
 
-    // Détail prime nette vs commission Jimmy
-    html += '<div class="v2-card"><div class="v2-card-title">💼 Détail commercial</div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Prime brute (obligé)</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Commission CEE Engine</div><div class="v2-field-value mono">0 % (par défaut)</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Prime nette bénéficiaire</div><div class="v2-field-value mono" style="color:#C8FF6B;font-size:16px;">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div></div>';
-    html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:10px;">vs. Effy/Hellio/Drapo : 10–20 % de commission. CEE Engine = tiers de confiance, prime intégrale au client.</div>';
-    html += '</div>';
+    // Stocker dans state pour P6 PDF + lien partageable
+    this.state.kpi = {
+      prime_totale: gc.totalPrimeBrute, prime_nette: gc.totalPrimeNette,
+      cumac_total: gc.totalKwhc, cout_ttc: gc.totalCostTTC,
+      rac: rac, eco_an: ecoAn, roi_mois: roiMois,
+      gain_5: gain5, gain_10: gain10, gain_15: gain15,
+      nb_selected: gc.details.length, coverage: gc.totalCoverage,
+    };
 
     document.getElementById('v2p5content').innerHTML = html;
   },
@@ -14659,6 +14756,13 @@ window.V2 = {
   },
 
   exportPdf() {
+    // V37.4.3 — réutilise exportPDF V1 (PDF 5 pages avec autoTable, mêmes calculs que step 5 V1)
+    if (!this._syncToV1State()) { alert('Sync V1 échec — vérifier P1+P2+P4'); return; }
+    if (typeof window.exportPDF === 'function') {
+      try { window.exportPDF(); return; }
+      catch (e) { console.error('[V2.exportPdf] V1 exportPDF failed:', e); /* fallback ci-dessous */ }
+    }
+    // Fallback : PDF basique si V1 indisponible
     var Pdf = window.jsPDF || (window.jspdf && window.jspdf.jsPDF);
     if (!Pdf) { alert('jsPDF non chargé. Recharge la page (Cmd+Shift+R).'); return; }
     var doc = new Pdf({orientation: 'portrait', unit: 'mm', format: 'a4'});
@@ -14776,10 +14880,44 @@ window.V2 = {
       });
   },
 
-  openDoc(type) {
-    var p = this.state.profil; if (!p) return;
-    var url = '/documents/preremplir/' + p.siret + '?cible=client';
-    window.open(url, '_blank');
+  async openDoc(type) {
+    // V37.4.3 — utilise /documents/pack pour générer les VRAIS HTML docs (pas juste preremplir)
+    var p = this.state.profil; if (!p) { alert('Identifie d\'abord en P1'); return; }
+    var a = this.state.answers || {};
+    if (!this._syncToV1State()) { alert('Sync V1 échec'); return; }
+    // Construit le payload /documents/pack avec contexte complet
+    var firstFiche = (this.state.pack || []).find(f => this.state.selected.has(f.fiche || f.ref));
+    var ficheRef = firstFiche ? (firstFiche.fiche || firstFiche.ref) : 'BAT-EN-103';
+    var body = {
+      client: {
+        raison_sociale: p.raisonSociale, siret: p.siret,
+        adresse: p.adresse, cp: p.cp, ville: p.ville,
+        naf_ape: p.ape,
+      },
+      operation: {
+        fiche: ficheRef, surface_m2: p.surface,
+        nom_chantier: p.raisonSociale + ' — ' + ficheRef,
+        adresse_chantier: p.adresse, cp_chantier: p.cp, ville_chantier: p.ville,
+        zone: p.zone,
+      },
+      emetteur: {}, dispositif: {}, admin: {},
+    };
+    try {
+      var r = await this._fetch('/documents/pack', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      var docs = d.documents || d;
+      var key = type + '_html';
+      var html = docs[key];
+      if (!html) { alert('Document "' + type + '" non disponible (clés dispo : ' + Object.keys(docs).join(', ') + ')'); return; }
+      var w = window.open('', '_blank');
+      if (!w) { alert('Pop-up bloqué — autorise les pop-ups pour ce site.'); return; }
+      w.document.write(html);
+      w.document.close();
+    } catch (e) {
+      if (e.code === 401) { alert('Connexion requise pour générer les documents. Mode V1 → login.'); }
+      else alert('Erreur génération document : ' + e.message);
+    }
   },
 
   flash(elId, msg, type) {
