@@ -14298,33 +14298,109 @@ window.V2 = {
   },
 
   _drawP2() {
-    var q = this.state.questions || {};
+    var q = this.state.questions || {}; var p = this.state.profil || {}; var a = this.state.answers;
     var html = '';
+
+    // Section A — Caractéristiques du site (énergie, facture, coup de pouce)
+    html += '<div class="v2-card"><div class="v2-card-title">⚡ Caractéristiques énergétiques du site</div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Énergie principale de chauffage</div><div>';
+    var energies = ['gaz','fioul','electrique','reseau_chaleur','bois','pac','autre'];
+    html += '<select class="v2-select" onchange="V2.state.profil.energie=this.value;V2.state.answers.energie=this.value">';
+    html += '<option value="">— choisir —</option>';
+    energies.forEach(e => { html += '<option value="' + e + '"' + (p.energie === e ? ' selected' : '') + '>' + e.replace('_',' ') + '</option>'; });
+    html += '</select></div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Facture chauffage annuelle (€)</div><div>';
+    html += '<input type="number" class="v2-input mono" value="' + (a.facture_chauffage || '') + '" placeholder="ex: 8000" oninput="V2.state.answers.facture_chauffage=Number(this.value)||0">';
+    html += '</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Coup de Pouce Chauffage P6 éligible ?</div><div>';
+    html += '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;">';
+    html += '<input type="checkbox"' + (a.coup_de_pouce ? ' checked' : '') + ' onchange="V2.state.answers.coup_de_pouce=this.checked" style="width:18px;height:18px;cursor:pointer;">';
+    html += '<span style="font-size:13px;color:rgba(245,245,247,.7);">Si remplacement chaudière fossile (gaz/fioul) → ×3 à ×5 sur la prime</span>';
+    html += '</label></div></div></div>';
+
+    // Section B — Bandeau infos déjà connues
     if (q.infos_deja_connues && q.infos_deja_connues.length) {
-      html += '<div class="v2-success">✓ ' + q.infos_deja_connues.length + ' infos déjà connues (page 1) : ' + q.infos_deja_connues.join(', ') + ' — pas re-demandées.</div>';
+      html += '<div class="v2-success">✓ ' + q.infos_deja_connues.length + ' infos déjà connues depuis P1 : ' + q.infos_deja_connues.join(', ') + ' — pas re-demandées.</div>';
     }
+
+    // Section C — Questions globales backend
     if (q.globales && q.globales.length) {
       html += '<div class="v2-card"><div class="v2-card-title">🌐 Questions globales</div>';
       q.globales.forEach(qq => html += this._qHtml(qq));
       html += '</div>';
     }
-    if (q.par_theme) {
-      Object.keys(q.par_theme).forEach(theme => {
-        var emoji = {isolation:'🧱',chauffage:'🔥',ventilation:'🌬️',eclairage_froid:'💡',destratification:'🏗️',process:'⚙️'}[theme] || '📌';
-        html += '<div class="v2-card"><div class="v2-card-title">' + emoji + ' ' + theme.replace('_',' ').toUpperCase() + '</div>';
-        q.par_theme[theme].forEach(qq => html += this._qHtml(qq));
+
+    // Section D — Universal Questionnaire (6 thèmes V1 absorbés)
+    var sections = [
+      {key: 'toiture', emoji: '🏠', label: 'Toiture / Combles', questions: [
+        {id:'u_combles_isoles', q:'Combles ou toiture isolés ?', type:'bool'},
+        {id:'u_combles_epaisseur', q:'Épaisseur isolation toiture (cm)', type:'select', opts:['0','< 5','5-10','10-20','> 20','ne sais pas']},
+        {id:'u_toiture_terrasse', q:'Toiture terrasse présente ?', type:'bool'},
+      ]},
+      {key: 'murs', emoji: '🧱', label: 'Murs extérieurs', questions: [
+        {id:'u_murs_isoles', q:'Murs extérieurs isolés ?', type:'select', opts:['ITE (extérieure)','ITI (intérieure)','partielle','aucune','ne sais pas']},
+      ]},
+      {key: 'chauffage', emoji: '🔥', label: 'Chauffage', questions: [
+        {id:'u_chaud_age', q:'Âge approximatif chaudière/PAC (ans)', type:'select', opts:['< 5','5-10','10-15','15-20','> 20','pas de chaudière']},
+        {id:'u_ecs', q:'Eau chaude sanitaire séparée ?', type:'bool'},
+        {id:'u_robinets_therm', q:'Robinets thermostatiques sur tous les radiateurs ?', type:'bool'},
+      ]},
+      {key: 'ventilation', emoji: '🌬️', label: 'Ventilation', questions: [
+        {id:'u_vmc', q:'VMC installée ?', type:'select', opts:['simple flux','double flux','aucune','ne sais pas']},
+      ]},
+      {key: 'eclairage', emoji: '💡', label: 'Éclairage', questions: [
+        {id:'u_led', q:'Éclairage LED ?', type:'select', opts:['100 % LED','partiel (≥ 50 %)','en cours','aucun (néon/halogène)']},
+      ]},
+    ];
+    // Process visible uniquement si NAF industriel
+    var ape = (p.ape || '').replace('.', '');
+    var apeNum = parseInt(ape.substring(0, 2)) || 0;
+    if (apeNum >= 5 && apeNum <= 33) {
+      sections.push({key: 'process', emoji: '⚙️', label: 'Process industriel', questions: [
+        {id:'u_compresseur', q:'Compresseur d\'air installé ?', type:'bool'},
+        {id:'u_moteurs_vsd', q:'Moteurs équipés de variateurs de vitesse ?', type:'bool'},
+      ]});
+    }
+    sections.forEach(s => {
+      html += '<div class="v2-card"><div class="v2-card-title">' + s.emoji + ' ' + s.label + '</div>';
+      s.questions.forEach(qq => {
+        var val = a[qq.id];
+        html += '<div class="v2-question"><div class="v2-q-text">' + qq.q + '</div>';
+        if (qq.type === 'bool') {
+          var yes = val === true ? ' active' : ''; var no = val === false ? ' active' : '';
+          html += '<div class="v2-q-options">';
+          html += '<button class="v2-q-opt' + yes + '" onclick="V2.state.answers[\'' + qq.id + '\']=true;V2._drawP2()">Oui</button>';
+          html += '<button class="v2-q-opt' + no + '" onclick="V2.state.answers[\'' + qq.id + '\']=false;V2._drawP2()">Non</button>';
+          html += '</div>';
+        } else if (qq.type === 'select') {
+          html += '<div class="v2-q-options">';
+          qq.opts.forEach(o => { var active = val === o ? ' active' : ''; html += '<button class="v2-q-opt' + active + '" onclick="V2.state.answers[\'' + qq.id + '\']=\'' + o.replace(/'/g,"\\'") + '\';V2._drawP2()">' + o + '</button>'; });
+          html += '</div>';
+        }
         html += '</div>';
       });
+      html += '</div>';
+    });
+
+    // Section E — Questions backend regroupées par thème (dédup avec sections au-dessus)
+    if (q.par_theme && Object.keys(q.par_theme).length) {
+      html += '<div class="v2-card"><div class="v2-card-title">🎯 Questions ciblées par fiche éligible</div>';
+      Object.keys(q.par_theme).forEach(theme => {
+        if (['toiture','murs','chauffage','ventilation','eclairage','process','isolation','eclairage_froid'].includes(theme)) return; // skip si dupliqué avec sections universelles
+        q.par_theme[theme].forEach(qq => html += this._qHtml(qq));
+      });
+      html += '</div>';
     }
-    if (!html) html = '<div class="v2-success">✓ Toutes les infos nécessaires sont déjà connues. Passe directement à l\'IA.</div>';
+
     document.getElementById('v2p2content').innerHTML = html;
   },
 
   _qHtml(qq) {
     var id = qq.id || ('q_' + Math.random().toString(36).slice(2,8));
+    var val = this.state.answers[id] || '';
     return '<div class="v2-question"><div class="v2-q-text">' + (qq.question || qq.label || '?') + '</div>'
          + (qq.impact ? '<div class="v2-q-impact">' + qq.impact + '</div>' : '')
-         + '<input type="text" class="v2-input" placeholder="Ta réponse" oninput="V2.state.answers[\'' + id + '\']=this.value">'
+         + '<input type="text" class="v2-input" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="Ta réponse" oninput="V2.state.answers[\'' + id + '\']=this.value">'
          + '</div>';
   },
 
@@ -14335,24 +14411,41 @@ window.V2 = {
     var c = document.getElementById('v2p3content');
     if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord une entreprise.</div>'; return; }
     if (this.state.iaInsights) { this._drawP3(); return; }
-    if (!this._checkAuth()) { c.innerHTML = this._authModal('La page Analyser IA appelle /ai/claude qui requiert une session'); return; }
-    c.innerHTML = '<div class="v2-loading">Claude en analyse… (~15-30 sec)</div>';
-    var p = this.state.profil;
-    var prompt = 'Profil entreprise : ' + p.raisonSociale + ' (NAF ' + p.ape + '), surface ' + p.surface + 'm², zone climatique ' + p.zone + ', DPE ' + p.dpe_classe + ', année construction ' + p.annee_construction + '. Identifie 3 opportunités CEE prioritaires (avec ref fiche), leurs prérequis techniques, et l\'ordre d\'enchaînement optimal. Réponds en français, format clair.';
-    try {
-      var r = await this._fetch('/ai/claude', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Requested-With':'XMLHttpRequest'}, body: JSON.stringify({messages: [{role:'user', content: prompt}]})});
-      var d = await r.json();
-      var content = (d.content && d.content[0] && d.content[0].text) || d.text || d.message || JSON.stringify(d);
-      this.state.iaInsights = content;
-      this._drawP3();
-    } catch (e) {
-      if (e.code === 401) c.innerHTML = this._authModal('/ai/claude requiert connexion');
-      else c.innerHTML = '<div class="v2-card"><div class="v2-card-title">🤖 IA</div><div class="v2-error">IA indisponible : ' + e.message + '. Tu peux passer directement à la sélection des primes (P4).</div></div>';
-    }
+    if (!this._checkAuth()) { c.innerHTML = this._authModal('La page Analyser IA appelle /ai/* qui requiert une session'); return; }
+    var p = this.state.profil; var a = this.state.answers || {};
+    var prompt = 'Tu es expert CEE. Profil : ' + (p.raisonSociale||'?') + ' (NAF ' + (p.ape||'?') + '), ' + (p.surface||'?') + ' m², zone ' + (p.zone||'?') + ', DPE ' + (p.dpe_classe||'?') + ', construit en ' + (p.annee_construction||'?') + ', énergie ' + (a.energie||'?') + '. Réponds en français, max 200 mots : 3 opportunités CEE prioritaires (avec ref fiche BAT-/BAR-/IND-), prime estimée, prérequis terrain.';
+    var msg = JSON.stringify({messages: [{role:'user', content: prompt}]});
+    var headers = {'Content-Type':'application/json', 'X-Requested-With':'XMLHttpRequest'};
+    c.innerHTML = '<div class="v2-loading">Penta-IA Conseil 5×3 en parallèle (Claude · GPT · Gemini · Groq · Kimi)… (~30 sec)</div>';
+    var endpoints = [
+      {name:'Claude (Anthropic)', url:'/ai/claude', extract: d => (d.content && d.content[0] && d.content[0].text) || d.text || ''},
+      {name:'GPT-4 (OpenAI)', url:'/ai/openai', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+      {name:'Gemini (Google)', url:'/ai/gemini', extract: d => (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] && d.candidates[0].content.parts[0].text) || d.text || ''},
+      {name:'Llama 3.3 (Groq)', url:'/ai/groq', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+      {name:'Kimi (Moonshot)', url:'/ai/kimi', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+    ];
+    var promises = endpoints.map(ep =>
+      this._fetch(ep.url, {method:'POST', headers: headers, body: msg})
+        .then(r => r.json())
+        .then(d => ({name: ep.name, ok: true, content: ep.extract(d) || JSON.stringify(d).slice(0,300)}))
+        .catch(e => ({name: ep.name, ok: false, error: e.message || String(e)}))
+    );
+    this.state.iaInsights = await Promise.all(promises);
+    this._drawP3();
   },
 
   _drawP3() {
-    document.getElementById('v2p3content').innerHTML = '<div class="v2-card"><div class="v2-card-title">🤖 Insights Penta-IA</div><div style="white-space:pre-wrap;line-height:1.6;font-size:14px;">' + (this.state.iaInsights || 'Pas de données') + '</div></div>';
+    var results = this.state.iaInsights || [];
+    if (typeof results === 'string') results = [{name:'Claude', ok:true, content: results}];
+    var ok = results.filter(r => r.ok && r.content && r.content.length > 20);
+    var ko = results.filter(r => !r.ok || !r.content || r.content.length <= 20);
+    var html = '<div class="v2-success">✓ ' + ok.length + ' / ' + results.length + ' IA ont répondu' + (ko.length ? ' (' + ko.length + ' indispo : ' + ko.map(r=>r.name.split(' ')[0]).join(', ') + ' — vérifier clés API)' : '') + '</div>';
+    ok.forEach(r => {
+      html += '<div class="v2-card"><div class="v2-card-title">🤖 ' + r.name + '</div>';
+      html += '<div style="white-space:pre-wrap;line-height:1.6;font-size:13px;color:rgba(245,245,247,.85);">' + (r.content || '').replace(/</g,'&lt;') + '</div></div>';
+    });
+    if (ok.length === 0) html += '<div class="v2-error">Aucune IA disponible. Vérifie les clés API côté admin.</div>';
+    document.getElementById('v2p3content').innerHTML = html;
   },
 
   // ═══════════════════════════════════════════════════════════════════
@@ -14360,22 +14453,74 @@ window.V2 = {
   // ═══════════════════════════════════════════════════════════════════
   renderP4() {
     var c = document.getElementById('v2p4content');
-    if (!this.state.pack.length) { c.innerHTML = '<div class="v2-error">Aucune fiche éligible. Vérifie page 1+2.</div>'; return; }
+    if (!this.state.pack.length) {
+      c.innerHTML = '<div class="v2-error">Aucune fiche éligible — fais d\'abord P1 (identifier) + P2 (affiner) pour calculer le pack.</div>';
+      return;
+    }
     var sorted = this.state.pack.slice().sort((a,b) => (b.prime_obligé_eur || b.prime_eur || 0) - (a.prime_obligé_eur || a.prime_eur || 0));
-    var html = '<div id="v2p4Total" class="v2-success">Total sélectionné : <span id="v2p4TotalNum" style="font-family:JetBrains Mono;font-weight:600;">0 €</span></div>';
-    sorted.forEach(f => {
+    // Auto-cocher tout par défaut au 1er passage
+    if (this.state.selected.size === 0 && !this.state._p4Init) {
+      sorted.forEach(f => this.state.selected.add(f.fiche || f.ref));
+      this.state._p4Init = true;
+    }
+
+    var html = '';
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.6);text-transform:uppercase;letter-spacing:.05em;">Total sélectionné</div>';
+    html += '<div id="v2p4TotalNum" style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:42px;color:#C8FF6B;letter-spacing:-.04em;">0 €</div></div>';
+    html += '<div style="display:flex;gap:8px;">';
+    html += '<button class="v2-btn" onclick="V2.selectAll(true)">Tout cocher</button>';
+    html += '<button class="v2-btn" onclick="V2.selectAll(false)">Tout décocher</button>';
+    html += '</div></div></div>';
+
+    // Filtres par secteur
+    var secteurs = Array.from(new Set(sorted.map(f => (f.fiche || f.ref || '').substring(0,3)).filter(Boolean)));
+    if (secteurs.length > 1) {
+      html += '<div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">';
+      html += '<button class="v2-q-opt' + (!this.state._p4Filter ? ' active' : '') + '" onclick="V2._p4SetFilter(null)">Tous (' + sorted.length + ')</button>';
+      secteurs.forEach(s => {
+        var n = sorted.filter(f => (f.fiche || f.ref || '').startsWith(s)).length;
+        html += '<button class="v2-q-opt' + (this.state._p4Filter === s ? ' active' : '') + '" onclick="V2._p4SetFilter(\'' + s + '\')">' + s + ' (' + n + ')</button>';
+      });
+      html += '</div>';
+    }
+
+    var visible = this.state._p4Filter ? sorted.filter(f => (f.fiche || f.ref || '').startsWith(this.state._p4Filter)) : sorted;
+    visible.forEach(f => {
       var ref = f.fiche || f.ref || '?';
       var prime = Math.round(f.prime_obligé_eur || f.prime_eur || 0);
+      var cumac = Math.round(f.kwh_cumac || 0);
+      var nom = f.nom || f.label || ref;
+      var conditions = (f.conditions_texte || []).slice(0, 2).join(' · ');
       var sel = this.state.selected.has(ref);
       html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')">';
       html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
-      html += '<div class="v2-fiche-ref">' + ref + '</div>';
-      html += '<div class="v2-fiche-title">' + (f.nom || f.label || '') + '</div>';
-      html += '<div class="v2-fiche-prime">' + prime.toLocaleString('fr-FR') + ' €</div>';
+      html += '<div style="flex:1;">';
+      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">';
+      html += '<span class="v2-fiche-ref">' + ref + '</span>';
+      html += '<span style="font-size:14px;font-weight:500;flex:1;">' + nom + '</span>';
+      html += '<span class="v2-fiche-prime">' + prime.toLocaleString('fr-FR') + ' €</span>';
       html += '</div>';
+      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
+      if (cumac) html += cumac.toLocaleString('fr-FR') + ' kWhc · ';
+      html += 'source : ADEME PNCEE';
+      if (conditions) html += ' · ' + conditions.slice(0, 80);
+      html += '</div></div></div>';
     });
     c.innerHTML = html;
     this._updateTotal();
+  },
+
+  selectAll(state) {
+    if (state) (this.state.pack || []).forEach(f => this.state.selected.add(f.fiche || f.ref));
+    else this.state.selected.clear();
+    this.renderP4();
+  },
+
+  _p4SetFilter(s) {
+    this.state._p4Filter = s;
+    this.renderP4();
   },
 
   toggleFiche(ref) {
@@ -14400,21 +14545,60 @@ window.V2 = {
   // ═══════════════════════════════════════════════════════════════════
   renderP5() {
     var k = this.state.kpi || {prime_totale: 0, nb_selected: 0};
-    // ROI estimé : prime / 0.6 (les CEE couvrent ~60% des coûts en moyenne) → coût total
-    var coutEstime = k.prime_totale / 0.6;
-    var economieAn = k.prime_totale * 0.18;  // 18%/an estimation conservative
-    var payback = economieAn > 0 ? (coutEstime / economieAn) : 0;
-    var html = '<div class="v2-kpi-grid">';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime totale</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + k.nb_selected + '</div><div class="v2-kpi-label">Fiches retenues</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(economieAn).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Économie estimée /an</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + payback.toFixed(1) + ' ans</div><div class="v2-kpi-label">Payback estimé</div></div>';
+    var p = this.state.profil || {};
+    // Cumac total des fiches sélectionnées
+    var cumacTotal = 0;
+    (this.state.pack || []).forEach(f => {
+      var ref = f.fiche || f.ref;
+      if (this.state.selected.has(ref)) cumacTotal += (f.kwh_cumac || 0);
+    });
+    // 3 scénarios financiers : optimiste / réaliste / pessimiste
+    var scenarios = [
+      {nom: 'Optimiste', pctCouv: 0.85, ecoPct: 0.25, color: '#C8FF6B'},
+      {nom: 'Réaliste', pctCouv: 0.60, ecoPct: 0.18, color: '#58a6ff'},
+      {nom: 'Pessimiste', pctCouv: 0.40, ecoPct: 0.10, color: '#ff7b72'},
+    ];
+    var html = '';
+    // KPI principaux
+    html += '<div class="v2-kpi-grid">';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime totale brute</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + (k.nb_selected || 0) + '</div><div class="v2-kpi-label">Fiches retenues</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (cumacTotal / 1000).toFixed(0) + ' k</div><div class="v2-kpi-label">kWh cumac</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (p.surface || '?') + '</div><div class="v2-kpi-label">m² bâtiment</div></div>';
     html += '</div>';
-    html += '<div class="v2-card"><div class="v2-card-title">📊 Détail</div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Coût total estimé</div><div class="v2-field-value mono">' + Math.round(coutEstime).toLocaleString('fr-FR') + ' €</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Reste à charge</div><div class="v2-field-value mono">' + Math.round(coutEstime - k.prime_totale).toLocaleString('fr-FR') + ' €</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Couverture prime</div><div class="v2-field-value mono">' + Math.round(100 * k.prime_totale / Math.max(coutEstime, 1)) + '%</div></div>';
+
+    // 3 scénarios financiers
+    html += '<div class="v2-card"><div class="v2-card-title">📈 Scénarios financiers — coût travaux estimé selon couverture prime</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+    html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,.12);text-align:left;color:rgba(245,245,247,.5);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">';
+    html += '<th style="padding:10px 8px;">Scénario</th><th style="padding:10px 8px;text-align:right;">Couverture prime</th><th style="padding:10px 8px;text-align:right;">Coût travaux</th><th style="padding:10px 8px;text-align:right;">Reste à charge</th><th style="padding:10px 8px;text-align:right;">Économie /an</th><th style="padding:10px 8px;text-align:right;">Payback</th>';
+    html += '</tr></thead><tbody>';
+    scenarios.forEach(s => {
+      var cout = k.prime_totale / Math.max(s.pctCouv, 0.01);
+      var rac = cout - k.prime_totale;
+      var ecoAn = k.prime_totale * s.ecoPct;
+      var payback = ecoAn > 0 ? (rac / ecoAn) : 0;
+      html += '<tr style="border-bottom:1px solid rgba(255,255,255,.04);">';
+      html += '<td style="padding:12px 8px;font-weight:600;color:' + s.color + ';">' + s.nom + '</td>';
+      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(s.pctCouv * 100) + ' %</td>';
+      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(cout).toLocaleString('fr-FR') + ' €</td>';
+      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(Math.max(rac,0)).toLocaleString('fr-FR') + ' €</td>';
+      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(ecoAn).toLocaleString('fr-FR') + ' €</td>';
+      html += '<td style="padding:12px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + (payback > 0 ? payback.toFixed(1) + ' ans' : 'instant') + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:14px;line-height:1.6;">Hypothèses : couverture prime estimée selon contexte marché tertiaire/industriel · économies annuelles calculées sur facture chauffage moyenne · payback = (reste à charge / économie annuelle).</div>';
     html += '</div>';
+
+    // Détail prime nette vs commission Jimmy
+    html += '<div class="v2-card"><div class="v2-card-title">💼 Détail commercial</div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Prime brute (obligé)</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Commission CEE Engine</div><div class="v2-field-value mono">0 % (par défaut)</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Prime nette bénéficiaire</div><div class="v2-field-value mono" style="color:#C8FF6B;font-size:16px;">' + Math.round(k.prime_totale).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:10px;">vs. Effy/Hellio/Drapo : 10–20 % de commission. CEE Engine = tiers de confiance, prime intégrale au client.</div>';
+    html += '</div>';
+
     document.getElementById('v2p5content').innerHTML = html;
   },
 
@@ -14422,39 +14606,174 @@ window.V2 = {
   // P6 — RAPPORT
   // ═══════════════════════════════════════════════════════════════════
   renderP6() {
-    var p = this.state.profil || {};
-    var k = this.state.kpi || {};
-    var html = '<div class="v2-card"><div class="v2-card-title">📄 Rapport prêt</div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Entreprise</div><div class="v2-field-value">' + (p.raisonSociale || '?') + '</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">SIRET</div><div class="v2-field-value mono">' + (p.siret || '?') + '</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Prime totale</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Fiches CEE retenues</div><div class="v2-field-value">' + (k.nb_selected || 0) + '</div></div>';
-    html += '</div>';
-    html += '<div class="v2-card"><div class="v2-card-title">📋 Documents CEE</div>';
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;">';
-    html += '<button class="v2-btn" onclick="V2.openDoc(\'mandat\')">📑 Mandat</button>';
-    html += '<button class="v2-btn" onclick="V2.openDoc(\'ah\')">✍️ Attestation honneur</button>';
-    html += '<button class="v2-btn" onclick="V2.openDoc(\'convention\')">📜 Convention</button>';
-    html += '<button class="v2-btn" onclick="V2.openDoc(\'devis\')">💰 Devis</button>';
+    var p = this.state.profil || {}; var k = this.state.kpi || {}; var a = this.state.answers || {};
+    // Récap exécutif
+    var html = '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
+    html += '<div class="v2-card-title">📊 Récap exécutif</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Bénéficiaire</div>';
+    html += '<div style="font-size:18px;font-weight:600;margin:4px 0 2px;">' + (p.raisonSociale || '?') + '</div>';
+    html += '<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:rgba(245,245,247,.6);">SIRET ' + (p.siret || '?') + ' · NAF ' + (p.ape || '?') + '</div></div>';
+    html += '<div style="text-align:right;"><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Prime totale CEE</div>';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:38px;color:#C8FF6B;letter-spacing:-.04em;line-height:1;margin-top:4px;">' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-top:4px;">' + (k.nb_selected || 0) + ' fiche' + ((k.nb_selected||0) > 1 ? 's' : '') + ' retenue' + ((k.nb_selected||0) > 1 ? 's' : '') + '</div></div>';
     html += '</div></div>';
+
+    // Sections du rapport
+    html += '<div class="v2-card"><div class="v2-card-title">📄 Contenu du rapport PDF (6 pages)</div>';
+    var sections = [
+      {n:'1', t:'Bilan général', s:'Profil entreprise + KPI prime/cumac/économies'},
+      {n:'2', t:'Détail des opérations CEE', s:'Pour chaque fiche : ref, conditions, calcul cumac, prime'},
+      {n:'3', t:'Équipements & coûts marché', s:'Estimation des coûts travaux par opération'},
+      {n:'4', t:'Comparatif financier', s:'3 scénarios pessimiste/réaliste/optimiste + ROI 5 ans'},
+      {n:'5', t:'Analyse IA Penta', s:'Synthèse des 5 IA consultées + opportunités prioritaires'},
+      {n:'6', t:'Suivi de dossier', s:'Étapes PNCEE, dates clés, conformité 12 erreurs G1T'},
+    ];
+    sections.forEach(s => {
+      html += '<div class="v2-field" style="grid-template-columns:50px 1fr;">';
+      html += '<div style="font-family:Fraunces,Georgia,serif;font-size:24px;font-weight:380;color:#58a6ff;letter-spacing:-.04em;">' + s.n + '</div>';
+      html += '<div><div style="font-weight:500;font-size:14px;margin-bottom:2px;">' + s.t + '</div>';
+      html += '<div style="font-size:12px;color:rgba(245,245,247,.55);">' + s.s + '</div></div></div>';
+    });
+    html += '</div>';
+
+    // Documents CEE pré-remplis
+    html += '<div class="v2-card"><div class="v2-card-title">📋 Documents CEE pré-remplis (à signer client)</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'gisement\')">📊 Rapport gisement</button>';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'devis\')">💰 Devis CEE</button>';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'convention\')">📜 Convention partenariat</button>';
+    html += '<button class="v2-btn" onclick="V2.openDoc(\'ah\')">✍️ Attestation honneur</button>';
+    html += '</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:14px;">Pré-remplissage automatique depuis SIRET + adresse + opérations sélectionnées. Reste à signer en encre bleue, recto seul, tampon à côté de la signature (12 erreurs PNCEE G1T respectées).</div>';
+    html += '</div>';
+
+    // Lien partageable
+    html += '<div class="v2-card"><div class="v2-card-title">🔗 Lien partageable client</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Génère une URL unique signée HMAC pour partager ce diagnostic au client (lecture seule, expire en 30 jours).</div>';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2.generateShareLink()">Générer le lien partageable</button>';
+    html += '<div id="v2p6shareLink" style="margin-top:14px;"></div>';
+    html += '</div>';
+
     document.getElementById('v2p6content').innerHTML = html;
   },
 
   exportPdf() {
-    if (typeof window.jsPDF !== 'undefined' || (window.jspdf && window.jspdf.jsPDF)) {
-      var Pdf = window.jsPDF || window.jspdf.jsPDF;
-      var doc = new Pdf();
-      var p = this.state.profil || {}; var k = this.state.kpi || {};
-      doc.setFontSize(20); doc.text('Rapport CEE — ' + (p.raisonSociale || '?'), 15, 25);
-      doc.setFontSize(10); doc.text('SIRET : ' + (p.siret || '?'), 15, 38);
-      doc.text('Adresse : ' + (p.adresse || '?') + ', ' + (p.cp || '') + ' ' + (p.ville || ''), 15, 46);
-      doc.text('NAF : ' + (p.ape || '?') + ' · Surface : ' + (p.surface || '?') + 'm² · Zone : ' + (p.zone || '?'), 15, 54);
-      doc.setFontSize(14); doc.text('Prime totale : ' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €', 15, 75);
-      doc.text(k.nb_selected + ' fiches CEE retenues', 15, 85);
-      doc.save('rapport_cee_' + (p.siret || 'export') + '.pdf');
-    } else {
-      alert('jsPDF non chargé — vérifier le script en haut du fichier.');
-    }
+    var Pdf = window.jsPDF || (window.jspdf && window.jspdf.jsPDF);
+    if (!Pdf) { alert('jsPDF non chargé. Recharge la page (Cmd+Shift+R).'); return; }
+    var doc = new Pdf({orientation: 'portrait', unit: 'mm', format: 'a4'});
+    var p = this.state.profil || {}; var k = this.state.kpi || {}; var a = this.state.answers || {};
+    var ia = this.state.iaInsights || []; if (typeof ia === 'string') ia = [{name:'Claude', ok:true, content:ia}];
+
+    // Page 1 — Bilan général
+    doc.setFontSize(22); doc.setTextColor(33,38,45);
+    doc.text('Rapport CEE — ' + (p.raisonSociale || 'Diagnostic'), 15, 22);
+    doc.setFontSize(10); doc.setTextColor(100,100,100);
+    doc.text('Audit prédictif CEE Engine V37 · ' + new Date().toLocaleDateString('fr-FR'), 15, 30);
+    doc.line(15, 35, 195, 35);
+    doc.setFontSize(11); doc.setTextColor(33,38,45);
+    var y = 45;
+    doc.text('IDENTIFICATION', 15, y); y += 7;
+    doc.setFontSize(10);
+    doc.text('SIRET : ' + (p.siret || '?'), 15, y); y += 6;
+    doc.text('NAF : ' + (p.ape || '?'), 15, y); y += 6;
+    doc.text('Adresse : ' + (p.adresse || '?') + ', ' + (p.cp || '') + ' ' + (p.ville || ''), 15, y); y += 6;
+    doc.text('Surface : ' + (p.surface || '?') + ' m² · Zone : ' + (p.zone || '?') + ' · Année : ' + (p.annee_construction || '?') + ' · DPE : ' + (p.dpe_classe || '?'), 15, y); y += 12;
+    doc.setFontSize(11); doc.text('PRIME CEE', 15, y); y += 7;
+    doc.setFontSize(20); doc.setTextColor(0,150,80);
+    doc.text(Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €', 15, y); y += 10;
+    doc.setFontSize(10); doc.setTextColor(100,100,100);
+    doc.text((k.nb_selected || 0) + ' fiches retenues · 0 % de commission', 15, y);
+
+    // Page 2 — Détail opérations
+    doc.addPage(); y = 22;
+    doc.setFontSize(16); doc.setTextColor(33,38,45);
+    doc.text('Détail des opérations CEE', 15, y); y += 12;
+    doc.setFontSize(9);
+    var pack = (this.state.pack || []).filter(f => this.state.selected.has(f.fiche || f.ref));
+    pack.forEach(f => {
+      if (y > 270) { doc.addPage(); y = 22; }
+      doc.setTextColor(33,38,45); doc.setFontSize(10);
+      doc.text((f.fiche || f.ref || '?') + ' — ' + ((f.nom || f.label || '').slice(0, 60)), 15, y); y += 5;
+      doc.setFontSize(8); doc.setTextColor(100,100,100);
+      doc.text('Prime : ' + Math.round(f.prime_obligé_eur || f.prime_eur || 0).toLocaleString('fr-FR') + ' € · ' + Math.round(f.kwh_cumac || 0).toLocaleString('fr-FR') + ' kWhc', 15, y); y += 8;
+    });
+
+    // Page 3 — IA insights
+    doc.addPage(); y = 22;
+    doc.setFontSize(16); doc.setTextColor(33,38,45);
+    doc.text('Analyse IA Penta', 15, y); y += 10;
+    var iaOk = ia.filter(r => r.ok && r.content);
+    iaOk.forEach(r => {
+      if (y > 250) { doc.addPage(); y = 22; }
+      doc.setFontSize(11); doc.setTextColor(0,80,180);
+      doc.text(r.name, 15, y); y += 6;
+      doc.setFontSize(9); doc.setTextColor(33,38,45);
+      var lines = doc.splitTextToSize((r.content || '').slice(0, 800), 180);
+      doc.text(lines.slice(0, 12), 15, y);
+      y += lines.length * 4 + 8;
+    });
+
+    // Page 4 — Comparatif financier
+    doc.addPage(); y = 22;
+    doc.setFontSize(16); doc.setTextColor(33,38,45);
+    doc.text('Comparatif financier', 15, y); y += 12;
+    doc.setFontSize(10);
+    var sc = [{n:'Optimiste',c:0.85,e:0.25},{n:'Réaliste',c:0.60,e:0.18},{n:'Pessimiste',c:0.40,e:0.10}];
+    sc.forEach(s => {
+      var cout = (k.prime_totale || 0) / Math.max(s.c, 0.01);
+      var rac = cout - (k.prime_totale || 0);
+      var ecoAn = (k.prime_totale || 0) * s.e;
+      doc.text(s.n + ' (couv ' + Math.round(s.c*100) + '%) : coût ' + Math.round(cout).toLocaleString('fr-FR') + ' € · reste ' + Math.round(rac).toLocaleString('fr-FR') + ' € · éco ' + Math.round(ecoAn).toLocaleString('fr-FR') + ' €/an', 15, y);
+      y += 7;
+    });
+
+    // Pages 5-6 — Suivi PNCEE + checklist 12 erreurs
+    doc.addPage(); y = 22;
+    doc.setFontSize(16); doc.setTextColor(33,38,45);
+    doc.text('Suivi de dossier — Conformité PNCEE', 15, y); y += 10;
+    doc.setFontSize(9); doc.setTextColor(100,100,100);
+    var checks = [
+      'Encre bleue obligatoire pour signatures',
+      'Recto seul (jamais de recto-verso AH)',
+      'Tampon à côté de la signature (pas dessus)',
+      'Engagement (mandat) AVANT devis',
+      'SIRET cohérent AH/devis/facture/RGE',
+      'Mention "lu et approuvé" manuscrite',
+      'RGE valide à la date du dépôt',
+      'Facture isolant : R + épaisseur + ACERMI',
+      'Cadre Contribution rempli sur AH',
+      'Vérifier mode dépôt avec obligé (papier vs scan)',
+      'P/O signé séparément si applicable',
+      'eIDAS qualifié pour signature électronique',
+    ];
+    checks.forEach((c, i) => {
+      if (y > 280) { doc.addPage(); y = 22; }
+      doc.text((i+1) + '. ' + c, 15, y); y += 5;
+    });
+
+    doc.save('rapport_cee_' + (p.siret || 'export') + '_' + new Date().toISOString().slice(0,10) + '.pdf');
+  },
+
+  generateShareLink() {
+    var p = this.state.profil; var k = this.state.kpi;
+    if (!p || !k) { alert('Identifie d\'abord en P1 et sélectionne en P4'); return; }
+    var d = document.getElementById('v2p6shareLink');
+    d.innerHTML = '<div class="v2-loading">Génération du lien…</div>';
+    // Pour l'instant : lien simple vers /portail (token serveur), à enrichir ensuite
+    this._fetch('/dossiers', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({client:{raison_sociale: p.raisonSociale, siret: p.siret, adresse: p.adresse, cp: p.cp, ville: p.ville}, operation:{}, dispositif:{}, admin:{}})})
+      .then(r => r.json())
+      .then(d2 => {
+        if (d2.url_partage_client) {
+          var fullUrl = location.origin + d2.url_partage_client;
+          d.innerHTML = '<div class="v2-success">✓ Lien généré (expire 30j) :</div><div style="margin-top:10px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:8px;font-family:JetBrains Mono,monospace;font-size:11px;word-break:break-all;">' + fullUrl + '</div><button class="v2-btn" style="margin-top:10px;" onclick="navigator.clipboard.writeText(\'' + fullUrl + '\').then(()=>this.textContent=\'✓ Copié\')">📋 Copier le lien</button>';
+        } else {
+          d.innerHTML = '<div class="v2-error">Erreur génération : ' + (d2.error || 'inconnue') + '</div>';
+        }
+      })
+      .catch(e => {
+        d.innerHTML = '<div class="v2-error">Erreur : ' + e.message + (e.code === 401 ? ' (connexion requise)' : '') + '</div>';
+      });
   },
 
   openDoc(type) {
