@@ -13682,7 +13682,7 @@ document.addEventListener('DOMContentLoaded', function() {
      V37.4.0 — MODE EXPRESS V2 : flow 6 pages strictement compartimentées.
      Self-contained (CSS + HTML + JS scoped #v2container). Activable via :
        - URL ?v=2
-       - Bouton flottant "Mode Express V2" en bas à droite
+       - Bouton flottant "Mode Clair" en bas à droite
        - localStorage.setItem('cee_v2', '1')
      N'altère JAMAIS le V1 (toujours fonctionnel). Toggle réversible.
      ═══════════════════════════════════════════════════════════════════════════ -->
@@ -13926,12 +13926,12 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 </style>
 
-<button class="v2-toggle-fab" onclick="V2.toggle()">🚀 <span id="v2ToggleLabel">Mode Express V2</span></button>
+<button class="v2-toggle-fab" onclick="V2.toggle()">🚀 <span id="v2ToggleLabel">Mode Clair</span></button>
 
 <div id="v2container">
   <div class="v2-shell">
     <div class="v2-topbar">
-      <div class="v2-brand">CEE&nbsp;<em>Engine</em>&nbsp;— Mode Express</div>
+      <div class="v2-brand">CEE&nbsp;<em>Engine</em>&nbsp;— Mode Clair</div>
       <button class="v2-back-v1" onclick="V2.toggle()">← Mode complet V1</button>
     </div>
 
@@ -14070,26 +14070,68 @@ window.V2 = {
     this.state.active = false;
     try { localStorage.removeItem('cee_v2'); } catch(e) {}
     var lbl = document.getElementById('v2ToggleLabel');
-    if (lbl) lbl.textContent = 'Mode Express V2';
+    if (lbl) lbl.textContent = 'Mode Clair';
   },
 
   go(page) {
-    if (page < 1 || page > 6) return;
-    document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
-    var target = document.getElementById('v2p' + page);
-    if (target) target.classList.add('active');
-    document.querySelectorAll('#v2Stepper .v2-step').forEach((el, i) => {
-      el.classList.remove('active', 'done');
-      if (i + 1 < page) el.classList.add('done');
-      if (i + 1 === page) el.classList.add('active');
-    });
-    this.state.currentPage = page;
-    // Lazy render à l'entrée de chaque page
-    if (page === 2) this.renderP2();
-    if (page === 3) this.renderP3();
-    if (page === 4) this.renderP4();
-    if (page === 5) this.renderP5();
-    if (page === 6) this.renderP6();
+    console.log('[V2.go] navigation page', page);
+    if (page < 1 || page > 6) { console.warn('[V2.go] page hors limites', page); return; }
+    try {
+      document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
+      var target = document.getElementById('v2p' + page);
+      if (!target) { console.error('[V2.go] target #v2p' + page + ' introuvable'); alert('Bug : page ' + page + ' introuvable. Recharge la page.'); return; }
+      target.classList.add('active');
+      document.querySelectorAll('#v2Stepper .v2-step').forEach((el, i) => {
+        el.classList.remove('active', 'done');
+        if (i + 1 < page) el.classList.add('done');
+        if (i + 1 === page) el.classList.add('active');
+      });
+      this.state.currentPage = page;
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } catch (e) {
+      console.error('[V2.go] erreur navigation:', e);
+      alert('Bug navigation: ' + e.message); return;
+    }
+    // Lazy render — chaque render isolé en try/catch
+    try {
+      if (page === 2) this.renderP2();
+      if (page === 3) this.renderP3();
+      if (page === 4) this.renderP4();
+      if (page === 5) this.renderP5();
+      if (page === 6) this.renderP6();
+    } catch (e) {
+      console.error('[V2.go] erreur render P' + page + ':', e);
+      var c = document.getElementById('v2p' + page + 'content');
+      if (c) c.innerHTML = '<div class="v2-error">❌ Erreur affichage P' + page + ' : ' + e.message + ' <br><small>Voir console DevTools (F12) pour détails.</small></div>';
+    }
+  },
+
+  // V37.4.1 — Helper auth : check si user loggé, sinon affiche modal
+  _checkAuth() {
+    var token = '';
+    try { token = localStorage.getItem('cee_jwt') || ''; } catch(e) {}
+    if (!token) return false;
+    return true;
+  },
+
+  _authModal(msg) {
+    return '<div class="v2-error">🔒 ' + (msg || 'Connexion requise') + '. Clique <a href="#" onclick="V2.deactivate();return false;" style="color:#58a6ff;text-decoration:underline;">ici pour aller au mode V1</a> où tu peux te connecter, puis reviens ici via le bouton 🚀.</div>';
+  },
+
+  // V37.4.1 — Wrapper fetch qui injecte JWT Bearer si présent + détecte 401
+  async _fetch(url, opts) {
+    opts = opts || {};
+    opts.headers = opts.headers || {};
+    var token = '';
+    try { token = localStorage.getItem('cee_jwt') || ''; } catch(e) {}
+    if (token && !opts.headers['Authorization']) opts.headers['Authorization'] = 'Bearer ' + token;
+    var r = await fetch(url, opts);
+    if (r.status === 401) {
+      var err = new Error('401 — connexion requise');
+      err.code = 401;
+      throw err;
+    }
+    return r;
   },
 
   // ═══════════════════════════════════════════════════════════════════
@@ -14106,7 +14148,7 @@ window.V2 = {
     document.getElementById('v2p1next').disabled = true;
 
     try {
-      // Étape 1 : Sirene (synchrone, source des autres lookups)
+      // Étape 1 : Sirene (synchrone, source des autres lookups) — endpoint public, pas besoin d'auth
       var rSirene = await fetch('/siret/search?q=' + siret + '&per_page=1');
       if (!rSirene.ok) throw new Error('Sirene HTTP ' + rSirene.status);
       var dSirene = await rSirene.json();
@@ -14192,6 +14234,7 @@ window.V2 = {
       return;
     }
     if (this.state.questions) { this._drawP2(); return; }
+    if (!this._checkAuth()) { c.innerHTML = this._authModal('La page Affiner appelle /expert qui requiert une session JWT'); return; }
     c.innerHTML = '<div class="v2-loading">Génération des questions intelligentes…</div>';
     try {
       var p = this.state.profil;
@@ -14200,14 +14243,16 @@ window.V2 = {
         energie: '', departement: p.dept, dpe: p.dpe_classe,
         annee_construction: p.annee_construction,
       };
-      var r = await fetch('/expert', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+      var r = await this._fetch('/expert', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
       if (!r.ok) throw new Error('HTTP ' + r.status);
       var d = await r.json();
       this.state.questions = d.questions || {};
       this.state.pack = d.pack || [];
+      console.log('[V2.renderP2] reçu ' + Object.keys(this.state.questions).length + ' clés questions, ' + this.state.pack.length + ' fiches');
       this._drawP2();
     } catch (e) {
-      c.innerHTML = '<div class="v2-error">❌ Erreur génération questions : ' + e.message + '</div>';
+      if (e.code === 401) c.innerHTML = this._authModal('/expert requiert connexion');
+      else c.innerHTML = '<div class="v2-error">❌ Erreur génération questions : ' + e.message + '</div>';
     }
   },
 
@@ -14249,17 +14294,19 @@ window.V2 = {
     var c = document.getElementById('v2p3content');
     if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord une entreprise.</div>'; return; }
     if (this.state.iaInsights) { this._drawP3(); return; }
-    c.innerHTML = '<div class="v2-loading">5 IA en analyse parallèle…</div>';
+    if (!this._checkAuth()) { c.innerHTML = this._authModal('La page Analyser IA appelle /ai/claude qui requiert une session'); return; }
+    c.innerHTML = '<div class="v2-loading">Claude en analyse… (~15-30 sec)</div>';
     var p = this.state.profil;
-    var prompt = 'Profil entreprise : ' + p.raisonSociale + ' (NAF ' + p.ape + '), surface ' + p.surface + 'm², zone ' + p.zone + ', DPE ' + p.dpe_classe + ', construit en ' + p.annee_construction + '. Identifie 3 opportunités CEE prioritaires et leurs prérequis.';
+    var prompt = 'Profil entreprise : ' + p.raisonSociale + ' (NAF ' + p.ape + '), surface ' + p.surface + 'm², zone climatique ' + p.zone + ', DPE ' + p.dpe_classe + ', année construction ' + p.annee_construction + '. Identifie 3 opportunités CEE prioritaires (avec ref fiche), leurs prérequis techniques, et l\'ordre d\'enchaînement optimal. Réponds en français, format clair.';
     try {
-      var r = await fetch('/ai/claude', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Requested-With':'XMLHttpRequest'}, body: JSON.stringify({messages: [{role:'user', content: prompt}]})});
+      var r = await this._fetch('/ai/claude', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-Requested-With':'XMLHttpRequest'}, body: JSON.stringify({messages: [{role:'user', content: prompt}]})});
       var d = await r.json();
-      var content = (d.content && d.content[0] && d.content[0].text) || d.text || JSON.stringify(d);
+      var content = (d.content && d.content[0] && d.content[0].text) || d.text || d.message || JSON.stringify(d);
       this.state.iaInsights = content;
       this._drawP3();
     } catch (e) {
-      c.innerHTML = '<div class="v2-card"><div class="v2-card-title">🤖 IA</div><div class="v2-error">IA indisponible : ' + e.message + '. Tu peux passer à la sélection des primes.</div></div>';
+      if (e.code === 401) c.innerHTML = this._authModal('/ai/claude requiert connexion');
+      else c.innerHTML = '<div class="v2-card"><div class="v2-card-title">🤖 IA</div><div class="v2-error">IA indisponible : ' + e.message + '. Tu peux passer directement à la sélection des primes (P4).</div></div>';
     }
   },
 
