@@ -181,15 +181,23 @@ def run_pipeline(siret=None, params_manuels=None):
     contexte = {"age_batiment": 15}
     state["audit_questions"] = enrichir_audit(resultats, contexte)
 
-    # Questions structurées par phase pour chaque fiche du pack
+    # V37.3.51 — Questions DÉDUPLIQUÉES en 1 appel global (vs boucle fiche-par-fiche).
+    # AVANT : 234 fiches × 4 questions globales = 936 questions répétées (chauffage, surface, age, zone).
+    # APRÈS : 1 appel à generate_smart_questions(all_fiches, contexte) → questions uniques + groupées par thème.
     fiches_db = {f["ref"]: f for f in load_fiches()}
-    pack = resultats.get("pack", [])
-    questions_par_fiche = {}
-    for r in pack:
-        fiche = fiches_db.get(r["fiche"])
-        if fiche:
-            questions_par_fiche[r["fiche"]] = generate_full_questions(fiche)
-    state["questions_structurees"] = questions_par_fiche
+    pack_data = resultats.get("pack", [])
+    pack_fiches = [fiches_db.get(r["fiche"]) for r in pack_data if fiches_db.get(r["fiche"])]
+    contexte_q = {
+        "ape": state.get("naf") or state.get("ape", ""),
+        "surface": surface,
+        "energie": energie,
+        "zone": state.get("zone", ""),
+        "dpe_classe": state.get("dpe_classe", ""),
+        "annee_construction": state.get("annee_construction"),
+    }
+    smart = generate_smart_questions(pack_fiches, contexte_q)
+    state["questions"] = smart
+    state["questions_structurees"] = smart.get("par_fiche", {})  # rétro-compat
 
     # =============================
     # ETAPE 5: CLOSING

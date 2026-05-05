@@ -92,7 +92,7 @@ from prospection import register_prospection_routes
 from fidelisation import register_fidelisation_routes
 from formation import register_formation_routes
 from pv_cotation import register_pv_routes
-from pipeline import enrichir_audit, generate_full_questions
+from pipeline import enrichir_audit, generate_full_questions, generate_smart_questions
 from negociation import (
     comparer_acheteurs, calculer_scenario_acheteur,
     ACHETEURS, PRIX_ACHETEURS_MAJ, PRIX_ACHETEURS_ALERTE_JOURS,
@@ -2316,14 +2316,26 @@ def expert():
     result["prix_cumac"] = prix_cumac
     result["audit_questions"] = enrichir_audit(result, {"age_batiment": 15})
 
-    # Questions structurées par fiche
+    # V37.3.51 — Questions structurées DÉDUPLIQUÉES en 1 appel global.
+    # AVANT (bug) : boucle fiche-par-fiche avec generate_full_questions(fiche)
+    # qui appelait generate_smart_questions([fiche], {}) avec contexte VIDE
+    # → "Quelle surface ?" / "Quel chauffage ?" répété N fois pour N fiches.
+    # APRÈS : generate_smart_questions(toutes_les_fiches, contexte_complet)
+    # passe le contexte connu (siret/ape/surface/energie/zone/dpe) → questions
+    # déjà répondues automatiquement filtrées + regroupement par THÈME pas par fiche.
     fiches_db = {f["ref"]: f for f in load_fiches()}
-    qs = {}
-    for r in result.get("pack", []):
-        fiche = fiches_db.get(r["fiche"])
-        if fiche:
-            qs[r["fiche"]] = generate_full_questions(fiche)
-    result["questions_structurees"] = qs
+    pack_fiches = [fiches_db.get(r["fiche"]) for r in result.get("pack", []) if fiches_db.get(r["fiche"])]
+    contexte_questions = {
+        "ape": data.get("naf") or data.get("ape") or "",
+        "surface": surface,
+        "energie": energie,
+        "zone": zone,
+        "dpe_classe": data.get("dpe", ""),
+        "annee_construction": data.get("annee_construction") or data.get("age_batiment"),
+    }
+    smart = generate_smart_questions(pack_fiches, contexte_questions)
+    result["questions"] = smart  # nouveau format : {globales, par_theme, par_fiche, closing}
+    result["questions_structurees"] = smart.get("par_fiche", {})  # rétro-compat frontend
 
     # ── Confiance factuelle (données + calcul) ──
     surface_source = data.get("surface_source", "")  # "client", "estimee", ""
