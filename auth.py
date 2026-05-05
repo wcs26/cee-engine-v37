@@ -35,7 +35,11 @@ from typing import Callable
 from flask import jsonify, request
 
 
-USERS_FILE = Path(__file__).parent / "users.json"
+# V37.3.50 — users.json sur volume persistant /data/ (CEE_DATA_DIR) sinon
+# perte des comptes à chaque deploy car /app/ est éphémère dans le container.
+# Fallback : à côté de auth.py (mode dev local).
+_USERS_DIR = os.environ.get("CEE_DATA_DIR", "").strip() or str(Path(__file__).parent)
+USERS_FILE = Path(_USERS_DIR) / "users.json"
 JWT_SECRET = os.environ.get("CEE_JWT_SECRET", "")
 JWT_ALG = "HS256"
 JWT_TTL_SECONDS = 24 * 3600  # 24h
