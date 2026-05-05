@@ -13735,9 +13735,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   .v2-back-v1:hover { color: #f5f5f7; border-color: rgba(255,255,255,.4); }
 
-  /* Stepper 6 pages */
+  /* Stepper — V37.4.4 : 9 pages compartimentées strictement */
   .v2-stepper {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px;
+    display: grid; grid-template-columns: repeat(9, 1fr); gap: 3px;
     margin-bottom: 40px;
   }
   .v2-step {
@@ -13937,11 +13937,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <div class="v2-stepper" id="v2Stepper">
       <div class="v2-step active" data-page="1" onclick="V2.go(1)"><div class="v2-step-num">1</div><div class="v2-step-label">Identifier</div></div>
-      <div class="v2-step" data-page="2" onclick="V2.go(2)"><div class="v2-step-num">2</div><div class="v2-step-label">Affiner</div></div>
-      <div class="v2-step" data-page="3" onclick="V2.go(3)"><div class="v2-step-num">3</div><div class="v2-step-label">Analyser IA</div></div>
-      <div class="v2-step" data-page="4" onclick="V2.go(4)"><div class="v2-step-num">4</div><div class="v2-step-label">Primes</div></div>
-      <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Économies</div></div>
-      <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Rapport</div></div>
+      <div class="v2-step" data-page="2" onclick="V2.go(2)"><div class="v2-step-num">2</div><div class="v2-step-label">Énergie</div></div>
+      <div class="v2-step" data-page="3" onclick="V2.go(3)"><div class="v2-step-num">3</div><div class="v2-step-label">Bâtiment</div></div>
+      <div class="v2-step" data-page="4" onclick="V2.go(4)"><div class="v2-step-num">4</div><div class="v2-step-label">Analyse</div></div>
+      <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Primes</div></div>
+      <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Économies</div></div>
+      <div class="v2-step" data-page="7" onclick="V2.go(7)"><div class="v2-step-num">7</div><div class="v2-step-label">Conformité</div></div>
+      <div class="v2-step" data-page="8" onclick="V2.go(8)"><div class="v2-step-num">8</div><div class="v2-step-label">Documents</div></div>
+      <div class="v2-step" data-page="9" onclick="V2.go(9)"><div class="v2-step-num">9</div><div class="v2-step-label">Rapport</div></div>
     </div>
 
     <!-- ═══ P1 — IDENTIFIER ═══ -->
@@ -13970,58 +13973,91 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
-    <!-- ═══ P2 — AFFINER ═══ -->
+    <!-- ═══ P2 — ÉNERGIE (extrait de l'ancien P2 V37.4.2b) ═══ -->
     <div class="v2-page" id="v2p2">
-      <h1 class="v2-page-title">Affiner les conditions</h1>
-      <p class="v2-page-sub">5-10 questions essentielles, regroupées par section. Pré-remplies depuis ton DPE quand possible. Aucune répétition.</p>
-      <div id="v2p2content"><div class="v2-loading" style="display:none;">Génération des questions intelligentes…</div></div>
+      <h1 class="v2-page-title">Profil énergétique</h1>
+      <p class="v2-page-sub">3 informations qui déterminent ton éligibilité Coup de Pouce P6 et le montant de la prime.</p>
+      <div id="v2p2content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(1)">← Retour Identifier</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(3)">Analyser avec l'IA →</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(3)">Étape 3 — Bâtiment →</button>
       </div>
     </div>
 
-    <!-- ═══ P3 — ANALYSER IA ═══ -->
+    <!-- ═══ P3 — BÂTIMENT (état physique) ═══ -->
     <div class="v2-page" id="v2p3">
-      <h1 class="v2-page-title">L'IA cherche tes opportunités</h1>
-      <p class="v2-page-sub">Penta-IA Conseil 5×3 : 5 modèles en consensus déduisent les manquements et te posent UNIQUEMENT les questions qui font la différence.</p>
-      <div id="v2p3content"><div class="v2-loading" style="display:none;">5 IA en analyse parallèle (~10-30 sec)…</div></div>
+      <h1 class="v2-page-title">État physique du bâtiment</h1>
+      <p class="v2-page-sub">6 sections : toiture, murs, chauffage, ventilation, éclairage, process. Pré-remplies depuis le DPE quand possible.</p>
+      <div id="v2p3content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(2)">← Retour Affiner</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(4)">Voir les primes →</button>
+        <button class="v2-btn" onclick="V2.go(2)">← Retour Énergie</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(4)">Étape 4 — Analyse →</button>
       </div>
     </div>
 
-    <!-- ═══ P4 — SÉLECTIONNER PRIMES ═══ -->
+    <!-- ═══ P4 — ANALYSE (moteur métier + Penta-IA) ═══ -->
     <div class="v2-page" id="v2p4">
-      <h1 class="v2-page-title">Tes primes éligibles</h1>
-      <p class="v2-page-sub">Fiches CEE applicables, triées par montant. Coche celles que tu retiens — total mis à jour live.</p>
-      <div id="v2p4content"><div class="v2-loading" style="display:none;">Calcul des primes éligibles…</div></div>
+      <h1 class="v2-page-title">Analyse double — moteur + IA</h1>
+      <p class="v2-page-sub">D'abord les détections automatiques du moteur métier, ensuite la lecture des 5 IA en consensus.</p>
+      <div id="v2p4content"><div class="v2-loading" style="display:none;">Analyse en cours…</div></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(3)">← Retour Analyser</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(5)">Voir les économies →</button>
+        <button class="v2-btn" onclick="V2.go(3)">← Retour Bâtiment</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(5)">Étape 5 — Primes →</button>
       </div>
     </div>
 
-    <!-- ═══ P5 — ÉCONOMIES ═══ -->
+    <!-- ═══ P5 — PRIMES (sélection) ═══ -->
     <div class="v2-page" id="v2p5">
-      <h1 class="v2-page-title">Économies générées</h1>
-      <p class="v2-page-sub">Prime totale, économies annuelles, retour sur investissement, scénarios financiers.</p>
+      <h1 class="v2-page-title">Sélection des primes</h1>
+      <p class="v2-page-sub">Fiches CEE éligibles triées par montant. Coche les retenues — total mis à jour live.</p>
       <div id="v2p5content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(4)">← Retour Primes</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(6)">Générer le rapport →</button>
+        <button class="v2-btn" onclick="V2.go(4)">← Retour Analyse</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(6)">Étape 6 — Économies →</button>
       </div>
     </div>
 
-    <!-- ═══ P6 — RAPPORT ═══ -->
+    <!-- ═══ P6 — ÉCONOMIES (KPI + projections, calculs V1) ═══ -->
     <div class="v2-page" id="v2p6">
-      <h1 class="v2-page-title">Rapport complet</h1>
-      <p class="v2-page-sub">PDF 6 pages exportable + documents CEE (mandat, AH, convention) prêts à signer.</p>
+      <h1 class="v2-page-title">Valeur financière générée</h1>
+      <p class="v2-page-sub">KPI prime, économie annuelle, projections 5/10/15 ans. Calculs identiques au moteur V1.</p>
       <div id="v2p6content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(5)">← Retour Économies</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.exportPdf()">📄 Télécharger le rapport PDF</button>
+        <button class="v2-btn" onclick="V2.go(5)">← Retour Primes</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(7)">Étape 7 — Conformité →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P7 — CONFORMITÉ PNCEE (NOUVEAU) ═══ -->
+    <div class="v2-page" id="v2p7">
+      <h1 class="v2-page-title">Conformité PNCEE</h1>
+      <p class="v2-page-sub">Checklist des 12 erreurs fatales identifiées par G1T + 46 règles juridiques P6. Statut OK / À corriger par item.</p>
+      <div id="v2p7content"><div class="v2-loading" style="display:none;">Vérification conformité…</div></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(6)">← Retour Économies</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(8)">Étape 8 — Documents →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P8 — DOCUMENTS (génération HTML 4 docs) ═══ -->
+    <div class="v2-page" id="v2p8">
+      <h1 class="v2-page-title">Documents pré-remplis</h1>
+      <p class="v2-page-sub">4 documents générés automatiquement depuis ton dossier : rapport gisement, devis, convention, attestation honneur.</p>
+      <div id="v2p8content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(7)">← Retour Conformité</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(9)">Étape 9 — Rapport →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P9 — RAPPORT (PDF + partage final) ═══ -->
+    <div class="v2-page" id="v2p9">
+      <h1 class="v2-page-title">Rapport final</h1>
+      <p class="v2-page-sub">PDF 5 pages (calculs V1) + lien partageable au client (token signé HMAC, expire 30j).</p>
+      <div id="v2p9content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(8)">← Retour Documents</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.exportPdf()">📄 Télécharger le PDF 5 pages</button>
       </div>
     </div>
   </div>
@@ -14092,13 +14128,16 @@ window.V2 = {
       console.error('[V2.go] erreur navigation:', e);
       alert('Bug navigation: ' + e.message); return;
     }
-    // Lazy render — chaque render isolé en try/catch
+    // V37.4.4 — Lazy render 9 pages compartimentées strictement
     try {
-      if (page === 2) this.renderP2();
-      if (page === 3) this.renderP3();
-      if (page === 4) this.renderP4();
-      if (page === 5) this.renderP5();
-      if (page === 6) this.renderP6();
+      if (page === 2) this._renderEnergie();
+      if (page === 3) this._renderBatiment();
+      if (page === 4) this._renderAnalyse();
+      if (page === 5) this.renderP4();      // primes (inchangé V37.4.2b)
+      if (page === 6) this.renderP5();      // économies (calculs V1, inchangé V37.4.3)
+      if (page === 7) this._renderConformite();
+      if (page === 8) this._renderDocuments();
+      if (page === 9) this._renderRapport();
     } catch (e) {
       console.error('[V2.go] erreur render P' + page + ':', e);
       var c = document.getElementById('v2p' + page + 'content');
@@ -14436,6 +14475,295 @@ window.V2 = {
     }
 
     document.getElementById('v2p2content').innerHTML = html;
+  },
+
+  // V37.4.4 — P2 ÉNERGIE seule (extrait de l'ancien _drawP2)
+  _renderEnergie() {
+    var c = document.getElementById('v2p2content'); if (!c) return;
+    if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
+    var p = this.state.profil; var a = this.state.answers;
+    var html = '<div class="v2-card"><div class="v2-card-title">⚡ Profil énergétique du site</div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Énergie principale de chauffage</div><div>';
+    var energies = ['gaz','fioul','electrique','reseau_chaleur','bois','pac','autre'];
+    html += '<select class="v2-select" onchange="V2.state.profil.energie=this.value;V2.state.answers.energie=this.value">';
+    html += '<option value="">— choisir —</option>';
+    energies.forEach(e => { html += '<option value="' + e + '"' + ((p.energie||a.energie) === e ? ' selected' : '') + '>' + e.replace('_',' ') + '</option>'; });
+    html += '</select></div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Facture chauffage annuelle (€)</div><div>';
+    html += '<input type="number" class="v2-input mono" value="' + (a.facture_chauffage || '') + '" placeholder="ex: 8000" oninput="V2.state.answers.facture_chauffage=Number(this.value)||0">';
+    html += '</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Facture électricité annuelle (€) — optionnel</div><div>';
+    html += '<input type="number" class="v2-input mono" value="' + (a.facture_elec || '') + '" placeholder="ex: 12000" oninput="V2.state.answers.facture_elec=Number(this.value)||0">';
+    html += '</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Coup de Pouce Chauffage P6</div><div>';
+    html += '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;">';
+    html += '<input type="checkbox"' + (a.coup_de_pouce ? ' checked' : '') + ' onchange="V2.state.answers.coup_de_pouce=this.checked" style="width:18px;height:18px;cursor:pointer;">';
+    html += '<span style="color:rgba(245,245,247,.7);">Si remplacement chaudière fossile (gaz/fioul) → ×3 à ×5 sur la prime</span>';
+    html += '</label></div></div></div>';
+    c.innerHTML = html;
+  },
+
+  // V37.4.4 — P3 BÂTIMENT seule (Universal Questionnaire 6 sections)
+  async _renderBatiment() {
+    var c = document.getElementById('v2p3content'); if (!c) return;
+    if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
+    var p = this.state.profil; var a = this.state.answers;
+    var html = '';
+    var sections = [
+      {key: 'toiture', emoji: '🏠', label: 'Toiture / Combles', questions: [
+        {id:'u_combles_isoles', q:'Combles ou toiture isolés ?', type:'bool'},
+        {id:'u_combles_epaisseur', q:'Épaisseur isolation toiture (cm)', type:'select', opts:['0','< 5','5-10','10-20','> 20','ne sais pas']},
+        {id:'u_toiture_terrasse', q:'Toiture terrasse présente ?', type:'bool'},
+      ]},
+      {key: 'murs', emoji: '🧱', label: 'Murs extérieurs', questions: [
+        {id:'u_murs_isoles', q:'Murs extérieurs isolés ?', type:'select', opts:['ITE (extérieure)','ITI (intérieure)','partielle','aucune','ne sais pas']},
+      ]},
+      {key: 'chauffage', emoji: '🔥', label: 'Chauffage', questions: [
+        {id:'u_chaud_age', q:'Âge approximatif chaudière/PAC (ans)', type:'select', opts:['< 5','5-10','10-15','15-20','> 20','pas de chaudière']},
+        {id:'u_ecs', q:'Eau chaude sanitaire séparée ?', type:'bool'},
+        {id:'u_robinets_therm', q:'Robinets thermostatiques sur tous les radiateurs ?', type:'bool'},
+      ]},
+      {key: 'ventilation', emoji: '🌬️', label: 'Ventilation', questions: [
+        {id:'u_vmc', q:'VMC installée ?', type:'select', opts:['simple flux','double flux','aucune','ne sais pas']},
+      ]},
+      {key: 'eclairage', emoji: '💡', label: 'Éclairage', questions: [
+        {id:'u_led', q:'Éclairage LED ?', type:'select', opts:['100 % LED','partiel (≥ 50 %)','en cours','aucun (néon/halogène)']},
+      ]},
+    ];
+    var ape = (p.ape || '').replace('.', ''); var apeNum = parseInt(ape.substring(0,2)) || 0;
+    if (apeNum >= 5 && apeNum <= 33) {
+      sections.push({key: 'process', emoji: '⚙️', label: 'Process industriel', questions: [
+        {id:'u_compresseur', q:'Compresseur d\'air installé ?', type:'bool'},
+        {id:'u_moteurs_vsd', q:'Moteurs équipés de variateurs de vitesse ?', type:'bool'},
+      ]});
+    }
+    sections.forEach(s => {
+      html += '<div class="v2-card"><div class="v2-card-title">' + s.emoji + ' ' + s.label + '</div>';
+      s.questions.forEach(qq => {
+        var val = a[qq.id];
+        html += '<div class="v2-question"><div class="v2-q-text">' + qq.q + '</div>';
+        if (qq.type === 'bool') {
+          html += '<div class="v2-q-options">';
+          html += '<button class="v2-q-opt' + (val === true ? ' active' : '') + '" onclick="V2.state.answers[\'' + qq.id + '\']=true;V2._renderBatiment()">Oui</button>';
+          html += '<button class="v2-q-opt' + (val === false ? ' active' : '') + '" onclick="V2.state.answers[\'' + qq.id + '\']=false;V2._renderBatiment()">Non</button>';
+          html += '</div>';
+        } else if (qq.type === 'select') {
+          html += '<div class="v2-q-options">';
+          qq.opts.forEach(o => { html += '<button class="v2-q-opt' + (val === o ? ' active' : '') + '" onclick="V2.state.answers[\'' + qq.id + '\']=\'' + o.replace(/'/g,"\\'") + '\';V2._renderBatiment()">' + o + '</button>'; });
+          html += '</div>';
+        }
+        html += '</div>';
+      });
+      html += '</div>';
+    });
+    c.innerHTML = html;
+  },
+
+  // V37.4.4 — P4 ANALYSE = moteur métier (détections auto) + Penta-IA
+  async _renderAnalyse() {
+    var c = document.getElementById('v2p4content'); if (!c) return;
+    if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
+    if (!this._checkAuth()) { c.innerHTML = this._authModal('Analyse appelle /expert et /ai/* — connexion requise'); return; }
+    var p = this.state.profil; var a = this.state.answers;
+
+    // Bloc A : moteur métier — fetch /expert si pas déjà fait
+    var moteurHtml = '';
+    if (!this.state.questions || !this.state.pack || this.state.pack.length === 0) {
+      c.innerHTML = '<div class="v2-loading">Moteur métier en analyse (calcul fiches éligibles)…</div>';
+      try {
+        var miss = []; if (!p.ape) miss.push('NAF'); if (!p.surface) miss.push('Surface'); if (!p.dept && p.cp) p.dept = p.cp.substring(0,2); if (!p.dept) miss.push('Département');
+        if (miss.length) { c.innerHTML = '<div class="v2-error">⚠ Champs manquants : ' + miss.join(', ') + '. Retourne en P1.</div>'; return; }
+        var body = {siret: p.siret, naf: p.ape, surface: p.surface, energie: a.energie || '', departement: p.dept, dpe: p.dpe_classe, annee_construction: p.annee_construction};
+        var r = await this._fetch('/expert', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+        var d = await r.json();
+        this.state.questions = d.questions || {};
+        this.state.pack = d.pack || [];
+      } catch (e) {
+        c.innerHTML = (e.code === 401 ? this._authModal('/expert requiert connexion') : '<div class="v2-error">Erreur moteur : ' + e.message + '</div>');
+        return;
+      }
+    }
+    var nbFiches = (this.state.pack || []).length;
+    var primeMax = (this.state.pack || []).reduce((s, f) => s + (f.prime_obligé_eur || f.prime_eur || 0), 0);
+    var top3 = (this.state.pack || []).slice().sort((a,b)=>(b.prime_obligé_eur||0)-(a.prime_obligé_eur||0)).slice(0,3);
+    moteurHtml += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(88,166,255,.06),rgba(88,166,255,.015));border-color:rgba(88,166,255,.25);">';
+    moteurHtml += '<div class="v2-card-title">🔬 Moteur métier — détections automatiques</div>';
+    moteurHtml += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">';
+    moteurHtml += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Fiches éligibles</div><div style="font-family:Fraunces,Georgia,serif;font-size:32px;font-weight:380;color:#58a6ff;">' + nbFiches + '</div></div>';
+    moteurHtml += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Prime max théorique</div><div style="font-family:Fraunces,Georgia,serif;font-size:32px;font-weight:380;color:#C8FF6B;">' + Math.round(primeMax).toLocaleString('fr-FR') + ' €</div></div>';
+    moteurHtml += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Secteurs détectés</div><div style="font-size:14px;font-weight:500;margin-top:8px;">' + Array.from(new Set((this.state.pack||[]).map(f=>(f.fiche||f.ref||'').substring(0,3)))).join(' · ') + '</div></div>';
+    moteurHtml += '</div>';
+    moteurHtml += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-top:10px;font-weight:500;">Top 3 par prime :</div>';
+    top3.forEach((f,i) => {
+      moteurHtml += '<div style="font-size:12px;color:rgba(245,245,247,.6);padding:4px 0;font-family:JetBrains Mono,monospace;">' + (i+1) + '. ' + (f.fiche||f.ref) + ' — ' + (f.nom||'').slice(0,55) + ' — ' + Math.round(f.prime_obligé_eur||0).toLocaleString('fr-FR') + ' €</div>';
+    });
+    moteurHtml += '</div>';
+
+    // Bloc B : Penta-IA Conseil 5×3
+    c.innerHTML = moteurHtml + '<div class="v2-loading">Penta-IA Conseil 5×3 (Claude · GPT · Gemini · Groq · Kimi)… (~30 sec)</div>';
+    if (this.state.iaInsights) { c.innerHTML = moteurHtml + this._iaHtml(); return; }
+    var prompt = 'Tu es expert CEE. Profil : ' + (p.raisonSociale||'?') + ' (NAF ' + (p.ape||'?') + '), ' + (p.surface||'?') + ' m², zone ' + (p.zone||'?') + ', DPE ' + (p.dpe_classe||'?') + ', construit en ' + (p.annee_construction||'?') + ', énergie ' + (a.energie||'?') + '. Réponds en français max 200 mots : 3 opportunités CEE prioritaires (avec ref BAT-/BAR-/IND-), prime estimée, prérequis terrain.';
+    var msg = JSON.stringify({messages: [{role:'user', content: prompt}]});
+    var headers = {'Content-Type':'application/json', 'X-Requested-With':'XMLHttpRequest'};
+    var endpoints = [
+      {name:'Claude (Anthropic)', url:'/ai/claude', extract: d => (d.content && d.content[0] && d.content[0].text) || d.text || ''},
+      {name:'GPT-4 (OpenAI)', url:'/ai/openai', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+      {name:'Gemini (Google)', url:'/ai/gemini', extract: d => (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] && d.candidates[0].content.parts[0].text) || d.text || ''},
+      {name:'Llama 3.3 (Groq)', url:'/ai/groq', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+      {name:'Kimi (Moonshot)', url:'/ai/kimi', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+    ];
+    var promises = endpoints.map(ep => this._fetch(ep.url, {method:'POST', headers: headers, body: msg})
+      .then(r => r.json()).then(d => ({name: ep.name, ok: true, content: ep.extract(d) || JSON.stringify(d).slice(0,300)}))
+      .catch(e => ({name: ep.name, ok: false, error: e.message || String(e)})));
+    this.state.iaInsights = await Promise.all(promises);
+    c.innerHTML = moteurHtml + this._iaHtml();
+  },
+
+  _iaHtml() {
+    var results = this.state.iaInsights || [];
+    if (typeof results === 'string') results = [{name:'Claude', ok:true, content: results}];
+    var ok = results.filter(r => r.ok && r.content && r.content.length > 20);
+    var ko = results.filter(r => !r.ok || !r.content || r.content.length <= 20);
+    var html = '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.04),rgba(200,255,107,.01));border-color:rgba(200,255,107,.2);"><div class="v2-card-title">🤖 Penta-IA Conseil 5×3 — consensus</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:14px;">' + ok.length + ' / ' + results.length + ' IA ont répondu' + (ko.length ? ' · indispo : ' + ko.map(r=>r.name.split(' ')[0]).join(', ') : '') + '</div>';
+    ok.forEach(r => {
+      html += '<div style="margin-bottom:14px;padding:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;">';
+      html += '<div style="font-size:12px;font-weight:600;color:#58a6ff;margin-bottom:8px;">' + r.name + '</div>';
+      html += '<div style="white-space:pre-wrap;line-height:1.55;font-size:13px;color:rgba(245,245,247,.85);">' + (r.content || '').replace(/</g,'&lt;') + '</div></div>';
+    });
+    if (ok.length === 0) html += '<div class="v2-error">Aucune IA disponible. Vérifie les clés API côté admin.</div>';
+    html += '</div>';
+    return html;
+  },
+
+  // V37.4.4 — P7 CONFORMITÉ PNCEE : checklist 12 erreurs G1T + 46 règles juridiques
+  async _renderConformite() {
+    var c = document.getElementById('v2p7content'); if (!c) return;
+    var p = this.state.profil; if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
+    if (!this._checkAuth()) { c.innerHTML = this._authModal('Conformité appelle /conformite/check'); return; }
+    c.innerHTML = '<div class="v2-loading">Vérification conformité 46 règles P6 + 12 erreurs G1T…</div>';
+    var fiches = Array.from(this.state.selected || []);
+    var dossier = {
+      siret: p.siret, raison_sociale: p.raisonSociale, adresse: (p.adresse||'') + ', ' + (p.cp||'') + ' ' + (p.ville||''),
+      fiches: fiches, surface: p.surface,
+      rge_installateur: false, rge_qualifications: [], rge_date_validite: null,
+      date_engagement: '', date_signature: '',
+    };
+    try {
+      var r = await this._fetch('/conformite/check', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(dossier)});
+      var d = await r.json();
+      var html = '';
+      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(88,166,255,.06),rgba(88,166,255,.015));">';
+      html += '<div class="v2-card-title">📋 Synthèse conformité dossier</div>';
+      html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center;">';
+      html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Total règles</div><div style="font-family:Fraunces,Georgia,serif;font-size:34px;color:#58a6ff;">' + (d.nb_total || (d.resultats||[]).length) + '</div></div>';
+      html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">OK</div><div style="font-family:Fraunces,Georgia,serif;font-size:34px;color:#C8FF6B;">' + (d.nb_ok || 0) + '</div></div>';
+      html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Avertissements</div><div style="font-family:Fraunces,Georgia,serif;font-size:34px;color:#d29922;">' + (d.nb_avertissements || 0) + '</div></div>';
+      html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Bloquants</div><div style="font-family:Fraunces,Georgia,serif;font-size:34px;color:#ff7b72;">' + (d.nb_bloquants || 0) + '</div></div>';
+      html += '</div></div>';
+      // Détail par item
+      var items = d.resultats || d.items || [];
+      if (items.length) {
+        html += '<div class="v2-card"><div class="v2-card-title">🔍 Détail par règle</div>';
+        items.slice(0, 50).forEach(it => {
+          var statut = it.statut || it.status || 'inconnu';
+          var color = statut === 'ok' ? '#C8FF6B' : (statut === 'avertissement' ? '#d29922' : (statut === 'bloquant' ? '#ff7b72' : 'rgba(245,245,247,.5)'));
+          var icon = statut === 'ok' ? '✓' : (statut === 'avertissement' ? '⚠' : (statut === 'bloquant' ? '✗' : '·'));
+          html += '<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;">';
+          html += '<span style="color:' + color + ';font-weight:600;font-family:JetBrains Mono,monospace;width:80px;">' + (it.id || '?') + '</span>';
+          html += '<span style="color:' + color + ';font-weight:600;width:24px;text-align:center;">' + icon + '</span>';
+          html += '<span style="flex:1;color:rgba(245,245,247,.85);">' + (it.description || it.message || it.label || '') + '</span>';
+          html += '</div>';
+        });
+        if (items.length > 50) html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:10px;">+ ' + (items.length-50) + ' autres règles…</div>';
+        html += '</div>';
+      }
+      // Checklist 12 erreurs G1T
+      try {
+        var rChk = await this._fetch('/conformite/checklist-pncee', {method:'GET'});
+        var dChk = await rChk.json();
+        var chk = dChk.checklist || dChk.items || dChk.erreurs || [];
+        if (chk.length) {
+          html += '<div class="v2-card"><div class="v2-card-title">📌 Les 12 erreurs fatales G1T à éviter</div>';
+          chk.slice(0, 12).forEach((it, i) => {
+            html += '<div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;">';
+            html += '<span style="font-family:JetBrains Mono,monospace;color:#58a6ff;width:30px;">' + (i+1) + '.</span>';
+            html += '<span style="color:rgba(245,245,247,.85);flex:1;">' + (typeof it === 'string' ? it : (it.description || it.titre || JSON.stringify(it).slice(0,100))) + '</span>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+      } catch (e) { /* skip si endpoint indispo */ }
+      c.innerHTML = html;
+    } catch (e) {
+      if (e.code === 401) c.innerHTML = this._authModal('/conformite/check requiert connexion');
+      else c.innerHTML = '<div class="v2-error">Erreur conformité : ' + e.message + '</div>';
+    }
+  },
+
+  // V37.4.4 — P8 DOCUMENTS : 4 boutons HTML pré-remplis (extrait de l'ancien renderP6)
+  _renderDocuments() {
+    var c = document.getElementById('v2p8content'); if (!c) return;
+    var p = this.state.profil; if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
+    var html = '';
+    html += '<div class="v2-card"><div class="v2-card-title">📋 4 documents pré-remplis (à signer client)</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:18px;">Pré-remplissage automatique depuis SIRET + adresse + opérations sélectionnées en P5. Reste à signer en encre bleue, recto seul, tampon à côté de la signature (12 erreurs PNCEE G1T respectées).</p>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">';
+    var docs = [
+      {type:'gisement', emoji:'📊', titre:'Rapport gisement', sub:'Synthèse opérations CEE éligibles + estimation prime'},
+      {type:'devis', emoji:'💰', titre:'Devis CEE', sub:'Devis SIRAT format CEE avec montants ventilés'},
+      {type:'convention', emoji:'📜', titre:'Convention partenariat', sub:'Convention 4 pages WCS / bénéficiaire'},
+      {type:'ah', emoji:'✍️', titre:'Attestation honneur P6', sub:'AH PNCEE pré-remplie, 9 ans conservation'},
+    ];
+    docs.forEach(d => {
+      html += '<button class="v2-btn" style="height:auto;flex-direction:column;align-items:flex-start;padding:18px;text-align:left;gap:6px;" onclick="V2.openDoc(\'' + d.type + '\')">';
+      html += '<span style="font-size:24px;">' + d.emoji + '</span>';
+      html += '<span style="font-weight:600;font-size:14px;">' + d.titre + '</span>';
+      html += '<span style="font-size:11px;color:rgba(245,245,247,.55);font-weight:400;line-height:1.4;">' + d.sub + '</span>';
+      html += '</button>';
+    });
+    html += '</div></div>';
+    c.innerHTML = html;
+  },
+
+  // V37.4.4 — P9 RAPPORT : récap exécutif + bouton PDF + lien partage (extrait de l'ancien renderP6)
+  _renderRapport() {
+    var c = document.getElementById('v2p9content'); if (!c) return;
+    var p = this.state.profil || {}; var k = this.state.kpi || {};
+    var html = '';
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
+    html += '<div class="v2-card-title">📊 Récap exécutif</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Bénéficiaire</div>';
+    html += '<div style="font-size:18px;font-weight:600;margin:4px 0 2px;">' + (p.raisonSociale || '?') + '</div>';
+    html += '<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:rgba(245,245,247,.6);">SIRET ' + (p.siret || '?') + ' · NAF ' + (p.ape || '?') + '</div></div>';
+    html += '<div style="text-align:right;"><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Prime totale CEE</div>';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:38px;color:#C8FF6B;letter-spacing:-.04em;line-height:1;margin-top:4px;">' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-top:4px;">' + (k.nb_selected || 0) + ' fiche' + ((k.nb_selected||0) > 1 ? 's' : '') + ' retenue' + ((k.nb_selected||0) > 1 ? 's' : '') + '</div></div>';
+    html += '</div></div>';
+    // Sommaire 5 pages PDF
+    html += '<div class="v2-card"><div class="v2-card-title">📄 PDF 5 pages (calculs V1 — autoTable)</div>';
+    var pages = [
+      {n:'1', t:'Bilan général', s:'Identité + KPI prime/cumac/coût + verdict ROI + tableau opérations'},
+      {n:'2', t:'Détail par opération', s:'Pour chaque fiche : ref, label, qty, prime, coût, couverture'},
+      {n:'3', t:'Équipements & coûts marché', s:'Sources prix (246 entrées), avant/après, durée de vie'},
+      {n:'4', t:'Comparatif financier', s:'3 scénarios + projection 15 ans + leasing'},
+      {n:'5', t:'Analyse IA Penta', s:'Synthèse Claude/GPT/Gemini/Groq/Kimi + recommandations'},
+    ];
+    pages.forEach(s => {
+      html += '<div class="v2-field" style="grid-template-columns:50px 1fr;">';
+      html += '<div style="font-family:Fraunces,Georgia,serif;font-size:24px;font-weight:380;color:#58a6ff;letter-spacing:-.04em;">' + s.n + '</div>';
+      html += '<div><div style="font-weight:500;font-size:14px;margin-bottom:2px;">' + s.t + '</div>';
+      html += '<div style="font-size:12px;color:rgba(245,245,247,.55);">' + s.s + '</div></div></div>';
+    });
+    html += '</div>';
+    // Lien partageable
+    html += '<div class="v2-card"><div class="v2-card-title">🔗 Lien partageable client (token signé HMAC)</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">URL unique signée pour partager ce diagnostic au client en lecture seule. Expire 30 jours. Aucune authentification requise côté client.</div>';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2.generateShareLink()">Générer le lien</button>';
+    html += '<div id="v2p6shareLink" style="margin-top:14px;"></div>';
+    html += '</div>';
+    c.innerHTML = html;
   },
 
   _qHtml(qq) {
