@@ -15,7 +15,7 @@ import os
 # Emmy dec 2025: 8.78 €/MWhc = 0.00878 €/kWhc
 # ⚠️ Distinguer du prix NÉGOCIÉ obligé (gisement_sirat.PRIX_CUMAC_DEFAUT_EUR_MWHC = 8.00 €/MWhc)
 # Le prix marché sert à estimer la valeur théorique. Le prix obligé sert à calculer la prime réelle.
-PRIX_CUMAC = float(os.environ.get("PRIX_CUMAC", 0.00878))
+PRIX_CUMAC = float(os.environ.get("PRIX_CUMAC", 0.00720))  # V37.4.8 — réf marché tertiaire conservateur (au lieu de 0.00878)
 
 # Prix cumac PRÉCARITÉ en €/kWhc
 # Emmy sept 2025: 15.23 €/MWhc = 0.01523 €/kWhc (hausse massive P6)
