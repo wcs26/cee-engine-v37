@@ -14586,12 +14586,41 @@ window.V2 = {
     c.innerHTML = html;
   },
 
-  // V37.4.4+5b — P3 BÂTIMENT : cards profils micro-activité V1 + Universal Questionnaire 6 sections
+  // V37.4.4+5b+6 — P3 BÂTIMENT : alertes réglementaires + cards profils + Universal Questionnaire
   async _renderBatiment() {
     var c = document.getElementById('v2p3content'); if (!c) return;
     if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     var p = this.state.profil; var a = this.state.answers;
     var html = '';
+
+    // V37.4.6 — Alertes réglementaires automatiques selon contexte bâtiment
+    var alertes = [];
+    var surface = Number(p.surface) || 0;
+    if (surface >= 1000) {
+      alertes.push({color:'#d29922', icon:'⚠', titre:'Décret BACS — GTB obligatoire',
+        text:'Surface ' + surface + ' m² ≥ 1 000 m² : décret BACS impose une GTB classe B (depuis 1er janv 2025). Fiche éligible : <strong>BAT-TH-116</strong> (15-25 % d\'économies). Sanction : amende 1 500 € jusqu\'à mise en conformité.'});
+      alertes.push({color:'#58a6ff', icon:'📊', titre:'Décret tertiaire — OPERAT',
+        text:'Surface ' + surface + ' m² ≥ 1 000 m² : déclaration annuelle OPERAT obligatoire (consommations sur plateforme ADEME). Objectifs : -40 % en 2030, -50 % en 2040, -60 % en 2050 (référence 2010 ou 2020 au choix).'});
+    }
+    var fc = Number(a.facture_chauffage) || 0; var fe = Number(a.facture_elec) || 0;
+    var consoEstime_kWh = (fc + fe) / 0.10;  // estimation grossière 0,10 €/kWh moyen tertiaire
+    if (consoEstime_kWh >= 2_750_000) {
+      alertes.push({color:'#ff7b72', icon:'🚨', titre:'Loi DDADUE — audit énergétique obligatoire',
+        text:'Consommation estimée ≥ 2,75 GWh/an (loi DDADUE 2025-391, transposition EED 2023/1791). Audit énergétique réglementaire obligatoire <strong>avant le 11 octobre 2026</strong>. À défaut : sanction administrative jusqu\'à 4 % du CA.'});
+    }
+    if (alertes.length) {
+      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(210,153,34,.06),rgba(210,153,34,.015));border-color:rgba(210,153,34,.3);">';
+      html += '<div class="v2-card-title">📜 Veille réglementaire applicable à ce bâtiment</div>';
+      alertes.forEach(al => {
+        html += '<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;gap:12px;">';
+        html += '<div style="font-size:22px;color:' + al.color + ';">' + al.icon + '</div>';
+        html += '<div style="flex:1;"><div style="font-weight:600;font-size:14px;color:' + al.color + ';margin-bottom:4px;">' + al.titre + '</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.75);line-height:1.55;">' + al.text + '</div></div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
 
     // V37.4.5b — Cards profils micro-activité (réutilise MICRO_ACTIVITIES V1, 16 profils × 3-5 micros)
     if (typeof MICRO_ACTIVITIES !== 'undefined') {
@@ -14719,24 +14748,73 @@ window.V2 = {
     });
     moteurHtml += '</div>';
 
-    // Bloc B : Penta-IA Conseil 5×3
-    c.innerHTML = moteurHtml + '<div class="v2-loading">Penta-IA Conseil 5×3 (Claude · GPT · Gemini · Groq · Kimi)… (~30 sec)</div>';
-    if (this.state.iaInsights) { c.innerHTML = moteurHtml + this._iaHtml(); return; }
-    var prompt = 'Tu es expert CEE. Profil : ' + (p.raisonSociale||'?') + ' (NAF ' + (p.ape||'?') + '), ' + (p.surface||'?') + ' m², zone ' + (p.zone||'?') + ', DPE ' + (p.dpe_classe||'?') + ', construit en ' + (p.annee_construction||'?') + ', énergie ' + (a.energie||'?') + '. Réponds en français max 200 mots : 3 opportunités CEE prioritaires (avec ref BAT-/BAR-/IND-), prime estimée, prérequis terrain.';
-    var msg = JSON.stringify({messages: [{role:'user', content: prompt}]});
+    // V37.4.6 — Penta-IA spécialisée : 1 rôle par IA (juridique/stratégie/marché/calcul/technique)
+    c.innerHTML = moteurHtml + '<div class="v2-loading">Penta-IA Conseil 5×3 — 5 rôles spécialisés en parallèle (juridique · stratégie · marché · calcul · technique)… (~30 sec)</div>';
+    if (this.state.iaInsights && Array.isArray(this.state.iaInsights) && this.state.iaInsights[0] && this.state.iaInsights[0].role) {
+      c.innerHTML = moteurHtml + this._iaHtmlRoles(); return;
+    }
+    var ctx = 'Profil entreprise : ' + (p.raisonSociale||'?') + ' (NAF ' + (p.ape||'?') + '), surface ' + (p.surface||'?') + ' m², zone climatique ' + (p.zone||'?') + ', DPE ' + (p.dpe_classe||'?') + ', construit en ' + (p.annee_construction||'?') + ', énergie ' + (a.energie||'?') + '. Période CEE actuelle : P6 (2026-2030, décret 2025-1048).';
     var headers = {'Content-Type':'application/json', 'X-Requested-With':'XMLHttpRequest'};
-    var endpoints = [
-      {name:'Claude (Anthropic)', url:'/ai/claude', extract: d => (d.content && d.content[0] && d.content[0].text) || d.text || ''},
-      {name:'GPT-4 (OpenAI)', url:'/ai/openai', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
-      {name:'Gemini (Google)', url:'/ai/gemini', extract: d => (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] && d.candidates[0].content.parts[0].text) || d.text || ''},
-      {name:'Llama 3.3 (Groq)', url:'/ai/groq', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
-      {name:'Kimi (Moonshot)', url:'/ai/kimi', extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+    var roles = [
+      {name:'Claude — Conseiller juridique', short:'Claude', url:'/ai/claude', role:'JURIDIQUE', emoji:'⚖️', color:'#58a6ff',
+       prompt: ctx + ' Tu es expert PNCEE/conformité P6 (arrêté 21/12/2025). Vérifie : non-cumul, RGE valide au dépôt, conservation 9 ans (art. 6 arrêté 4/9/2014), 12 erreurs G1T. Réponds 120 mots max, format strict : ✓ OK | ⚠ avertissement | ✗ bloquant.',
+       extract: d => (d.content && d.content[0] && d.content[0].text) || d.text || ''},
+      {name:'GPT-4 — Synthèse stratégique', short:'GPT-4', url:'/ai/openai', role:'STRATÉGIE', emoji:'🎯', color:'#C8FF6B',
+       prompt: ctx + ' Tu es directeur commercial CEE expert. Synthétise en 3 opportunités prioritaires avec ref BAT-/BAR-/IND-, prime estimée, ordre d\'enchaînement optimal. 120 mots max.',
+       extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+      {name:'Gemini — Veille marché', short:'Gemini', url:'/ai/gemini', role:'MARCHÉ', emoji:'📊', color:'#d29922',
+       prompt: ctx + ' Tu es analyste marché CEE. Ressors : prix cumac EMMY actuel (~8,78 €/MWhc déc 2025), fiches récemment abrogées impactantes (BAR-TH-104/160, BAT-TH-102, BAR-TH-124, BAT-TH-127), opportunités délégataire/obligé pour ce secteur. 120 mots.',
+       extract: d => (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts && d.candidates[0].content.parts[0] && d.candidates[0].content.parts[0].text) || d.text || ''},
+      {name:'Llama 3.3 — Calcul rapide', short:'Llama', url:'/ai/groq', role:'CALCUL', emoji:'🧮', color:'#9d6dff',
+       prompt: ctx + ' Tu es moteur de calcul CEE. Estime numériquement : cumac total estimé, prime brute estimée P6 (×3-5 si fossile→renouvelable Coup de Pouce), ROI 5/10/15 ans réaliste. Format chiffré tableau.',
+       extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
+      {name:'Kimi — Analyse technique', short:'Kimi', url:'/ai/kimi', role:'TECHNIQUE', emoji:'🔧', color:'#ff7b72',
+       prompt: ctx + ' Tu es ingénieur thermicien. Identifie pour ce profil : prérequis terrain (vide sanitaire accessible, gaine technique, accès toiture), équipements compatibles selon âge/DPE, contraintes installation. 120 mots.',
+       extract: d => (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || ''},
     ];
-    var promises = endpoints.map(ep => this._fetch(ep.url, {method:'POST', headers: headers, body: msg})
-      .then(r => r.json()).then(d => ({name: ep.name, ok: true, content: ep.extract(d) || JSON.stringify(d).slice(0,300)}))
-      .catch(e => ({name: ep.name, ok: false, error: e.message || String(e)})));
+    var promises = roles.map(r => this._fetch(r.url, {method:'POST', headers: headers, body: JSON.stringify({messages:[{role:'user', content: r.prompt}]})})
+      .then(resp => resp.json()).then(d => Object.assign({}, r, {ok: true, content: r.extract(d) || ''}))
+      .catch(e => Object.assign({}, r, {ok: false, error: e.message || String(e)})));
     this.state.iaInsights = await Promise.all(promises);
-    c.innerHTML = moteurHtml + this._iaHtml();
+    c.innerHTML = moteurHtml + this._iaHtmlRoles();
+  },
+
+  // V37.4.6 — Render Penta-IA spécialisée + verdict consensus GO/PRUDENCE/STOP
+  _iaHtmlRoles() {
+    var results = this.state.iaInsights || [];
+    if (!Array.isArray(results) || !results[0] || !results[0].role) return this._iaHtml ? this._iaHtml() : '';
+    var ok = results.filter(r => r.ok && r.content && r.content.length > 20);
+    // Verdict consensus depuis Claude juridique + signaux des autres
+    var juridique = results.find(r => r.role === 'JURIDIQUE');
+    var verdict = 'GO', verdictColor = '#C8FF6B', verdictMsg = 'Aucun blocage juridique détecté. Profil compatible CEE P6.';
+    if (juridique && juridique.ok && /✗|bloqu|stop|interdit|non.?conforme/i.test(juridique.content || '')) {
+      verdict = 'STOP'; verdictColor = '#ff7b72'; verdictMsg = 'Claude (juridique) a détecté un blocage PNCEE. À résoudre AVANT signature.';
+    } else if (ok.some(r => /⚠|avertissement|attention|risque|prudence/i.test(r.content || ''))) {
+      verdict = 'PRUDENCE'; verdictColor = '#d29922'; verdictMsg = 'Avertissement(s) détecté(s) par 1+ IA. À vérifier avant signature.';
+    }
+    var html = '';
+    // Verdict consensus en haut
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,' + verdictColor + '18,' + verdictColor + '08);border-color:' + verdictColor + '60;">';
+    html += '<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:54px;color:' + verdictColor + ';letter-spacing:-.04em;line-height:1;">' + verdict + '</div>';
+    html += '<div style="flex:1;min-width:200px;"><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Verdict consensus 5 IA spécialisées</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.85);margin-top:6px;line-height:1.5;">' + verdictMsg + '</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.4);margin-top:6px;">' + ok.length + ' / 5 IA ont répondu · règle : Claude STOP override, ≥1 ⚠ → PRUDENCE</div></div>';
+    html += '</div></div>';
+    // 5 cards par rôle
+    results.forEach(r => {
+      if (!r.ok || !r.content || r.content.length <= 20) {
+        html += '<div class="v2-card" style="opacity:.5;border-color:rgba(255,255,255,.06);">';
+        html += '<div class="v2-card-title">' + (r.emoji || '🤖') + ' ' + (r.name || '?') + '</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.45);">⚠ Indisponible : ' + (r.error || 'pas de réponse') + '</div></div>';
+        return;
+      }
+      html += '<div class="v2-card" style="border-left:3px solid ' + r.color + ';">';
+      html += '<div class="v2-card-title" style="color:' + r.color + ';display:flex;align-items:center;gap:8px;">' + (r.emoji || '🤖') + ' ' + (r.name || '?') + '<span style="margin-left:auto;font-size:10px;padding:2px 8px;background:' + r.color + '25;border-radius:99px;color:' + r.color + ';font-weight:600;">' + (r.role || '') + '</span></div>';
+      html += '<div style="white-space:pre-wrap;line-height:1.6;font-size:13px;color:rgba(245,245,247,.85);">' + (r.content || '').replace(/</g,'&lt;') + '</div>';
+      html += '</div>';
+    });
+    return html;
   },
 
   _iaHtml() {
@@ -14851,6 +14929,19 @@ window.V2 = {
     var c = document.getElementById('v2p9content'); if (!c) return;
     var p = this.state.profil || {}; var k = this.state.kpi || {};
     var html = '';
+
+    // V37.4.6 — Bandeau veille réglementaire P6 (2026-2030)
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(88,166,255,.06),rgba(88,166,255,.015));border-color:rgba(88,166,255,.3);">';
+    html += '<div class="v2-card-title">📜 Référentiel réglementaire applicable au rapport</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:12px;line-height:1.6;color:rgba(245,245,247,.7);">';
+    html += '<div><strong style="color:#58a6ff;">Période CEE</strong><br>P6 — 1er janv 2026 → 31 déc 2030<br>Volume : 1 050 TWhc/an (+27 %)</div>';
+    html += '<div><strong style="color:#58a6ff;">Décret cadre</strong><br>n° 2025-1048 du 11/10/2025<br>Arrêté du 21/12/2025</div>';
+    html += '<div><strong style="color:#58a6ff;">Prix cumac</strong><br>EMMY déc 2025 : ~8,78 €/MWhc<br>(variable selon obligé)</div>';
+    html += '<div><strong style="color:#58a6ff;">Conservation pièces</strong><br>9 ans après délivrance CEE<br>(arrêté 4/9/2014 art. 6)</div>';
+    html += '<div><strong style="color:#58a6ff;">RGE installateur</strong><br>Validité requise au dépôt<br>Qualibat / QualiPAC / Qualit\'EnR</div>';
+    html += '<div><strong style="color:#58a6ff;">Coup de Pouce P6</strong><br>×3 à ×5 si fossile → renouvelable<br>(PAC, biomasse, réseau chaleur)</div>';
+    html += '</div></div>';
+
     html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
     html += '<div class="v2-card-title">📊 Récap exécutif</div>';
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
