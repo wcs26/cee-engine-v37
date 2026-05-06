@@ -13743,7 +13743,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   /* Stepper — V37.4.4 : 9 pages compartimentées strictement */
   .v2-stepper {
-    display: grid; grid-template-columns: repeat(9, 1fr); gap: 3px;
+    display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px;
     margin-bottom: 40px;
   }
   .v2-step {
@@ -13956,11 +13956,12 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="v2-step" data-page="2" onclick="V2.go(2)"><div class="v2-step-num">2</div><div class="v2-step-label">Énergie</div></div>
       <div class="v2-step" data-page="3" onclick="V2.go(3)"><div class="v2-step-num">3</div><div class="v2-step-label">Bâtiment</div></div>
       <div class="v2-step" data-page="4" onclick="V2.go(4)"><div class="v2-step-num">4</div><div class="v2-step-label">Analyse</div></div>
-      <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Primes</div></div>
-      <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Économies</div></div>
-      <div class="v2-step" data-page="7" onclick="V2.go(7)"><div class="v2-step-num">7</div><div class="v2-step-label">Conformité</div></div>
-      <div class="v2-step" data-page="8" onclick="V2.go(8)"><div class="v2-step-num">8</div><div class="v2-step-label">Documents</div></div>
-      <div class="v2-step" data-page="9" onclick="V2.go(9)"><div class="v2-step-num">9</div><div class="v2-step-label">Rapport</div></div>
+      <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Primes 0€</div></div>
+      <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Recommandées</div></div>
+      <div class="v2-step" data-page="7" onclick="V2.go(7)"><div class="v2-step-num">7</div><div class="v2-step-label">Économies</div></div>
+      <div class="v2-step" data-page="8" onclick="V2.go(8)"><div class="v2-step-num">8</div><div class="v2-step-label">Conformité</div></div>
+      <div class="v2-step" data-page="9" onclick="V2.go(9)"><div class="v2-step-num">9</div><div class="v2-step-label">Documents</div></div>
+      <div class="v2-step" data-page="10" onclick="V2.go(10)"><div class="v2-step-num">10</div><div class="v2-step-label">Rapport</div></div>
     </div>
 
     <!-- ═══ P1 — IDENTIFIER ═══ -->
@@ -14022,57 +14023,68 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
-    <!-- ═══ P5 — PRIMES (sélection) ═══ -->
+    <!-- ═══ P5 — PRIMES 0€ (couverture ≥ 90 %, projet auto-financé) ═══ -->
     <div class="v2-page" id="v2p5">
-      <h1 class="v2-page-title">Sélection des primes</h1>
-      <p class="v2-page-sub">Fiches CEE éligibles triées par montant. Coche les retenues — total mis à jour live.</p>
+      <h1 class="v2-page-title">🎁 Primes à 0&nbsp;€ reste à charge</h1>
+      <p class="v2-page-sub">Fiches CEE dont la prime couvre 90&nbsp;% à 100&nbsp;% (voire au-delà) du coût travaux estimé. Projet auto-financé — argument commercial maximum.</p>
       <div id="v2p5content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(4)">← Retour Analyse</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(6)">Étape 6 — Économies →</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(6)">Étape 6 — Recommandées →</button>
       </div>
     </div>
 
-    <!-- ═══ P6 — ÉCONOMIES (KPI + projections, calculs V1) ═══ -->
+    <!-- ═══ P6 — PRIMES RECOMMANDÉES / OBLIGATOIRES (utiles + BACS/DDADUE) ═══ -->
     <div class="v2-page" id="v2p6">
-      <h1 class="v2-page-title">Valeur financière générée</h1>
-      <p class="v2-page-sub">KPI prime, économie annuelle, projections 5/10/15 ans. Calculs identiques au moteur V1.</p>
+      <h1 class="v2-page-title">📋 Primes recommandées &amp; obligations réglementaires</h1>
+      <p class="v2-page-sub">Autres fiches éligibles (couverture &lt; 90&nbsp;%) qui restent rentables, plus les obligations applicables : décret BACS, OPERAT, audit DDADUE.</p>
       <div id="v2p6content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(5)">← Retour Primes</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(7)">Étape 7 — Conformité →</button>
+        <button class="v2-btn" onclick="V2.go(5)">← Retour Primes 0€</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(7)">Étape 7 — Économies →</button>
       </div>
     </div>
 
-    <!-- ═══ P7 — CONFORMITÉ PNCEE (NOUVEAU) ═══ -->
+    <!-- ═══ P7 — ÉCONOMIES (KPI + projections, calculs V1) ═══ -->
     <div class="v2-page" id="v2p7">
+      <h1 class="v2-page-title">Valeur financière générée</h1>
+      <p class="v2-page-sub">KPI prime, économie annuelle, projections 5/10/15 ans. Calculs identiques au moteur V1.</p>
+      <div id="v2p7content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(6)">← Retour Recommandées</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(8)">Étape 8 — Conformité →</button>
+      </div>
+    </div>
+
+    <!-- ═══ P8 — CONFORMITÉ PNCEE ═══ -->
+    <div class="v2-page" id="v2p8">
       <h1 class="v2-page-title">Conformité PNCEE</h1>
       <p class="v2-page-sub">Checklist des 12 erreurs fatales identifiées par G1T + 46 règles juridiques P6. Statut OK / À corriger par item.</p>
-      <div id="v2p7content"><div class="v2-loading" style="display:none;">Vérification conformité…</div></div>
+      <div id="v2p8content"><div class="v2-loading" style="display:none;">Vérification conformité…</div></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(6)">← Retour Économies</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(8)">Étape 8 — Documents →</button>
+        <button class="v2-btn" onclick="V2.go(7)">← Retour Économies</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(9)">Étape 9 — Documents →</button>
       </div>
     </div>
 
-    <!-- ═══ P8 — DOCUMENTS (génération HTML 4 docs) ═══ -->
-    <div class="v2-page" id="v2p8">
+    <!-- ═══ P9 — DOCUMENTS ═══ -->
+    <div class="v2-page" id="v2p9">
       <h1 class="v2-page-title">Documents pré-remplis</h1>
       <p class="v2-page-sub">4 documents générés automatiquement depuis ton dossier : rapport gisement, devis, convention, attestation honneur.</p>
-      <div id="v2p8content"></div>
+      <div id="v2p9content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(7)">← Retour Conformité</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(9)">Étape 9 — Rapport →</button>
+        <button class="v2-btn" onclick="V2.go(8)">← Retour Conformité</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(10)">Étape 10 — Rapport →</button>
       </div>
     </div>
 
-    <!-- ═══ P9 — RAPPORT (PDF + partage final) ═══ -->
-    <div class="v2-page" id="v2p9">
+    <!-- ═══ P10 — RAPPORT (PDF + partage final) ═══ -->
+    <div class="v2-page" id="v2p10">
       <h1 class="v2-page-title">Rapport final</h1>
       <p class="v2-page-sub">PDF 5 pages (calculs V1) + lien partageable au client (token signé HMAC, expire 30j).</p>
-      <div id="v2p9content"></div>
+      <div id="v2p10content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(8)">← Retour Documents</button>
+        <button class="v2-btn" onclick="V2.go(9)">← Retour Documents</button>
         <button class="v2-btn v2-btn-primary" onclick="V2.exportPdf()">📄 Télécharger le PDF 5 pages</button>
       </div>
     </div>
@@ -14128,7 +14140,7 @@ window.V2 = {
 
   go(page) {
     console.log('[V2.go] navigation page', page);
-    if (page < 1 || page > 6) { console.warn('[V2.go] page hors limites', page); return; }
+    if (page < 1 || page > 10) { console.warn('[V2.go] page hors limites', page); return; }
     try {
       document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
       var target = document.getElementById('v2p' + page);
@@ -14147,16 +14159,17 @@ window.V2 = {
       console.error('[V2.go] erreur navigation:', e);
       alert('Bug navigation: ' + e.message); return;
     }
-    // V37.4.4 — Lazy render 9 pages compartimentées strictement
+    // V37.4.8 — Lazy render 10 pages : split P5 → "Primes 0€" + "Recommandées/obligations"
     try {
       if (page === 2) this._renderEnergie();
       if (page === 3) this._renderBatiment();
       if (page === 4) this._renderAnalyse();
-      if (page === 5) this.renderP4();      // primes (inchangé V37.4.2b)
-      if (page === 6) this.renderP5();      // économies (calculs V1, inchangé V37.4.3)
-      if (page === 7) this._renderConformite();
-      if (page === 8) this._renderDocuments();
-      if (page === 9) this._renderRapport();
+      if (page === 5) this._renderPrimesZero();    // primes 0€ reste à charge (couv ≥ 90%)
+      if (page === 6) this._renderPrimesReco();    // recommandées + obligations BACS/DDADUE
+      if (page === 7) this.renderP5();             // économies (calculs V1)
+      if (page === 8) this._renderConformite();
+      if (page === 9) this._renderDocuments();
+      if (page === 10) this._renderRapport();
     } catch (e) {
       console.error('[V2.go] erreur render P' + page + ':', e);
       var c = document.getElementById('v2p' + page + 'content');
@@ -14293,8 +14306,53 @@ window.V2 = {
     html += f('Zone climatique', 'zone', 'select', true, 'Calculé', ['H1','H2','H3']);
     html += f('Tranche effectif salarié', 'tranche_effectif', 'text', false, 'Sirene');
     html += f('RNB ID (bâtiment)', 'rnb_id', 'mono', false, 'RNB');
+
+    // V37.4.8 — TVA intracommunautaire (calcul auto FR{cle2}{siren}, algo officiel)
+    var siret = (p.siret || '').replace(/\D/g,'');
+    var tvaCalc = '';
+    if (siret.length >= 9) {
+      var siren9 = siret.substring(0, 9);
+      var cle = (12 + 3 * (parseInt(siren9, 10) % 97)) % 97;
+      tvaCalc = 'FR' + (cle < 10 ? '0' : '') + cle + siren9;
+      p.tva_intra = tvaCalc;
+    }
+    if (tvaCalc) {
+      html += '<div class="v2-field"><div class="v2-field-label">TVA intracommunautaire</div><div class="v2-field-value mono">' + tvaCalc + '<span class="v2-field-source">Calculé (algo INSEE)</span></div></div>';
+    }
     document.getElementById('v2p1fields').innerHTML = html;
     document.getElementById('v2p1result').style.display = 'block';
+
+    // V37.4.8 — Liens externes : Pappers + Annuaire-entreprises + Sirene officiel
+    var oldLinks = document.getElementById('v2p1ExtLinks'); if (oldLinks) oldLinks.remove();
+    if (p.siret) {
+      var linksCard = document.createElement('div');
+      linksCard.id = 'v2p1ExtLinks';
+      linksCard.className = 'v2-card';
+      linksCard.style.marginTop = '14px';
+      var siren = (p.siret || '').substring(0, 9);
+      linksCard.innerHTML =
+        '<div class="v2-card-title">🔗 Sources officielles entreprise — vérification croisée</div>' +
+        '<div style="font-size:12px;color:rgba(245,245,247,.65);margin-bottom:12px;">Toutes les données entreprise sont sourcées en open data publique. Vérifie chez la source si doute.</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">' +
+          '<a href="https://www.pappers.fr/entreprise/' + p.siret + '" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;flex-direction:column;height:auto;padding:14px;">' +
+            '<span style="font-size:18px;">📑</span><span style="font-size:13px;font-weight:600;margin-top:4px;">Pappers</span>' +
+            '<span style="font-size:10px;color:rgba(245,245,247,.55);font-weight:400;">Comptes annuels · dirigeants · marques</span>' +
+          '</a>' +
+          '<a href="https://annuaire-entreprises.data.gouv.fr/etablissement/' + p.siret + '" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;flex-direction:column;height:auto;padding:14px;">' +
+            '<span style="font-size:18px;">🏛️</span><span style="font-size:13px;font-weight:600;margin-top:4px;">Annuaire entreprises</span>' +
+            '<span style="font-size:10px;color:rgba(245,245,247,.55);font-weight:400;">Sirene INSEE officiel · gouv.fr</span>' +
+          '</a>' +
+          '<a href="https://avis-situation-sirene.insee.fr/jsp/avis.jsp?siret=' + p.siret + '" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;flex-direction:column;height:auto;padding:14px;">' +
+            '<span style="font-size:18px;">📋</span><span style="font-size:13px;font-weight:600;margin-top:4px;">Avis Sirene INSEE</span>' +
+            '<span style="font-size:10px;color:rgba(245,245,247,.55);font-weight:400;">Justificatif établissement (PDF)</span>' +
+          '</a>' +
+          '<a href="https://www.infogreffe.fr/entreprise-societe/' + siren + '" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;flex-direction:column;height:auto;padding:14px;">' +
+            '<span style="font-size:18px;">⚖️</span><span style="font-size:13px;font-weight:600;margin-top:4px;">Infogreffe</span>' +
+            '<span style="font-size:10px;color:rgba(245,245,247,.55);font-weight:400;">RCS · procédures collectives</span>' +
+          '</a>' +
+        '</div>';
+      document.getElementById('v2p1result').parentNode.insertBefore(linksCard, document.getElementById('v2p1result').nextSibling);
+    }
 
     // V37.4.5b — Bonus card "Cartes IGN" : satellite/Street View/cadastre/PLU sur la position de l'entreprise
     var oldCardMap = document.getElementById('v2p1MapCard'); if (oldCardMap) oldCardMap.remove();
@@ -14871,7 +14929,8 @@ window.V2 = {
 
   // V37.4.4 — P7 CONFORMITÉ PNCEE : checklist 12 erreurs G1T + 46 règles juridiques
   async _renderConformite() {
-    var c = document.getElementById('v2p7content'); if (!c) return;
+    // V37.4.8 — cible v2p8content (P8 Conformité en archi 10 pages)
+    var c = document.getElementById('v2p8content'); if (!c) return;
     var p = this.state.profil; if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     if (!this._checkAuth()) { c.innerHTML = this._authModal('Conformité appelle /conformite/check'); return; }
     c.innerHTML = '<div class="v2-loading">Vérification conformité 46 règles P6 + 12 erreurs G1T…</div>';
@@ -14936,7 +14995,8 @@ window.V2 = {
 
   // V37.4.4 — P8 DOCUMENTS : 4 boutons HTML pré-remplis (extrait de l'ancien renderP6)
   _renderDocuments() {
-    var c = document.getElementById('v2p8content'); if (!c) return;
+    // V37.4.8 — cible v2p9content (P9 Documents en archi 10 pages)
+    var c = document.getElementById('v2p9content'); if (!c) return;
     var p = this.state.profil; if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     var html = '';
     html += '<div class="v2-card"><div class="v2-card-title">📋 4 documents pré-remplis (à signer client)</div>';
@@ -14961,7 +15021,8 @@ window.V2 = {
 
   // V37.4.4 — P9 RAPPORT : récap exécutif + bouton PDF + lien partage (extrait de l'ancien renderP6)
   _renderRapport() {
-    var c = document.getElementById('v2p9content'); if (!c) return;
+    // V37.4.8 — cible v2p10content (P10 Rapport en archi 10 pages)
+    var c = document.getElementById('v2p10content'); if (!c) return;
     var p = this.state.profil || {}; var k = this.state.kpi || {};
     var html = '';
 
@@ -15069,9 +15130,9 @@ window.V2 = {
   // P4 — SÉLECTION PRIMES
   // ═══════════════════════════════════════════════════════════════════
   renderP4() {
-    // V37.4.5b — Cible v2p5content (Primes en archi 9 pages) au lieu de v2p4content (= Analyse).
-    // Bug introduit en V37.4.4 lors de la renumérotation 6→9 pages.
-    var c = document.getElementById('v2p5content');
+    // V37.4.8 — renderP4 utilisé dans P5+P6 séparément, mais helper de base ici cible un container passé en param
+    // Pour rétro-compat : si appelé sans target, on tombe sur v2p5content (qui contient maintenant Primes 0€)
+    var c = arguments[0] && arguments[0].targetId ? document.getElementById(arguments[0].targetId) : document.getElementById('v2p5content');
     if (!c) { console.warn('[V2.renderP4] v2p5content introuvable'); return; }
     if (!this.state.pack.length) {
       c.innerHTML = '<div class="v2-error">Aucune fiche éligible — fais d\'abord P1 + P2 + P4 (analyse moteur) pour calculer le pack.</div>';
@@ -15162,6 +15223,145 @@ window.V2 = {
     this._updateTotal();
   },
 
+  // V37.4.8 — P5 PRIMES 0€ (couverture ≥ 90%, projet auto-financé)
+  _renderPrimesZero() {
+    var c = document.getElementById('v2p5content'); if (!c) return;
+    if (!this.state.pack.length) { c.innerHTML = '<div class="v2-error">Aucune fiche éligible. Fais d\'abord P1+P2+P4.</div>'; return; }
+    // Sync STATE V1 pour utiliser getGlobalCalc
+    this._syncToV1State();
+    var fichesZero = [];
+    if (typeof window.getFullCalc === 'function' && typeof FICHES !== 'undefined') {
+      var zone = (this.state.profil && this.state.profil.zone) || 'H2';
+      var eType = (this.state.answers && this.state.answers.energie) || '';
+      this.state.pack.forEach(packItem => {
+        var ref = packItem.fiche || packItem.ref;
+        var fv1 = FICHES.find(f => f.ref === ref);
+        if (!fv1) return;
+        try {
+          var calc = window.getFullCalc(fv1, 1, zone, eType);
+          if (calc.coverage >= 90 || fv1.zeroEuro) {
+            fichesZero.push({ref: ref, fiche: fv1, calc: calc, packItem: packItem});
+          }
+        } catch (_e) {}
+      });
+    }
+    fichesZero.sort((a,b) => (b.calc.primeBrute||0) - (a.calc.primeBrute||0));
+
+    var html = '';
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.10),rgba(200,255,107,.02));border-color:rgba(200,255,107,.35);">';
+    html += '<div class="v2-card-title" style="color:#C8FF6B;">🎁 Argument commercial maximum — projet auto-financé</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
+    html += 'Ces ' + fichesZero.length + ' fiches couvrent <strong>90 % à 100 %+</strong> du coût travaux estimé. Le client signe sans débourser. ';
+    html += 'Pitch : <em>« Ces ' + fichesZero.length + ' opérations sont financées intégralement par les CEE — vous ne payez rien, vous économisez quand même. »</em>';
+    html += '</div></div>';
+
+    if (fichesZero.length === 0) {
+      html += '<div class="v2-card"><div class="v2-card-title">⚠ Aucune fiche 0€ détectée pour ce profil</div>';
+      html += '<div style="font-size:13px;color:rgba(245,245,247,.7);">Le calcul couverture nécessite : énergie principale (P2), surface (P1), zone climatique. Vérifie ces inputs ou consulte les Primes recommandées (P6) pour les opportunités à reste à charge réduit.</div></div>';
+    } else {
+      fichesZero.forEach(item => {
+        var ref = item.ref; var f = item.fiche; var calc = item.calc;
+        var sel = this.state.selected.has(ref);
+        if (this.state.selected.size === 0) { this.state.selected.add(ref); sel = true; }
+        var couvBadge = calc.coverage >= 100 ? '✓ 100&nbsp;%+' : Math.round(calc.coverage) + '&nbsp;%';
+        html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')" style="border-left:3px solid #C8FF6B;">';
+        html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
+        html += '<div style="flex:1;">';
+        html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
+        html += '<span class="v2-fiche-ref">' + ref + '</span>';
+        html += '<span style="padding:2px 8px;background:rgba(200,255,107,.15);color:#C8FF6B;border:1px solid rgba(200,255,107,.35);border-radius:4px;font-size:10px;font-weight:700;font-family:JetBrains Mono,monospace;">COUV ' + couvBadge + '</span>';
+        html += '<span style="font-size:14px;font-weight:500;flex:1;">' + (f.label || f.ref) + '</span>';
+        html += '<span class="v2-fiche-prime">' + Math.round(calc.primeBrute).toLocaleString('fr-FR') + ' €</span>';
+        html += '</div>';
+        html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
+        html += 'Coût TTC ' + Math.round(calc.costTTC).toLocaleString('fr-FR') + ' € · RAC ' + Math.round(Math.max(0, calc.rac)).toLocaleString('fr-FR') + ' €';
+        html += ' · ' + Math.round(calc.kwhcTotal/1000) + ' kWhc · catégorie ' + (f.cat || 'autre');
+        html += '</div></div></div>';
+      });
+    }
+    c.innerHTML = html;
+    this._updateTotal();
+  },
+
+  // V37.4.8 — P6 PRIMES RECOMMANDÉES (couverture < 90%) + obligations BACS/DDADUE/OPERAT
+  _renderPrimesReco() {
+    var c = document.getElementById('v2p6content'); if (!c) return;
+    if (!this.state.pack.length) { c.innerHTML = '<div class="v2-error">Aucune fiche éligible. Fais d\'abord P1+P2+P4.</div>'; return; }
+    this._syncToV1State();
+    var p = this.state.profil || {}; var a = this.state.answers || {};
+    var fichesReco = [];
+    if (typeof window.getFullCalc === 'function' && typeof FICHES !== 'undefined') {
+      var zone = p.zone || 'H2'; var eType = a.energie || '';
+      this.state.pack.forEach(packItem => {
+        var ref = packItem.fiche || packItem.ref;
+        var fv1 = FICHES.find(f => f.ref === ref);
+        if (!fv1) return;
+        try {
+          var calc = window.getFullCalc(fv1, 1, zone, eType);
+          if (calc.coverage < 90 && !fv1.zeroEuro) fichesReco.push({ref: ref, fiche: fv1, calc: calc});
+        } catch (_e) {}
+      });
+    }
+    fichesReco.sort((a,b) => (b.calc.coverage||0) - (a.calc.coverage||0));
+
+    var html = '';
+    // Section A — Obligations réglementaires
+    var oblig = [];
+    var surface = Number(p.surface) || 0;
+    var fc = Number(a.facture_chauffage) || 0; var fe = Number(a.facture_elec) || 0;
+    var consoEstime = (fc + fe) / 0.10;
+    if (surface >= 1000) {
+      oblig.push({color:'#d29922', titre:'Décret BACS — GTB obligatoire (depuis 1er janv 2025)',
+        ref:'BAT-TH-116', text:'Surface ' + surface + ' m² ≥ 1 000 m² → installation GTB classe B obligatoire. Sanction 1 500 €. Économies 15-25 % sur conso. Fiche BAT-TH-116 prend en charge ~50-80 % du coût.'});
+      oblig.push({color:'#58a6ff', titre:'Décret tertiaire — déclaration OPERAT annuelle',
+        ref:'OPERAT', text:'Déclaration consommations sur plateforme ADEME. Objectifs -40 % en 2030, -50 % en 2040, -60 % en 2050.'});
+    }
+    if (consoEstime >= 2_750_000) {
+      oblig.push({color:'#ff7b72', titre:'Loi DDADUE — audit énergétique obligatoire avant 11/10/2026',
+        ref:'AUDIT', text:'Conso estimée ≥ 2,75 GWh/an. Audit OPQIBI 19.05 obligatoire. Sanction jusqu\'à 4 % CA.'});
+    }
+    if (oblig.length) {
+      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(210,153,34,.06),rgba(210,153,34,.015));border-color:rgba(210,153,34,.3);">';
+      html += '<div class="v2-card-title" style="color:#d29922;">⚠ Obligations réglementaires applicables</div>';
+      oblig.forEach(o => {
+        html += '<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);">';
+        html += '<div style="font-weight:600;font-size:14px;color:' + o.color + ';margin-bottom:4px;">' + o.titre;
+        if (o.ref) html += ' <span style="font-family:JetBrains Mono,monospace;font-size:11px;background:' + o.color + '25;color:' + o.color + ';padding:2px 8px;border-radius:4px;margin-left:6px;">' + o.ref + '</span>';
+        html += '</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.75);line-height:1.55;">' + o.text + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Section B — Fiches recommandées (couv < 90% mais utiles)
+    if (fichesReco.length) {
+      html += '<div class="v2-card"><div class="v2-card-title">📋 Fiches CEE recommandées (' + fichesReco.length + ') — reste à charge à anticiper</div>';
+      html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:14px;">Couverture prime &lt; 90 %. Rentables sur 5-15 ans selon économies réalisées. Triées par couverture décroissante.</div></div>';
+      fichesReco.forEach(item => {
+        var ref = item.ref; var f = item.fiche; var calc = item.calc;
+        var sel = this.state.selected.has(ref);
+        var covColor = calc.coverage >= 70 ? '#58a6ff' : (calc.coverage >= 40 ? '#d29922' : '#ff7b72');
+        html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')" style="border-left:3px solid ' + covColor + ';">';
+        html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
+        html += '<div style="flex:1;">';
+        html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
+        html += '<span class="v2-fiche-ref">' + ref + '</span>';
+        html += '<span style="padding:2px 8px;background:' + covColor + '20;color:' + covColor + ';border:1px solid ' + covColor + '40;border-radius:4px;font-size:10px;font-weight:700;font-family:JetBrains Mono,monospace;">COUV ' + Math.round(calc.coverage) + '&nbsp;%</span>';
+        html += '<span style="font-size:14px;font-weight:500;flex:1;">' + (f.label || ref) + '</span>';
+        html += '<span class="v2-fiche-prime">' + Math.round(calc.primeBrute).toLocaleString('fr-FR') + ' €</span>';
+        html += '</div>';
+        html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
+        html += 'Coût TTC ' + Math.round(calc.costTTC).toLocaleString('fr-FR') + ' € · RAC ' + Math.round(calc.rac).toLocaleString('fr-FR') + ' € à financer · ' + Math.round(calc.kwhcTotal/1000) + ' kWhc';
+        html += '</div></div></div>';
+      });
+    } else if (oblig.length === 0) {
+      html += '<div class="v2-card"><div class="v2-card-title">✓ Rien à signaler ici</div><div style="font-size:13px;color:rgba(245,245,247,.7);">Toutes tes fiches sont en P5 (0€ reste à charge). Aucune obligation réglementaire détectée pour ton profil.</div></div>';
+    }
+    c.innerHTML = html;
+    this._updateTotal();
+  },
+
   _p4SetTab(tab) { this.state._p4Tab = tab; this.renderP4(); },
   _p4SetSearch(s) { this.state._p4Search = s; this.renderP4(); },
   _p4SetQty(ref, q) { this.state._p4Qty = this.state._p4Qty || {}; this.state._p4Qty[ref] = q; this._updateTotal(); },
@@ -15199,8 +15399,8 @@ window.V2 = {
   // ═══════════════════════════════════════════════════════════════════
   renderP5() {
     // V37.4.3 — utilise getGlobalCalc() V1 (mêmes calculs que step 4 V1)
-    // V37.4.5b — cible v2p6content (P6 Économies en archi 9 pages, pas v2p5content)
-    var c = document.getElementById('v2p6content');
+    // V37.4.8 — cible v2p7content (P7 Économies en archi 10 pages)
+    var c = document.getElementById('v2p7content');
     if (!this._syncToV1State()) { c.innerHTML = '<div class="v2-error">Calculs V1 indisponibles. Vérifie P1+P2+P4 d\'abord.</div>'; return; }
     if (typeof window.getGlobalCalc !== 'function') { c.innerHTML = '<div class="v2-error">getGlobalCalc V1 introuvable.</div>'; return; }
     var gc;
@@ -15308,7 +15508,7 @@ window.V2 = {
       nb_selected: gc.details.length, coverage: gc.totalCoverage,
     };
 
-    document.getElementById('v2p6content').innerHTML = html;
+    document.getElementById('v2p7content').innerHTML = html;
     // V37.4.5a — célébration ludique 0€ V1
     setTimeout(() => this._celebrateZeroEuros(), 200);
   },
