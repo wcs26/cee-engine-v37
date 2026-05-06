@@ -14753,7 +14753,20 @@ window.V2 = {
     if (this.state.iaInsights && Array.isArray(this.state.iaInsights) && this.state.iaInsights[0] && this.state.iaInsights[0].role) {
       c.innerHTML = moteurHtml + this._iaHtmlRoles(); return;
     }
-    var ctx = 'Profil entreprise : ' + (p.raisonSociale||'?') + ' (NAF ' + (p.ape||'?') + '), surface ' + (p.surface||'?') + ' m², zone climatique ' + (p.zone||'?') + ', DPE ' + (p.dpe_classe||'?') + ', construit en ' + (p.annee_construction||'?') + ', énergie ' + (a.energie||'?') + '. Période CEE actuelle : P6 (2026-2030, décret 2025-1048).';
+    // V37.4.7 — Précharger les abrogations + pack actif pour ENRICHIR les prompts IA
+    var abrogees = []; var packRefs = [];
+    try {
+      if (!this.state._abrogeesCache) {
+        var rA = await fetch('/fiches/abrogees');
+        if (rA.ok) { var dA = await rA.json(); this.state._abrogeesCache = dA.abrogees || []; }
+      }
+      abrogees = this.state._abrogeesCache || [];
+    } catch (_e) {}
+    packRefs = (this.state.pack || []).map(f => f.fiche || f.ref).filter(Boolean).slice(0, 30);
+    var abrogeesStr = abrogees.map(a => a.ref).join(', ') || 'aucune connue';
+    var packStr = packRefs.join(', ') || 'aucune';
+
+    var ctx = 'Profil entreprise : ' + (p.raisonSociale||'?') + ' (NAF ' + (p.ape||'?') + '), surface ' + (p.surface||'?') + ' m², zone climatique ' + (p.zone||'?') + ', DPE ' + (p.dpe_classe||'?') + ', construit en ' + (p.annee_construction||'?') + ', énergie ' + (a.energie||'?') + '.\n\n⚠️ CONTRAINTES RÉGLEMENTAIRES P6 (2026-2030, décret 2025-1048) :\n• Fiches ABROGÉES à NE JAMAIS suggérer (dataset vivant) : ' + abrogeesStr + '\n• Pack actif éligible déjà calculé par moteur métier (utiliser UNIQUEMENT ces refs) : ' + packStr + '\n• Conservation 9 ans (arrêté 4/9/2014 art. 6), RGE valide au dépôt, prix EMMY déc 2025 ~8,78 €/MWhc.';
     var headers = {'Content-Type':'application/json', 'X-Requested-With':'XMLHttpRequest'};
     var roles = [
       {name:'Claude — Conseiller juridique', short:'Claude', url:'/ai/claude', role:'JURIDIQUE', emoji:'⚖️', color:'#58a6ff',
@@ -14776,7 +14789,25 @@ window.V2 = {
       .then(resp => resp.json()).then(d => Object.assign({}, r, {ok: true, content: r.extract(d) || ''}))
       .catch(e => Object.assign({}, r, {ok: false, error: e.message || String(e)})));
     this.state.iaInsights = await Promise.all(promises);
-    c.innerHTML = moteurHtml + this._iaHtmlRoles();
+    // V37.4.7 — Validation post-IA : check refs hallucinées (abrogées suggérées par erreur)
+    var refsAbrogees = (this.state._abrogeesCache || []).map(a => a.ref);
+    this.state.iaInsights.forEach(r => {
+      if (!r.ok || !r.content) return;
+      var halluc = refsAbrogees.filter(ref => new RegExp('\\b' + ref + '\\b').test(r.content));
+      if (halluc.length) r.hallucinationsAbrogees = halluc;
+    });
+    // Carte "Veille abrogations actives" en transparence
+    var veilleHtml = '';
+    if (refsAbrogees.length) {
+      veilleHtml = '<div class="v2-card" style="background:linear-gradient(180deg,rgba(248,81,73,.06),rgba(248,81,73,.015));border-color:rgba(248,81,73,.3);">' +
+        '<div class="v2-card-title" style="color:#ff7b72;">🚫 Veille abrogations active — ' + refsAbrogees.length + ' fiches à NE PAS suggérer</div>' +
+        '<div style="font-size:12px;color:rgba(245,245,247,.65);margin-bottom:10px;">Liste injectée dans les 5 prompts IA (interdit suggestion). Source : <code style="background:rgba(255,255,255,.05);padding:1px 5px;border-radius:3px;font-family:JetBrains Mono,monospace;">/fiches/abrogees</code> (catalogue ATEE/PNCEE).</div>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;font-family:JetBrains Mono,monospace;font-size:11px;">' +
+        (this.state._abrogeesCache || []).slice(0, 20).map(a =>
+          '<span style="padding:3px 8px;background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.25);border-radius:6px;color:#ff7b72;" title="' + (a.nom||'').replace(/"/g,'&quot;') + '">' + a.ref + '</span>'
+        ).join('') + '</div></div>';
+    }
+    c.innerHTML = moteurHtml + veilleHtml + this._iaHtmlRoles();
   },
 
   // V37.4.6 — Render Penta-IA spécialisée + verdict consensus GO/PRUDENCE/STOP
@@ -14811,6 +14842,10 @@ window.V2 = {
       }
       html += '<div class="v2-card" style="border-left:3px solid ' + r.color + ';">';
       html += '<div class="v2-card-title" style="color:' + r.color + ';display:flex;align-items:center;gap:8px;">' + (r.emoji || '🤖') + ' ' + (r.name || '?') + '<span style="margin-left:auto;font-size:10px;padding:2px 8px;background:' + r.color + '25;border-radius:99px;color:' + r.color + ';font-weight:600;">' + (r.role || '') + '</span></div>';
+      // V37.4.7 — Alerte hallucination abrogée
+      if (r.hallucinationsAbrogees && r.hallucinationsAbrogees.length) {
+        html += '<div style="margin-bottom:10px;padding:8px 12px;background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.3);border-radius:6px;font-size:11px;color:#ff7b72;">⚠ Cette IA a mentionné ' + r.hallucinationsAbrogees.length + ' fiche(s) ABROGÉE(S) à ignorer : <strong>' + r.hallucinationsAbrogees.join(', ') + '</strong>. Veille réglementaire signale.</div>';
+      }
       html += '<div style="white-space:pre-wrap;line-height:1.6;font-size:13px;color:rgba(245,245,247,.85);">' + (r.content || '').replace(/</g,'&lt;') + '</div>';
       html += '</div>';
     });

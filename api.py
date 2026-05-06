@@ -4158,6 +4158,48 @@ def etablissements(siren):
 # AI PROXIES (GROQ / Gemini)
 # ═══════════════════════════════════════════════════════════════════════════
 
+# V37.4.7 — Veille réglementaire intelligente : liste des fiches abrogées (à NE PAS suggérer)
+@app.route("/fiches/abrogees", methods=["GET"])
+def fiches_abrogees():
+    """Retourne la liste des fiches CEE marquées actif=false dans fiches.json.
+    Utilisé par V2 P4 ANALYSE pour enrichir le prompt IA — empêche les
+    modèles d'halluciner en suggérant des fiches techniquement valides
+    mais juridiquement abrogées (ex: BAR-EQ-110 LED parties communes,
+    BAR-TH-104 PAC ancienne, BAT-TH-127 chaudière condensation tertiaire).
+
+    Source : champ `actif` du catalogue fiches.json (mis à jour par parse_atee.py).
+    """
+    try:
+        fiches = load_fiches()
+    except Exception as e:
+        return jsonify({"error": f"load_fiches failed: {e}"}), 500
+    abrogees = []
+    actives_par_secteur = {}
+    for f in fiches:
+        ref = f.get("ref", "")
+        if not ref:
+            continue
+        secteur = (f.get("secteur") or ref[:3] or "").upper()
+        if not f.get("actif", True):
+            abrogees.append({
+                "ref": ref,
+                "nom": f.get("nom", ""),
+                "secteur": secteur,
+                "raison": f.get("raison_abrogation") or f.get("note_abrogation") or "abrogée selon catalogue ATEE",
+            })
+        else:
+            actives_par_secteur.setdefault(secteur, 0)
+            actives_par_secteur[secteur] += 1
+    return jsonify({
+        "count": len(abrogees),
+        "abrogees": abrogees,
+        "actives_par_secteur": actives_par_secteur,
+        "as_of": __import__("datetime").date.today().isoformat(),
+        "periode": "P6 (1er janv 2026 → 31 déc 2030)",
+        "source": "fiches.json catalogue ATEE/PNCEE",
+    })
+
+
 @app.route("/status", methods=["GET"])
 def status_dashboard():
     """V37 P2.3 — Page HTML dashboard monitoring.
