@@ -13694,6 +13694,12 @@ document.addEventListener('DOMContentLoaded', function() {
   body.v2-mode .footer { display: none !important; }
   body.v2-mode #v2container { display: block !important; }
 
+  /* V37.4.5a — Drawer Outils V1 reste accessible en V2 (overlay + drawer pas masqués) */
+  body.v2-mode #toolkitDrawer,
+  body.v2-mode #toolkitOverlay { display: revert; }
+  body.v2-mode #toolkitDrawer.tk-open { display: block !important; }
+  body.v2-mode #toolkitOverlay.tk-open { display: block !important; }
+
   #v2container {
     display: none;
     background: #0a0a0b;
@@ -13932,7 +13938,17 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="v2-shell">
     <div class="v2-topbar">
       <div class="v2-brand">CEE&nbsp;<em>Engine</em>&nbsp;— Mode Clair</div>
-      <button class="v2-back-v1" onclick="V2.toggle()">← Mode complet V1</button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <!-- V37.4.5a — Mode vendeur toggle (commission/marge visibles) -->
+        <button class="v2-back-v1" id="v2SellerToggle" onclick="V2.toggleSeller()" title="Mode vendeur : affiche commission et marge dans P5+P6">
+          <span id="v2SellerLabel">💼 Mode client</span>
+        </button>
+        <!-- V37.4.5a — 6 outils commerciaux V1 (drawer toolkit) accessibles depuis n'importe quelle page V2 -->
+        <button class="v2-back-v1" onclick="V2.openTools()" title="Dossiers · Acheteurs · Documents · Prospection · Formation · Pipeline">
+          🧰 Outils
+        </button>
+        <button class="v2-back-v1" onclick="V2.toggle()" title="Retour au mode V1 complet (toutes options avancées)">← Mode complet V1</button>
+      </div>
     </div>
 
     <div class="v2-stepper" id="v2Stepper">
@@ -14077,6 +14093,7 @@ window.V2 = {
     pack: [],            // fiches éligibles P4
     selected: new Set(), // refs sélectionnées P4
     kpi: null,           // KPI calculés P5
+    sellerMode: false,   // V37.4.5a — Mode vendeur (commission/marge visibles)
   },
 
   init() {
@@ -14124,6 +14141,8 @@ window.V2 = {
       });
       this.state.currentPage = page;
       window.scrollTo({top: 0, behavior: 'smooth'});
+      // V37.4.5a — Headlines ludiques proactives (réutilise V1 si dispo)
+      try { if (typeof window.updateInsightHeadline === 'function') window.updateInsightHeadline(); } catch (_e) {}
     } catch (e) {
       console.error('[V2.go] erreur navigation:', e);
       alert('Bug navigation: ' + e.message); return;
@@ -14231,6 +14250,7 @@ window.V2 = {
       this._renderP1Fields();
       this._updateP1Validity();
       this.flash('v2p1status', '✓ Enrichissement parallèle terminé. Complète les champs manquants ci-dessous si besoin.', 'success');
+      this._saveCRMHistory();  // V37.4.5a — sauvegarde CRM client
     } catch (e) {
       console.error('[V2.identifyFull]', e);
       this.flash('v2p1status', '❌ Erreur enrichissement : ' + e.message, 'error');
@@ -14275,6 +14295,50 @@ window.V2 = {
     html += f('RNB ID (bâtiment)', 'rnb_id', 'mono', false, 'RNB');
     document.getElementById('v2p1fields').innerHTML = html;
     document.getElementById('v2p1result').style.display = 'block';
+  },
+
+  // V37.4.5a — Helpers transverses : Outils + Mode vendeur + CRM + célébration 0€
+  openTools() {
+    try {
+      if (typeof window.openToolkit === 'function') {
+        window.openToolkit();
+        // Force visibilité même en mode V2 (le drawer V1 a body.v2-mode .header masqué)
+        var d = document.getElementById('toolkitDrawer'); if (d) { d.classList.add('tk-open'); d.style.display = 'block'; }
+        var o = document.getElementById('toolkitOverlay'); if (o) { o.classList.add('tk-open'); o.style.display = 'block'; }
+      } else {
+        alert('Drawer Outils V1 indisponible — recharge la page.');
+      }
+    } catch (e) {
+      console.error('[V2.openTools]', e);
+      alert('Erreur ouverture outils : ' + e.message);
+    }
+  },
+
+  toggleSeller() {
+    try {
+      if (typeof STATE !== 'undefined') STATE.sellerMode = !STATE.sellerMode;
+      this.state.sellerMode = !this.state.sellerMode;
+      var lbl = document.getElementById('v2SellerLabel');
+      if (lbl) lbl.textContent = this.state.sellerMode ? '👁 Mode vendeur (commission visible)' : '💼 Mode client';
+      // Re-render page courante pour appliquer le mode
+      if (this.state.currentPage >= 5) this.go(this.state.currentPage);
+    } catch (e) { console.error('[V2.toggleSeller]', e); }
+  },
+
+  _saveCRMHistory() {
+    try {
+      if (typeof window.saveClientToHistory !== 'function' || !this.state.profil) return;
+      var p = this.state.profil;
+      window.saveClientToHistory({
+        siret: p.siret, nom: p.raisonSociale, adresse: p.adresse,
+        cp: p.cp, ville: p.ville, ape: p.ape,
+        date: new Date().toISOString(),
+      });
+    } catch (e) { console.warn('[V2._saveCRMHistory]', e.message); }
+  },
+
+  _celebrateZeroEuros() {
+    try { if (typeof window.maybeCelebrateZeroEuros === 'function') window.maybeCelebrateZeroEuros(); } catch (_e) {}
   },
 
   // V37.4.3 — Sync V2.state vers STATE V1 + selectedFiches Map.
@@ -15025,6 +15089,8 @@ window.V2 = {
     };
 
     document.getElementById('v2p5content').innerHTML = html;
+    // V37.4.5a — célébration ludique 0€ V1
+    setTimeout(() => this._celebrateZeroEuros(), 200);
   },
 
   // ═══════════════════════════════════════════════════════════════════
