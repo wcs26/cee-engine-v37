@@ -14295,6 +14295,25 @@ window.V2 = {
     html += f('RNB ID (bâtiment)', 'rnb_id', 'mono', false, 'RNB');
     document.getElementById('v2p1fields').innerHTML = html;
     document.getElementById('v2p1result').style.display = 'block';
+
+    // V37.4.5b — Bonus card "Cartes IGN" : satellite/Street View/cadastre/PLU sur la position de l'entreprise
+    var oldCardMap = document.getElementById('v2p1MapCard'); if (oldCardMap) oldCardMap.remove();
+    if (p.adresse && p.cp) {
+      var addrEnc = encodeURIComponent((p.adresse || '') + ', ' + (p.cp || '') + ' ' + (p.ville || ''));
+      var mapCard = document.createElement('div');
+      mapCard.id = 'v2p1MapCard';
+      mapCard.className = 'v2-card';
+      mapCard.style.marginTop = '14px';
+      mapCard.innerHTML =
+        '<div class="v2-card-title">🗺️ Vues satellite / cadastre / PLU</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">' +
+          '<a href="https://www.google.com/maps/search/?api=1&query=' + addrEnc + '&zoom=19&t=k" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;">🛰️ Satellite Google</a>' +
+          '<a href="https://www.google.com/maps?q=' + addrEnc + '&layer=c&cbll=&cbp=" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;">📷 Street View</a>' +
+          '<a href="https://www.cadastre.gouv.fr/scpc/accueil.do?adresse=' + addrEnc + '" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;">📐 Cadastre.gouv</a>' +
+          '<a href="https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=2.349&lat=48.865&zoom=10&search=' + addrEnc + '" target="_blank" rel="noopener" class="v2-btn" style="text-decoration:none;justify-content:center;">🏛️ PLU urbanisme</a>' +
+        '</div>';
+      document.getElementById('v2p1result').parentNode.insertBefore(mapCard, document.getElementById('v2p1result').nextSibling);
+    }
   },
 
   // V37.4.5a — Helpers transverses : Outils + Mode vendeur + CRM + célébration 0€
@@ -14567,12 +14586,49 @@ window.V2 = {
     c.innerHTML = html;
   },
 
-  // V37.4.4 — P3 BÂTIMENT seule (Universal Questionnaire 6 sections)
+  // V37.4.4+5b — P3 BÂTIMENT : cards profils micro-activité V1 + Universal Questionnaire 6 sections
   async _renderBatiment() {
     var c = document.getElementById('v2p3content'); if (!c) return;
     if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     var p = this.state.profil; var a = this.state.answers;
     var html = '';
+
+    // V37.4.5b — Cards profils micro-activité (réutilise MICRO_ACTIVITIES V1, 16 profils × 3-5 micros)
+    if (typeof MICRO_ACTIVITIES !== 'undefined') {
+      // Détection auto secteur depuis APE (5 secteurs : AGRI/BAR/BAT/IND/RES/TRA)
+      var ape = (p.ape || '').replace('.', ''); var apeNum = parseInt(ape.substring(0,2)) || 0;
+      var secteursPossibles = [];
+      if (['01','02','03'].includes(ape.substring(0,2))) secteursPossibles.push('AGRI');
+      if (apeNum >= 5 && apeNum <= 39) secteursPossibles.push('IND');
+      if (apeNum >= 49 && apeNum <= 53) secteursPossibles.push('TRA');
+      if (apeNum >= 41) secteursPossibles.push('BAT');
+      secteursPossibles.push('BAR');  // résidentiel toujours possible
+      var hasMicros = false;
+      var microsHtml = '';
+      secteursPossibles.forEach(secteur => {
+        var activities = MICRO_ACTIVITIES[secteur];
+        if (!activities) return;
+        hasMicros = true;
+        microsHtml += '<div style="margin-bottom:14px;"><div style="font-size:11px;font-weight:700;color:#58a6ff;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;">Secteur ' + secteur + '</div>';
+        microsHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;">';
+        Object.keys(activities).forEach(key => {
+          var act = activities[key];
+          var isActive = a.microActivity === key;
+          microsHtml += '<div onclick="V2.state.answers.microActivity=\'' + key + '\';V2.state.answers.microActivitySecteur=\'' + secteur + '\';V2._renderBatiment()" style="padding:12px;border-radius:10px;border:1px solid ' + (isActive ? '#C8FF6B' : 'rgba(255,255,255,.12)') + ';background:' + (isActive ? 'rgba(200,255,107,.08)' : 'rgba(255,255,255,.03)') + ';cursor:pointer;transition:all .25s;">';
+          microsHtml += '<div style="font-weight:600;font-size:13px;margin-bottom:4px;">' + (act.label || key) + '</div>';
+          microsHtml += '<div style="font-size:10px;color:rgba(245,245,247,.55);">' + ((act.gisements || []).length) + ' gisements détectés</div>';
+          microsHtml += '</div>';
+        });
+        microsHtml += '</div></div>';
+      });
+      if (hasMicros) {
+        html += '<div class="v2-card"><div class="v2-card-title">🎯 Profil métier détecté (NAF ' + (p.ape || '?') + ')</div>';
+        html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:14px;">Sélectionne le profil le plus proche de ton activité — chaque profil a ses gisements CEE spécifiques (16 profils, 150+ questions micro-cibles).</div>';
+        html += microsHtml;
+        html += '</div>';
+      }
+    }
+
     var sections = [
       {key: 'toiture', emoji: '🏠', label: 'Toiture / Combles', questions: [
         {id:'u_combles_isoles', q:'Combles ou toiture isolés ?', type:'bool'},
@@ -14887,65 +14943,102 @@ window.V2 = {
   // P4 — SÉLECTION PRIMES
   // ═══════════════════════════════════════════════════════════════════
   renderP4() {
-    var c = document.getElementById('v2p4content');
+    // V37.4.5b — Cible v2p5content (Primes en archi 9 pages) au lieu de v2p4content (= Analyse).
+    // Bug introduit en V37.4.4 lors de la renumérotation 6→9 pages.
+    var c = document.getElementById('v2p5content');
+    if (!c) { console.warn('[V2.renderP4] v2p5content introuvable'); return; }
     if (!this.state.pack.length) {
-      c.innerHTML = '<div class="v2-error">Aucune fiche éligible — fais d\'abord P1 (identifier) + P2 (affiner) pour calculer le pack.</div>';
+      c.innerHTML = '<div class="v2-error">Aucune fiche éligible — fais d\'abord P1 + P2 + P4 (analyse moteur) pour calculer le pack.</div>';
       return;
     }
     var sorted = this.state.pack.slice().sort((a,b) => (b.prime_obligé_eur || b.prime_eur || 0) - (a.prime_obligé_eur || a.prime_eur || 0));
-    // Auto-cocher tout par défaut au 1er passage
     if (this.state.selected.size === 0 && !this.state._p4Init) {
-      sorted.forEach(f => this.state.selected.add(f.fiche || f.ref));
+      sorted.slice(0, 10).forEach(f => this.state.selected.add(f.fiche || f.ref));
       this.state._p4Init = true;
     }
 
     var html = '';
     html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">';
     html += '<div><div style="font-size:11px;color:rgba(245,245,247,.6);text-transform:uppercase;letter-spacing:.05em;">Total sélectionné</div>';
-    html += '<div id="v2p4TotalNum" style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:42px;color:#C8FF6B;letter-spacing:-.04em;">0 €</div></div>';
+    html += '<div id="v2p5TotalNum" style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:42px;color:#C8FF6B;letter-spacing:-.04em;">0 €</div></div>';
     html += '<div style="display:flex;gap:8px;">';
     html += '<button class="v2-btn" onclick="V2.selectAll(true)">Tout cocher</button>';
     html += '<button class="v2-btn" onclick="V2.selectAll(false)">Tout décocher</button>';
     html += '</div></div></div>';
 
-    // Filtres par secteur
-    var secteurs = Array.from(new Set(sorted.map(f => (f.fiche || f.ref || '').substring(0,3)).filter(Boolean)));
+    // V37.4.5b — Tabs Pertinentes / Tous (style V1)
+    var tab = this.state._p4Tab || 'pertinentes';
+    var top10 = sorted.slice(0, 10);
+    html += '<div style="display:flex;gap:8px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);">';
+    ['pertinentes', 'tous'].forEach(t => {
+      var n = t === 'pertinentes' ? top10.length : sorted.length;
+      var label = t === 'pertinentes' ? '⭐ Pertinentes (TOP ' + n + ')' : '📋 Toutes les fiches (' + n + ')';
+      html += '<button onclick="V2._p4SetTab(\'' + t + '\')" style="padding:10px 16px;background:transparent;border:none;border-bottom:2px solid ' + (tab === t ? '#C8FF6B' : 'transparent') + ';color:' + (tab === t ? '#f5f5f7' : 'rgba(245,245,247,.6)') + ';cursor:pointer;font-family:Geist,sans-serif;font-size:13px;font-weight:' + (tab === t ? '600' : '400') + ';">' + label + '</button>';
+    });
+    html += '</div>';
+
+    // V37.4.5b — Search filter texte libre (style V1)
+    var searchVal = this.state._p4Search || '';
+    html += '<div style="margin-bottom:14px;"><input type="text" class="v2-input" placeholder="🔍 Filtrer par nom, ref, ou condition…" value="' + String(searchVal).replace(/"/g,'&quot;') + '" oninput="V2._p4SetSearch(this.value)"></div>';
+
+    var base = tab === 'pertinentes' ? top10 : sorted;
+    var secteurs = Array.from(new Set(base.map(f => (f.fiche || f.ref || '').substring(0,3)).filter(Boolean)));
     if (secteurs.length > 1) {
-      html += '<div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">';
-      html += '<button class="v2-q-opt' + (!this.state._p4Filter ? ' active' : '') + '" onclick="V2._p4SetFilter(null)">Tous (' + sorted.length + ')</button>';
+      html += '<div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">';
+      html += '<button class="v2-q-opt' + (!this.state._p4Filter ? ' active' : '') + '" onclick="V2._p4SetFilter(null)">Tous secteurs (' + base.length + ')</button>';
       secteurs.forEach(s => {
-        var n = sorted.filter(f => (f.fiche || f.ref || '').startsWith(s)).length;
+        var n = base.filter(f => (f.fiche || f.ref || '').startsWith(s)).length;
         html += '<button class="v2-q-opt' + (this.state._p4Filter === s ? ' active' : '') + '" onclick="V2._p4SetFilter(\'' + s + '\')">' + s + ' (' + n + ')</button>';
       });
       html += '</div>';
     }
 
-    var visible = this.state._p4Filter ? sorted.filter(f => (f.fiche || f.ref || '').startsWith(this.state._p4Filter)) : sorted;
-    visible.forEach(f => {
-      var ref = f.fiche || f.ref || '?';
-      var prime = Math.round(f.prime_obligé_eur || f.prime_eur || 0);
-      var cumac = Math.round(f.kwh_cumac || 0);
-      var nom = f.nom || f.label || ref;
-      var conditions = (f.conditions_texte || []).slice(0, 2).join(' · ');
-      var sel = this.state.selected.has(ref);
-      html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')">';
-      html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
-      html += '<div style="flex:1;">';
-      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">';
-      html += '<span class="v2-fiche-ref">' + ref + '</span>';
-      html += '<span style="font-size:14px;font-weight:500;flex:1;">' + nom + '</span>';
-      html += '<span class="v2-fiche-prime">' + prime.toLocaleString('fr-FR') + ' €</span>';
-      html += '</div>';
-      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
-      if (cumac) html += cumac.toLocaleString('fr-FR') + ' kWhc · ';
-      html += 'source : ADEME PNCEE';
-      if (conditions) html += ' · ' + conditions.slice(0, 80);
-      html += '</div></div></div>';
-    });
+    var visible = base;
+    if (this.state._p4Filter) visible = visible.filter(f => (f.fiche || f.ref || '').startsWith(this.state._p4Filter));
+    if (searchVal) {
+      var q = searchVal.toLowerCase();
+      visible = visible.filter(f => ((f.fiche || f.ref || '') + ' ' + (f.nom || f.label || '') + ' ' + (f.conditions_texte || []).join(' ')).toLowerCase().includes(q));
+    }
+
+    if (visible.length === 0) {
+      html += '<div class="v2-error">Aucune fiche ne correspond aux filtres.</div>';
+    } else {
+      visible.forEach(f => {
+        var ref = f.fiche || f.ref || '?';
+        var prime = Math.round(f.prime_obligé_eur || f.prime_eur || 0);
+        var cumac = Math.round(f.kwh_cumac || 0);
+        var nom = f.nom || f.label || ref;
+        var conditions = (f.conditions_texte || []).slice(0, 2).join(' · ');
+        var sel = this.state.selected.has(ref);
+        this.state._p4Qty = this.state._p4Qty || {};
+        var qty = this.state._p4Qty[ref] || 1;
+        var actif = f.actif !== false;
+        html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')">';
+        html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
+        html += '<div style="flex:1;">';
+        html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
+        html += '<span class="v2-fiche-ref">' + ref + '</span>';
+        if (!actif) html += '<span style="padding:1px 6px;background:rgba(248,81,73,.15);color:#ff7b72;border:1px solid rgba(248,81,73,.3);border-radius:4px;font-size:9px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;">⚠ ABROGÉE</span>';
+        html += '<span style="font-size:14px;font-weight:500;flex:1;">' + nom + '</span>';
+        html += '<span class="v2-fiche-prime">' + prime.toLocaleString('fr-FR') + ' €</span>';
+        html += '</div>';
+        html += '<div style="display:flex;align-items:center;gap:10px;font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
+        html += '<span>Quantité :</span>';
+        html += '<input type="number" min="1" step="1" value="' + qty + '" onclick="event.stopPropagation()" oninput="event.stopPropagation();V2._p4SetQty(\'' + ref + '\',Number(this.value)||1)" style="width:70px;padding:3px 6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:4px;color:#f5f5f7;font-family:JetBrains Mono,monospace;font-size:11px;">';
+        if (cumac) html += '<span>· ' + cumac.toLocaleString('fr-FR') + ' kWhc</span>';
+        html += '<span>· ADEME PNCEE</span>';
+        if (conditions) html += '<span>· ' + conditions.slice(0, 60) + '</span>';
+        html += '</div></div></div>';
+      });
+    }
     c.innerHTML = html;
     this._updateTotal();
   },
+
+  _p4SetTab(tab) { this.state._p4Tab = tab; this.renderP4(); },
+  _p4SetSearch(s) { this.state._p4Search = s; this.renderP4(); },
+  _p4SetQty(ref, q) { this.state._p4Qty = this.state._p4Qty || {}; this.state._p4Qty[ref] = q; this._updateTotal(); },
 
   selectAll(state) {
     if (state) (this.state.pack || []).forEach(f => this.state.selected.add(f.fiche || f.ref));
@@ -14970,7 +15063,7 @@ window.V2 = {
       var ref = f.fiche || f.ref || '?';
       if (this.state.selected.has(ref)) total += (f.prime_obligé_eur || f.prime_eur || 0);
     });
-    var el = document.getElementById('v2p4TotalNum');
+    var el = document.getElementById('v2p5TotalNum');
     if (el) el.textContent = Math.round(total).toLocaleString('fr-FR') + ' €';
     this.state.kpi = {prime_totale: total, nb_selected: this.state.selected.size};
   },
@@ -14980,7 +15073,8 @@ window.V2 = {
   // ═══════════════════════════════════════════════════════════════════
   renderP5() {
     // V37.4.3 — utilise getGlobalCalc() V1 (mêmes calculs que step 4 V1)
-    var c = document.getElementById('v2p5content');
+    // V37.4.5b — cible v2p6content (P6 Économies en archi 9 pages, pas v2p5content)
+    var c = document.getElementById('v2p6content');
     if (!this._syncToV1State()) { c.innerHTML = '<div class="v2-error">Calculs V1 indisponibles. Vérifie P1+P2+P4 d\'abord.</div>'; return; }
     if (typeof window.getGlobalCalc !== 'function') { c.innerHTML = '<div class="v2-error">getGlobalCalc V1 introuvable.</div>'; return; }
     var gc;
@@ -15088,7 +15182,7 @@ window.V2 = {
       nb_selected: gc.details.length, coverage: gc.totalCoverage,
     };
 
-    document.getElementById('v2p5content').innerHTML = html;
+    document.getElementById('v2p6content').innerHTML = html;
     // V37.4.5a — célébration ludique 0€ V1
     setTimeout(() => this._celebrateZeroEuros(), 200);
   },
