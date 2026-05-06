@@ -13700,6 +13700,28 @@ document.addEventListener('DOMContentLoaded', function() {
   body.v2-mode #toolkitDrawer.tk-open { display: block !important; }
   body.v2-mode #toolkitOverlay.tk-open { display: block !important; }
 
+  /* V37.4.9 — @media print scopé V2 (ne touche PAS le @media print V1 global L884) */
+  @media print {
+    body.v2-mode .v2-topbar,
+    body.v2-mode .v2-stepper,
+    body.v2-mode .v2-back-v1,
+    body.v2-mode .v2-fab,
+    body.v2-mode .no-print { display: none !important; }
+    body.v2-mode #v2container { background: #fff !important; color: #111 !important; }
+    body.v2-mode .v2-card { background: #fff !important; border: 1px solid #ddd !important; color: #111 !important; page-break-inside: avoid; }
+    body.v2-mode .v2-fiche { background: #fff !important; border: 1px solid #e5e5e5 !important; color: #111 !important; page-break-inside: avoid; }
+    body.v2-mode .v2-card-title { color: #111 !important; }
+    body.v2-mode .v2-fiche-prime { color: #111 !important; }
+    @page { size: A4; margin: 12mm; }
+  }
+
+  /* V37.4.9 — Animation camembert P5 */
+  @keyframes v2-pie-draw {
+    from { stroke-dashoffset: 188.5; }
+    to   { stroke-dashoffset: var(--pie-target, 0); }
+  }
+  .v2-pie-arc { animation: v2-pie-draw .9s cubic-bezier(.22,1,.36,1) forwards; }
+
   #v2container {
     display: none;
     background: #0a0a0b;
@@ -14994,8 +15016,8 @@ window.V2 = {
   },
 
   // V37.4.4 — P8 DOCUMENTS : 4 boutons HTML pré-remplis (extrait de l'ancien renderP6)
+  // V37.4.9 — + Print A4, Export CSV, Export Excel, Envoi email
   _renderDocuments() {
-    // V37.4.8 — cible v2p9content (P9 Documents en archi 10 pages)
     var c = document.getElementById('v2p9content'); if (!c) return;
     var p = this.state.profil; if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     var html = '';
@@ -15016,8 +15038,118 @@ window.V2 = {
       html += '</button>';
     });
     html += '</div></div>';
+
+    // V37.4.9 — Section export & partage
+    html += '<div class="v2-card"><div class="v2-card-title">📤 Export & partage rapport</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:14px;">Sors le rapport au format adapté au client (impression A4 propre, fichier Excel pour DAF, mail récap pour décideur).</p>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">';
+    var exports = [
+      {fn:'_printA4',     emoji:'🖨',  titre:'Imprimer A4',         sub:'Mise en page propre, fond blanc, sans menus'},
+      {fn:'_exportCSV_v2', emoji:'📊', titre:'Export CSV',           sub:'Tableur (séparateur ;) avec BOM UTF-8'},
+      {fn:'_exportXLS_v2', emoji:'📈', titre:'Export Excel',         sub:'.xls compatible Excel 2016+ (avis sécurité)'},
+      {fn:'_emailMailto', emoji:'📧', titre:'Envoyer par email',    sub:'mailto: avec sujet + résumé KPI pré-remplis'},
+    ];
+    exports.forEach(e => {
+      html += '<button class="v2-btn no-print" style="height:auto;flex-direction:column;align-items:flex-start;padding:16px;text-align:left;gap:4px;" onclick="V2.' + e.fn + '()">';
+      html += '<span style="font-size:22px;">' + e.emoji + '</span>';
+      html += '<span style="font-weight:600;font-size:14px;">' + e.titre + '</span>';
+      html += '<span style="font-size:11px;color:rgba(245,245,247,.55);font-weight:400;line-height:1.4;">' + e.sub + '</span>';
+      html += '</button>';
+    });
+    html += '</div></div>';
     c.innerHTML = html;
   },
+
+  // V37.4.9 — Helpers export
+  _selectedRows() {
+    var rows = []; var p = this.state.profil || {}; var a = this.state.answers || {};
+    if (typeof window.getFullCalc !== 'function' || typeof FICHES === 'undefined') return rows;
+    var zone = p.zone || 'H2'; var eType = a.energie || '';
+    this.state.selected.forEach(ref => {
+      var fv1 = FICHES.find(f => f.ref === ref); if (!fv1) return;
+      try {
+        var calc = window.getFullCalc(fv1, 1, zone, eType);
+        rows.push({
+          ref: ref,
+          label: (fv1.label || ref).replace(/"/g, "'"),
+          cat: fv1.cat || 'autre',
+          kwhc: Math.round(calc.kwhcTotal),
+          prime: Math.round(calc.primeBrute),
+          cout: Math.round(calc.costTTC),
+          rac: Math.round(Math.max(0, calc.rac)),
+          coverage: Math.round(calc.coverage)
+        });
+      } catch(_e) {}
+    });
+    return rows;
+  },
+  _printA4() {
+    if (!document.body.classList.contains('v2-mode')) document.body.classList.add('v2-mode');
+    setTimeout(function(){ window.print(); }, 100);
+  },
+  _exportCSV_v2() {
+    var rows = this._selectedRows();
+    if (!rows.length) { alert('Aucune fiche sélectionnée à exporter.'); return; }
+    var raison = (this.state.profil && this.state.profil.raison) || 'audit';
+    var sep = ';';
+    var header = ['Référence','Libellé','Catégorie','kWhc','Prime €','Coût TTC €','RAC €','Couverture %'].join(sep);
+    var body = rows.map(function(r){
+      return [r.ref, '"'+r.label+'"', r.cat, r.kwhc, r.prime, r.cout, r.rac, r.coverage].join(sep);
+    }).join('\n');
+    var csv = '﻿' + header + '\n' + body;
+    this._downloadBlob(csv, 'audit-cee-' + this._slug(raison) + '.csv', 'text/csv;charset=utf-8');
+  },
+  _exportXLS_v2() {
+    var rows = this._selectedRows();
+    if (!rows.length) { alert('Aucune fiche sélectionnée à exporter.'); return; }
+    var raison = (this.state.profil && this.state.profil.raison) || 'audit';
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8"></head><body>';
+    html += '<table border="1"><thead><tr style="background:#C8FF6B;font-weight:bold;"><th>Référence</th><th>Libellé</th><th>Catégorie</th><th>kWhc</th><th>Prime €</th><th>Coût TTC €</th><th>RAC €</th><th>Couverture %</th></tr></thead><tbody>';
+    rows.forEach(function(r){
+      html += '<tr><td>'+r.ref+'</td><td>'+r.label+'</td><td>'+r.cat+'</td><td>'+r.kwhc+'</td><td>'+r.prime+'</td><td>'+r.cout+'</td><td>'+r.rac+'</td><td>'+r.coverage+'</td></tr>';
+    });
+    var totalPrime = rows.reduce(function(s,r){return s+r.prime;},0);
+    var totalCout = rows.reduce(function(s,r){return s+r.cout;},0);
+    var totalRac = rows.reduce(function(s,r){return s+r.rac;},0);
+    html += '<tr style="background:#21262d;color:#fff;font-weight:bold;"><td colspan="4">TOTAL ('+rows.length+' fiches)</td><td>'+totalPrime+'</td><td>'+totalCout+'</td><td>'+totalRac+'</td><td>—</td></tr>';
+    html += '</tbody></table></body></html>';
+    this._downloadBlob('﻿' + html, 'audit-cee-' + this._slug(raison) + '.xls', 'application/vnd.ms-excel;charset=utf-8');
+  },
+  _emailMailto() {
+    var p = this.state.profil || {}; var rows = this._selectedRows();
+    var raison = p.raison || '[Raison sociale]';
+    var totalPrime = rows.reduce(function(s,r){return s+r.prime;},0);
+    var totalCout = rows.reduce(function(s,r){return s+r.cout;},0);
+    var totalRac = rows.reduce(function(s,r){return s+r.rac;},0);
+    var fmt = function(n){return n.toLocaleString('fr-FR');};
+    var sujet = 'Audit CEE — ' + raison + ' — ' + fmt(totalPrime) + ' € de primes';
+    var top5 = rows.slice(0, 5).map(function(r){ return '• ' + r.ref + ' — ' + r.label.substring(0,60) + ' — ' + fmt(r.prime) + ' €'; }).join('\n');
+    var corps = 'Bonjour,\n\n';
+    corps += 'Vous trouverez ci-dessous la synthèse de votre audit CEE :\n\n';
+    corps += '— Entreprise : ' + raison + (p.siret ? ' (SIRET ' + p.siret + ')' : '') + '\n';
+    corps += '— Surface : ' + (p.surface || '?') + ' m²\n';
+    corps += '— Zone climatique : ' + (p.zone || '?') + '\n\n';
+    corps += '== KPI ==\n';
+    corps += '• Prime CEE estimée : ' + fmt(totalPrime) + ' €\n';
+    corps += '• Coût travaux TTC : ' + fmt(totalCout) + ' €\n';
+    corps += '• Reste à charge : ' + fmt(totalRac) + ' €\n';
+    corps += '• Nombre d\'opérations : ' + rows.length + '\n\n';
+    if (rows.length) corps += '== Top opérations ==\n' + top5 + '\n\n';
+    corps += 'Le rapport détaillé + 4 documents pré-remplis (rapport gisement, devis CEE, convention, attestation honneur) sont disponibles sur demande.\n\n';
+    corps += 'Bien cordialement,\nJimmy — Conseiller CEE indépendant';
+    if (corps.length > 1500) corps = corps.substring(0, 1490) + '\n…';
+    var url = 'mailto:?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
+    window.location.href = url;
+  },
+  _downloadBlob(content, filename, mime) {
+    var blob = new Blob([content], {type: mime});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+  },
+  _slug(s) { return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').substring(0,40) || 'export'; },
 
   // V37.4.4 — P9 RAPPORT : récap exécutif + bouton PDF + lien partage (extrait de l'ancien renderP6)
   _renderRapport() {
@@ -15266,6 +15398,7 @@ window.V2 = {
         var couvBadge = calc.coverage >= 100 ? '✓ 100&nbsp;%+' : Math.round(calc.coverage) + '&nbsp;%';
         html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')" style="border-left:3px solid #C8FF6B;">';
         html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
+        html += this._pieSVG(calc.coverage, '#C8FF6B'); // V37.4.9 camembert
         html += '<div style="flex:1;">';
         html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
         html += '<span class="v2-fiche-ref">' + ref + '</span>';
@@ -15281,6 +15414,22 @@ window.V2 = {
     }
     c.innerHTML = html;
     this._updateTotal();
+  },
+
+  // V37.4.9 — Camembert SVG vanilla (pas de Chart.js). Animation via @keyframes v2-pie-draw.
+  _pieSVG(coverage, color) {
+    var pct = Math.max(0, Math.min(100, Math.round(coverage)));
+    var r = 30, circ = 2 * Math.PI * r;
+    var dash = (pct / 100) * circ;
+    var label = pct >= 100 ? '100%' : pct + '%';
+    return '<div class="no-print" style="flex:0 0 auto;width:64px;height:64px;position:relative;margin-right:6px;" aria-label="Couverture ' + label + '">'
+      + '<svg viewBox="0 0 70 70" width="64" height="64" style="transform:rotate(-90deg);" role="img">'
+      + '<circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="6"/>'
+      + '<circle class="v2-pie-arc" cx="35" cy="35" r="30" fill="none" stroke="' + color + '" stroke-width="6" stroke-linecap="round"'
+      + ' stroke-dasharray="' + dash.toFixed(1) + ' ' + circ.toFixed(1) + '" stroke-dashoffset="0" />'
+      + '</svg>'
+      + '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;color:' + color + ';">' + label + '</div>'
+      + '</div>';
   },
 
   // V37.4.8 — P6 PRIMES RECOMMANDÉES (couverture < 90%) + obligations BACS/DDADUE/OPERAT
@@ -15305,45 +15454,84 @@ window.V2 = {
     fichesReco.sort((a,b) => (b.calc.coverage||0) - (a.calc.coverage||0));
 
     var html = '';
-    // Section A — Obligations réglementaires
+    // V37.4.9 — Section A : Obligations réglementaires en accordéon (référence légale + sanction + deadline + lien)
     var oblig = [];
     var surface = Number(p.surface) || 0;
     var fc = Number(a.facture_chauffage) || 0; var fe = Number(a.facture_elec) || 0;
     var consoEstime = (fc + fe) / 0.10;
     if (surface >= 1000) {
-      oblig.push({color:'#d29922', titre:'Décret BACS — GTB obligatoire (depuis 1er janv 2025)',
-        ref:'BAT-TH-116', text:'Surface ' + surface + ' m² ≥ 1 000 m² → installation GTB classe B obligatoire. Sanction 1 500 €. Économies 15-25 % sur conso. Fiche BAT-TH-116 prend en charge ~50-80 % du coût.'});
-      oblig.push({color:'#58a6ff', titre:'Décret tertiaire — déclaration OPERAT annuelle',
-        ref:'OPERAT', text:'Déclaration consommations sur plateforme ADEME. Objectifs -40 % en 2030, -50 % en 2040, -60 % en 2050.'});
+      oblig.push({
+        color:'#d29922',
+        titre:'Décret BACS — GTB obligatoire (depuis 1er janv 2025)',
+        badge:'BAT-TH-116',
+        text:'Surface ' + surface + ' m² ≥ 1 000 m² → installation GTB classe B obligatoire. Économies 15-25 % sur conso. Fiche BAT-TH-116 prend en charge ~50-80 % du coût.',
+        legal:'Décret n°2020-887 du 20 juillet 2020 modifié par décret n°2023-259 du 7 avril 2023, art. R175-1 à R175-6 du Code de la construction.',
+        sanction:'Mise en demeure préfectorale puis amende administrative jusqu\'à 1 500 € par bâtiment non conforme + obligation de mise en conformité sous 6 mois.',
+        deadline:'Bâtiments existants > 1000 m² : 1er janv 2025 (puissance > 290 kW) — 1er janv 2027 (puissance > 70 kW).',
+        lien:'https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000042134033'
+      });
+      oblig.push({
+        color:'#58a6ff',
+        titre:'Décret tertiaire — déclaration OPERAT annuelle',
+        badge:'OPERAT',
+        text:'Déclaration consommations sur plateforme ADEME. Objectifs -40 % en 2030, -50 % en 2040, -60 % en 2050 (vs année référence 2010-2020).',
+        legal:'Décret n°2019-771 du 23 juillet 2019 (Éco Énergie Tertiaire), art. L111-10-3 du CCH.',
+        sanction:'Publication "name & shame" sur site dédié (publicité du non-respect) + amende administrative jusqu\'à 7 500 € (PM) / 1 500 € (PP) par bâtiment.',
+        deadline:'Déclaration annuelle avant le 30 septembre. Prochaine échéance : 30/09/2026 pour les conso 2025.',
+        lien:'https://operat.ademe.fr/'
+      });
     }
     if (consoEstime >= 2_750_000) {
-      oblig.push({color:'#ff7b72', titre:'Loi DDADUE — audit énergétique obligatoire avant 11/10/2026',
-        ref:'AUDIT', text:'Conso estimée ≥ 2,75 GWh/an. Audit OPQIBI 19.05 obligatoire. Sanction jusqu\'à 4 % CA.'});
+      oblig.push({
+        color:'#ff7b72',
+        titre:'Loi DDADUE — audit énergétique obligatoire',
+        badge:'AUDIT-NF',
+        text:'Conso estimée ≥ 2,75 GWh/an → audit OPQIBI 19.05 (norme NF EN 16247) obligatoire tous les 4 ans. Pas obligatoire si entreprise certifiée ISO 50001.',
+        legal:'Loi n°2023-175 du 10 mars 2023 (DDADUE), art. L233-1 du Code de l\'énergie. Décret n°2014-1393 du 24 nov 2014.',
+        sanction:'Amende administrative jusqu\'à 2 % du chiffre d\'affaires HT du dernier exercice clos (4 % en cas de récidive).',
+        deadline:'Audit à réaliser avant le 11 octobre 2026 (cycle quadriennal). Le suivant : 11 oct 2030.',
+        lien:'https://www.ecologie.gouv.fr/audit-energetique-grandes-entreprises'
+      });
     }
     if (oblig.length) {
       html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(210,153,34,.06),rgba(210,153,34,.015));border-color:rgba(210,153,34,.3);">';
-      html += '<div class="v2-card-title" style="color:#d29922;">⚠ Obligations réglementaires applicables</div>';
+      html += '<div class="v2-card-title" style="color:#d29922;">⚠ Obligations réglementaires applicables — arguments closing R2</div>';
+      html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:12px;">Cliquer chaque ligne pour le détail complet (référence légale, sanction, deadline, lien officiel).</div>';
       oblig.forEach(o => {
-        html += '<div style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);">';
-        html += '<div style="font-weight:600;font-size:14px;color:' + o.color + ';margin-bottom:4px;">' + o.titre;
-        if (o.ref) html += ' <span style="font-family:JetBrains Mono,monospace;font-size:11px;background:' + o.color + '25;color:' + o.color + ';padding:2px 8px;border-radius:4px;margin-left:6px;">' + o.ref + '</span>';
+        html += '<details style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);" class="no-print-children">';
+        html += '<summary style="cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:8px;">';
+        html += '<span style="color:' + o.color + ';font-size:14px;line-height:1;margin-top:2px;">▸</span>';
+        html += '<div style="flex:1;">';
+        html += '<div style="font-weight:600;font-size:14px;color:' + o.color + ';">' + o.titre;
+        if (o.badge) html += ' <span style="font-family:JetBrains Mono,monospace;font-size:11px;background:' + o.color + '25;color:' + o.color + ';padding:2px 8px;border-radius:4px;margin-left:6px;">' + o.badge + '</span>';
         html += '</div>';
-        html += '<div style="font-size:12px;color:rgba(245,245,247,.75);line-height:1.55;">' + o.text + '</div>';
-        html += '</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.75);line-height:1.55;margin-top:4px;">' + o.text + '</div>';
+        html += '</div></summary>';
+        html += '<div style="margin-top:10px;padding:12px;background:rgba(255,255,255,.03);border-radius:6px;font-size:12px;line-height:1.65;color:rgba(245,245,247,.85);">';
+        html += '<div style="margin-bottom:6px;"><strong style="color:' + o.color + ';">📜 Référence légale :</strong> ' + o.legal + '</div>';
+        html += '<div style="margin-bottom:6px;"><strong style="color:#ff7b72;">⚖ Sanction encourue :</strong> ' + o.sanction + '</div>';
+        html += '<div style="margin-bottom:6px;"><strong style="color:#d29922;">📅 Deadline :</strong> ' + o.deadline + '</div>';
+        html += '<div><strong style="color:#58a6ff;">🔗 Source :</strong> <a href="' + o.lien + '" target="_blank" rel="noopener" style="color:#58a6ff;text-decoration:underline;">' + o.lien.replace('https://','').substring(0,60) + '</a></div>';
+        html += '</div></details>';
       });
       html += '</div>';
     }
 
-    // Section B — Fiches recommandées (couv < 90% mais utiles)
+    // Section B — Fiches recommandées (couv < 90% mais utiles) avec leasing 36/60/84 mois
     if (fichesReco.length) {
-      html += '<div class="v2-card"><div class="v2-card-title">📋 Fiches CEE recommandées (' + fichesReco.length + ') — reste à charge à anticiper</div>';
-      html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:14px;">Couverture prime &lt; 90 %. Rentables sur 5-15 ans selon économies réalisées. Triées par couverture décroissante.</div></div>';
+      html += '<div class="v2-card"><div class="v2-card-title">📋 Fiches CEE recommandées (' + fichesReco.length + ') — leasing pour gommer le RAC</div>';
+      html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:14px;">Couverture prime &lt; 90 %. Pitch 0€ d\'avance grâce au leasing pro (taux indicatif 4,5 %/an, mensualité linéaire). Triées par couverture décroissante.</div>';
       fichesReco.forEach(item => {
         var ref = item.ref; var f = item.fiche; var calc = item.calc;
         var sel = this.state.selected.has(ref);
         var covColor = calc.coverage >= 70 ? '#58a6ff' : (calc.coverage >= 40 ? '#d29922' : '#ff7b72');
+        var rac = Math.max(0, calc.rac);
+        var m36 = this._leasing(rac, 36, 0.045);
+        var m60 = this._leasing(rac, 60, 0.045);
+        var m84 = this._leasing(rac, 84, 0.045);
         html += '<div class="v2-fiche' + (sel ? ' selected' : '') + '" onclick="V2.toggleFiche(\'' + ref + '\')" style="border-left:3px solid ' + covColor + ';">';
         html += '<div class="v2-fiche-check">' + (sel ? '✓' : '') + '</div>';
+        html += this._pieSVG(calc.coverage, covColor); // V37.4.9 camembert sur P6 aussi
         html += '<div style="flex:1;">';
         html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
         html += '<span class="v2-fiche-ref">' + ref + '</span>';
@@ -15351,15 +15539,33 @@ window.V2 = {
         html += '<span style="font-size:14px;font-weight:500;flex:1;">' + (f.label || ref) + '</span>';
         html += '<span class="v2-fiche-prime">' + Math.round(calc.primeBrute).toLocaleString('fr-FR') + ' €</span>';
         html += '</div>';
-        html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
-        html += 'Coût TTC ' + Math.round(calc.costTTC).toLocaleString('fr-FR') + ' € · RAC ' + Math.round(calc.rac).toLocaleString('fr-FR') + ' € à financer · ' + Math.round(calc.kwhcTotal/1000) + ' kWhc';
-        html += '</div></div></div>';
+        html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;margin-bottom:6px;">';
+        html += 'Coût TTC ' + Math.round(calc.costTTC).toLocaleString('fr-FR') + ' € · RAC ' + Math.round(rac).toLocaleString('fr-FR') + ' € · ' + Math.round(calc.kwhcTotal/1000) + ' kWhc';
+        html += '</div>';
+        if (rac > 0) {
+          html += '<div style="display:flex;gap:8px;flex-wrap:wrap;font-family:JetBrains Mono,monospace;font-size:11px;">';
+          html += '<span style="padding:3px 8px;background:rgba(88,166,255,.10);color:#58a6ff;border-radius:4px;">36 mois · ' + m36.toLocaleString('fr-FR') + ' €/mois</span>';
+          html += '<span style="padding:3px 8px;background:rgba(88,166,255,.10);color:#58a6ff;border-radius:4px;">60 mois · ' + m60.toLocaleString('fr-FR') + ' €/mois</span>';
+          html += '<span style="padding:3px 8px;background:rgba(88,166,255,.10);color:#58a6ff;border-radius:4px;">84 mois · ' + m84.toLocaleString('fr-FR') + ' €/mois</span>';
+          html += '</div>';
+        }
+        html += '</div></div>';
       });
+      html += '</div>';
     } else if (oblig.length === 0) {
       html += '<div class="v2-card"><div class="v2-card-title">✓ Rien à signaler ici</div><div style="font-size:13px;color:rgba(245,245,247,.7);">Toutes tes fiches sont en P5 (0€ reste à charge). Aucune obligation réglementaire détectée pour ton profil.</div></div>';
     }
     c.innerHTML = html;
     this._updateTotal();
+  },
+
+  // V37.4.9 — Mensualité leasing (annuité constante). rac=reste à charge €, mois=durée, taux=annuel décimal (0.045 = 4,5%).
+  _leasing(rac, mois, taux) {
+    if (!rac || rac <= 0) return 0;
+    var t = taux / 12;
+    if (t === 0) return Math.round(rac / mois);
+    var m = rac * t / (1 - Math.pow(1 + t, -mois));
+    return Math.round(m);
   },
 
   _p4SetTab(tab) { this.state._p4Tab = tab; this.renderP4(); },
@@ -15380,7 +15586,11 @@ window.V2 = {
   toggleFiche(ref) {
     if (this.state.selected.has(ref)) this.state.selected.delete(ref);
     else this.state.selected.add(ref);
-    this.renderP4();
+    // V37.4.9 — Re-render la page courante (P5 camembert, P6 leasing) sinon renderP4 écrase
+    var page = this.state.currentPage;
+    if (page === 5 && typeof this._renderPrimesZero === 'function') this._renderPrimesZero();
+    else if (page === 6 && typeof this._renderPrimesReco === 'function') this._renderPrimesReco();
+    else this.renderP4();
   },
 
   _updateTotal() {
