@@ -7340,6 +7340,82 @@
           });
         }
 
+        // ════════════════════════════════════════════════════════════════
+        // V37.4.14 — INPUTS CRITIQUES MANQUANTS (audit Jimmy 2026-05-08)
+        // Trous bloquants : sans ces questions, le chercheur de gisement
+        // RATE BAT-TH-142 (déstrat) / 127 (chaudière) / 134-145 (froid) /
+        // 103-105-143 (émetteurs) / 125-126 (ventilation) / RES-CH-* (réseau)
+        // ════════════════════════════════════════════════════════════════
+
+        // --- 1) HAUTEUR SOUS PLAFOND universelle (BAT-TH-142 déstrat dès 6m)
+        if (surfCalc > 500) {
+          var hauteurDefaut = surfCalc > 2000 ? 8 : surfCalc > 1000 ? 6 : 3;
+          smartQuestions.push({
+            q: 'Hauteur sous plafond/faîtage (m) ?', field: 'hauteur_sous_plafond', type: 'number',
+            defaut: hauteurDefaut,
+            impact: '📦 Si > 6m : déstrat BAT-TH-142 = 38k cumac/unité (entrepôt 10000m² H=10m → 380k cumac perdu sans cette donnée)',
+            source: surfCalc > 1000 ? 'Estim : surface > 1000m² = probable bât. industriel/logistique H≥6m' : null
+          });
+        }
+
+        // --- 2) PUISSANCE CHAUFFAGE existant (BAT-TH-127/163/164/110/162 dimensionnement PAC)
+        var chauffActuel = chauffDeduced || (STATE._proAnswers && STATE._proAnswers.chauff_type) || '';
+        if (chauffActuel && chauffActuel !== 'ne_sais_pas') {
+          var puissEstim = Math.max(20, Math.round(surfCalc * 0.05)); // 50W/m² tertiaire moyen
+          smartQuestions.push({
+            q: 'Puissance chauffage actuel (kW) ? Plaque chaudière ou facture × 0,11', field: 'puissance_chauff_kw', type: 'number',
+            defaut: puissEstim,
+            impact: '🔥 Dimensionne BAT-TH-127 (chaudière) / BAT-TH-163-164 (PAC). Sans : prime ±50% inexacte',
+            source: 'Estim : ' + surfCalc + 'm² × 50W/m² = ' + puissEstim + ' kW'
+          });
+        }
+
+        // --- 3) TYPE ÉMETTEUR (BAT-TH-103 plancher BT, BAT-TH-105 radiateur BT, BAT-TH-143 ventilo HP)
+        if (chauffActuel) {
+          smartQuestions.push({
+            q: 'Type d\'émetteur de chauffage ?', field: 'type_emetteur', type: 'select',
+            options: ['radiateur_HT','radiateur_BT','plancher_chauffant','ventilo_convecteur','aerotherme','autre','ne_sais_pas'],
+            defaut: 'radiateur_HT',
+            impact: '🔧 Plancher BT existant → BAT-TH-103 INELIGIBLE. Radiateur HT → BAT-TH-105 ELIGIBLE. Ventilo-conv HT → BAT-TH-143 ELIGIBLE',
+            source: null
+          });
+        }
+
+        // --- 4) CHAMBRE FROIDE TERTIAIRE (BAT-TH-134/135/139/145, hors agri/commerce déjà couverts)
+        var actSector = (STATE.diagnostic.activitySector || '').toLowerCase();
+        var sectorsWithCF = ['hotellerie','restauration','sante','commerces','enseignement'];
+        if (sectorsWithCF.indexOf(actSector) >= 0 || actSector === '') {
+          smartQuestions.push({
+            q: 'Chambre(s) froide(s) présente(s) ? (HCR / santé / labos / restaurants → quasi systématique)', field: 'chambre_froide_tertiaire', type: 'select',
+            options: ['oui_positive','oui_negative','oui_mixte','non','ne_sais_pas'],
+            defaut: actSector === 'hotellerie' || actSector === 'restauration' ? 'oui_mixte' : 'non',
+            impact: '❄ Si OUI → BAT-TH-139 récup chaleur condenseur + BAT-TH-134/135/145 régulation HP/BP flottante (5-20k€ gisement caché)',
+            source: null
+          });
+        }
+
+        // --- 5) TYPE VENTILATION existante (BAT-TH-125 SF, BAT-TH-126 DF)
+        if (['bureaux','enseignement','sante','hotellerie','commerces'].indexOf(actSector) >= 0) {
+          smartQuestions.push({
+            q: 'Type de ventilation actuelle ?', field: 'ventilation_type', type: 'select',
+            options: ['naturelle','simple_flux','hygro_reglable','double_flux','clim_centralisee','ne_sais_pas'],
+            defaut: actSector === 'bureaux' ? 'simple_flux' : 'ne_sais_pas',
+            impact: '💨 SF/naturelle → DF haute perf BAT-TH-126 = 2-10k€ cumac. Pas demandé ailleurs = gisement raté',
+            source: null
+          });
+        }
+
+        // --- 6) RÉSEAU DE CHALEUR dispo dans la rue (RES-CH-103-108 + EXCLUE Coup de Pouce P6)
+        if (surfCalc > 200) {
+          smartQuestions.push({
+            q: 'Réseau de chaleur municipal accessible dans la rue ? (À vérifier avec mairie/DNEC)', field: 'reseau_chaleur_dispo', type: 'select',
+            options: ['oui_operational','oui_planifie','non','ne_sais_pas'],
+            defaut: 'ne_sais_pas',
+            impact: '🌡 Réseau existant → raccordement RES-CH-103/104 prime ALTERNATIVE. ATTENTION : Coup de Pouce P6 PAC EXCLUE si réseau dispo',
+            source: null
+          });
+        }
+
         // --- AFFICHAGE ---
         if (smartQuestions.length > 0) {
           const confirmed = smartQuestions.filter(q => q.type === 'confirmed');
