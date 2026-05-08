@@ -13864,6 +13864,34 @@ document.addEventListener('DOMContentLoaded', function() {
   .v2-back-v1:hover { color: #f5f5f7; border-color: rgba(255,255,255,.4); }
 
   /* Stepper — V37.4.4 : 9 pages compartimentées strictement */
+  /* V37.4.15 — Stepper multi-phases R0→R4 (17 onglets groupés) */
+  .v2-phase-row {
+    display: grid; gap: 2px;
+    margin-bottom: 6px;
+  }
+  .v2-phase-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: rgba(245,245,247,.45);
+    margin: 8px 0 4px;
+    text-transform: uppercase;
+  }
+  .v2-phase-row.r0 { grid-template-columns: repeat(3, 1fr); }
+  .v2-phase-row.r1 { grid-template-columns: repeat(5, 1fr); }
+  .v2-phase-row.r2 { grid-template-columns: repeat(4, 1fr); }
+  .v2-phase-row.r3 { grid-template-columns: repeat(3, 1fr); }
+  .v2-phase-row.r4 { grid-template-columns: repeat(2, 1fr); }
+  .v2-step.placeholder { opacity: 0.55; border-style: dashed; }
+  .v2-step.placeholder::after {
+    content: '🚧';
+    position: absolute;
+    top: 2px; right: 4px;
+    font-size: 10px;
+    opacity: .7;
+  }
+
   .v2-stepper {
     display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px;
     margin-bottom: 40px;
@@ -14073,17 +14101,40 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
-    <div class="v2-stepper" id="v2Stepper">
-      <div class="v2-step active" data-page="1" onclick="V2.go(1)"><div class="v2-step-num">1</div><div class="v2-step-label">Identifier</div></div>
-      <div class="v2-step" data-page="2" onclick="V2.go(2)"><div class="v2-step-num">2</div><div class="v2-step-label">Énergie</div></div>
-      <div class="v2-step" data-page="3" onclick="V2.go(3)"><div class="v2-step-num">3</div><div class="v2-step-label">Bâtiment</div></div>
-      <div class="v2-step" data-page="4" onclick="V2.go(4)"><div class="v2-step-num">4</div><div class="v2-step-label">Analyse</div></div>
-      <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Primes 0€</div></div>
-      <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Recommandées</div></div>
-      <div class="v2-step" data-page="7" onclick="V2.go(7)"><div class="v2-step-num">7</div><div class="v2-step-label">Économies</div></div>
-      <div class="v2-step" data-page="8" onclick="V2.go(8)"><div class="v2-step-num">8</div><div class="v2-step-label">Conformité</div></div>
-      <div class="v2-step" data-page="9" onclick="V2.go(9)"><div class="v2-step-num">9</div><div class="v2-step-label">Documents</div></div>
-      <div class="v2-step" data-page="10" onclick="V2.go(10)"><div class="v2-step-num">10</div><div class="v2-step-label">Rapport</div></div>
+    <!-- V37.4.15 — Stepper multi-phases R0→R4, 17 onglets selon déroulement client Jimmy -->
+    <div id="v2Stepper">
+      <div class="v2-phase-label">R0 · Prospection &amp; lookup</div>
+      <div class="v2-phase-row r0">
+        <div class="v2-step placeholder" data-page="11" onclick="V2.go(11)"><div class="v2-step-num">11</div><div class="v2-step-label">Hunt prospects</div></div>
+        <div class="v2-step active" data-page="1" onclick="V2.go(1)"><div class="v2-step-num">1</div><div class="v2-step-label">Identifier</div></div>
+        <div class="v2-step placeholder" data-page="12" onclick="V2.go(12)"><div class="v2-step-num">12</div><div class="v2-step-label">Cartes &amp; PLU</div></div>
+      </div>
+      <div class="v2-phase-label">R1 · Audit prédictif</div>
+      <div class="v2-phase-row r1">
+        <div class="v2-step" data-page="2" onclick="V2.go(2)"><div class="v2-step-num">2</div><div class="v2-step-label">Énergie</div></div>
+        <div class="v2-step" data-page="3" onclick="V2.go(3)"><div class="v2-step-num">3</div><div class="v2-step-label">Bâtiment</div></div>
+        <div class="v2-step placeholder" data-page="13" onclick="V2.go(13)"><div class="v2-step-num">13</div><div class="v2-step-label">Gisements 15</div></div>
+        <div class="v2-step placeholder" data-page="14" onclick="V2.go(14)"><div class="v2-step-num">14</div><div class="v2-step-label">Catalog 234</div></div>
+        <div class="v2-step" data-page="4" onclick="V2.go(4)"><div class="v2-step-num">4</div><div class="v2-step-label">Lentilles + IA</div></div>
+      </div>
+      <div class="v2-phase-label">R2 · Calcul &amp; closing</div>
+      <div class="v2-phase-row r2">
+        <div class="v2-step" data-page="5" onclick="V2.go(5)"><div class="v2-step-num">5</div><div class="v2-step-label">Primes 0€</div></div>
+        <div class="v2-step" data-page="6" onclick="V2.go(6)"><div class="v2-step-num">6</div><div class="v2-step-label">Recommandées</div></div>
+        <div class="v2-step" data-page="7" onclick="V2.go(7)"><div class="v2-step-num">7</div><div class="v2-step-label">Économies</div></div>
+        <div class="v2-step placeholder" data-page="15" onclick="V2.go(15)"><div class="v2-step-num">15</div><div class="v2-step-label">Closing armé</div></div>
+      </div>
+      <div class="v2-phase-label">R3 · Dossier signature</div>
+      <div class="v2-phase-row r3">
+        <div class="v2-step" data-page="8" onclick="V2.go(8)"><div class="v2-step-num">8</div><div class="v2-step-label">Conformité</div></div>
+        <div class="v2-step" data-page="9" onclick="V2.go(9)"><div class="v2-step-num">9</div><div class="v2-step-label">Documents</div></div>
+        <div class="v2-step placeholder" data-page="16" onclick="V2.go(16)"><div class="v2-step-num">16</div><div class="v2-step-label">Push CRM</div></div>
+      </div>
+      <div class="v2-phase-label">R4 · Post-signature</div>
+      <div class="v2-phase-row r4">
+        <div class="v2-step placeholder" data-page="17" onclick="V2.go(17)"><div class="v2-step-num">17</div><div class="v2-step-label">Suivi 9 ans</div></div>
+        <div class="v2-step" data-page="10" onclick="V2.go(10)"><div class="v2-step-num">10</div><div class="v2-step-label">Rapport final</div></div>
+      </div>
     </div>
 
     <!-- ═══ P1 — IDENTIFIER ═══ -->
@@ -14210,6 +14261,88 @@ document.addEventListener('DOMContentLoaded', function() {
         <button class="v2-btn v2-btn-primary" onclick="V2.exportPdf()">📄 Télécharger le PDF 5 pages</button>
       </div>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- V37.4.15 — 7 NOUVELLES PAGES (placeholders R0/R1/R2/R3/R4)     -->
+    <!-- Implémentations livrées V37.4.16 → V37.4.20                    -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- ═══ P11 — HUNT PROSPECTION (R0) — V37.4.16 ═══ -->
+    <div class="v2-page" id="v2p11">
+      <h1 class="v2-page-title">🎯 Hunt — alimente ton pipeline</h1>
+      <p class="v2-page-sub">Sirene-lookalike : trouve 50 entreprises similaires à un dossier signé. Scan zone géographique. Scan secteur NAF. Apify Google Maps.</p>
+      <div id="v2p11content"></div>
+      <div class="v2-nav">
+        <div></div>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(1)">→ Étape 1 — Identifier le prospect</button>
+      </div>
+    </div>
+
+    <!-- ═══ P12 — CARTES & PLU (R0) — V37.4.16 ═══ -->
+    <div class="v2-page" id="v2p12">
+      <h1 class="v2-page-title">🗺 Cartes &amp; contexte territorial</h1>
+      <p class="v2-page-sub">Vue satellite, StreetView, cadastre, PLU, carte des risques. Préparation rendez-vous physique. Score complétude dossier 0-100.</p>
+      <div id="v2p12content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(1)">← Retour Identifier</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(2)">→ Étape 2 — Énergie</button>
+      </div>
+    </div>
+
+    <!-- ═══ P13 — INVESTIGATION GISEMENTS (R1) — V37.4.17 ═══ -->
+    <div class="v2-page" id="v2p13">
+      <h1 class="v2-page-title">🔍 Investigation 15 gisements universels</h1>
+      <p class="v2-page-sub">15 gisements transversaux + 16 micro-activités × 150 questions ciblées. Profondeur métier maximale par profil.</p>
+      <div id="v2p13content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(3)">← Retour Bâtiment</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(14)">→ Étape suivante — Catalog 234</button>
+      </div>
+    </div>
+
+    <!-- ═══ P14 — CATALOG 234 FICHES (R1) — V37.4.17 ═══ -->
+    <div class="v2-page" id="v2p14">
+      <h1 class="v2-page-title">📚 Catalogue 234 fiches CEE</h1>
+      <p class="v2-page-sub">Toutes les fiches navigables. Filtre secteur. Search texte. Quantité éditable. Badges abrogées / Coup de Pouce / 0€ reste à charge.</p>
+      <div id="v2p14content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(13)">← Retour Gisements</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(4)">→ Étape suivante — Lentilles</button>
+      </div>
+    </div>
+
+    <!-- ═══ P15 — CLOSING ARMÉ (R2) — V37.4.18 ═══ -->
+    <div class="v2-page" id="v2p15">
+      <h1 class="v2-page-title">⚔ Closing armé — comparateur + objections</h1>
+      <p class="v2-page-sub">Comparateur Effy / Hellio / NR-PRO / France CEE / Drapo. 44 objections + 12 commandements + ADERA. Closing visuel : mensualité avant/après, total éco vie.</p>
+      <div id="v2p15content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(7)">← Retour Économies</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(8)">→ Étape 8 — Conformité</button>
+      </div>
+    </div>
+
+    <!-- ═══ P16 — PUSH CRM + EXPORTS (R3) — V37.4.19 ═══ -->
+    <div class="v2-page" id="v2p16">
+      <h1 class="v2-page-title">🔄 Push CRM + transmission équipe</h1>
+      <p class="v2-page-sub">Push Monday auto. Lien partageable HMAC 30j. Notifications WhatsApp / Telegram. Email récap DAF.</p>
+      <div id="v2p16content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(9)">← Retour Documents</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(17)">→ Étape suivante — Suivi 9 ans</button>
+      </div>
+    </div>
+
+    <!-- ═══ P17 — SUIVI 9 ANS POST-SIGNATURE (R4) — V37.4.20 ═══ -->
+    <div class="v2-page" id="v2p17">
+      <h1 class="v2-page-title">📅 Suivi dossier 9 ans</h1>
+      <p class="v2-page-sub">Timeline post-signature. Reminder conservation AH 9 ans. Statut PNCEE temps réel. Préparation contrôle COFRAC.</p>
+      <div id="v2p17content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(16)">← Retour Push CRM</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(10)">→ Rapport final</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -14223,11 +14356,21 @@ window.V2 = {
     profil: null,        // résultat enrichissement P1
     questions: null,     // result.questions backend P2
     answers: {},         // réponses user P2
-    iaInsights: null,    // résultats Penta-IA P3
-    pack: [],            // fiches éligibles P4
-    selected: new Set(), // refs sélectionnées P4
-    kpi: null,           // KPI calculés P5
+    iaInsights: null,    // résultats Penta-IA P4 (lentilles)
+    pack: [],            // fiches éligibles P5/P6
+    selected: new Set(), // refs sélectionnées P5/P6
+    kpi: null,           // KPI calculés P7
     sellerMode: false,   // V37.4.5a — Mode vendeur (commission/marge visibles)
+    // V37.4.15 — Nouveaux champs pour 17 onglets R0→R4
+    prospection_results: [],   // P11 Hunt — leads détectés
+    cartes_data: null,         // P12 Cartes & PLU — IGN/Cadastre/RNB enrichis
+    multisites: [],            // P3 Bâtiment + multisite — zones spéciales
+    gisements_actifs: [],      // P13 — 15 gisements universels détectés
+    catalog_filter: { tab:'pertinentes', sector:'', search:'', qty:{} }, // P14
+    lentilles_data: { active:'predictif', modes:{} }, // P4 enrichi — 5 lentilles
+    closing_data: null,        // P15 — comparateur + objections
+    push_crm_status: null,     // P16 — état Monday + WhatsApp + Telegram
+    suivi_dossier: null,       // P17 — timeline 9 ans post-signature
   },
 
   init() {
@@ -14262,16 +14405,17 @@ window.V2 = {
 
   go(page) {
     console.log('[V2.go] navigation page', page);
-    if (page < 1 || page > 10) { console.warn('[V2.go] page hors limites', page); return; }
+    // V37.4.15 — 17 onglets (10 implémentés + 7 placeholders R0-R4)
+    if (page < 1 || page > 17) { console.warn('[V2.go] page hors limites', page); return; }
     try {
       document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
       var target = document.getElementById('v2p' + page);
       if (!target) { console.error('[V2.go] target #v2p' + page + ' introuvable'); alert('Bug : page ' + page + ' introuvable. Recharge la page.'); return; }
       target.classList.add('active');
-      document.querySelectorAll('#v2Stepper .v2-step').forEach((el, i) => {
-        el.classList.remove('active', 'done');
-        if (i + 1 < page) el.classList.add('done');
-        if (i + 1 === page) el.classList.add('active');
+      // V37.4.15 — Stepper actif via data-page (PAS index séquentiel : ordre R0→R4 réordonné visuellement)
+      document.querySelectorAll('#v2Stepper .v2-step').forEach(el => {
+        el.classList.remove('active');
+        if (parseInt(el.getAttribute('data-page')) === page) el.classList.add('active');
       });
       this.state.currentPage = page;
       window.scrollTo({top: 0, behavior: 'smooth'});
@@ -14281,17 +14425,32 @@ window.V2 = {
       console.error('[V2.go] erreur navigation:', e);
       alert('Bug navigation: ' + e.message); return;
     }
-    // V37.4.8 — Lazy render 10 pages : split P5 → "Primes 0€" + "Recommandées/obligations"
+    // V37.4.15 — Lazy render 17 pages : 10 livrées + 7 placeholders
     try {
       if (page === 2) this._renderEnergie();
       if (page === 3) this._renderBatiment();
-      if (page === 4) this._renderAnalyse();
-      if (page === 5) this._renderPrimesZero();    // primes 0€ reste à charge (couv ≥ 90%)
-      if (page === 6) this._renderPrimesReco();    // recommandées + obligations BACS/DDADUE
-      if (page === 7) this.renderP5();             // économies (calculs V1)
-      if (page === 8) this._renderConformite();
-      if (page === 9) this._renderDocuments();
-      if (page === 10) this._renderRapport();
+      if (page === 4) this._renderAnalyse();        // R1 — sera enrichi V37.4.17 (lentilles + Conseil 5×3)
+      if (page === 5) this._renderPrimesZero();    // R2 — primes 0€ reste à charge (couv ≥ 90%)
+      if (page === 6) this._renderPrimesReco();    // R2 — recommandées + obligations BACS/DDADUE
+      if (page === 7) this.renderP5();             // R2 — économies (calculs V1)
+      if (page === 8) this._renderConformite();    // R3
+      if (page === 9) this._renderDocuments();     // R3
+      if (page === 10) this._renderRapport();      // R4
+      // ── 7 placeholders V37.4.16-20 ──
+      if (page === 11) this._renderPlaceholder('v2p11content', 'P11 Hunt prospection', 'V37.4.16',
+        'Sirene-lookalike (50 entreprises similaires à un dossier signé) · scan zone géo · scan secteur NAF · Apify Google Maps. Endpoint /prospection/* déjà actif côté backend.');
+      if (page === 12) this._renderPlaceholder('v2p12content', 'P12 Cartes & PLU', 'V37.4.16',
+        'Vue satellite IGN + StreetView + cadastre + PLU + carte des risques. Score complétude dossier 0-100 (réutilise calculateScore V1 L5145).');
+      if (page === 13) this._renderPlaceholder('v2p13content', 'P13 Investigation 15 gisements', 'V37.4.17',
+        '15 gisements universels visualisables (renderGisements V1 L8672) + 16 micro-activités × 150 questions ciblées (MICRO_ACTIVITIES V1 L3767).');
+      if (page === 14) this._renderPlaceholder('v2p14content', 'P14 Catalog 234 fiches', 'V37.4.17',
+        'Catalogue inline navigable : tabs Pertinentes/Toutes, filtre secteur, search texte, qty éditable, badges abrogées/p6Bonus/zeroEuro (renderFiches V1 L8871 + filterFiches V1 L8913).');
+      if (page === 15) this._renderPlaceholder('v2p15content', 'P15 Closing armé', 'V37.4.18',
+        'Comparateur Effy/Hellio/NR-PRO/France CEE/Drapo (loadComparateurAcheteurs V1 L13293) + 44 objections + 12 commandements + ADERA + closing visuel mensualité avant/après (V1 L3084).');
+      if (page === 16) this._renderPlaceholder('v2p16content', 'P16 Push CRM', 'V37.4.19',
+        'Push Monday auto (autoPushMonday V1 L9197 + pushToMonday L13185) + lien partageable HMAC 30j + notifications WhatsApp/Telegram + email récap DAF.');
+      if (page === 17) this._renderPlaceholder('v2p17content', 'P17 Suivi 9 ans', 'V37.4.20',
+        'Timeline post-signature (renderSuiviDossier V1 L12572) + reminder AH 9 ans + statut PNCEE temps réel + préparation contrôle COFRAC. Endpoints /post-signature/* déjà actifs.');
     } catch (e) {
       console.error('[V2.go] erreur render P' + page + ':', e);
       var c = document.getElementById('v2p' + page + 'content');
@@ -15522,6 +15681,26 @@ window.V2 = {
     }
     c.innerHTML = html;
     this._updateTotal();
+  },
+
+  // V37.4.15 — Placeholder vivant pour les 7 onglets en construction (R0/R1/R2/R3/R4)
+  // Reste honnête : dit ce qui sera livré, dans quelle version, et pourquoi c'est utile.
+  _renderPlaceholder(containerId, titre, version, description) {
+    var c = document.getElementById(containerId); if (!c) return;
+    var html = '';
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(88,166,255,.08),rgba(88,166,255,.02));border-color:rgba(88,166,255,.3);">';
+    html += '<div class="v2-card-title" style="color:#58a6ff;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+    html += '<span>🚧 ' + titre + '</span>';
+    html += '<span style="font-family:JetBrains Mono,monospace;font-size:11px;background:rgba(88,166,255,.15);color:#58a6ff;padding:3px 8px;border-radius:4px;">livré ' + version + '</span>';
+    html += '</div>';
+    html += '<div style="font-size:14px;color:rgba(245,245,247,.85);line-height:1.65;margin-top:14px;">' + description + '</div>';
+    html += '<div style="margin-top:18px;padding:12px;background:rgba(88,166,255,.06);border-left:3px solid #58a6ff;border-radius:0 6px 6px 0;font-size:12px;color:rgba(245,245,247,.7);line-height:1.55;">';
+    html += '<strong style="color:#58a6ff;">État :</strong> infrastructure stepper R0→R4 + state V2 enrichi en place (V37.4.15). ';
+    html += 'Chaque page placeholder reste cliquable pour validation Jimmy avant implémentation. ';
+    html += 'Toutes les données métier existent côté backend (modules Python testés en prod) — il ne reste qu\'à les brancher en V2.';
+    html += '</div>';
+    html += '</div>';
+    c.innerHTML = html;
   },
 
   // V37.4.9 — Camembert SVG vanilla (pas de Chart.js). Animation via @keyframes v2-pie-draw.
