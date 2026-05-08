@@ -14139,6 +14139,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- ═══ P1 — IDENTIFIER ═══ -->
     <div class="v2-page active" id="v2p1">
+      <!-- V37.4.20 — Onboarding ludique V2 (slot rempli au render par _renderOnboarding) -->
+      <div id="v2_onboarding_slot"></div>
       <h1 class="v2-page-title">Qui est cette entreprise ?</h1>
       <p class="v2-page-sub">Un SIRET. On enrichit en parallèle Sirene, Cadastre IGN, RNB, BDNB, DPE et la zone climatique. Tu valides en 30 secondes.</p>
 
@@ -14421,6 +14423,11 @@ window.V2 = {
       window.scrollTo({top: 0, behavior: 'smooth'});
       // V37.4.5a — Headlines ludiques proactives (réutilise V1 si dispo)
       try { if (typeof window.updateInsightHeadline === 'function') window.updateInsightHeadline(); } catch (_e) {}
+      // V37.4.20 — Onboarding ludique sur P1 (premier visit uniquement, dismissable)
+      if (page === 1) {
+        var slot = document.getElementById('v2_onboarding_slot');
+        if (slot && !slot.innerHTML) slot.innerHTML = this._renderOnboarding();
+      }
     } catch (e) {
       console.error('[V2.go] erreur navigation:', e);
       alert('Bug navigation: ' + e.message); return;
@@ -14443,6 +14450,7 @@ window.V2 = {
       if (page === 14) this._renderCatalog();       // V37.4.17 — R1 Catalogue 234 fiches navigable
       if (page === 15) this._renderClosingArme();   // V37.4.18 — R2 Closing armé : comparateur + objections + commandements + mensualité
       if (page === 16) this._renderPushCRM();       // V37.4.19 — R3 Push CRM : Monday + lien HMAC + email + notif
+      if (page === 17) this._renderSuivi9Ans();     // V37.4.20 — R4 Suivi 9 ans : timeline + reminders + COFRAC
       if (page === 13) this._renderPlaceholder('v2p13content', 'P13 Investigation 15 gisements', 'V37.4.17',
         '15 gisements universels visualisables (renderGisements V1 L8672) + 16 micro-activités × 150 questions ciblées (MICRO_ACTIVITIES V1 L3767).');
       if (page === 14) this._renderPlaceholder('v2p14content', 'P14 Catalog 234 fiches', 'V37.4.17',
@@ -15478,7 +15486,7 @@ window.V2 = {
     html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:12px;line-height:1.6;color:rgba(245,245,247,.7);">';
     html += '<div><strong style="color:#58a6ff;">Période CEE</strong><br>P6 — 1er janv 2026 → 31 déc 2030<br>Volume : 1 050 TWhc/an (+27 %)</div>';
     html += '<div><strong style="color:#58a6ff;">Décret cadre</strong><br>n° 2025-1048 du 11/10/2025<br>Arrêté du 21/12/2025</div>';
-    html += '<div><strong style="color:#58a6ff;">Prix cumac</strong><br>EMMY déc 2025 : ~8,78 €/MWhc<br>(variable selon obligé)</div>';
+    html += '<div><strong style="color:#58a6ff;">Prix cumac</strong><br>EMMY Q1 2026 : ~9,00 €/MWhc · précarité ~16,40<br>(V37.4.12 — actualisé moy 4 mois)</div>';
     html += '<div><strong style="color:#58a6ff;">Conservation pièces</strong><br>9 ans après délivrance CEE<br>(arrêté 4/9/2014 art. 6)</div>';
     html += '<div><strong style="color:#58a6ff;">RGE installateur</strong><br>Validité requise au dépôt<br>Qualibat / QualiPAC / Qualit\'EnR</div>';
     html += '<div><strong style="color:#58a6ff;">Coup de Pouce P6</strong><br>×3 à ×5 si fossile → renouvelable<br>(PAC, biomasse, réseau chaleur)</div>';
@@ -15515,6 +15523,12 @@ window.V2 = {
     html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">URL unique signée pour partager ce diagnostic au client en lecture seule. Expire 30 jours. Aucune authentification requise côté client.</div>';
     html += '<button class="v2-btn v2-btn-primary" onclick="V2.generateShareLink()">Générer le lien</button>';
     html += '<div id="v2p6shareLink" style="margin-top:14px;"></div>';
+    html += '</div>';
+    // V37.4.20 — Pont vers R4 Suivi 9 ans
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(125,217,131,.06),rgba(125,217,131,.015));border-color:rgba(125,217,131,.25);">';
+    html += '<div class="v2-card-title" style="color:#7dd983;">📅 Et après la signature ?</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;line-height:1.55;">Une fois le client signé, le dossier passe en suivi 9 ans (conservation AH, alertes COFRAC, OPERAT annuel, audit DDADUE quadriennal). Toutes les obligations réglementaires sont consultables en P17.</div>';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2.go(17)" style="background:linear-gradient(135deg,#7dd983,#39d353);color:#0a0a0b;border:none;">→ Suivi 9 ans P17</button>';
     html += '</div>';
     c.innerHTML = html;
   },
@@ -16108,6 +16122,139 @@ window.V2 = {
     html += '</div>';
     d.innerHTML = html;
     d.scrollIntoView({behavior:'smooth', block:'start'});
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // V37.4.20 — R4 SUIVI 9 ANS (P17) + onboarding ludique V2 + bilan rapport
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // P17 — SUIVI 9 ANS POST-SIGNATURE : timeline + reminders + statut PNCEE + COFRAC
+  async _renderSuivi9Ans() {
+    var c = document.getElementById('v2p17content'); if (!c) return;
+
+    var html = '';
+    // Pitch
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(125,217,131,.08),rgba(125,217,131,.02));border-color:rgba(125,217,131,.3);">';
+    html += '<div class="v2-card-title" style="color:#7dd983;">📅 Suivi dossier 9 ans — récurrence + COFRAC</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
+    html += 'Une fois signé, un dossier CEE doit être conservé <strong>9 ans</strong> (arrêté 4 sept 2014 art. 6, modifié 2025). ';
+    html += 'Timeline post-signature · alertes contrôle COFRAC · reminders facture / DAACT / AH · statut PNCEE temps réel.';
+    html += '</div></div>';
+
+    // Dashboard global de tous les dossiers signés
+    html += '<div class="v2-card"><div class="v2-card-title">🗂 Dashboard global post-signature</div>';
+    html += '<div id="v2p17_dashboard"><div class="v2-loading">Chargement dossiers signés…</div></div>';
+    html += '</div>';
+
+    // Calendrier des reminders réglementaires (toujours affiché)
+    html += '<div class="v2-card"><div class="v2-card-title">⏰ Calendrier des reminders réglementaires</div>';
+    var reminders = [
+      {emoji:'📋', titre:'Conservation AH 9 ans', delai:'9 ans après dépôt', source:'Arrêté 4 sept 2014 art. 6, modifié 2025', impact:'Sanction obligé si AH absente lors contrôle COFRAC.'},
+      {emoji:'🔍', titre:'Contrôle COFRAC aléatoire', delai:'30% des dossiers (en hausse P6)', source:'Décret 2025-1048', impact:'Contrôle terrain par tiers + audit pièces. Préparer rapport gisement + facture + AH + DAACT.'},
+      {emoji:'📊', titre:'Déclaration OPERAT annuelle', delai:'Avant le 30 sept N+1', source:'Décret tertiaire 2019-771', impact:'Déclarer conso N-1 sur operat.ademe.fr. Sanction 7500€ PM / 1500€ PP par bâtiment.'},
+      {emoji:'⚖', titre:'Audit DDADUE quadriennal', delai:'Tous les 4 ans (prochain : 11/10/2030)', source:'Loi 2023-175 du 10/03/2023', impact:'Audit OPQIBI 19.05 obligatoire si conso ≥ 2,75 GWh/an. Sanction 2-4 % CA.'},
+      {emoji:'🏢', titre:'BACS classe B (extension < 70 kW)', delai:'1er janv 2027', source:'Décret BACS 2020-887 + 2023-259', impact:'GTB obligatoire pour > 70 kW (vs 290 kW actuellement). Anticiper signature avant fin 2026.'},
+      {emoji:'🌡', titre:'Décret tertiaire — objectif -40 %', delai:'2030', source:'Décret 2019-771 (Éco Énergie Tertiaire)', impact:'Objectifs progressifs -40% en 2030, -50% en 2040, -60% en 2050. Documenter chaque opération CEE comme contribution.'}
+    ];
+    reminders.forEach(function(r) {
+      html += '<details style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);">';
+      html += '<summary style="cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:10px;">';
+      html += '<span style="font-size:22px;">' + r.emoji + '</span>';
+      html += '<div style="flex:1;">';
+      html += '<div style="font-weight:600;font-size:13px;color:#7dd983;">' + r.titre + '</div>';
+      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;margin-top:2px;">⏱ ' + r.delai + ' · ' + r.source + '</div>';
+      html += '</div>';
+      html += '<span style="color:rgba(245,245,247,.4);">▸</span>';
+      html += '</summary>';
+      html += '<div style="margin-top:8px;padding:10px;background:rgba(255,255,255,.03);border-radius:6px;font-size:12px;line-height:1.6;color:rgba(245,245,247,.85);">';
+      html += '<strong style="color:#d29922;">⚠ Impact :</strong> ' + r.impact;
+      html += '</div></details>';
+    });
+    html += '</div>';
+
+    c.innerHTML = html;
+
+    // Charger le dashboard des dossiers signés
+    this._loadDashboardPostSign();
+  },
+
+  async _loadDashboardPostSign() {
+    var c = document.getElementById('v2p17_dashboard'); if (!c) return;
+    try {
+      var data = await this._fetch('/post-signature/dashboard');
+      var dossiers = data.dossiers || data.results || data.list || [];
+      this.state.suivi_dossier = {dossiers: dossiers, loaded_at: new Date().toISOString()};
+      if (!dossiers.length) {
+        c.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(245,245,247,.55);font-size:13px;">Aucun dossier signé enregistré pour l\'instant. Le suivi 9 ans démarre dès qu\'un dossier passe en R3 (signature).</div>';
+        return;
+      }
+      var html = '<div style="font-size:11px;color:rgba(245,245,247,.5);margin-bottom:10px;font-family:JetBrains Mono,monospace;">' + dossiers.length + ' dossier(s) en suivi 9 ans</div>';
+      dossiers.forEach(function(d) {
+        var statut = d.statut || d.etat || 'en_cours';
+        var color = statut === 'depose_pncee' ? '#7dd983' : statut === 'controle_cofrac' ? '#d29922' : statut === 'rejete' ? '#ff7b72' : '#58a6ff';
+        var dateSign = d.date_signature || d.date_creation || '';
+        var ageJours = dateSign ? Math.floor((Date.now() - new Date(dateSign).getTime()) / 86400000) : null;
+        var anneeRestantes = ageJours ? Math.max(0, 9 - Math.floor(ageJours / 365)) : 9;
+        html += '<div class="v2-fiche" style="border-left:3px solid ' + color + ';">';
+        html += '<div style="flex:1;">';
+        html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
+        html += '<span style="font-weight:600;font-size:14px;">' + (d.raison_sociale || d.nom || d.siret || 'Dossier #' + (d.id || '?')) + '</span>';
+        html += '<span style="padding:2px 8px;background:' + color + '20;color:' + color + ';border:1px solid ' + color + '40;border-radius:4px;font-size:10px;font-weight:700;font-family:JetBrains Mono,monospace;">' + statut.toUpperCase() + '</span>';
+        if (d.prime_eur) html += '<span style="margin-left:auto;font-family:JetBrains Mono,monospace;font-size:12px;color:#C8FF6B;">' + Math.round(d.prime_eur).toLocaleString('fr-FR') + ' €</span>';
+        html += '</div>';
+        html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
+        if (d.siret) html += 'SIRET ' + d.siret + ' · ';
+        if (dateSign) html += 'Signé ' + dateSign + ' (il y a ' + ageJours + ' j) · ';
+        html += '⏱ ' + anneeRestantes + ' an(s) restant(s) sur 9';
+        html += '</div>';
+        if (d.alertes && d.alertes.length) {
+          html += '<div style="margin-top:6px;font-size:11px;color:#d29922;">⚠ ' + d.alertes.length + ' alerte(s) : ' + d.alertes.slice(0,2).join(' · ') + '</div>';
+        }
+        html += '</div></div>';
+      });
+      c.innerHTML = html;
+    } catch (e) {
+      if (e.code === 401) c.innerHTML = this._authModal('/post-signature/dashboard requiert connexion');
+      else c.innerHTML = '<div style="padding:14px;background:rgba(248,81,73,.06);border-left:3px solid #ff7b72;border-radius:0 6px 6px 0;font-size:12px;color:rgba(245,245,247,.75);">⚠ Endpoint /post-signature/dashboard indisponible (' + (e.message || e) + ').<br>Le calendrier réglementaire ci-dessous reste utilisable comme référence universelle.</div>';
+    }
+  },
+
+  // V37.4.20 — Onboarding ludique V2 (premier visit, 3 étapes guidées)
+  _renderOnboarding() {
+    var dismissed = false;
+    try { dismissed = localStorage.getItem('cee_v2_onboarded') === '1'; } catch(_e) {}
+    if (dismissed) return '';
+    var html = '';
+    html += '<div id="v2_onboarding" class="v2-card" style="background:linear-gradient(135deg,rgba(0,212,170,.10),rgba(88,166,255,.06));border:1px solid rgba(0,212,170,.35);margin-bottom:18px;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">';
+    html += '<div style="flex:1;min-width:260px;">';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-size:22px;color:#C8FF6B;margin-bottom:6px;">Bienvenue dans le Mode Clair, Jimmy.</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.8);line-height:1.6;margin-bottom:12px;">17 onglets organisés en 5 phases R0→R4 selon ton déroulement client réel. Tout ce qui compte : prospection, audit, calcul, closing, signature, suivi 9 ans.</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:14px;">';
+    var steps = [
+      {emoji:'🎯', label:'1 · Hunt prospects', sub:'P11 Sirene-lookalike', page:11},
+      {emoji:'🔬', label:'2 · Audit prédictif', sub:'P3 → P4 → P14', page:1},
+      {emoji:'⚔', label:'3 · Closing armé', sub:'P15 + 44 objections', page:15},
+      {emoji:'✍', label:'4 · Signature', sub:'P8 + P14 + P16', page:8},
+      {emoji:'📅', label:'5 · Suivi 9 ans', sub:'P17 timeline COFRAC', page:17}
+    ];
+    steps.forEach(function(s) {
+      html += '<button class="v2-btn" style="height:auto;flex-direction:column;align-items:flex-start;padding:10px;text-align:left;gap:2px;font-size:11px;" onclick="V2.go(' + s.page + ')">';
+      html += '<span style="font-size:18px;">' + s.emoji + '</span>';
+      html += '<span style="font-weight:600;color:rgba(245,245,247,.9);">' + s.label + '</span>';
+      html += '<span style="color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">' + s.sub + '</span>';
+      html += '</button>';
+    });
+    html += '</div></div>';
+    html += '<button class="no-print" style="background:none;border:none;color:rgba(245,245,247,.5);cursor:pointer;font-size:18px;padding:0;line-height:1;" onclick="V2._dismissOnboarding()" title="Masquer">✕</button>';
+    html += '</div></div>';
+    return html;
+  },
+
+  _dismissOnboarding() {
+    try { localStorage.setItem('cee_v2_onboarded', '1'); } catch(_e) {}
+    var el = document.getElementById('v2_onboarding');
+    if (el) el.style.display = 'none';
   },
 
   // ═══════════════════════════════════════════════════════════════════════
