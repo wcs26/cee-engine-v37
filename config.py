@@ -57,9 +57,12 @@ PRIX_NEGOCIE = float(os.environ.get("PRIX_NEGOCIE", 0.75))
 # Taux conformité exigé: 90% (2026+)
 
 # Deadlines Coup de Pouce par secteur
+# V37.4.11 — chauffage tertiaire prolongé par arrêté du 27/12/2025 :
+# travaux engagés jusqu'au 31/12/2030, achevés au plus tard 31/12/2032.
+# Source : JORF n°0301 du 28/12/2025, JORFTEXT000053202091
 P6_DEADLINES = {
-    "chauffage": "2025-12-31",
-    "vehicules": "2026-12-31",
+    "chauffage": "2030-12-31",  # ex 2025-12-31 (avant prolongation)
+    "vehicules": "2026-12-31",  # à confirmer source officielle
 }
 
 # ═══════════════════════════════════════════════
