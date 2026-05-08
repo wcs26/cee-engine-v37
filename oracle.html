@@ -1648,7 +1648,7 @@
         <button type="button" onclick="loadComparateurAcheteurs('comparateurAcheteursBody')" style="font-size:11px;padding:4px 10px;border:1px solid var(--accent-cyan);border-radius:6px;background:rgba(0,212,170,0.1);color:var(--accent-cyan);cursor:pointer;">🔄 Actualiser</button>
       </div>
       <div id="comparateurAcheteursBody">
-        <div style="padding:12px;text-align:center;color:var(--text-secondary);font-size:12px;">Effectue un diagnostic puis clique <strong>Actualiser</strong> pour voir le classement (prix €/MWhc, prime nette, tolérances, délai).</div>
+        <div style="padding:12px;text-align:center;color:var(--text-secondary);font-size:12px;">Effectue un diagnostic puis clique <strong>Actualiser</strong> pour voir le classement (prix €/MWhc, Prime CEE estimée, tolérances, délai).</div>
       </div>
     </div>
     <div id="tkTabDocs" class="tk-pane" style="padding:16px 20px;display:none;">
@@ -3388,7 +3388,9 @@
   // ════════════════════════════════════════════════════════════════
 
   const CONFIG = {
-    PRIX_MWH: 8.78,
+    // V37.4.10 — aligné sur config.py PRIX_CUMAC=0.00720 (oversight V37.4.8 : front était resté à 8.78)
+    // Prix marché tertiaire conservateur Emmy 2026. Override possible via UI (à venir V37.4.11).
+    PRIX_MWH: 7.20,
     COMMISSION_RATE: 0,  // V36: 0% par défaut = pas d'intermédiaire, prime intégrale au client
     TVA_PRO: 0.20,
     PRIX_NEGOCIE: 0.75,
@@ -5010,6 +5012,16 @@
       costHT = primeBrute > 0 ? (primeBrute / ratioEstim) : 0;
     }
 
+    // V37.4.10 — flag heuristique : conversion d'unité OU fallback prime⁻¹ → coût peu fiable
+    var unitWarning = false; var unitWarningReason = '';
+    if (ct && (ct.u || '').toLowerCase() !== (fiche.unit || '').toLowerCase() && unitFactor !== null && unitFactor !== 1) {
+      unitWarning = true;
+      unitWarningReason = 'Coût travaux estimé par facteur ' + (ct.u || '?') + '→' + (fiche.unit || '?') + ' (=' + unitFactor + '). Précisez la puissance/quantité réelle pour une exactitude ±10%.';
+    } else if (!ct) {
+      unitWarning = true;
+      unitWarningReason = 'Aucun coût travaux référencé pour cette fiche : estimation = prime / ' + (fiche.zeroEuro ? '0.9' : '0.5') + '. Approximation ±50%.';
+    }
+
     // 5) Coût TTC — V37 FIX : TVA 5.5% résidentiel rénov, 20% tertiaire
     const isResidentiel = fiche.sector === 'BAR' || fiche.sector === 'RES';
     const tvaRate = isResidentiel ? 0.055 : CONFIG.TVA_PRO;
@@ -5042,7 +5054,9 @@
       covLevel,
       hasCoutMarche: !!ct,
       coutMarche: ct,
-      unitFactor: unitFactor // V37.3.35 — exposé pour badge UI ratio
+      unitFactor: unitFactor, // V37.3.35 — exposé pour badge UI ratio
+      unitWarning: unitWarning, // V37.4.10 — flag heuristique coût travaux
+      unitWarningReason: unitWarningReason
     };
   }
 
@@ -7001,7 +7015,7 @@
               html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">';
               html += '<div style="padding:8px;background:rgba(35,134,54,0.08);border-radius:8px;text-align:center;">';
               html += '<div style="font-size:18px;font-weight:800;color:#238636;">' + Math.round(g.total_prime_nette).toLocaleString('fr-FR') + ' €</div>';
-              html += '<div style="font-size:9px;color:var(--text-secondary);">prime nette totale</div></div>';
+              html += '<div style="font-size:9px;color:var(--text-secondary);">Prime CEE estimée totale</div></div>';
               html += '<div style="padding:8px;background:rgba(0,212,170,0.08);border-radius:8px;text-align:center;">';
               html += '<div style="font-size:18px;font-weight:800;color:#00d4aa;">' + (g.zero_count || 0) + '</div>';
               html += '<div style="font-size:9px;color:var(--text-secondary);">opérations 0€ client</div></div>';
@@ -12435,7 +12449,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:11px;">
         <div>Cumac total</div><div style="text-align:right;font-weight:600;">${g.total_cumac.toLocaleString('fr-FR')} kWhc</div>
-        <div>Prime nette</div><div style="text-align:right;color:#238636;font-weight:600;">${Math.round(g.total_prime_nette).toLocaleString('fr-FR')} €</div>
+        <div>Prime CEE estimée</div><div style="text-align:right;color:#238636;font-weight:600;">${Math.round(g.total_prime_nette).toLocaleString('fr-FR')} €</div>
         <div>Coût TTC</div><div style="text-align:right;">${Math.round(g.total_cost_ttc).toLocaleString('fr-FR')} €</div>
         <div>Couverture</div><div style="text-align:right;color:${g.total_coverage>=100?'#00d4aa':g.total_coverage>=70?'#d29922':'#f85149'};font-weight:600;">${g.total_coverage}%</div>
         <div>RAC</div><div style="text-align:right;color:${g.total_rac<=0?'#238636':'#d29922'};">${Math.round(g.total_rac).toLocaleString('fr-FR')} €</div>
@@ -13224,7 +13238,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (reco) {
         h += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">';
         h += '<div><strong style="font-size:16px;">' + (reco.nom || reco.acheteur) + '</strong><div style="font-size:11px;color:var(--text-secondary);">' + (reco.type || '') + (reco.notes ? ' — ' + reco.notes : '') + '</div></div>';
-        h += '<div style="text-align:right;"><div style="font-size:20px;font-weight:800;color:var(--accent-cyan);">' + Math.round(reco.prime_nette || 0).toLocaleString('fr-FR') + ' €</div><div style="font-size:10px;color:var(--text-secondary);">prime nette estimée</div></div>';
+        h += '<div style="text-align:right;"><div style="font-size:20px;font-weight:800;color:var(--accent-cyan);">' + Math.round(reco.prime_nette || 0).toLocaleString('fr-FR') + ' €</div><div style="font-size:10px;color:var(--text-secondary);">Prime CEE estimée</div></div>';
         h += '</div>';
       } else { h += '<div style="color:var(--text-secondary);">Volume insuffisant ou données manquantes.</div>'; }
       h += '</div>';
@@ -13232,7 +13246,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (classement && classement.length) {
         h += '<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">';
         h += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
-        h += '<thead style="background:var(--bg-tertiary);"><tr><th style="text-align:left;padding:8px 10px;">#</th><th style="text-align:left;padding:8px 10px;">Acheteur</th><th style="text-align:left;padding:8px 10px;">Type</th><th style="text-align:right;padding:8px 10px;">Prix €/MWhc</th><th style="text-align:right;padding:8px 10px;">Prime nette</th><th style="text-align:left;padding:8px 10px;">Tolérance</th></tr></thead><tbody>';
+        h += '<thead style="background:var(--bg-tertiary);"><tr><th style="text-align:left;padding:8px 10px;">#</th><th style="text-align:left;padding:8px 10px;">Acheteur</th><th style="text-align:left;padding:8px 10px;">Type</th><th style="text-align:right;padding:8px 10px;">Prix €/MWhc</th><th style="text-align:right;padding:8px 10px;">Prime CEE estimée</th><th style="text-align:left;padding:8px 10px;">Tolérance</th></tr></thead><tbody>';
         classement.forEach(function(a, i) {
           var rowBg = i === 0 ? 'background:rgba(0,212,170,0.05);' : '';
           h += '<tr style="border-top:1px solid var(--border);'+rowBg+'">';
@@ -15409,7 +15423,11 @@ window.V2 = {
         html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
         html += 'Coût TTC ' + Math.round(calc.costTTC).toLocaleString('fr-FR') + ' € · RAC ' + Math.round(Math.max(0, calc.rac)).toLocaleString('fr-FR') + ' €';
         html += ' · ' + Math.round(calc.kwhcTotal/1000) + ' kWhc · catégorie ' + (f.cat || 'autre');
-        html += '</div></div></div>';
+        html += '</div>';
+        if (calc.unitWarning) {
+          html += '<div style="margin-top:4px;font-size:10px;color:#d29922;display:flex;align-items:center;gap:4px;" title="' + (calc.unitWarningReason || '').replace(/"/g,"'") + '">⚠ Estimation coût travaux — précisez kW/qté pour exactitude</div>';
+        }
+        html += '</div></div>';
       });
     }
     c.innerHTML = html;
@@ -15542,6 +15560,9 @@ window.V2 = {
         html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;margin-bottom:6px;">';
         html += 'Coût TTC ' + Math.round(calc.costTTC).toLocaleString('fr-FR') + ' € · RAC ' + Math.round(rac).toLocaleString('fr-FR') + ' € · ' + Math.round(calc.kwhcTotal/1000) + ' kWhc';
         html += '</div>';
+        if (calc.unitWarning) {
+          html += '<div style="margin-bottom:6px;font-size:10px;color:#d29922;" title="' + (calc.unitWarningReason || '').replace(/"/g,"'") + '">⚠ Estimation coût travaux — précisez kW/qté pour exactitude</div>';
+        }
         if (rac > 0) {
           html += '<div style="display:flex;gap:8px;flex-wrap:wrap;font-family:JetBrains Mono,monospace;font-size:11px;">';
           html += '<span style="padding:3px 8px;background:rgba(88,166,255,.10);color:#58a6ff;border-radius:4px;">36 mois · ' + m36.toLocaleString('fr-FR') + ' €/mois</span>';
@@ -15705,7 +15726,7 @@ window.V2 = {
     html += '<div class="v2-card"><div class="v2-card-title">💼 Détail commercial — Tiers de confiance 0% commission</div>';
     html += '<div class="v2-field"><div class="v2-field-label">Prime brute (obligé)</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
     html += '<div class="v2-field"><div class="v2-field-label">Commission CEE Engine</div><div class="v2-field-value mono">0 % par défaut</div></div>';
-    html += '<div class="v2-field"><div class="v2-field-label">Prime nette bénéficiaire</div><div class="v2-field-value mono" style="color:#C8FF6B;font-size:16px;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div class="v2-field"><div class="v2-field-label">Prime CEE estimée<span style="font-size:9px;color:rgba(245,245,247,.5);font-weight:400;display:block;">avant cession obligé / négo Abokine</span></div><div class="v2-field-value mono" style="color:#C8FF6B;font-size:16px;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
     html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:10px;">Effy/Hellio/Drapo : 10–20 % de commission. CEE Engine = la prime intégrale au client.</div>';
     html += '</div>';
 
