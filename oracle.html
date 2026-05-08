@@ -14442,6 +14442,7 @@ window.V2 = {
       if (page === 13) this._renderGisementsR1();   // V37.4.17 — R1 15 gisements universels + micro-activités
       if (page === 14) this._renderCatalog();       // V37.4.17 — R1 Catalogue 234 fiches navigable
       if (page === 15) this._renderClosingArme();   // V37.4.18 — R2 Closing armé : comparateur + objections + commandements + mensualité
+      if (page === 16) this._renderPushCRM();       // V37.4.19 — R3 Push CRM : Monday + lien HMAC + email + notif
       if (page === 13) this._renderPlaceholder('v2p13content', 'P13 Investigation 15 gisements', 'V37.4.17',
         '15 gisements universels visualisables (renderGisements V1 L8672) + 16 micro-activités × 150 questions ciblées (MICRO_ACTIVITIES V1 L3767).');
       if (page === 14) this._renderPlaceholder('v2p14content', 'P14 Catalog 234 fiches', 'V37.4.17',
@@ -15287,22 +15288,40 @@ window.V2 = {
         if (items.length > 50) html += '<div style="font-size:11px;color:rgba(245,245,247,.45);margin-top:10px;">+ ' + (items.length-50) + ' autres règles…</div>';
         html += '</div>';
       }
-      // Checklist 12 erreurs G1T
-      try {
-        var rChk = await this._fetch('/conformite/checklist-pncee', {method:'GET'});
-        var dChk = await rChk.json();
-        var chk = dChk.checklist || dChk.items || dChk.erreurs || [];
-        if (chk.length) {
-          html += '<div class="v2-card"><div class="v2-card-title">📌 Les 12 erreurs fatales G1T à éviter</div>';
-          chk.slice(0, 12).forEach((it, i) => {
-            html += '<div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;">';
-            html += '<span style="font-family:JetBrains Mono,monospace;color:#58a6ff;width:30px;">' + (i+1) + '.</span>';
-            html += '<span style="color:rgba(245,245,247,.85);flex:1;">' + (typeof it === 'string' ? it : (it.description || it.titre || JSON.stringify(it).slice(0,100))) + '</span>';
-            html += '</div>';
-          });
-          html += '</div>';
-        }
-      } catch (e) { /* skip si endpoint indispo */ }
+      // V37.4.19 — Checklist 12 erreurs G1T détaillées (description + sanction + remède en accordéon)
+      // Données métier stables Jimmy / G1T / PNCEE — hardcodées pour fiabilité (vs endpoint /conformite/checklist-pncee
+      // qui retourne du text/plain). Sources : feedback_no_repeat_errors.md + reference_get1tech.md.
+      var g1tErreurs = [
+        {n:1,  titre:'Encre noire au lieu d\'encre bleue',                desc:'Toute signature en encre noire est rejetée par le PNCEE comme "non originale".', sanction:'Rejet automatique du dossier · perte 100 % de la prime.', remede:'Stylo Bic Cristal bleu uniquement. Pas de stylo plume.'},
+        {n:2,  titre:'Document recto-verso',                              desc:'Convention / AH imprimés recto-verso = scan PNCEE échoue (les 2 faces se mélangent).', sanction:'Demande de re-signature · délai +15 j.', remede:'Toujours imprimer en recto seul, agrafe coin haut-gauche.'},
+        {n:3,  titre:'Tampon de l\'entreprise au-dessus de la signature', desc:'Le tampon doit être à CÔTÉ (gauche ou droite) de la signature, jamais dessus.', sanction:'Avertissement · re-signature exigée si tampon couvre la signature.', remede:'Tampon à 2 cm à droite de la signature manuscrite.'},
+        {n:4,  titre:'Date d\'engagement postérieure à la date de signature', desc:'L\'engagement (DAACT/devis signé) doit être antérieur ou égal à la date de signature de la convention.', sanction:'Bloquant · le PNCEE refuse l\'antériorité.', remede:'Vérifier dates : devis signé < convention signée < AH signée < travaux finis.'},
+        {n:5,  titre:'RGE installateur expiré au moment du devis',        desc:'Le RGE doit être valide à la DATE DE DEVIS, pas à la date de signature client.', sanction:'Rejet PNCEE au contrôle COFRAC · perte prime + sanction obligé.', remede:'Vérifier validité RGE sur france-renov.gouv.fr AVANT le rendez-vous.'},
+        {n:6,  titre:'Adresse incorrecte sur l\'AH (vs Sirene)',          desc:'L\'AH doit reprendre l\'adresse EXACTE du SIRET (Sirene), pas l\'adresse de chantier.', sanction:'Rejet · re-impression + re-signature.', remede:'Croiser AH avec extrait Sirene (api.insee.fr) avant impression.'},
+        {n:7,  titre:'SIRET du bénéficiaire absent ou erroné',            desc:'AH/devis sans SIRET ou avec SIRET typo = rejet.', sanction:'Bloquant · refait tout.', remede:'Vérifier SIRET via Pappers + recopier au stylo si pré-rempli.'},
+        {n:8,  titre:'Mention "encre bleue" oubliée sur la convention',   desc:'La convention 4 pages WCS doit mentionner explicitement la couleur d\'encre exigée.', sanction:'Avertissement (pas bloquant mais bonne pratique).', remede:'Modèle convention V37.4.x à jour intègre la mention.'},
+        {n:9,  titre:'Conservation 9 ans non documentée',                 desc:'Arrêté 4 sept 2014 art. 6 : pièces du dossier à garder 9 ans (pas 6 comme dit avant 2025).', sanction:'Sanction obligé · contrôle COFRAC échoué.', remede:'Documenter procédure de conservation (cloud + papier) dans la convention.'},
+        {n:10, titre:'Cumul CEE non documenté avec MaPrimeRénov\'',        desc:'Si client cumule CEE+MPR, traçabilité du % couverture totale obligatoire.', sanction:'Rejet PNCEE si cumul > 100 % du coût travaux.', remede:'Joindre simulation cumul (P5 V2) au dossier signature.'},
+        {n:11, titre:'Surface chantier différente entre devis et AH',     desc:'Surface m² doit être STRICTEMENT identique entre devis, AH et convention.', sanction:'Bloquant · re-doc complet.', remede:'Saisir 1 seule fois en P1, propager aux 4 docs (V2 fait ça automatiquement).'},
+        {n:12, titre:'Pas de DAACT (déclaration travaux) joint',          desc:'Pour les travaux > 5000 € HT : DAACT obligatoire en pièce jointe au dossier PNCEE.', sanction:'Rejet à la première exigence du PNCEE.', remede:'Demander DAACT à l\'installateur RGE en même temps que la facture.'}
+      ];
+      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(248,81,73,.05),rgba(248,81,73,.01));border-color:rgba(248,81,73,.25);">';
+      html += '<div class="v2-card-title" style="color:#ff7b72;">📌 Les 12 erreurs fatales G1T (cliquer pour détails)</div>';
+      html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:14px;">Ces 12 erreurs ont causé à elles seules <strong>~70 % des rejets PNCEE</strong> chez G1T+LSF Energie 2020-2022. À vérifier item par item AVANT signature.</div>';
+      g1tErreurs.forEach(function(e) {
+        html += '<details style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);">';
+        html += '<summary style="cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:10px;">';
+        html += '<span style="font-family:JetBrains Mono,monospace;color:#ff7b72;font-weight:700;min-width:30px;">N°' + e.n + '</span>';
+        html += '<span style="font-weight:600;font-size:13px;color:rgba(245,245,247,.9);flex:1;">' + e.titre + '</span>';
+        html += '<span style="color:rgba(245,245,247,.4);">▸</span>';
+        html += '</summary>';
+        html += '<div style="margin-top:10px;padding:12px;background:rgba(255,255,255,.03);border-radius:6px;font-size:12px;line-height:1.65;color:rgba(245,245,247,.85);">';
+        html += '<div style="margin-bottom:6px;"><strong style="color:#58a6ff;">📋 Description :</strong> ' + e.desc + '</div>';
+        html += '<div style="margin-bottom:6px;"><strong style="color:#ff7b72;">⚖ Sanction :</strong> ' + e.sanction + '</div>';
+        html += '<div><strong style="color:#C8FF6B;">🔧 Remède :</strong> ' + e.remede + '</div>';
+        html += '</div></details>';
+      });
+      html += '</div>';
       c.innerHTML = html;
     } catch (e) {
       if (e.code === 401) c.innerHTML = this._authModal('/conformite/check requiert connexion');
@@ -16089,6 +16108,137 @@ window.V2 = {
     html += '</div>';
     d.innerHTML = html;
     d.scrollIntoView({behavior:'smooth', block:'start'});
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // V37.4.19 — R3 PUSH CRM (P16) : Monday + lien partage HMAC + email + notif
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // P16 — PUSH CRM : 4 actions transmission équipe (Monday / lien HMAC / email DAF / notifs)
+  _renderPushCRM() {
+    var c = document.getElementById('v2p16content'); if (!c) return;
+    var p = this.state.profil;
+    if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1 puis sélectionne des fiches en P5/P6.</div>'; return; }
+    var s = this.state;
+    var hasFiches = s.selected && s.selected.size > 0;
+
+    var html = '';
+    // Pitch
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(57,211,83,.08),rgba(57,211,83,.02));border-color:rgba(57,211,83,.3);">';
+    html += '<div class="v2-card-title" style="color:#39d353;">🔄 4 façons de transmettre ce dossier à l\'équipe</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
+    html += 'Push CRM Monday · lien partageable signé HMAC · email récap DAF · notifications WhatsApp/Telegram. ';
+    html += 'Tout pré-rempli avec les KPI de ce dossier — zéro re-saisie pour Anthony / Aurelien / Nicolas.';
+    html += '</div></div>';
+
+    if (!hasFiches) {
+      html += '<div class="v2-card"><div class="v2-card-title">⚠ Sélectionne d\'abord des fiches en P5 / P6</div><div style="font-size:13px;color:rgba(245,245,247,.7);">Le push CRM nécessite au moins 1 fiche sélectionnée pour transmettre les KPI (prime · coût · RAC).</div></div>';
+      c.innerHTML = html;
+      return;
+    }
+
+    // Récap KPI dossier
+    var rows = this._selectedRows();
+    var totalPrime = rows.reduce(function(s,r){return s+r.prime;},0);
+    var totalCout = rows.reduce(function(s,r){return s+r.cout;},0);
+    var totalRac = rows.reduce(function(s,r){return s+r.rac;},0);
+    html += '<div class="v2-card"><div class="v2-card-title">📊 Récap dossier prêt à transmettre</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center;">';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Entreprise</div><div style="font-family:Fraunces,Georgia,serif;font-size:18px;color:#58a6ff;line-height:1.2;margin-top:6px;">' + (p.raison || p.raisonSociale || '?') + '</div></div>';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Fiches</div><div style="font-family:Fraunces,Georgia,serif;font-size:32px;color:#C8FF6B;">' + rows.length + '</div></div>';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Prime CEE</div><div style="font-family:Fraunces,Georgia,serif;font-size:24px;color:#C8FF6B;">' + totalPrime.toLocaleString('fr-FR') + ' €</div></div>';
+    html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;">Reste à charge</div><div style="font-family:Fraunces,Georgia,serif;font-size:24px;color:#d29922;">' + totalRac.toLocaleString('fr-FR') + ' €</div></div>';
+    html += '</div></div>';
+
+    // 4 actions transmission
+    html += '<div class="v2-card"><div class="v2-card-title">🚀 Choisis ton mode de transmission</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">';
+    var actions = [
+      {fn:'_pushMonday',  emoji:'🟧', titre:'Push Monday auto', sub:'Crée l\'item dans le board CEE avec colonnes prime/RAC/secteur/SIRET pré-remplies', endpoint:'/monday/push-dossier'},
+      {fn:'_createShareLink', emoji:'🔗', titre:'Lien partageable HMAC 30j', sub:'URL signée pour client/DAF — vue rapport sans login. Expire 30j.', endpoint:'/dossiers'},
+      {fn:'_emailDaf',  emoji:'📧', titre:'Email récap DAF', sub:'mailto: pré-rempli sujet + KPI + top 5 ops + signature Jimmy', endpoint:'mailto:'},
+      {fn:'_notifSend', emoji:'📲', titre:'Notif WhatsApp/Telegram (V37.4.20)', sub:'CallMeBot WhatsApp + bot Telegram — placeholder en attente endpoint', endpoint:'à venir'}
+    ];
+    actions.forEach(function(a) {
+      html += '<button class="v2-btn no-print" style="height:auto;flex-direction:column;align-items:flex-start;padding:18px;text-align:left;gap:6px;" onclick="V2.' + a.fn + '()">';
+      html += '<div style="display:flex;align-items:center;gap:10px;width:100%;"><span style="font-size:24px;">' + a.emoji + '</span><span style="margin-left:auto;font-family:JetBrains Mono,monospace;font-size:10px;color:rgba(245,245,247,.45);">' + a.endpoint + '</span></div>';
+      html += '<span style="font-weight:600;font-size:14px;">' + a.titre + '</span>';
+      html += '<span style="font-size:11px;color:rgba(245,245,247,.55);font-weight:400;line-height:1.4;">' + a.sub + '</span>';
+      html += '</button>';
+    });
+    html += '</div></div>';
+
+    // Zone résultat
+    html += '<div class="v2-card" id="v2p16_result_card" style="display:none;"><div class="v2-card-title">📋 Résultat transmission</div><div id="v2p16_result"></div></div>';
+
+    c.innerHTML = html;
+    s.push_crm_status = {ready:true, totalPrime:totalPrime, totalRac:totalRac, nbFiches:rows.length};
+  },
+
+  async _pushMonday() {
+    this._pushCRMResult('<div class="v2-loading">Push Monday en cours…</div>');
+    var p = this.state.profil; var rows = this._selectedRows();
+    var payload = {
+      siret: p.siret, raison_sociale: p.raison || p.raisonSociale,
+      secteur: p.naf || p.ape, surface: p.surface,
+      prime_eur: rows.reduce(function(s,r){return s+r.prime;},0),
+      cout_eur: rows.reduce(function(s,r){return s+r.cout;},0),
+      rac_eur: rows.reduce(function(s,r){return s+r.rac;},0),
+      nb_fiches: rows.length, fiches: rows.map(function(r){return r.ref;}),
+      adresse: ((p.adresse||'') + ' ' + (p.cp||'') + ' ' + (p.ville||'')).trim()
+    };
+    try {
+      var data = await this._fetch('/monday/push-dossier', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      var item_id = data.item_id || data.id || '?';
+      var url = data.url || (item_id !== '?' ? 'https://lawofjimmy.monday.com/items/' + item_id : '');
+      var html = '<div style="padding:14px;background:rgba(57,211,83,.08);border-left:3px solid #39d353;border-radius:0 6px 6px 0;">';
+      html += '<div style="font-weight:700;color:#39d353;">✓ Item Monday créé — ID ' + item_id + '</div>';
+      if (url) html += '<div style="margin-top:8px;"><a href="' + url + '" target="_blank" rel="noopener" style="color:#58a6ff;">Ouvrir dans Monday →</a></div>';
+      html += '<div style="margin-top:8px;font-size:12px;color:rgba(245,245,247,.7);">Colonnes pré-remplies : SIRET, raison, prime, RAC, fiches sélectionnées.</div>';
+      html += '</div>';
+      this._pushCRMResult(html);
+    } catch (e) {
+      this._pushCRMResult('<div class="v2-error">Erreur Monday : ' + (e.message || e) + (e.code === 401 ? ' (connexion requise)' : '') + '</div>');
+    }
+  },
+
+  async _createShareLink() {
+    this._pushCRMResult('<div class="v2-loading">Création du dossier signé HMAC…</div>');
+    var p = this.state.profil; var rows = this._selectedRows();
+    var payload = {
+      siret: p.siret, raison_sociale: p.raison || p.raisonSociale,
+      surface: p.surface, fiches: rows,
+      kpi: {prime: rows.reduce(function(s,r){return s+r.prime;},0), rac: rows.reduce(function(s,r){return s+r.rac;},0)}
+    };
+    try {
+      var data = await this._fetch('/dossiers', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      var token = data.token || data.lien || data.share_token || '';
+      var url = token ? (window.location.origin + '/dossiers/lien/' + token) : (data.url || '');
+      var html = '<div style="padding:14px;background:rgba(88,166,255,.08);border-left:3px solid #58a6ff;border-radius:0 6px 6px 0;">';
+      html += '<div style="font-weight:700;color:#58a6ff;">🔗 Lien partage généré (expire 30j)</div>';
+      if (url) {
+        html += '<div style="margin-top:10px;font-family:JetBrains Mono,monospace;font-size:12px;background:rgba(0,0,0,.3);padding:10px;border-radius:4px;word-break:break-all;">' + url + '</div>';
+        html += '<div style="margin-top:10px;display:flex;gap:8px;"><button class="v2-btn" style="font-size:12px;" onclick="navigator.clipboard.writeText(\'' + url + '\').then(()=>this.textContent=\'✓ Copié\')">📋 Copier le lien</button>';
+        html += '<a href="' + url + '" target="_blank" rel="noopener" class="v2-btn" style="font-size:12px;text-decoration:none;">🔍 Ouvrir</a></div>';
+      }
+      html += '<div style="margin-top:8px;font-size:12px;color:rgba(245,245,247,.7);">Vue rapport sans login pour le client/DAF.</div>';
+      html += '</div>';
+      this._pushCRMResult(html);
+    } catch (e) {
+      this._pushCRMResult('<div class="v2-error">Erreur création lien : ' + (e.message || e) + (e.code === 401 ? ' (connexion requise)' : '') + '</div>');
+    }
+  },
+
+  _emailDaf() { this._emailMailto(); },
+
+  _notifSend() {
+    this._pushCRMResult('<div style="padding:14px;background:rgba(210,153,34,.08);border-left:3px solid #d29922;border-radius:0 6px 6px 0;"><div style="font-weight:700;color:#d29922;">🚧 Notifications WhatsApp/Telegram — V37.4.20</div><div style="margin-top:8px;font-size:13px;color:rgba(245,245,247,.75);">Backend prêt (CallMeBot WhatsApp + Telegram bot natif déjà en prod, voir feedback_no_repeat_errors.md V37.3.37/38). Ne reste qu\'à câbler l\'endpoint pour push à un destinataire choisi (équipe ou client).</div></div>');
+  },
+
+  _pushCRMResult(html) {
+    var card = document.getElementById('v2p16_result_card'); if (card) card.style.display = '';
+    var c = document.getElementById('v2p16_result'); if (c) c.innerHTML = html;
+    if (card) card.scrollIntoView({behavior:'smooth', block:'start'});
   },
 
   // ═══════════════════════════════════════════════════════════════════════
