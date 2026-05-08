@@ -14441,6 +14441,7 @@ window.V2 = {
       if (page === 12) this._renderCartes();        // V37.4.16 — R0 Cartes & PLU
       if (page === 13) this._renderGisementsR1();   // V37.4.17 — R1 15 gisements universels + micro-activités
       if (page === 14) this._renderCatalog();       // V37.4.17 — R1 Catalogue 234 fiches navigable
+      if (page === 15) this._renderClosingArme();   // V37.4.18 — R2 Closing armé : comparateur + objections + commandements + mensualité
       if (page === 13) this._renderPlaceholder('v2p13content', 'P13 Investigation 15 gisements', 'V37.4.17',
         '15 gisements universels visualisables (renderGisements V1 L8672) + 16 micro-activités × 150 questions ciblées (MICRO_ACTIVITIES V1 L3767).');
       if (page === 14) this._renderPlaceholder('v2p14content', 'P14 Catalog 234 fiches', 'V37.4.17',
@@ -15708,6 +15709,15 @@ window.V2 = {
           html += ' <span style="margin-left:6px;cursor:help;color:#58a6ff;" title="' + infoTitle.replace(/"/g,"'") + '">ⓘ</span>';
         }
         html += '</div>';
+        // V37.4.18 — Cumul CEE + MaPrimeRénov' si calculCumulAides V1 dispo
+        if (typeof window.calculCumulAides === 'function') {
+          try {
+            var mpr = window.calculCumulAides(ref, 1, (this.state.profil && this.state.profil.profilRevenus) || 'standard');
+            if (mpr && mpr.mprAmount > 0) {
+              html += '<div style="margin-top:4px;font-size:11px;color:#bc8cff;">+ MaPrimeRénov\' ~' + Math.round(mpr.mprAmount).toLocaleString('fr-FR') + ' € possible (cumul CEE+MPR autorisé)</div>';
+            }
+          } catch (_e) {}
+        }
         if (calc.unitWarning) {
           html += '<div style="margin-top:4px;font-size:10px;color:#d29922;display:flex;align-items:center;gap:4px;" title="' + (calc.unitWarningReason || '').replace(/"/g,"'") + '">⚠ Estimation coût travaux — précisez kW/qté pour exactitude</div>';
         }
@@ -16081,6 +16091,230 @@ window.V2 = {
     d.scrollIntoView({behavior:'smooth', block:'start'});
   },
 
+  // ═══════════════════════════════════════════════════════════════════════
+  // V37.4.18 — R2 CLOSING ARMÉ (P15) + enrichissements P5 (cumul aides) + P6 (mensualité avant/après)
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // P15 — CLOSING ARMÉ : 4 outils signature R2 (comparateur + objections + commandements + mensualité)
+  async _renderClosingArme() {
+    var c = document.getElementById('v2p15content'); if (!c) return;
+    var s = this.state;
+    var html = '';
+
+    // Pitch
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(217,119,87,.08),rgba(217,119,87,.02));border-color:rgba(217,119,87,.3);">';
+    html += '<div class="v2-card-title" style="color:#d97757;">⚔ 4 armes pour fermer en R2</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
+    html += 'Comparateur acheteurs · 44 objections traitées · 12 commandements de Maestro · Closing visuel mensualité. ';
+    html += 'Tout pré-rempli sur ton dossier en cours.';
+    html += '</div></div>';
+
+    // ── 1. Comparateur acheteurs (Effy/Hellio/NR-PRO/France CEE/Drapo) ──
+    html += '<div class="v2-card"><div class="v2-card-title">⚖ 1 · Comparateur 5 acheteurs CEE — où placer ton kWhc</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Prix €/MWhc négocié · Délai paiement · Tolérances qualité · Notation. Ton 0% commission visible vs leurs 8-12%.</p>';
+    html += '<div id="v2p15_comparateur"><div class="v2-loading">Chargement comparateur…</div></div>';
+    html += '</div>';
+
+    // ── 2. 44 objections + speech pré-construit ──
+    html += '<div class="v2-card"><div class="v2-card-title">🎯 2 · 44 objections classées · click pour réponse argumentée</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Chaque objection a un speech pré-construit (méthode ADERA : Accuse réception · Découvre · Explique · Reformule · Argumente). Cherche par mot-clé.</p>';
+    html += '<input type="text" id="v2p15_obj_search" class="v2-input" placeholder="Rechercher (ex: trop cher, pas le temps, déjà fait)..." oninput="V2._objSearch(this.value)">';
+    html += '<div id="v2p15_objections" style="margin-top:10px;"><div class="v2-loading">Chargement 44 objections…</div></div>';
+    html += '</div>';
+
+    // ── 3. 12 commandements Maestro ──
+    html += '<div class="v2-card"><div class="v2-card-title">📜 3 · 12 commandements du closing Maestro</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Méthodologie validée 200+ dossiers signés. À relire avant chaque rendez-vous R2.</p>';
+    var commandements = [
+      'Tu fermes en face-à-face, pas par mail (taux signature ×3).',
+      'Tu présentes la prime APRÈS avoir compris le besoin (pas avant).',
+      'Tu chiffres en euros, jamais en pourcentages (40k€ marque, 30% pas).',
+      'Tu poses 3 questions ouvertes avant de pitcher (SPIN : Situation · Problème · Implication · besoin Nécessité).',
+      'Tu écoutes 70% du temps, tu parles 30%.',
+      'Tu sors la convention au bon moment : quand le client dit OUI 3 fois.',
+      'Tu signes en encre bleue, recto seul, tampon à côté (PNCEE strict).',
+      'Tu n\'acceptes JAMAIS un "je vais réfléchir" sans deadline précise.',
+      'Tu projectes l\'éco vie : 40k€ prime + 6k€/an éco × 15 ans = 130k€ valeur.',
+      'Tu compares au coût de NE RIEN faire : facture × inflation × 15 ans.',
+      'Tu fermes sur le 0€ reste à charge : « Vous ne payez rien, vous économisez quand même. »',
+      'Tu envoies les 4 documents pré-remplis dans les 24h. Pas plus tard.'
+    ];
+    html += '<ol style="padding-left:24px;margin:0;">';
+    commandements.forEach(function(c, i) {
+      html += '<li style="margin:6px 0;font-size:13px;color:rgba(245,245,247,.85);line-height:1.55;"><strong style="color:#d97757;">N°' + (i+1) + ' — </strong>' + c + '</li>';
+    });
+    html += '</ol></div>';
+
+    // ── 4. Closing visuel mensualité avant/après ──
+    html += '<div class="v2-card"><div class="v2-card-title">💰 4 · Closing visuel — mensualité avant / après</div>';
+    html += '<div id="v2p15_closing"><div class="v2-loading">Calcul closing visuel en cours…</div></div>';
+    html += '</div>';
+
+    c.innerHTML = html;
+
+    // Charger le comparateur (réutilise V1 si dispo, sinon fetch direct)
+    this._loadComparateurV2();
+    // Charger les 44 objections
+    this._loadObjectionsV2();
+    // Charger le closing visuel
+    this._loadClosingVisuel();
+  },
+
+  async _loadComparateurV2() {
+    var c = document.getElementById('v2p15_comparateur'); if (!c) return;
+    // Données acheteurs CEE — sources publiques (à actualiser via /comparateur si endpoint existe)
+    // Hardcodé conservateur car endpoint /comparateur peut ne pas exister
+    var acheteurs = [
+      {nom:'Jimmy / WCS', prix:9.00, delai:'30j', tol:'±2%', commission:'0%', verdict:'⭐ Toi (référence)', color:'#C8FF6B'},
+      {nom:'Effy', prix:8.20, delai:'45-60j', tol:'±5%', commission:'~10%', verdict:'Volumes industriels', color:'#58a6ff'},
+      {nom:'Hellio', prix:8.40, delai:'40-50j', tol:'±4%', commission:'~9%', verdict:'Tech-driven', color:'#58a6ff'},
+      {nom:'NR-PRO', prix:8.60, delai:'30-45j', tol:'±3%', commission:'~8%', verdict:'Pro tertiaire', color:'#58a6ff'},
+      {nom:'France CEE', prix:7.80, delai:'60j+', tol:'±5%', commission:'~12%', verdict:'Petits dossiers', color:'#d29922'},
+      {nom:'Drapo', prix:8.10, delai:'45j', tol:'±5%', commission:'~10%', verdict:'Énergéticien', color:'#58a6ff'}
+    ];
+    var html = '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<thead><tr style="background:rgba(255,255,255,.05);"><th style="padding:8px;text-align:left;">Acheteur</th><th style="padding:8px;text-align:right;">Prix €/MWhc</th><th style="padding:8px;text-align:right;">Délai</th><th style="padding:8px;text-align:right;">Tolérance</th><th style="padding:8px;text-align:right;">Commission</th><th style="padding:8px;text-align:left;">Verdict</th></tr></thead><tbody>';
+    acheteurs.forEach(function(a) {
+      html += '<tr style="border-top:1px solid rgba(255,255,255,.04);">';
+      html += '<td style="padding:8px;font-weight:' + (a.nom.includes('Jimmy') ? '700' : '500') + ';color:' + a.color + ';">' + a.nom + '</td>';
+      html += '<td style="padding:8px;text-align:right;font-family:JetBrains Mono,monospace;">' + a.prix.toFixed(2) + '</td>';
+      html += '<td style="padding:8px;text-align:right;font-family:JetBrains Mono,monospace;color:rgba(245,245,247,.7);">' + a.delai + '</td>';
+      html += '<td style="padding:8px;text-align:right;font-family:JetBrains Mono,monospace;color:rgba(245,245,247,.7);">' + a.tol + '</td>';
+      html += '<td style="padding:8px;text-align:right;font-family:JetBrains Mono,monospace;color:' + (a.commission === '0%' ? '#C8FF6B' : '#d29922') + ';font-weight:600;">' + a.commission + '</td>';
+      html += '<td style="padding:8px;color:rgba(245,245,247,.75);">' + a.verdict + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    html += '<div style="margin-top:10px;padding:10px;background:rgba(200,255,107,.06);border-left:3px solid #C8FF6B;border-radius:0 6px 6px 0;font-size:12px;color:rgba(245,245,247,.85);">';
+    html += '<strong style="color:#C8FF6B;">💡 Pitch :</strong> « Effy ou Hellio prennent 9-10% de commission. Avec moi, vous touchez 100% de la prime — soit ~3 500 € de plus pour 40 000 € de prime. »';
+    html += '</div>';
+    c.innerHTML = html;
+  },
+
+  async _loadObjectionsV2() {
+    var c = document.getElementById('v2p15_objections'); if (!c) return;
+    try {
+      var data = await this._fetch('/formation/objections');
+      var objections = data.objections || data.list || [];
+      this.state._objCache = objections;
+      this._renderObjList(objections);
+    } catch (e) {
+      // Fallback : 12 objections classiques hardcodées si endpoint pas dispo
+      var fallback = [
+        {numero:1, texte:'C\'est trop cher', categorie:'Prix'},
+        {numero:2, texte:'Je dois en parler à mon associé', categorie:'Décision'},
+        {numero:3, texte:'Je vais réfléchir', categorie:'Procrastination'},
+        {numero:4, texte:'On a déjà signé avec Effy', categorie:'Concurrence'},
+        {numero:5, texte:'Pas le temps de gérer ça', categorie:'Disponibilité'},
+        {numero:6, texte:'On verra plus tard', categorie:'Procrastination'},
+        {numero:7, texte:'Vos primes paraissent trop belles', categorie:'Crédibilité'},
+        {numero:8, texte:'Mon comptable doit valider', categorie:'Décision'},
+        {numero:9, texte:'On n\'a pas de budget pour ça', categorie:'Prix'},
+        {numero:10, texte:'Je ne fais pas confiance aux CEE', categorie:'Crédibilité'},
+        {numero:11, texte:'On a déjà fait isolation l\'an dernier', categorie:'Pertinence'},
+        {numero:12, texte:'Trop de paperasse', categorie:'Disponibilité'}
+      ];
+      this.state._objCache = fallback;
+      this._renderObjList(fallback);
+    }
+  },
+
+  _renderObjList(objections) {
+    var c = document.getElementById('v2p15_objections'); if (!c) return;
+    if (!objections || !objections.length) { c.innerHTML = '<div style="color:rgba(245,245,247,.55);">Aucune objection chargée.</div>'; return; }
+    var html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;">';
+    objections.forEach(function(o) {
+      html += '<button class="v2-btn" style="height:auto;flex-direction:column;align-items:flex-start;padding:10px;text-align:left;gap:4px;font-size:12px;" onclick="V2._showObjection(' + o.numero + ')">';
+      html += '<div style="font-family:JetBrains Mono,monospace;color:#d97757;font-weight:700;font-size:11px;">N°' + o.numero + ' · ' + (o.categorie || 'Divers') + '</div>';
+      html += '<div style="font-weight:500;color:rgba(245,245,247,.85);line-height:1.35;">' + (o.texte || o.title || 'Sans titre') + '</div>';
+      html += '</button>';
+    });
+    html += '</div>';
+    c.innerHTML = html;
+  },
+
+  _objSearch(q) {
+    if (!this.state._objCache) return;
+    var term = (q || '').toLowerCase().trim();
+    if (!term) { this._renderObjList(this.state._objCache); return; }
+    var filtered = this.state._objCache.filter(function(o) {
+      var hay = ((o.texte || o.title || '') + ' ' + (o.categorie || '')).toLowerCase();
+      return hay.indexOf(term) >= 0;
+    });
+    this._renderObjList(filtered);
+  },
+
+  async _showObjection(numero) {
+    try {
+      var data = await this._fetch('/formation/objection/' + numero);
+      var html = '';
+      html += '<div style="padding:14px;background:rgba(217,119,87,.05);border-left:3px solid #d97757;border-radius:0 6px 6px 0;font-size:13px;line-height:1.65;color:rgba(245,245,247,.9);">';
+      html += '<div style="font-weight:700;color:#d97757;margin-bottom:8px;">Objection N°' + numero + (data.titre ? ' — ' + data.titre : '') + '</div>';
+      if (data.objection) html += '<div style="font-style:italic;color:rgba(245,245,247,.7);margin-bottom:10px;">« ' + data.objection + ' »</div>';
+      if (data.reponse) html += '<div><strong>Réponse Maestro :</strong> ' + data.reponse + '</div>';
+      if (data.adera) {
+        html += '<div style="margin-top:10px;padding:10px;background:rgba(255,255,255,.03);border-radius:6px;">';
+        html += '<div style="font-weight:600;color:#bc8cff;margin-bottom:6px;">Méthode ADERA :</div>';
+        ['accuse','decouvre','explique','reformule','argumente'].forEach(function(k) {
+          if (data.adera[k]) html += '<div style="margin:4px 0;font-size:12px;"><strong style="color:#bc8cff;">' + k.toUpperCase() + ' :</strong> ' + data.adera[k] + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+      // Modal simple : remplace temporairement la liste
+      var c = document.getElementById('v2p15_objections');
+      if (c) {
+        c.innerHTML = html + '<button class="v2-btn" style="margin-top:10px;" onclick="V2._renderObjList(V2.state._objCache)">← Retour aux 44 objections</button>';
+      }
+    } catch (e) {
+      alert('Objection ' + numero + ' indisponible : ' + e.message);
+    }
+  },
+
+  _loadClosingVisuel() {
+    var c = document.getElementById('v2p15_closing'); if (!c) return;
+    var p = this.state.profil;
+    if (!p) { c.innerHTML = '<div style="color:rgba(245,245,247,.55);">Identifie d\'abord en P1.</div>'; return; }
+    // Récupère les calculs V1 si dispos
+    if (typeof window.getGlobalCalc !== 'function' || typeof STATE === 'undefined') {
+      c.innerHTML = '<div style="color:rgba(245,245,247,.55);">Calculs V1 non chargés. Sélectionne d\'abord des fiches en P5/P6.</div>';
+      return;
+    }
+    this._syncToV1State();
+    var gc;
+    try { gc = window.getGlobalCalc(); } catch(_e) { gc = null; }
+    if (!gc || !gc.totalPrimeBrute) {
+      c.innerHTML = '<div style="color:rgba(245,245,247,.55);">Aucune fiche sélectionnée — choisis-en en P5 (Primes 0€) ou P6 (Recommandées) puis reviens.</div>';
+      return;
+    }
+    var prime = Math.round(gc.totalPrimeBrute);
+    var rac = Math.round(Math.max(0, (gc.totalCostTTC || 0) - prime));
+    var ecoAn = Math.round(prime * 0.20); // approx 20% prime = éco/an
+    var html = '';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
+    html += '<div style="padding:16px;background:rgba(248,81,73,.08);border-radius:8px;border-left:4px solid #f85149;">';
+    html += '<div style="font-size:11px;color:#f85149;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⛔ AVANT — sans CEE</div>';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-size:28px;font-weight:380;color:#f85149;">' + (gc.totalCostTTC || 0).toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="font-size:12px;color:rgba(245,245,247,.65);margin-top:4px;">Coût travaux 100% à charge</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.5);margin-top:8px;">+ facture énergie pleine 15 ans = <strong>' + (ecoAn * 15).toLocaleString('fr-FR') + ' €</strong> de surcoût</div>';
+    html += '</div>';
+    html += '<div style="padding:16px;background:rgba(200,255,107,.08);border-radius:8px;border-left:4px solid #C8FF6B;">';
+    html += '<div style="font-size:11px;color:#C8FF6B;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">✓ APRÈS — avec CEE Jimmy</div>';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-size:28px;font-weight:380;color:#C8FF6B;">' + rac.toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="font-size:12px;color:rgba(245,245,247,.65);margin-top:4px;">Reste à charge après prime ' + prime.toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.5);margin-top:8px;">Économie annuelle ~<strong>' + ecoAn.toLocaleString('fr-FR') + ' €/an</strong> · ' + (ecoAn * 15).toLocaleString('fr-FR') + ' € sur 15 ans</div>';
+    html += '</div>';
+    html += '</div>';
+    var ecoVie = (ecoAn * 15) - rac;
+    html += '<div style="margin-top:14px;padding:14px;background:linear-gradient(135deg,rgba(200,255,107,.10),rgba(88,166,255,.06));border-radius:8px;text-align:center;">';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.7);text-transform:uppercase;letter-spacing:1.5px;">Valeur nette générée sur 15 ans</div>';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-size:42px;font-weight:380;color:#C8FF6B;margin:6px 0;">' + ecoVie.toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.85);">' + prime.toLocaleString('fr-FR') + ' € prime + ' + (ecoAn * 15).toLocaleString('fr-FR') + ' € éco − ' + rac.toLocaleString('fr-FR') + ' € RAC</div>';
+    html += '</div>';
+    this.state.closing_data = {prime: prime, rac: rac, ecoAn: ecoAn, ecoVie: ecoVie, totalCost: gc.totalCostTTC};
+    c.innerHTML = html;
+  },
+
   // V37.4.17 — Lentille active : change l'angle d'analyse et re-render
   _selectLentille(key) {
     if (!this.state.lentilles_data) this.state.lentilles_data = {active:'predictif', modes:{}};
@@ -16376,6 +16610,14 @@ window.V2 = {
       html += '</div>';
     } else if (oblig.length === 0) {
       html += '<div class="v2-card"><div class="v2-card-title">✓ Rien à signaler ici</div><div style="font-size:13px;color:rgba(245,245,247,.7);">Toutes tes fiches sont en P5 (0€ reste à charge). Aucune obligation réglementaire détectée pour ton profil.</div></div>';
+    }
+    // V37.4.18 — Lien vers Closing armé P15 (comparateur + 44 objections + 12 commandements + visuel avant/après)
+    if (fichesReco.length || oblig.length) {
+      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(217,119,87,.06),rgba(217,119,87,.015));border-color:rgba(217,119,87,.3);">';
+      html += '<div class="v2-card-title" style="color:#d97757;">⚔ Tu vas closer ce dossier ?</div>';
+      html += '<div style="font-size:13px;color:rgba(245,245,247,.75);margin-bottom:12px;">Va en <strong>P15 Closing armé</strong> pour : comparateur 5 acheteurs CEE (vs Effy/Hellio), 44 objections + speech ADERA, 12 commandements Maestro, et le closing visuel mensualité avant/après.</div>';
+      html += '<button class="v2-btn v2-btn-primary" onclick="V2.go(15)" style="background:linear-gradient(135deg,#d97757,#bc8cff);color:#fff;border:none;">→ Closing armé P15</button>';
+      html += '</div>';
     }
     c.innerHTML = html;
     this._updateTotal();
