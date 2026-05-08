@@ -3388,9 +3388,10 @@
   // ════════════════════════════════════════════════════════════════
 
   const CONFIG = {
-    // V37.4.10 — aligné sur config.py PRIX_CUMAC=0.00720 (oversight V37.4.8 : front était resté à 8.78)
-    // Prix marché tertiaire conservateur Emmy 2026. Override possible via UI (à venir V37.4.11).
-    PRIX_MWH: 7.20,
+    // V37.4.12 — aligné sur config.py PRIX_CUMAC=0.00900 (Q1 2026 marché Emmy moy pondérée 4 mois)
+    // Source : C2E Market relais Emmy — janv 9,07 / févr 8,96 / mars 9,02 / avril 8,97
+    // Override conservateur possible via env var (ex : 7.20 pour pitch défensif)
+    PRIX_MWH: 9.00,
     COMMISSION_RATE: 0,  // V36: 0% par défaut = pas d'intermédiaire, prime intégrale au client
     TVA_PRO: 0.20,
     PRIX_NEGOCIE: 0.75,
@@ -3462,7 +3463,7 @@
     // === TERTIAIRE THERMIQUE ===
     "BAT-TH-102":{min:100,max:180,moy:140,u:"kW"},    // Chaudière condensation
     "BAT-TH-103":{min:85,max:145,moy:115,u:"kW"},     // Chaudière BT
-    "BAT-TH-104":{min:12,max:22,moy:17,u:"m"},        // Calorifuge réseaux
+    "BAT-TH-104":{min:12,max:22,moy:17,u:"m",abroge:"2025-08-01",note:"71e arrêté CEE — label code 'Calorifuge' ERRONÉ : BAT-TH-104 = robinet thermostatique. Le calorifuge = BAT-TH-146 (aussi abrogée 1/8/2025)."},
     "BAT-TH-105":{min:300,max:550,moy:425,u:"kW"},    // Chaudière biomasse
     "BAT-TH-106":{min:250,max:450,moy:350,u:"kW"},    // Chaudière biomasse >200kW
     "BAT-TH-108":{min:700,max:1200,moy:950,u:"kW"},   // PAC air/air
@@ -4194,7 +4195,7 @@
     // ============================================
     {ref:"BAT-EN-101",label:"Isolation combles/toitures tertiaire",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:2600,H2:2100,H3:1400,DOM:870,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA64-4 FOST vérifié",sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,autres:0.6},cofrac:true,zeroEuro:true,gisements:["isolation_enveloppe"]},
     {ref:"BAT-EN-102",label:"Isolation murs tertiaire",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:4800,H2:3900,H3:2600,DOM:1700,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},z_elec:{H1:3000,H2:2500,H3:1600,DOM:1060},active:true,note:"vA64-3 FOST vérifié",sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.3,autres:0.6},cofrac:true,gisements:["isolation_enveloppe"]},
-    {ref:"BAT-EN-103",label:"Isolation plancher tertiaire",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:5200,H2:4200,H3:2800,DOM:1700,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA64-4 FOST vérifié",sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,autres:0.6},cofrac:true,zeroEuro:true,gisements:["isolation_enveloppe"]},
+    {ref:"BAT-EN-103",label:"Isolation plancher tertiaire",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:5200,H2:4200,H3:2800,DOM:1700,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.6,sante:1.1,sport:0.6,autres:0.6}},active:true,note:"vA64-4 FOST vérifié — V37.4.12 sectFactors alignés PDF officiel ministère écologie (santé 1.1, HCR 0.6)",sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.6,sante:1.1,autres:0.6},cofrac:true,zeroEuro:true,gisements:["isolation_enveloppe"]},
     {ref:"BAT-EN-104",label:"Fenêtre/porte-fenêtre isolante tertiaire",surface_ratio:0.2,sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:6200,H2:5050,H3:3400,DOM:2270,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},z_elec:{H1:4730,H2:3850,H3:2590,DOM:1730},active:true,note:"vA54.3 01/01/2024",gisements:["isolation_enveloppe"]},
     {ref:"BAT-EN-107",label:"Isolation toitures-terrasses tertiaire",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:2600,H2:2100,H3:1400,DOM:870,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA64-3 FOST vérifié",sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,autres:0.6},gisements:["isolation_enveloppe"]},
     {ref:"BAT-EN-110",surface_ratio:0.15,label:"Fenêtre pariétodynamique",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:9200,H2:7500,H3:5400,DOM:3600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["isolation_enveloppe"]},
@@ -4340,7 +4341,7 @@
   {ref:"IND-UT-108",label:"Détection fuites réseau air comprimé",sector:"IND",cat:"Air comprimé",unit:"kW",z:{H1:3600,H2:3600,H3:3600,DOM:3600},active:true,note:"vA73 [V26:ajouté]",zeroEuro:true,gisements:["air_comprime"]},
   {ref:"IND-UT-109",label:"Optimisation production froid industriel",sector:"IND",cat:"Froid",unit:"kW froid",z:{H1:4200,H2:3800,H3:3200,DOM:2600},active:true,note:"vA64 [V26:ajouté]",gisements:["froid"]},
   {ref:"IND-UT-112",label:"Système mesurage indicateurs énergétiques",sector:"IND",cat:"Management",unit:"site",z:{H1:320000,H2:320000,H3:320000,DOM:320000},active:true,note:"vA64 [V26:ajouté]",gisements:["process_thermique"]},
-  {ref:"IND-UT-134",label:"Mesurage indicateurs performance énergétique",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:7800,H2:7800,H3:7800,DOM:7800},active:true,note:"vA35-2 [V26:ajouté]",gisements:["process_thermique"]},
+  {ref:"IND-UT-134",label:"Mesurage indicateurs performance énergétique",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:330,H2:330,H3:330,DOM:330},active:true,note:"vA35-2 — formule officielle: 29.4×coefActivité×P×F. Cas représentatif (3×8h arrêt WE, engagement 4 ans) = 29.4×3.0×3.78 = 333 kWhc/kW. Max théorique (3×8h continu, 6 ans) = 671. Précisez profil opérationnel pour exactitude.",formuleOfficielle:"29.4×coefActivité×P(kW)×F(engagement)",gisements:["process_thermique"]},
   // === TRANSPORT ADDITIONNELS ===
   {ref:"TRA-EQ-113",label:"Lubrifiant économiseur énergie transport",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
   {ref:"TRA-EQ-115",label:"Véhicule transport marchandises optimisé",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"vA14-1 [V26:ajouté]",gisements:["flotte_vehicules"]},

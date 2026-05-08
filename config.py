@@ -12,14 +12,16 @@ import os
 # ═══════════════════════════════════════════════
 
 # Prix cumac MARCHÉ (Emmy, cotation publique) en €/kWhc
-# Emmy dec 2025: 8.78 €/MWhc = 0.00878 €/kWhc
+# V37.4.12 — Source : C2E Market relais Emmy. Moyenne pondérée Q1 2026 :
+#   janv 9,07 / févr 8,96 / mars 9,02 / avril 8,97 → MOY 9,00 €/MWhc
 # ⚠️ Distinguer du prix NÉGOCIÉ obligé (gisement_sirat.PRIX_CUMAC_DEFAUT_EUR_MWHC = 8.00 €/MWhc)
 # Le prix marché sert à estimer la valeur théorique. Le prix obligé sert à calculer la prime réelle.
-PRIX_CUMAC = float(os.environ.get("PRIX_CUMAC", 0.00720))  # V37.4.8 — réf marché tertiaire conservateur (au lieu de 0.00878)
+# Override possible via env var pour pitch conservateur (ex : PRIX_CUMAC=0.00720)
+PRIX_CUMAC = float(os.environ.get("PRIX_CUMAC", 0.00900))  # V37.4.12 — Q1 2026 marché Emmy
 
 # Prix cumac PRÉCARITÉ en €/kWhc
-# Emmy sept 2025: 15.23 €/MWhc = 0.01523 €/kWhc (hausse massive P6)
-PRIX_CUMAC_PRECARITE = float(os.environ.get("PRIX_CUMAC_PRECARITE", 0.01523))
+# V37.4.12 — Q1 2026 Emmy : janv 16,15 / févr 16,49 / mars 16,34 / avril 16,66 → MOY 16,40
+PRIX_CUMAC_PRECARITE = float(os.environ.get("PRIX_CUMAC_PRECARITE", 0.01640))  # V37.4.12
 
 # ═══════════════════════════════════════════════
 # COMMISSIONS & MARGES
