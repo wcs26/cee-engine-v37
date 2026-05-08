@@ -14439,6 +14439,8 @@ window.V2 = {
       // ── 7 placeholders V37.4.16-20 ──
       if (page === 11) this._renderHunt();          // V37.4.16 — R0 Hunt prospection
       if (page === 12) this._renderCartes();        // V37.4.16 — R0 Cartes & PLU
+      if (page === 13) this._renderGisementsR1();   // V37.4.17 — R1 15 gisements universels + micro-activités
+      if (page === 14) this._renderCatalog();       // V37.4.17 — R1 Catalogue 234 fiches navigable
       if (page === 13) this._renderPlaceholder('v2p13content', 'P13 Investigation 15 gisements', 'V37.4.17',
         '15 gisements universels visualisables (renderGisements V1 L8672) + 16 micro-activités × 150 questions ciblées (MICRO_ACTIVITIES V1 L3767).');
       if (page === 14) this._renderPlaceholder('v2p14content', 'P14 Catalog 234 fiches', 'V37.4.17',
@@ -15046,11 +15048,46 @@ window.V2 = {
   },
 
   // V37.4.4 — P4 ANALYSE = moteur métier (détections auto) + Penta-IA
+  // V37.4.17 — + bandeau 5 lentilles + bouton Conseil 5×3 V1
   async _renderAnalyse() {
     var c = document.getElementById('v2p4content'); if (!c) return;
     if (!this.state.profil) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     if (!this._checkAuth()) { c.innerHTML = this._authModal('Analyse appelle /expert et /ai/* — connexion requise'); return; }
     var p = this.state.profil; var a = this.state.answers;
+
+    // V37.4.17 — Bandeau 5 lentilles d'analyse régulatoire (réutilise V1 si dispo)
+    var lensActive = this.state.lentilles_data.active || 'predictif';
+    var lentillesHtml = '';
+    lentillesHtml += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(188,140,255,.06),rgba(188,140,255,.02));border-color:rgba(188,140,255,.3);">';
+    lentillesHtml += '<div class="v2-card-title" style="color:#bc8cff;">🔭 5 lentilles d\'analyse régulatoire</div>';
+    lentillesHtml += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Change l\'angle d\'analyse pour cadrer ton pitch. Chaque lentille = 1 narratif client (DAF prudent / opportuniste / vision long-terme / etc.).</div>';
+    lentillesHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;">';
+    var lentilles = [
+      {key:'optimiste', label:'🚀 Optimiste', color:'#3fb950', sub:'Prix max marché Emmy + bonus P6'},
+      {key:'pessimiste', label:'🛡 Pessimiste', color:'#f85149', sub:'Prix négocié -25% + sans bonus'},
+      {key:'opportuniste', label:'🎯 Opportuniste', color:'#d29922', sub:'Coup de Pouce P6 max activable'},
+      {key:'predictif', label:'🔮 Prédictif', color:'#58a6ff', sub:'Tendance EMMY 12 mois + abrogations'},
+      {key:'proactif', label:'⚡ Proactif', color:'#bc8cff', sub:'Obligations BACS/OPERAT/DDADUE'}
+    ];
+    var self = this;
+    lentilles.forEach(function(l) {
+      var isActive = lensActive === l.key;
+      lentillesHtml += '<button class="v2-btn' + (isActive ? ' v2-btn-primary' : '') + '" style="height:auto;flex-direction:column;align-items:flex-start;padding:10px;text-align:left;gap:4px;border-left:3px solid ' + l.color + ';" onclick="V2._selectLentille(\'' + l.key + '\')">';
+      lentillesHtml += '<span style="font-weight:600;font-size:12px;color:' + l.color + ';">' + l.label + '</span>';
+      lentillesHtml += '<span style="font-size:10px;color:rgba(245,245,247,.55);font-weight:400;line-height:1.3;">' + l.sub + '</span>';
+      lentillesHtml += '</button>';
+    });
+    lentillesHtml += '</div>';
+    // Bouton Conseil 5×3 V1 si dispo
+    if (typeof window.v32AnalyseIAConseil === 'function') {
+      lentillesHtml += '<div style="margin-top:14px;padding:10px;background:rgba(217,119,87,.06);border-left:3px solid #d97757;border-radius:0 6px 6px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+      lentillesHtml += '<span style="font-size:13px;color:rgba(245,245,247,.85);flex:1;"><strong style="color:#d97757;">🧠 Conseil 5×3 V1 (15 agents)</strong> — chaque IA fait draft → critic → verifier. ~8 sec, +200 % de profondeur.</span>';
+      lentillesHtml += '<button class="v2-btn" onclick="V2._launchConseil5x3()" style="background:linear-gradient(135deg,#d97757,#bc8cff);color:#fff;border:none;">Lancer Conseil 5×3</button>';
+      lentillesHtml += '</div>';
+    }
+    lentillesHtml += '</div>';
+    // Inject avant moteurHtml plus bas
+    this._lentillesHtml = lentillesHtml;
 
     // Bloc A : moteur métier — fetch /expert si pas déjà fait
     var moteurHtml = '';
@@ -15086,9 +15123,9 @@ window.V2 = {
     moteurHtml += '</div>';
 
     // V37.4.6 — Penta-IA spécialisée : 1 rôle par IA (juridique/stratégie/marché/calcul/technique)
-    c.innerHTML = moteurHtml + '<div class="v2-loading">Penta-IA Conseil 5×3 — 5 rôles spécialisés en parallèle (juridique · stratégie · marché · calcul · technique)… (~30 sec)</div>';
+    c.innerHTML = (this._lentillesHtml || '') + moteurHtml + '<div class="v2-loading">Penta-IA Conseil 5×3 — 5 rôles spécialisés en parallèle (juridique · stratégie · marché · calcul · technique)… (~30 sec)</div>';
     if (this.state.iaInsights && Array.isArray(this.state.iaInsights) && this.state.iaInsights[0] && this.state.iaInsights[0].role) {
-      c.innerHTML = moteurHtml + this._iaHtmlRoles(); return;
+      c.innerHTML = (this._lentillesHtml || '') + moteurHtml + this._iaHtmlRoles(); return;
     }
     // V37.4.7 — Précharger les abrogations + pack actif pour ENRICHIR les prompts IA
     var abrogees = []; var packRefs = [];
@@ -15144,7 +15181,7 @@ window.V2 = {
           '<span style="padding:3px 8px;background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.25);border-radius:6px;color:#ff7b72;" title="' + (a.nom||'').replace(/"/g,'&quot;') + '">' + a.ref + '</span>'
         ).join('') + '</div></div>';
     }
-    c.innerHTML = moteurHtml + veilleHtml + this._iaHtmlRoles();
+    c.innerHTML = (this._lentillesHtml || '') + moteurHtml + veilleHtml + this._iaHtmlRoles();
   },
 
   // V37.4.6 — Render Penta-IA spécialisée + verdict consensus GO/PRUDENCE/STOP
@@ -15937,6 +15974,241 @@ window.V2 = {
     html += '</div>';
 
     c.innerHTML = html;
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // V37.4.17 — R1 AUDIT PRÉDICTIF (P13 Gisements + P14 Catalog)
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // P13 — INVESTIGATION 15 GISEMENTS UNIVERSELS + micro-activités sectorielles
+  _renderGisementsR1() {
+    var c = document.getElementById('v2p13content'); if (!c) return;
+    if (typeof GISEMENTS === 'undefined' || typeof FICHES === 'undefined') {
+      c.innerHTML = '<div class="v2-error">Catalog V1 non chargé. Recharge la page.</div>'; return;
+    }
+    var s = this.state;
+    var html = '';
+
+    // Pitch
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(88,166,255,.10),rgba(88,166,255,.02));border-color:rgba(88,166,255,.35);">';
+    html += '<div class="v2-card-title" style="color:#58a6ff;">🔍 15 gisements transversaux + 16 secteurs spécifiques</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
+    html += 'Chaque gisement = 1 famille de fiches CEE. Clique pour voir les opportunités. ';
+    html += 'Si ton profil est détecté, les questions sectorielles ciblées apparaissent en bas (ex : tank à lait, atelier porcin).';
+    html += '</div></div>';
+
+    // 15 gisements universels en grille — compteur fiches actives par gisement
+    var fichesByGis = {};
+    Object.keys(GISEMENTS).forEach(function(g) { fichesByGis[g] = 0; });
+    FICHES.forEach(function(f) {
+      (f.gisements || []).forEach(function(g) {
+        if (fichesByGis[g] != null) fichesByGis[g]++;
+      });
+    });
+
+    html += '<div class="v2-card"><div class="v2-card-title">📊 15 gisements universels (compteur fiches actives)</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;">';
+    Object.keys(GISEMENTS).forEach(function(key) {
+      var g = GISEMENTS[key];
+      var n = fichesByGis[key] || 0;
+      html += '<div class="v2-btn" style="height:auto;flex-direction:column;align-items:flex-start;padding:14px;text-align:left;gap:6px;border-left:3px solid ' + g.color + ';" onclick="V2._gisementDrill(\'' + key + '\')">';
+      html += '<div style="display:flex;align-items:center;gap:8px;width:100%;"><span style="font-size:22px;">' + g.icon + '</span><span style="margin-left:auto;font-family:JetBrains Mono,monospace;font-size:11px;background:' + g.color + '25;color:' + g.color + ';padding:2px 8px;border-radius:4px;">' + n + ' fiches</span></div>';
+      html += '<span style="font-weight:600;font-size:13px;">' + g.label + '</span>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+
+    // Drill zone : si gisement sélectionné, montre fiches associées
+    html += '<div id="v2p13drill"></div>';
+
+    // Micro-activités sectorielles si profil détecté
+    if (typeof MICRO_ACTIVITIES !== 'undefined' && s.profil && s.profil.naf) {
+      var sector = (s.profil.naf || '').substring(0, 2);
+      var sectorMap = {'01':'AGRI','02':'AGRI','03':'AGRI','10':'AGRI','55':'HCR','56':'HCR','86':'SANTE','87':'SANTE','85':'EDUC','47':'COM','68':'BUREAU','25':'IND','24':'IND'};
+      var matched = sectorMap[sector];
+      if (matched && MICRO_ACTIVITIES[matched]) {
+        html += '<div class="v2-card"><div class="v2-card-title">🎯 Questions ciblées secteur ' + matched + ' (NAF ' + sector + 'xx)</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:12px;">Selon le déroulement Jimmy, ces questions ne sont pertinentes que pour ce profil. À poser pendant le R1 / sur site.</div>';
+        Object.keys(MICRO_ACTIVITIES[matched]).forEach(function(actKey) {
+          var act = MICRO_ACTIVITIES[matched][actKey];
+          var qCount = (act.questions || []).length;
+          html += '<details style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);">';
+          html += '<summary style="cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;">';
+          html += '<span style="color:#58a6ff;">▸</span>';
+          html += '<span style="font-weight:600;font-size:13px;">' + act.label + '</span>';
+          html += '<span style="margin-left:auto;font-family:JetBrains Mono,monospace;font-size:11px;color:rgba(245,245,247,.55);">' + qCount + ' questions · gisements : ' + (act.gisements || []).length + '</span>';
+          html += '</summary>';
+          html += '<div style="margin-top:10px;padding-left:18px;font-size:12px;line-height:1.65;color:rgba(245,245,247,.85);">';
+          (act.questions || []).slice(0, 8).forEach(function(q) {
+            html += '<div style="margin-bottom:6px;"><strong style="color:#58a6ff;">' + q.label + '</strong>';
+            if (q.why) html += '<div style="color:rgba(245,245,247,.55);font-size:11px;font-style:italic;">→ ' + q.why + '</div>';
+            html += '</div>';
+          });
+          if (qCount > 8) html += '<div style="color:rgba(245,245,247,.45);font-size:11px;">… et ' + (qCount - 8) + ' autres questions.</div>';
+          html += '</div></details>';
+        });
+        html += '</div>';
+      }
+    }
+    c.innerHTML = html;
+    s.gisements_actifs = Object.keys(fichesByGis).filter(function(k) { return fichesByGis[k] > 0; });
+  },
+
+  _gisementDrill(key) {
+    var d = document.getElementById('v2p13drill'); if (!d) return;
+    if (typeof FICHES === 'undefined' || typeof GISEMENTS === 'undefined') return;
+    var g = GISEMENTS[key]; if (!g) return;
+    var fichesGis = FICHES.filter(function(f) { return (f.gisements || []).indexOf(key) >= 0; });
+    var html = '';
+    html += '<div class="v2-card" style="border-left:4px solid ' + g.color + ';"><div class="v2-card-title" style="color:' + g.color + ';">' + g.icon + ' ' + g.label + ' — ' + fichesGis.length + ' fiches actives</div>';
+    if (!fichesGis.length) {
+      html += '<div style="color:rgba(245,245,247,.55);">Aucune fiche active pour ce gisement.</div>';
+    } else {
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">';
+      fichesGis.forEach(function(f) {
+        var p6 = f.p6Bonus > 1 ? '<span style="font-size:9px;background:#d2992225;color:#d29922;padding:1px 5px;border-radius:3px;margin-left:4px;">P6×' + f.p6Bonus + '</span>' : '';
+        var ze = f.zeroEuro ? '<span style="font-size:9px;background:#23863622;color:#3fb950;padding:1px 5px;border-radius:3px;margin-left:4px;">0€</span>' : '';
+        html += '<div style="padding:10px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid ' + g.color + ';">';
+        html += '<div style="font-family:JetBrains Mono,monospace;font-size:11px;color:' + g.color + ';font-weight:700;">' + f.ref + p6 + ze + '</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.85);margin-top:4px;line-height:1.4;">' + (f.label || f.ref) + '</div>';
+        html += '<div style="font-size:10px;color:rgba(245,245,247,.5);margin-top:4px;">' + (f.sector || '') + ' / ' + (f.unit || '') + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    d.innerHTML = html;
+    d.scrollIntoView({behavior:'smooth', block:'start'});
+  },
+
+  // V37.4.17 — Lentille active : change l'angle d'analyse et re-render
+  _selectLentille(key) {
+    if (!this.state.lentilles_data) this.state.lentilles_data = {active:'predictif', modes:{}};
+    this.state.lentilles_data.active = key;
+    // Si V1 expose showLens, propager pour cohérence cross-mode
+    try { if (typeof window.showLens === 'function') window.showLens(key); } catch(_e) {}
+    this._renderAnalyse();
+  },
+
+  // V37.4.17 — Conseil 5×3 : déclenche l'analyse 15 agents V1 (réutilise window.v32AnalyseIAConseil)
+  _launchConseil5x3() {
+    if (typeof window.v32AnalyseIAConseil !== 'function') {
+      alert('Conseil 5×3 V1 non chargé. Recharge la page.');
+      return;
+    }
+    if (typeof STATE !== 'undefined' && this.state.profil) {
+      this._syncToV1State();
+    }
+    try { window.v32AnalyseIAConseil(); } catch (e) { alert('Erreur Conseil 5×3 : ' + e.message); }
+  },
+
+  // P14 — CATALOG 234 FICHES navigable (filtre secteur, search, qty, badges)
+  _renderCatalog() {
+    var c = document.getElementById('v2p14content'); if (!c) return;
+    if (typeof FICHES === 'undefined' || typeof FICHES_CATALOGUE === 'undefined') {
+      c.innerHTML = '<div class="v2-error">Catalog V1 non chargé. Recharge la page.</div>'; return;
+    }
+    var f = this.state.catalog_filter || (this.state.catalog_filter = {tab:'pertinentes', sector:'', search:'', qty:{}});
+
+    var html = '';
+    // Header tabs + filtres
+    html += '<div class="v2-card"><div class="v2-card-title">📚 Catalog navigable — ' + FICHES.length + ' actives / ' + FICHES_CATALOGUE.length + ' total</div>';
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">';
+    var tabs = [
+      {key:'pertinentes', label:'⭐ Pertinentes pour ce dossier', count: this._countPertinentes()},
+      {key:'actives', label:'✓ Toutes actives', count: FICHES.length},
+      {key:'toutes', label:'📜 Toutes (avec abrogées)', count: FICHES_CATALOGUE.length}
+    ];
+    tabs.forEach(function(t) {
+      var active = f.tab === t.key;
+      html += '<button class="v2-btn' + (active ? ' v2-btn-primary' : '') + '" style="font-size:12px;padding:6px 12px;" onclick="V2._catalogTab(\'' + t.key + '\')">' + t.label + ' (' + t.count + ')</button>';
+    });
+    html += '</div>';
+    // Filtres secteur + search
+    html += '<div style="display:grid;grid-template-columns:auto 1fr;gap:8px;">';
+    html += '<select id="v2cat_sector" class="v2-input" onchange="V2._catalogFilter(\'sector\', this.value)">';
+    html += '<option value="">Tous secteurs</option><option value="BAR" ' + (f.sector==='BAR'?'selected':'') + '>BAR · Résidentiel</option><option value="BAT" ' + (f.sector==='BAT'?'selected':'') + '>BAT · Tertiaire</option><option value="IND" ' + (f.sector==='IND'?'selected':'') + '>IND · Industrie</option><option value="AGRI" ' + (f.sector==='AGRI'?'selected':'') + '>AGRI · Agriculture</option><option value="RES" ' + (f.sector==='RES'?'selected':'') + '>RES · Réseau chaleur</option><option value="TRA" ' + (f.sector==='TRA'?'selected':'') + '>TRA · Transport</option>';
+    html += '</select>';
+    html += '<input type="text" id="v2cat_search" class="v2-input" placeholder="Rechercher (ref, label, secteur, gisement)..." value="' + (f.search || '').replace(/"/g,'&quot;') + '" oninput="V2._catalogFilter(\'search\', this.value)">';
+    html += '</div></div>';
+
+    // Liste filtrée
+    var list = this._catalogFilterList();
+    html += '<div class="v2-card"><div class="v2-card-title">' + list.length + ' fiches affichées</div>';
+    if (!list.length) {
+      html += '<div style="color:rgba(245,245,247,.55);padding:20px;text-align:center;">Aucune fiche ne correspond au filtre.</div>';
+    } else {
+      list.slice(0, 100).forEach(function(fi) {
+        var bgRef = fi.active === false ? 'rgba(248,81,73,.06)' : 'rgba(255,255,255,.02)';
+        var borderRef = fi.active === false ? '#f85149' : '#58a6ff';
+        var p6 = fi.p6Bonus > 1 ? ' <span style="font-size:10px;background:#d2992225;color:#d29922;padding:1px 6px;border-radius:3px;">P6×' + fi.p6Bonus + '</span>' : '';
+        var ze = fi.zeroEuro ? ' <span style="font-size:10px;background:#23863622;color:#3fb950;padding:1px 6px;border-radius:3px;">0€ RAC</span>' : '';
+        var ab = fi.active === false ? ' <span style="font-size:10px;background:#f8514922;color:#f85149;padding:1px 6px;border-radius:3px;">ABROGÉE</span>' : '';
+        html += '<div style="padding:10px;background:' + bgRef + ';border-left:3px solid ' + borderRef + ';border-radius:0 6px 6px 0;margin-bottom:6px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">';
+        html += '<span style="font-family:JetBrains Mono,monospace;font-size:12px;color:#58a6ff;font-weight:700;min-width:120px;">' + fi.ref + p6 + ze + ab + '</span>';
+        html += '<span style="flex:1;font-size:13px;line-height:1.4;">' + (fi.label || fi.ref) + '</span>';
+        html += '<span style="font-size:10px;color:rgba(245,245,247,.5);font-family:JetBrains Mono,monospace;">' + (fi.sector || '') + '/' + (fi.cat || '') + ' · ' + (fi.unit || '') + '</span>';
+        if (fi.active !== false) {
+          html += '<button class="v2-btn" style="padding:4px 8px;font-size:11px;" onclick="V2._catalogAdd(\'' + fi.ref + '\')">+ Ajouter</button>';
+        }
+        html += '</div>';
+      });
+      if (list.length > 100) html += '<div style="padding:10px;text-align:center;color:rgba(245,245,247,.55);font-size:12px;">… et ' + (list.length - 100) + ' autres. Affine la recherche.</div>';
+    }
+    html += '</div>';
+    c.innerHTML = html;
+  },
+
+  _countPertinentes() {
+    var s = this.state;
+    if (!s.pack || !s.pack.length) return 0;
+    return s.pack.length;
+  },
+
+  _catalogTab(tab) {
+    this.state.catalog_filter.tab = tab;
+    this._renderCatalog();
+  },
+
+  _catalogFilter(field, value) {
+    this.state.catalog_filter[field] = value;
+    if (this._catalogFilterTimer) clearTimeout(this._catalogFilterTimer);
+    var self = this;
+    this._catalogFilterTimer = setTimeout(function() { self._renderCatalog(); }, 200);
+  },
+
+  _catalogFilterList() {
+    var f = this.state.catalog_filter;
+    var src;
+    if (f.tab === 'toutes') src = FICHES_CATALOGUE;
+    else if (f.tab === 'actives') src = FICHES;
+    else { // pertinentes : intersection avec state.pack
+      var packRefs = new Set((this.state.pack || []).map(function(p) { return p.fiche || p.ref; }));
+      src = FICHES.filter(function(fi) { return packRefs.has(fi.ref); });
+      if (!src.length) src = FICHES; // fallback : montre tout si pack vide
+    }
+    var q = (f.search || '').toLowerCase().trim();
+    return src.filter(function(fi) {
+      if (f.sector && fi.sector !== f.sector) return false;
+      if (q) {
+        var hay = ((fi.ref || '') + ' ' + (fi.label || '') + ' ' + (fi.sector || '') + ' ' + (fi.cat || '') + ' ' + (fi.gisements || []).join(' ')).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+  },
+
+  _catalogAdd(ref) {
+    if (!this.state.selected) this.state.selected = new Set();
+    this.state.selected.add(ref);
+    if (typeof FICHES !== 'undefined') {
+      var fi = FICHES.find(function(f) { return f.ref === ref; });
+      if (fi && !this.state.pack.find(function(p){ return (p.fiche||p.ref) === ref; })) {
+        this.state.pack.push({fiche: ref, label: fi.label});
+      }
+    }
+    alert('Fiche ' + ref + ' ajoutée à la sélection. Voir P5 / P6 / P7 pour calculs.');
+    this._renderCatalog();
   },
 
   // V37.4.15 — Placeholder vivant pour les 7 onglets en construction (R0/R1/R2/R3/R4)
