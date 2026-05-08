@@ -14437,10 +14437,8 @@ window.V2 = {
       if (page === 9) this._renderDocuments();     // R3
       if (page === 10) this._renderRapport();      // R4
       // ── 7 placeholders V37.4.16-20 ──
-      if (page === 11) this._renderPlaceholder('v2p11content', 'P11 Hunt prospection', 'V37.4.16',
-        'Sirene-lookalike (50 entreprises similaires à un dossier signé) · scan zone géo · scan secteur NAF · Apify Google Maps. Endpoint /prospection/* déjà actif côté backend.');
-      if (page === 12) this._renderPlaceholder('v2p12content', 'P12 Cartes & PLU', 'V37.4.16',
-        'Vue satellite IGN + StreetView + cadastre + PLU + carte des risques. Score complétude dossier 0-100 (réutilise calculateScore V1 L5145).');
+      if (page === 11) this._renderHunt();          // V37.4.16 — R0 Hunt prospection
+      if (page === 12) this._renderCartes();        // V37.4.16 — R0 Cartes & PLU
       if (page === 13) this._renderPlaceholder('v2p13content', 'P13 Investigation 15 gisements', 'V37.4.17',
         '15 gisements universels visualisables (renderGisements V1 L8672) + 16 micro-activités × 150 questions ciblées (MICRO_ACTIVITIES V1 L3767).');
       if (page === 14) this._renderPlaceholder('v2p14content', 'P14 Catalog 234 fiches', 'V37.4.17',
@@ -15681,6 +15679,264 @@ window.V2 = {
     }
     c.innerHTML = html;
     this._updateTotal();
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // V37.4.16 — R0 PROSPECTION (P11 Hunt + P12 Cartes & PLU)
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // P11 — HUNT : 4 modes de prospection (Sirene-lookalike, Scan zone, Scan secteur, Apify Google Maps)
+  _renderHunt() {
+    var c = document.getElementById('v2p11content'); if (!c) return;
+    var s = this.state;
+    var refSiret = (s.profil && s.profil.siret) || '';
+    var html = '';
+
+    // Pitch global (Steve Jobs : promesse claire, chiffrée)
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.10),rgba(200,255,107,.02));border-color:rgba(200,255,107,.35);">';
+    html += '<div class="v2-card-title" style="color:#C8FF6B;">🎯 4 façons d\'alimenter ton pipeline</div>';
+    html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
+    html += 'Trouve <strong>50 entreprises</strong> à auditer en 30 secondes. Chaque mode = 1 angle d\'attaque commercial.';
+    html += '</div></div>';
+
+    // Mode 1 — Sirene-lookalike
+    html += '<div class="v2-card"><div class="v2-card-title">🧬 1 · Sirene-lookalike — clones d\'un dossier signé</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">SIRET de référence (un dossier déjà signé) → 20 entreprises au profil quasi-identique (même NAF, taille, zone). Pitch « comme votre voisin Magritte SARL ».</p>';
+    html += '<div style="display:flex;gap:10px;align-items:flex-start;">';
+    html += '<input type="text" id="v2hunt_lookalike_siret" class="v2-input mono" placeholder="SIRET référence (14 chiffres)" maxlength="17" inputmode="numeric" value="' + refSiret + '" style="flex:1;">';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2._huntLookalike()">Lancer 🧬</button>';
+    html += '</div></div>';
+
+    // Mode 2 — Scan zone géographique
+    html += '<div class="v2-card"><div class="v2-card-title">🗺 2 · Scan zone géographique</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Rayon autour d\'un point GPS. Idéal pour pitch territorial (« 12 entreprises 5 km autour, 3 déjà signées »).</p>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:center;">';
+    html += '<input type="number" step="0.001" id="v2hunt_zone_lat" class="v2-input mono" placeholder="Latitude" value="' + ((s.profil && s.profil.lat) || '') + '">';
+    html += '<input type="number" step="0.001" id="v2hunt_zone_lon" class="v2-input mono" placeholder="Longitude" value="' + ((s.profil && s.profil.lon) || '') + '">';
+    html += '<input type="number" id="v2hunt_zone_rayon" class="v2-input mono" placeholder="Rayon km" value="10" min="1" max="100">';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2._huntZone()">Scanner 🗺</button>';
+    html += '</div></div>';
+
+    // Mode 3 — Scan secteur NAF
+    html += '<div class="v2-card"><div class="v2-card-title">🏭 3 · Scan par secteur NAF + départements</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Code NAF + départements ciblés. Le moteur enrichit automatiquement avec : déjà-en-pipeline (rouge), références abouties (vert), groupement possible (jaune).</p>';
+    html += '<div style="display:grid;grid-template-columns:auto 1fr 1fr auto;gap:8px;align-items:center;">';
+    html += '<select id="v2hunt_secteur_preset" class="v2-input" onchange="document.getElementById(\'v2hunt_naf\').value=this.value">';
+    html += '<option value="">— Preset —</option>';
+    html += '<option value="86.10Z">Hôpital (86.10Z)</option>';
+    html += '<option value="87.10A">EHPAD (87.10A)</option>';
+    html += '<option value="55.10Z">Hôtellerie (55.10Z)</option>';
+    html += '<option value="56.10A">Restauration (56.10A)</option>';
+    html += '<option value="47.11D">Supermarché (47.11D)</option>';
+    html += '<option value="01.41Z">Élevage bovin lait (01.41Z)</option>';
+    html += '<option value="68.20A">Bureaux (68.20A)</option>';
+    html += '</select>';
+    html += '<input type="text" id="v2hunt_naf" class="v2-input mono" placeholder="Code NAF (ex: 86.10Z)">';
+    html += '<input type="text" id="v2hunt_depts" class="v2-input mono" placeholder="Départements (ex: 75,92,93)">';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2._huntSecteur()">Scanner 🏭</button>';
+    html += '</div></div>';
+
+    // Mode 4 — Apify Google Maps
+    html += '<div class="v2-card"><div class="v2-card-title">📍 4 · Apify Google Maps (extraction live)</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Scrape Google Maps temps réel pour requête + zone. Ramène nom, adresse, téléphone, site web, note. Coût Apify ~0,02 $/résultat.</p>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;">';
+    html += '<input type="text" id="v2hunt_apify_query" class="v2-input" placeholder="ex: hôpital privé">';
+    html += '<input type="text" id="v2hunt_apify_zone" class="v2-input" placeholder="ex: Bourgogne Franche-Comté">';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2._huntApify()">Scraper 📍</button>';
+    html += '</div></div>';
+
+    // Résultats
+    html += '<div class="v2-card" id="v2hunt_results_card" style="display:none;"><div class="v2-card-title">📊 Résultats prospection</div><div id="v2hunt_results"></div></div>';
+
+    c.innerHTML = html;
+  },
+
+  async _huntLookalike() {
+    var siret = (document.getElementById('v2hunt_lookalike_siret').value || '').replace(/\s/g, '');
+    if (siret.length !== 14) { alert('SIRET attendu : 14 chiffres.'); return; }
+    this._huntLoading('Sirene-lookalike sur ' + siret + '…');
+    try {
+      var data = await this._fetch('/prospection/sirene-lookalike/' + siret + '?per_page=20');
+      this._huntRender(data.results || data.prospects || data.lookalikes || [], 'Sirene-lookalike');
+    } catch (e) {
+      this._huntError(e);
+    }
+  },
+
+  async _huntZone() {
+    var lat = parseFloat(document.getElementById('v2hunt_zone_lat').value);
+    var lon = parseFloat(document.getElementById('v2hunt_zone_lon').value);
+    var rayon = parseFloat(document.getElementById('v2hunt_zone_rayon').value) || 10;
+    if (isNaN(lat) || isNaN(lon)) { alert('Lat/Lon requis. Identifie d\'abord un SIRET en P1 pour récupérer les coordonnées.'); return; }
+    this._huntLoading('Scan zone ' + rayon + ' km…');
+    try {
+      var data = await this._fetch('/prospection/scan-zone', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({lat: lat, lon: lon, rayon_km: rayon, limit: 30})
+      });
+      this._huntRender(data.prospects || data.results || [], 'Scan zone');
+    } catch (e) {
+      this._huntError(e);
+    }
+  },
+
+  async _huntSecteur() {
+    var naf = (document.getElementById('v2hunt_naf').value || '').trim();
+    var deptsRaw = (document.getElementById('v2hunt_depts').value || '').trim();
+    if (!naf) { alert('Code NAF requis (ex: 86.10Z).'); return; }
+    var depts = deptsRaw ? deptsRaw.split(',').map(function(s){return s.trim();}).filter(Boolean) : [];
+    this._huntLoading('Scan secteur ' + naf + (depts.length ? ' (' + depts.join(',') + ')' : '') + '…');
+    try {
+      var data = await this._fetch('/prospection/scan-secteur', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({naf: naf, departements: depts, limit: 20})
+      });
+      this._huntRender(data.prospects || data.results || [], 'Scan secteur ' + naf);
+    } catch (e) {
+      this._huntError(e);
+    }
+  },
+
+  async _huntApify() {
+    var query = (document.getElementById('v2hunt_apify_query').value || '').trim();
+    var zone = (document.getElementById('v2hunt_apify_zone').value || '').trim();
+    if (!query || !zone) { alert('Requête ET zone requises.'); return; }
+    this._huntLoading('Apify Google Maps : "' + query + '" / ' + zone + '…');
+    try {
+      var data = await this._fetch('/prospection/apify/google-maps', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({query: query, zone: zone, limit: 20})
+      });
+      this._huntRender(data.results || data.prospects || [], 'Apify Google Maps');
+    } catch (e) {
+      this._huntError(e);
+    }
+  },
+
+  _huntLoading(msg) {
+    document.getElementById('v2hunt_results_card').style.display = '';
+    document.getElementById('v2hunt_results').innerHTML = '<div class="v2-loading">' + msg + '</div>';
+  },
+
+  _huntError(e) {
+    var html = '<div class="v2-error">Erreur prospection : ' + (e.message || e) + '</div>';
+    if (e.code === 401) html = this._authModal('/prospection/* requiert connexion');
+    document.getElementById('v2hunt_results').innerHTML = html;
+  },
+
+  _huntRender(prospects, modeLabel) {
+    var c = document.getElementById('v2hunt_results');
+    if (!prospects || !prospects.length) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:rgba(245,245,247,.5);">Aucun prospect trouvé pour ' + modeLabel + '. Élargis la zone, change le NAF, ou essaie un autre mode.</div>';
+      return;
+    }
+    var html = '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:10px;font-family:JetBrains Mono,monospace;">' + prospects.length + ' résultats · ' + modeLabel + '</div>';
+    this.state.prospection_results = prospects;
+    prospects.forEach(function(p) {
+      var inPipe = p.already_in_pipeline_stage;
+      var hasRefs = (p.references_abouties || []).length > 0;
+      var hasGrp = (p.groupement_possible || []).length > 0;
+      var color, label;
+      if (inPipe) { color = '#dc2626'; label = '⚠ DÉJÀ ' + (inPipe + '').toUpperCase(); }
+      else if (hasRefs) { color = '#16a34a'; label = '🟢 RÉFÉRENCE ABOUTIE secteur'; }
+      else if (hasGrp) { color = '#eab308'; label = '🟡 GROUPEMENT POSSIBLE'; }
+      else { color = (p.score >= 70 ? '#C8FF6B' : p.score >= 40 ? '#d29922' : '#58a6ff'); label = ''; }
+      var nom = p.nom || p.raison_sociale || p.denomination || p.title || '?';
+      var siret = p.siret || '';
+      var ville = p.ville || p.commune || (p.adresse && p.adresse.commune) || '';
+      var cp = p.code_postal || (p.adresse && p.adresse.code_postal) || '';
+      var naf = p.naf || p.activite_principale || '';
+      var score = (p.score != null) ? p.score : '—';
+      html += '<div class="v2-fiche" style="border-left:3px solid ' + color + ';' + (inPipe ? 'opacity:.6;cursor:not-allowed;' : '') + '">';
+      html += '<div style="flex:1;">';
+      html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
+      html += '<span style="font-weight:600;font-size:14px;">' + nom + '</span>';
+      if (label) html += '<span style="font-size:10px;font-weight:700;color:#fff;background:' + color + ';padding:2px 6px;border-radius:4px;">' + label + '</span>';
+      html += '<span style="margin-left:auto;font-family:JetBrains Mono,monospace;font-size:11px;background:rgba(' + (color === '#C8FF6B' ? '200,255,107' : '88,166,255') + ',.15);color:' + color + ';padding:2px 8px;border-radius:4px;">Score ' + score + '/100</span>';
+      html += '</div>';
+      html += '<div style="font-size:11px;color:rgba(245,245,247,.6);font-family:JetBrains Mono,monospace;">';
+      if (siret) html += 'SIRET ' + siret + ' · ';
+      if (naf) html += 'NAF ' + naf + ' · ';
+      if (cp || ville) html += cp + ' ' + ville;
+      html += '</div>';
+      if (p.fiches_suggerees && p.fiches_suggerees.length) {
+        html += '<div style="font-size:11px;color:#C8FF6B;margin-top:4px;">📚 Fiches suggérées : ' + p.fiches_suggerees.join(' · ') + '</div>';
+      }
+      if (siret && !inPipe) {
+        html += '<div style="margin-top:8px;"><button class="v2-btn" style="padding:4px 10px;font-size:11px;" onclick="V2._huntAuditer(\'' + siret + '\')">→ Auditer ce prospect (P1)</button></div>';
+      }
+      html += '</div></div>';
+    });
+    c.innerHTML = html;
+  },
+
+  _huntAuditer(siret) {
+    var input = document.getElementById('v2siret');
+    if (input) { input.value = siret; }
+    this.go(1);
+    setTimeout(function() { if (typeof V2.identifyFull === 'function') V2.identifyFull(); }, 200);
+  },
+
+  // P12 — CARTES & PLU : 4 outils territoriaux + score complétude
+  _renderCartes() {
+    var c = document.getElementById('v2p12content'); if (!c) return;
+    var p = this.state.profil;
+    if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1 pour activer les cartes.</div>'; return; }
+
+    // Score complétude (réutilise logique V1 calculateScore L5145 si dispo)
+    var completude = 0, missing = [];
+    if (p.siret) completude += 15; else missing.push('SIRET');
+    if (p.raison || p.raison_sociale) completude += 10; else missing.push('raison sociale');
+    if (p.adresse) completude += 10; else missing.push('adresse');
+    if (p.lat && p.lon) completude += 15; else missing.push('coordonnées GPS');
+    if (p.surface) completude += 15; else missing.push('surface');
+    if (p.zone) completude += 10; else missing.push('zone climatique');
+    if (p.naf || p.ape) completude += 10; else missing.push('code NAF');
+    if (p.dpe || p.energie) completude += 15; else missing.push('DPE/énergie');
+
+    var addr = encodeURIComponent((p.adresse || '') + ' ' + (p.cp || '') + ' ' + (p.ville || ''));
+    var lat = p.lat || '', lon = p.lon || '';
+
+    var html = '';
+    // Score complétude — gauge
+    var scoreColor = completude >= 80 ? '#C8FF6B' : completude >= 50 ? '#d29922' : '#ff7b72';
+    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(' + (completude >= 80 ? '200,255,107' : '210,153,34') + ',.08),rgba(0,0,0,0));">';
+    html += '<div class="v2-card-title" style="color:' + scoreColor + ';">📊 Score complétude dossier — ' + completude + ' / 100</div>';
+    html += '<div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin:10px 0;"><div style="width:' + completude + '%;height:100%;background:' + scoreColor + ';transition:width .8s ease;"></div></div>';
+    if (missing.length) html += '<div style="font-size:12px;color:rgba(245,245,247,.65);">À compléter : ' + missing.join(' · ') + '</div>';
+    else html += '<div style="font-size:12px;color:#C8FF6B;">✓ Dossier 100 % complet — prêt pour rapport.</div>';
+    html += '</div>';
+
+    // 4 outils territoriaux
+    html += '<div class="v2-card"><div class="v2-card-title">🗺 4 outils territoriaux pour préparer le rendez-vous</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">';
+    var tools = [
+      {emoji: '🛰', titre: 'Vue satellite IGN', sub: 'Toiture, parking, dépendances, ombrage solaire',
+        url: lat && lon ? 'https://www.geoportail.gouv.fr/carte?c=' + lon + ',' + lat + '&z=18&l0=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(1)' : null},
+      {emoji: '🚶', titre: 'StreetView Google', sub: 'Façades, état isolation visible, type émetteur extérieur',
+        url: lat && lon ? 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + lat + ',' + lon + '&heading=0&pitch=10&fov=80' : null},
+      {emoji: '📐', titre: 'Cadastre IGN', sub: 'Parcelles, surface bâtie officielle, voisinage',
+        url: 'https://www.cadastre.gouv.fr/scpc/rechercherPlan.do?numero=&adresse=' + addr},
+      {emoji: '🏛', titre: 'PLU + risques Géoportail', sub: 'PLU, PPRN, ZAC, contraintes urbanisme',
+        url: lat && lon ? 'https://www.geoportail.gouv.fr/carte?c=' + lon + ',' + lat + '&z=17&l0=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(0.6)&l1=GEOGRAPHICALGRIDSYSTEMS.PLAN.IGN::GEOPORTAIL:OGC:WMTS(0.5)&permalink=yes' : null}
+    ];
+    tools.forEach(function(t) {
+      var dis = !t.url;
+      html += '<a href="' + (t.url || '#') + '" target="_blank" rel="noopener" class="v2-btn no-print" style="text-decoration:none;height:auto;flex-direction:column;align-items:flex-start;padding:18px;text-align:left;gap:6px;' + (dis ? 'opacity:.4;pointer-events:none;' : '') + '">';
+      html += '<span style="font-size:24px;">' + t.emoji + '</span>';
+      html += '<span style="font-weight:600;font-size:14px;">' + t.titre + '</span>';
+      html += '<span style="font-size:11px;color:rgba(245,245,247,.55);font-weight:400;line-height:1.4;">' + t.sub + (dis ? ' (besoin coordonnées GPS)' : '') + '</span>';
+      html += '</a>';
+    });
+    html += '</div></div>';
+
+    // Drawer Outils V1 (raccourci historique CRM)
+    html += '<div class="v2-card"><div class="v2-card-title">🧰 Drawer Outils CRM (V1)</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;">Historique clients, comparateur acheteurs CEE, formation 44 objections, pipeline sales velocity. Toujours accessible en V2.</p>';
+    html += '<button class="v2-btn v2-btn-primary" onclick="V2.openTools()">Ouvrir le drawer Outils →</button>';
+    html += '</div>';
+
+    c.innerHTML = html;
   },
 
   // V37.4.15 — Placeholder vivant pour les 7 onglets en construction (R0/R1/R2/R3/R4)
