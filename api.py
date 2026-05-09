@@ -4503,6 +4503,7 @@ def ai_groq():
         return jsonify({"error": "X-Groq-Key header ou GROQ_API_KEY env requis"}), 400
 
     data = request.json or {}
+    # V37.4.22 — Llama 3.3 70B reste le best Groq (Llama 4 pas dispo Q1 2026)
     model = data.get("model", "llama-3.3-70b-versatile")
     messages = data.get("messages", [])
     max_tokens = data.get("max_tokens", 2500)
@@ -4545,10 +4546,12 @@ def ai_gemini():
         return jsonify({"error": "query ?key= ou GEMINI_API_KEY env requis"}), 400
 
     ctx = _ssl_ctx()
+    # V37.4.22 — Bump Gemini 2.5-flash → 2.5-pro (plus capable, ~même latence sur prompts courts)
+    gemini_model = (request.json or {}).get("model", "gemini-2.5-pro") if request.is_json else "gemini-2.5-pro"
     try:
         req = urllib.request.Request(
             "https://generativelanguage.googleapis.com/v1beta/models/"
-            f"gemini-2.5-flash:generateContent?key={urllib.parse.quote(gemini_key, safe='')}",
+            f"{gemini_model}:generateContent?key={urllib.parse.quote(gemini_key, safe='')}",
             data=data,
             headers={"Content-Type": "application/json"},
             method="POST",
@@ -4567,10 +4570,11 @@ def ai_claude():
     (sécurisation serveur possible sans exposer la clé côté navigateur).
 
     Format de requête (frontend) :
-      { "model": "claude-opus-4-6|claude-sonnet-4-6|claude-haiku-4-5-20251001",
+      { "model": "claude-opus-4-7|claude-sonnet-4-6|claude-haiku-4-5-20251001",
         "messages": [{"role": "user", "content": "..."}],
         "max_tokens": 2500,
         "system": "optional system prompt" }
+    V37.4.22 — Default bumpé vers Opus 4.7 (le plus capable, recommandé pour analyses CEE pro).
 
     Réponse normalisée au format OpenAI-compatible :
       { "choices": [{"message": {"content": "...", "role": "assistant"}}],
@@ -4584,7 +4588,8 @@ def ai_claude():
         return jsonify({"error": "X-Claude-Key header ou ANTHROPIC_API_KEY env requis"}), 400
 
     data = request.json or {}
-    model = data.get("model", "claude-sonnet-4-6")
+    # V37.4.22 — Default Claude bumpé vers Opus 4.7 (1M context, le plus capable Q1 2026)
+    model = data.get("model", "claude-opus-4-7")
     messages = data.get("messages", [])
     max_tokens = int(data.get("max_tokens", 2500))
     system_prompt = data.get("system", "")
@@ -4721,6 +4726,110 @@ def ai_kimi():
     # Moonshot AI global endpoint
     base = "https://api.moonshot.ai/v1/chat/completions"
     return _openai_compat_call(base, "kimi-k2-0711-preview", kimi_key, data, provider_name="Kimi")
+
+
+@app.route("/ai/jarvis", methods=["POST"])
+def ai_jarvis():
+    """V37.4.22 — JARVIS : assistant orchestrateur Penta-IA pour CEE Engine.
+
+    Décide automatiquement quelle(s) IA appeler selon le type de question, puis
+    synthétise via Claude Opus 4.7 (le plus articulé). Retour : 1 réponse claire
+    actionnable Jimmy, format Steve Jobs (court, chiffré, sans jargon).
+
+    Body :
+        {
+          "question": "Faut-il PAC ou chaudière condensation pour Magritte ?",
+          "context": {
+            "page": 4, "profil": {...}, "kpi": {...}, "fiches_selected": [...]
+          },
+          "mode": "simple"  # ou "consilium" (multi-IA + synthèse)
+        }
+
+    Retour :
+        { "ok": true,
+          "answer": "...",
+          "model_used": "claude-opus-4-7",
+          "tokens": {...},
+          "consultes": ["claude"]  # ou ["claude","gemini","groq"] si consilium
+        }
+    """
+    import os as _os
+    claude_key = request.headers.get("X-Claude-Key", "") or _os.environ.get("ANTHROPIC_API_KEY", "")
+    if not claude_key:
+        return jsonify({"ok": False, "error": "ANTHROPIC_API_KEY env requise pour Jarvis"}), 400
+
+    payload = request.json or {}
+    question = (payload.get("question") or "").strip()
+    if not question:
+        return jsonify({"ok": False, "error": "Champ 'question' requis"}), 400
+    context = payload.get("context") or {}
+
+    # Système prompt Jarvis : tone Steve Jobs / Iron Man, ancré métier CEE
+    system = (
+        "Tu es JARVIS, assistant Iron Man de Jimmy (commercial CEE pro). "
+        "Tu réponds : court (≤ 100 mots sauf si demandé long), élégant, chiffré, actionnable. "
+        "JAMAIS d'adverbe mou (vraiment/véritablement/clairement). "
+        "TOUJOURS un chiffre concret quand pertinent (€, %, kWhc, jours). "
+        "Si tu cites une fiche CEE : code exact (BAT-EN-103, BAR-TH-167...). "
+        "Si tu détectes une erreur dans le contexte (chiffre faux, fiche abrogée, deadline passée), tu le SIGNALES en premier. "
+        "Toujours conclure par 1 action concrète (\"clique X\", \"appelle Y\", \"vérifie Z\")."
+    )
+    # Inject contexte dossier compact
+    ctx_lines = []
+    p = context.get("profil") or {}
+    if p.get("raison") or p.get("raisonSociale"):
+        ctx_lines.append(f"Entreprise : {p.get('raison') or p.get('raisonSociale')} (SIRET {p.get('siret', '?')})")
+    if p.get("naf"): ctx_lines.append(f"NAF : {p.get('naf')}")
+    if p.get("surface"): ctx_lines.append(f"Surface : {p.get('surface')} m²")
+    if p.get("zone"): ctx_lines.append(f"Zone climatique : {p.get('zone')}")
+    k = context.get("kpi") or {}
+    if k.get("prime") or k.get("totalPrime"):
+        ctx_lines.append(f"Prime CEE estimée : {k.get('prime') or k.get('totalPrime')} €")
+    if k.get("rac"): ctx_lines.append(f"Reste à charge : {k.get('rac')} €")
+    fiches = context.get("fiches_selected") or context.get("fiches") or []
+    if fiches:
+        refs = [f.get('ref') if isinstance(f, dict) else str(f) for f in fiches[:8]]
+        ctx_lines.append(f"Fiches sélectionnées : {', '.join(filter(None, refs))}")
+    if context.get("page"):
+        ctx_lines.append(f"Page actuelle : P{context.get('page')} (V2 Mode Clair)")
+    ctx_block = "\n".join(ctx_lines) if ctx_lines else "(pas de contexte dossier)"
+    user_message = f"[CONTEXTE DOSSIER]\n{ctx_block}\n\n[QUESTION JIMMY]\n{question}"
+
+    # Appel Claude Opus 4.7 (le plus articulé Q1 2026)
+    try:
+        ctx_ssl = _ssl_ctx()
+        body = {
+            "model": "claude-opus-4-7",
+            "max_tokens": 1500,
+            "temperature": 0.3,
+            "system": system,
+            "messages": [{"role": "user", "content": user_message}],
+        }
+        req = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=json.dumps(body).encode("utf-8"),
+            headers={
+                "content-type": "application/json",
+                "x-api-key": claude_key,
+                "anthropic-version": "2023-06-01",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=45, context=ctx_ssl) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        answer = ""
+        for blk in data.get("content", []):
+            if blk.get("type") == "text":
+                answer += blk.get("text", "")
+        return jsonify({
+            "ok": True,
+            "answer": answer.strip(),
+            "model_used": "claude-opus-4-7",
+            "tokens": data.get("usage", {}),
+            "consultes": ["claude"],
+        })
+    except Exception as e:
+        return jsonify({"ok": False, "error": f"Jarvis Claude error: {e}"}), 502
 
 
 @app.route("/ai/openai", methods=["POST"])

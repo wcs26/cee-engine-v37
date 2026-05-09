@@ -71,7 +71,7 @@ def _call_ai(which: str, user_msg: str, diag_context: dict, history: list) -> tu
     try:
         if which == "claude":
             body = {
-                "model": "claude-sonnet-4-6",
+                "model": "claude-opus-4-7",
                 "max_tokens": 1500,
                 "temperature": 0.2,
                 "system": SYSTEM_PROMPT,
