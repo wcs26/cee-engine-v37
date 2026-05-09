@@ -1,77 +1,41 @@
 /**
- * CEE Engine V37 — Service Worker (PWA)
- * Stratégie : network-first avec fallback cache pour résilience offline.
- * Les endpoints /analyse, /expert, /ai/* ne sont JAMAIS cachés (données fraîches).
+ * CEE Engine V37.4.21c — Service Worker KILL-SWITCH
+ *
+ * Le SW PWA causait des stale UI sur les release rapides (oracle.html
+ * cache servi à la place de la version live). Décision : on désactive le
+ * SW pour cette app B2B qui requiert toujours réseau pour /expert /ai/*
+ * /conformite etc. — l'offline-first n'a pas de valeur métier ici.
+ *
+ * Au prochain fetch que le browser fait sur sw.js, ce nouveau code remplace
+ * l'ancien. Au activate :
+ *  1. Supprime tous les caches existants (cee-engine-v37-*).
+ *  2. S'auto-désinscrit (registration.unregister()).
+ *  3. Force tous les clients à recharger (skipWaiting + claim → reload).
+ * Résultat : à partir du prochain refresh, plus aucun SW actif, tout va au
+ * réseau directement avec les headers Cache-Control: no-store.
  */
-// V37.4.21 — Bump cache name à chaque release UI majeure pour forcer flush
-const CACHE_NAME = 'cee-engine-v37-4-21';
-// V37.4.21 — oracle.html RETIRÉ des assets pre-cachés : il évolue à chaque release
-// et doit toujours être servi en network-first sans fallback cache initial.
-const STATIC_ASSETS = [
-  '/manifest.json',
-  '/js/cee-pdfs.js',
-];
-
-// Endpoints qui ne doivent JAMAIS être servis depuis le cache
-const NEVER_CACHE = [
-  '/ai/',
-  '/analyse',
-  '/expert',
-  '/recalcul',
-  '/predictions',
-  '/regulatory',
-  '/siret',
-  '/etablissements',
-  '/cadastre',
-  '/batiment',
-  '/dpe',
-  '/negociation',
-  '/status',
-  '/health',
-  '/auth',
-];
 
 self.addEventListener('install', (ev) => {
-  ev.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)).catch(() => {})
-  );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (ev) => {
-  ev.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
+  ev.waitUntil((async () => {
+    // 1. Supprime TOUS les caches (cee-engine-v37-*, et tout autre résiduel)
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+    // 2. Désinscrit ce SW
+    await self.registration.unregister();
+    // 3. Force reload tous les clients pour qu'ils repartent sans SW
+    const clients = await self.clients.matchAll({type: 'window'});
+    clients.forEach((client) => {
+      try { client.navigate(client.url); } catch (_e) {}
+    });
+  })());
 });
 
+// Fallback : si le browser intercepte un fetch avant le activate, on bypass
+// totalement et on laisse le réseau gérer (pas d'ev.respondWith).
 self.addEventListener('fetch', (ev) => {
-  const url = new URL(ev.request.url);
-  // Same-origin only
-  if (url.origin !== self.location.origin) return;
-  // Ne pas cacher les endpoints dynamiques
-  if (NEVER_CACHE.some((p) => url.pathname.startsWith(p))) return;
-  // V37.4.21 — oracle.html TOUJOURS network (pas de fallback cache) pour garantir version live
-  if (url.pathname === '/oracle.html' || url.pathname === '/') {
-    ev.respondWith(fetch(ev.request, {cache: 'no-store'}));
-    return;
-  }
-  // Ne traiter que les GET
-  if (ev.request.method !== 'GET') return;
-
-  // Network-first avec fallback cache (offline)
-  ev.respondWith(
-    fetch(ev.request)
-      .then((resp) => {
-        // Cache les réponses OK
-        if (resp && resp.status === 200 && resp.type === 'basic') {
-          const clone = resp.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(ev.request, clone)).catch(() => {});
-        }
-        return resp;
-      })
-      .catch(() => caches.match(ev.request))
-  );
+  // No-op : browser default fetch (réseau direct).
 });
