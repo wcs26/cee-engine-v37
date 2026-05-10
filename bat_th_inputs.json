@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "version": "V38.2a",
+    "version": "V38.2b",
     "date": "2026-05-10",
-    "purpose": "Inputs requis par fiche BAT-TH pour calcul officiel exact (model_type). Source : PDFs ministère écologie. Utilisé par smart Q auto-génération + calculateurs V38.0+."
+    "purpose": "Inputs requis par fiche BAT-TH pour calcul officiel exact (model_type). 22 fiches couvertes. Source : PDFs ministère écologie."
   },
   "fiches": {
     "BAT-TH-111": {
@@ -45,7 +45,7 @@
     "BAT-TH-109": {
       "model_type": "absolute_per_sector_zone",
       "label_fiche": "Optimiseur relance chauffage collectif",
-      "formula_summary": "kWhc = montant_secteur × surface × facteur_zone (table V38.2a hardcodée)",
+      "formula_summary": "kWhc = montant_secteur × surface × facteur_zone (table V38.2a)",
       "inputs": []
     },
     "BAT-TH-159": {
@@ -110,6 +110,95 @@
         {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
         {"id": "T_consigne_156", "label": "Plage T° consigne réseau", "type": "select", "options": ["15_18C", "18_20C"], "default": "18_20C"},
         {"id": "secteur_156", "label": "Type bâtiment", "type": "select", "options": ["climatisation_hors_dc", "climatisation_dc"], "default": "climatisation_hors_dc"}
+      ]
+    },
+    "BAT-TH-108": {
+      "model_type": "absolute_per_sector_zone_energy",
+      "label_fiche": "Régulation programmation intermittence",
+      "formula_summary": "kWhc = montant(secteur, énergie) × surface × facteur_zone",
+      "inputs": [
+        {"id": "energie_chauffage_108", "label": "Énergie chauffage actuelle", "type": "select", "options": ["combustible", "electricite"], "default": "combustible"}
+      ]
+    },
+    "BAT-TH-116": {
+      "model_type": "absolute_per_sector_usage_class_zone",
+      "label_fiche": "GTB classe A ou B",
+      "formula_summary": "kWhc = SOMME(usage : montant_secteur_classe_usage × surface_usage) × facteur_zone (modèle simplifié : usage chauffage seul)",
+      "inputs": [
+        {"id": "classe_gtb", "label": "Classe GTB visée", "type": "select", "options": ["B", "A"], "default": "B"}
+      ]
+    },
+    "BAT-TH-127": {
+      "model_type": "absolute_per_sector_usage_power_zone",
+      "label_fiche": "Raccordement réseau de chaleur",
+      "formula_summary": "kWhc = montant(secteur, usage, puissance) × surface × facteur_zone",
+      "inputs": [
+        {"id": "usage_127", "label": "Usage", "type": "select", "options": ["chauffage_seul", "chauffage_ecs"], "default": "chauffage_seul"},
+        {"id": "puiss_127", "label": "Puissance souscrite", "type": "select", "options": ["inf_400kW", "sup_400kW"], "default": "inf_400kW"}
+      ]
+    },
+    "BAT-TH-125": {
+      "model_type": "absolute_per_zone_sector_type",
+      "label_fiche": "VMC simple flux tertiaire",
+      "formula_summary": "kWhc = montant(zone, type) × surface × facteur_secteur",
+      "inputs": [
+        {"id": "type_vmc_125", "label": "Type ventilation VMC SF", "type": "select", "options": ["modulee_proportionnelle", "modulee_detection_presence", "debit_constant"], "default": "modulee_proportionnelle"}
+      ]
+    },
+    "BAT-TH-126": {
+      "model_type": "absolute_per_zone_sector_type",
+      "label_fiche": "VMC double flux tertiaire",
+      "formula_summary": "kWhc = montant(zone, type) × surface × facteur_secteur",
+      "inputs": [
+        {"id": "type_vmc_126", "label": "Type ventilation VMC DF", "type": "select", "options": ["modulee_proportionnelle", "modulee_detection_presence", "debit_constant"], "default": "modulee_proportionnelle"}
+      ]
+    },
+    "BAT-TH-143": {
+      "model_type": "double_formula_chauffage_rafraichissement",
+      "label_fiche": "Ventilo-convecteurs HP",
+      "formula_summary": "kWhc = Mch + Mra (matrice secteur×zone, chauffage + rafraîchissement)",
+      "inputs": []
+    },
+    "BAT-TH-154": {
+      "model_type": "absolute_per_sector_zone_debits",
+      "label_fiche": "Récupération chaleur eaux grises",
+      "formula_summary": "kWhc = montant(secteur, zone, débits) × N × ε",
+      "inputs": [
+        {"id": "secteur_154", "label": "Type bâtiment", "type": "select", "options": ["hotellerie", "etablissement_sportif", "sante", "terrain_camping", "salon_coiffure"], "default": "hotellerie"},
+        {"id": "N_154", "label": "Nombre d'unités (chambres/douches/salons)", "type": "number", "min": 1},
+        {"id": "epsilon_154", "label": "Efficacité ε (≥ 0,35)", "type": "number", "default": 0.35, "min": 0.35, "max": 0.9},
+        {"id": "debits_154", "label": "Configuration débits", "type": "select", "options": ["egaux", "inegaux"], "default": "egaux"}
+      ]
+    },
+    "BAT-TH-162": {
+      "model_type": "absolute_per_perf_zone_usage_sector_R",
+      "label_fiche": "Système géothermique (PAC + captage)",
+      "formula_summary": "kWhc = montant(perf, zone, usage) × surface × facteur_secteur × R",
+      "inputs": [
+        {"id": "etas_162", "label": "Performance Etas (%)", "type": "select", "options": ["111_126", "126_175", "sup_175"], "default": "126_175"},
+        {"id": "usage_162", "label": "Usage", "type": "select", "options": ["chauffage", "chauffage_ecs"], "default": "chauffage"},
+        {"id": "P_PAC_162", "label": "Puissance PAC (kW)", "type": "number", "unit": "kW", "min": 30},
+        {"id": "P_chaufferie_162", "label": "Puissance chaufferie totale (kW)", "type": "number", "unit": "kW", "min": 30}
+      ]
+    },
+    "BAT-TH-163": {
+      "model_type": "absolute_per_perf_zone_sector_R",
+      "label_fiche": "PAC air/eau tertiaire",
+      "formula_summary": "kWhc = montant(perf, zone) × surface × facteur_secteur × R",
+      "inputs": [
+        {"id": "etas_163", "label": "Performance Etas (%)", "type": "select", "options": ["111_126", "126_175", "sup_175"], "default": "126_175"},
+        {"id": "P_PAC_163", "label": "Puissance PAC (kW)", "type": "number", "unit": "kW", "min": 30},
+        {"id": "P_chaufferie_163", "label": "Puissance chaufferie totale (kW)", "type": "number", "unit": "kW", "min": 30}
+      ]
+    },
+    "BAT-TH-164": {
+      "model_type": "absolute_per_perf_zone_sector_R",
+      "label_fiche": "PAC eau/eau ou eau glycolée/eau",
+      "formula_summary": "kWhc = montant(perf, zone) × surface × facteur_secteur × R",
+      "inputs": [
+        {"id": "etas_164", "label": "Performance Etas (%)", "type": "select", "options": ["111_126", "126_175", "sup_175"], "default": "126_175"},
+        {"id": "P_PAC_164", "label": "Puissance PAC (kW)", "type": "number", "unit": "kW", "min": 30},
+        {"id": "P_chaufferie_164", "label": "Puissance chaufferie totale (kW)", "type": "number", "unit": "kW", "min": 30}
       ]
     }
   }

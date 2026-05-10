@@ -4214,7 +4214,8 @@
     // V37.4.23 — sectFactors alignés PDF officiel ministère écologie BAT-TH-105 v.A32.2 (01/04/2020)
     // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAT-TH-105%20v%20A32-2%20%C3%A0%20compter%20du%2001-04-2020.pdf
     {ref:"BAT-TH-105",label:"Radiateur basse température",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:470,H2:380,H3:270,DOM:180,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:1.3,sante:1.0,sport:0.8,autres:0.8}},active:true,gisements:["chauffage_batiment"]},
-    {ref:"BAT-TH-108",label:"Régulation programmation intermittence",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:6100,H2:5000,H3:3600,DOM:2400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["chauffage_batiment","regulation_gtb"]},
+    // V38.2b — model_type absolute_per_sector_zone_energy (PDF vA22.1)
+    {ref:"BAT-TH-108",model_type:"absolute_per_sector_zone_energy",label:"Régulation programmation intermittence",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:6100,H2:5000,H3:3600,DOM:2400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA22.1 — calcul officiel si energie_chauffage_108 renseigné",gisements:["chauffage_batiment","regulation_gtb"]},
     // V38.2a — model_type absolute_per_sector_zone (PDF vA54.3, table officielle hardcodée)
     {ref:"BAT-TH-109",model_type:"absolute_per_sector_zone",officialTable:{by_sector:{bureaux:69,enseignement:43,sante:53,commerces:55,hotellerie_restauration:82,autres:43},by_zone:{H1:1.1,H2:0.9,H3:0.6}},label:"Optimiseur relance chauffage collectif",sector:"BAT",cat:"Thermique",unit:"logement",z:{H1:2800,H2:2300,H3:1600,DOM:1100,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA54.3 01/01/2024 — formule officielle table secteur×zone",gisements:["chauffage_batiment","regulation_gtb"]},
     // V37.4.23 — sectFactors alignés PDF officiel ministère écologie BAT-TH-110 v.A15.1 (30/06/2021)
@@ -4222,13 +4223,16 @@
     // PDF a 2 tables (Chauffage seul vs Chauffage+ECS) — défaut "Chauffage seul" (le + fréquent récup condensation).
     // Variante Chauffage+ECS : 1.1/0.7/0.8/1.6/1.1/0.7 (à switcher dynamiquement V37.4.24+).
     {ref:"BAT-TH-110",label:"Récupérateur chaleur condensation",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:8100,H2:6600,H3:4800,DOM:3200,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:1.4,sante:1.0,sport:0.8,autres:0.8}},active:true,gisements:["chauffage_batiment"]},
-    {ref:"BAT-TH-116",label:"GTB gestion technique bâtiment",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:49,H2:40,H3:27,DOM:18,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA62.6 01/01/2025",gisements:["regulation_gtb"]},
-    {ref:"BAT-TH-125",label:"VMC simple flux tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:6,H2:5,H3:3,DOM:2,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA32-2 01/04/2020",gisements:["ventilation"]},
-    {ref:"BAT-TH-126",label:"VMC double flux tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:10,H2:8,H3:6,DOM:4,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA32-2 01/04/2020",gisements:["ventilation"]},
+    // V38.2b — BAT-TH-116 model_type absolute_per_sector_usage_class_zone (modèle simplifié usage chauffage)
+    {ref:"BAT-TH-116",model_type:"absolute_per_sector_usage_class_zone",label:"GTB gestion technique bâtiment",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:49,H2:40,H3:27,DOM:18,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA62.6 01/01/2025 — calcul officiel chauffage si classe_gtb (A/B) renseignée",gisements:["regulation_gtb"]},
+    // V38.2b — BAT-TH-125/126 model_type absolute_per_zone_sector_type (PDF vA32.2)
+    {ref:"BAT-TH-125",model_type:"absolute_per_zone_sector_type",label:"VMC simple flux tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:6,H2:5,H3:3,DOM:2,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA32-2 — calcul officiel si type_vmc_125 renseigné",gisements:["ventilation"]},
+    {ref:"BAT-TH-126",model_type:"absolute_per_zone_sector_type",label:"VMC double flux tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:10,H2:8,H3:6,DOM:4,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA32-2 — calcul officiel si type_vmc_126 renseigné",gisements:["ventilation"]},
     // V37.4.24 — Label corrigé (était "Chaudière condensation tertiaire" — FAUX. Vrai libellé : Raccordement réseau de chaleur)
     // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAT-TH-127%20vA79-5%20%C3%A0%20compter%20du%2001-01-2026.pdf
     // ATTENTION : modèle officiel = table absolue kWh/m² par secteur (Bureaux 480 chauf / 510 +ECS, Santé 400/540, HCR 540/680, etc.). sectFactors actuels = placeholder sans effet réel (refactor V38).
-    {ref:"BAT-TH-127",label:"Raccordement bâtiment tertiaire à un réseau de chaleur",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:27700,H2:22700,H3:16300,DOM:10900,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA79-5 P6 01/01/2026 — modèle absolu, refactor V38",gisements:["chauffage_batiment","reseau_chaleur"]},
+    // V38.2b — model_type absolute_per_sector_usage_power_zone (PDF vA79-5 P6 01/01/2026)
+    {ref:"BAT-TH-127",model_type:"absolute_per_sector_usage_power_zone",label:"Raccordement bâtiment tertiaire à un réseau de chaleur",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:27700,H2:22700,H3:16300,DOM:10900,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA79-5 P6 — calcul officiel si usage_127+puiss_127 renseignés",gisements:["chauffage_batiment","reseau_chaleur"]},
     // V38.2a — BAT-TH-134 model_type absolute_per_application_zone_condensation (PDF vA22.1)
     {ref:"BAT-TH-134",model_type:"absolute_per_application_zone_condensation",label:"Régulation haute pression flottante froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,zeroEuro:true,note:"vA22.1 — calcul officiel si application+condensation+P_kW renseignés",gisements:["froid","regulation_gtb"]},
     // V38.2a — BAT-TH-135 model_type absolute_per_application (PDF vA26.1, DOM uniquement)
@@ -4237,12 +4241,14 @@
     {ref:"BAT-TH-139",model_type:"fixed_formula",label:"Récupération chaleur groupe froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA35-3 01/10/2020 — formule officielle D×9.9×P",zeroEuro:true,gisements:["froid","ecs"]},
     // V38.2a — BAT-TH-142 model_type absolute_per_zone_systeme_chauffage (PDF vA71.4)
     {ref:"BAT-TH-142",model_type:"absolute_per_zone_systeme_chauffage",label:"Déstratification d'air",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:38000,H2:31000,H3:22000,DOM:15000,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA71-4 01/08/2025 — calcul officiel si P_chauffage_kW+type_destrat renseignés (hauteur ≥5m)",zeroEuro:true,gisements:["chauffage_batiment"]},
-    {ref:"BAT-TH-143",label:"Ventilo-convecteurs haute performance",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:1650,H2:1350,H3:970,DOM:650,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["chauffage_batiment"]},
+    // V38.2b — model_type double_formula_chauffage_rafraichissement (PDF vA16.1, matrice secteur×zone)
+    {ref:"BAT-TH-143",model_type:"double_formula_chauffage_rafraichissement",label:"Ventilo-convecteurs haute performance",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:1650,H2:1350,H3:970,DOM:650,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA16.1 — calcul officiel auto Mch+Mra (matrice secteur×zone)",gisements:["chauffage_batiment"]},
     // V38.2a — BAT-TH-145 model_type absolute_per_application (PDF vA23.1, datacenters EXCLUS)
     {ref:"BAT-TH-145",model_type:"absolute_per_application",label:"Régulation basse pression flottante froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,zeroEuro:true,note:"vA23.1 — calcul officiel si application_145+P_kW renseignés",gisements:["froid","regulation_gtb"]},
     // V38.1 — model_type fixed_formula : calcul officiel exact si inputs P_kW + deltaT renseignés
     {ref:"BAT-TH-153",model_type:"fixed_formula",label:"Confinement allées Data Center",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:10400,H2:10400,H3:10400,DOM:10400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA28.1 — formule officielle 1500×ΔT×P",gisements:["froid"]},
-    {ref:"BAT-TH-154",label:"Récupération chaleur eaux grises",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:22000,H2:22000,H3:22000,DOM:22000,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["ecs"]},
+    // V38.2b — model_type absolute_per_sector_zone_debits (PDF vA28.1, eaux grises)
+    {ref:"BAT-TH-154",model_type:"absolute_per_sector_zone_debits",label:"Récupération chaleur eaux grises",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:22000,H2:22000,H3:22000,DOM:22000,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA28.1 — calcul officiel si secteur_154+N_154+epsilon_154 renseignés",gisements:["ecs"]},
     // V38.2a — BAT-TH-156 model_type absolute_per_zone_temperature_secteur (PDF vA31.1)
     {ref:"BAT-TH-156",model_type:"absolute_per_zone_temperature_secteur",label:"Freecooling climatisation",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:9400,H2:9400,H3:9400,DOM:9400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA31.1 — calcul officiel si P_kW+T_consigne+secteur renseignés",gisements:["froid"]},
     // V38.1 — model_type fixed_formula : calcul officiel exact si inputs Q + P_kW renseignés
@@ -4259,9 +4265,10 @@
     // V37.4.23 — sectFactors alignés PDF officiel ministère écologie v.A75-1 (01/01/2026, P6)
     // Pattern PAC tertiaire identique TH-162/163/164 : bureaux 1.2 / ens 0.8 / com 0.9 / HCR 0.7 / santé 1.1 / autres 0.7
     // Sources : ecologie.gouv.fr/sites/default/files/documents/BAT-TH-{162,163,164}%20vA75-1%20%C3%A0%20compter%20du%2001-01-2026.pdf
-    {ref:"BAT-TH-162",label:"Système géothermique",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:3300,H2:2700,H3:1800,DOM:1200,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:0.7,sante:1.1,sport:0.7,autres:0.7}},active:true,note:"vA75-1 P6 01/01/2026",p6Bonus:5,gisements:["chauffage_batiment","ecs"]},
-    {ref:"BAT-TH-163",label:"PAC air/eau tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:2200,H2:1800,H3:1200,DOM:800,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:0.7,sante:1.1,sport:0.7,autres:0.7}},active:true,note:"vA75-1 P6 01/01/2026 remplace TH-113",p6Bonus:3,gisements:["chauffage_batiment","ecs"]},
-    {ref:"BAT-TH-164",label:"PAC eau/eau ou eau glycolée/eau",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:2800,H2:2300,H3:1500,DOM:1000,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:0.7,sante:1.1,sport:0.7,autres:0.7}},active:true,note:"vA75-1 P6 01/01/2026",p6Bonus:4,gisements:["chauffage_batiment","ecs"]},
+    // V38.2b — model_type PAC géothermie + PAC air/eau + PAC eau/eau (PDF vA81.2 P6)
+    {ref:"BAT-TH-162",model_type:"absolute_per_perf_zone_usage_sector_R",label:"Système géothermique",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:3300,H2:2700,H3:1800,DOM:1200,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:0.7,sante:1.1,sport:0.7,autres:0.7}},active:true,note:"vA81.2 P6 — calcul officiel si etas+usage+P_PAC+P_chaufferie renseignés",p6Bonus:5,gisements:["chauffage_batiment","ecs"]},
+    {ref:"BAT-TH-163",model_type:"absolute_per_perf_zone_sector_R",label:"PAC air/eau tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:2200,H2:1800,H3:1200,DOM:800,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:0.7,sante:1.1,sport:0.7,autres:0.7}},active:true,note:"vA81.2 P6 remplace TH-113 — calcul officiel si etas+P_PAC+P_chaufferie renseignés",p6Bonus:3,gisements:["chauffage_batiment","ecs"]},
+    {ref:"BAT-TH-164",model_type:"absolute_per_perf_zone_sector_R",label:"PAC eau/eau ou eau glycolée/eau",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:2800,H2:2300,H3:1500,DOM:1000,sectFactors:{bureaux:1.2,enseignement:0.8,commerces:0.9,hotellerie_restauration:0.7,sante:1.1,sport:0.7,autres:0.7}},active:true,note:"vA81.2 P6 — calcul officiel si etas+P_PAC+P_chaufferie renseignés",p6Bonus:4,gisements:["chauffage_batiment","ecs"]},
     {ref:"BAT-EQ-117",label:"Installation frigo CO2 sub/transcritique",sector:"BAT",cat:"Équipements",unit:"kW",z:{H1:19200,H2:19200,H3:19200,DOM:19200},active:true,gisements:["froid"]},
     {ref:"BAT-EQ-124",label:"Fermeture meubles frigo T+",sector:"BAT",cat:"Équipements",unit:"m linéaire",z:{H1:9200,H2:9200,H3:9200,DOM:9200},active:true,gisements:["froid"]},
     {ref:"BAT-EQ-125",label:"Fermeture meubles frigo T-",sector:"BAT",cat:"Équipements",unit:"m linéaire",z:{H1:16800,H2:16800,H3:16800,DOM:16800},active:true,gisements:["froid"]},
@@ -4999,7 +5006,16 @@
         case 'absolute_per_zone_systeme_chauffage':      return calcAbsolutePerZoneSystemeChauffage(fiche, ctx);
         case 'absolute_per_application_zone_condensation': return calcAbsolutePerApplicationZoneCondensation(fiche, ctx);
         case 'absolute_per_zone_temperature_secteur':    return calcAbsolutePerZoneTemperatureSecteur(fiche, ctx);
-        default: return null; // model_type non encore implémenté → fallback legacy
+        // V38.2b — 8 patterns complexes
+        case 'absolute_per_sector_zone_energy':          return calcAbsolutePerSectorZoneEnergy(fiche, ctx);
+        case 'absolute_per_sector_usage_class_zone':     return calcAbsolutePerSectorUsageClassZone(fiche, ctx);
+        case 'absolute_per_sector_usage_power_zone':     return calcAbsolutePerSectorUsagePowerZone(fiche, ctx);
+        case 'absolute_per_zone_sector_type':            return calcAbsolutePerZoneSectorType(fiche, ctx);
+        case 'double_formula_chauffage_rafraichissement': return calcDoubleFormulaChauffageRafraichissement(fiche, ctx);
+        case 'absolute_per_sector_zone_debits':          return calcAbsolutePerSectorZoneDebits(fiche, ctx);
+        case 'absolute_per_perf_zone_usage_sector_R':    return calcAbsolutePerPerfZoneUsageSectorR(fiche, ctx);
+        case 'absolute_per_perf_zone_sector_R':          return calcAbsolutePerPerfZoneSectorR(fiche, ctx);
+        default: return null;
       }
     } catch (e) {
       console.warn('[V38 calcByModelType]', fiche.ref, e);
@@ -5130,6 +5146,255 @@
     var coefSect = (sec === 'climatisation_dc') ? 4.5 : 1.0;
     var zoneT = t[ctx.zone] || t.H2;
     return {kwhcTotal: (zoneT[T] || zoneT['18_20C']) * P * coefSect, source: 'official_156_freecooling'};
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // V38.2b — 8 calculateurs complexes (multi-axes, switches, matrices, perf)
+  // ════════════════════════════════════════════════════════════════
+
+  // V38.2b — Pattern 8 : absolute_per_sector_zone_energy (BAT-TH-108)
+  function calcAbsolutePerSectorZoneEnergy(fiche, ctx) {
+    if (fiche.ref !== 'BAT-TH-108') return null;
+    var s = ctx.smart || {};
+    var energie = s.energie_chauffage_108 || 'combustible';
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    var t = {
+      bureaux:               {combustible: 66, electricite: 37},
+      enseignement:          {combustible: 43, electricite: 24},
+      commerces:             {combustible: 47, electricite: 27},
+      hotellerie_restauration:{combustible: 78, electricite: 29},
+      sante:                 {combustible: 54, electricite: 31},
+      autres:                {combustible: 43, electricite: 24}
+    };
+    var sectTable = t[fostKey] || t.autres;
+    var byZone = {H1: 1.1, H2: 0.9, H3: 0.6};
+    var kwhcM2 = sectTable[energie] || sectTable.combustible;
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcM2 * qty * (byZone[ctx.zone] || 0.9), source: 'official_108'};
+  }
+
+  // V38.2b — Pattern 9 : absolute_per_sector_usage_class_zone (BAT-TH-116 GTB classe A/B)
+  // Modèle simplifié : on agrège chauffage seul (le poste principal) — usage chauffage
+  function calcAbsolutePerSectorUsageClassZone(fiche, ctx) {
+    if (fiche.ref !== 'BAT-TH-116') return null;
+    var s = ctx.smart || {};
+    var classe = s.classe_gtb || 'B';
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    // Usage chauffage uniquement (proxy — le PDF a ECS/clim/eclairage/aux mais on simplifie)
+    var t = {
+      A: {bureaux: 360, enseignement: 170, commerces: 520, hotellerie_restauration: 400, sante: 150, autres: 170},
+      B: {bureaux: 240, enseignement: 100, commerces: 250, hotellerie_restauration: 200, sante: 90, autres: 100}
+    };
+    var byZone = {H1: 1.1, H2: 0.9, H3: 0.6, DOM: 0.6};
+    var sectTable = t[classe] || t.B;
+    var kwhcM2 = sectTable[fostKey] != null ? sectTable[fostKey] : sectTable.autres;
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcM2 * qty * (byZone[ctx.zone] || 0.9), source: 'official_116_chauffage_only'};
+  }
+
+  // V38.2b — Pattern 10 : absolute_per_sector_usage_power_zone (BAT-TH-127 réseau chaleur)
+  function calcAbsolutePerSectorUsagePowerZone(fiche, ctx) {
+    if (fiche.ref !== 'BAT-TH-127') return null;
+    var s = ctx.smart || {};
+    var usage = s.usage_127 || 'chauffage_seul';
+    var puiss = s.puiss_127 || 'inf_400kW';
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    var t = {
+      inf_400kW: {
+        bureaux:               {chauffage_seul: 480, chauffage_ecs: 510},
+        enseignement:          {chauffage_seul: 310, chauffage_ecs: 360},
+        sante:                 {chauffage_seul: 400, chauffage_ecs: 540},
+        commerces:             {chauffage_seul: 370, chauffage_ecs: 420},
+        hotellerie_restauration:{chauffage_seul: 540, chauffage_ecs: 680},
+        autres:                {chauffage_seul: 310, chauffage_ecs: 330}
+      },
+      sup_400kW: {
+        bureaux:               {chauffage_seul: 370, chauffage_ecs: 390},
+        enseignement:          {chauffage_seul: 240, chauffage_ecs: 270},
+        sante:                 {chauffage_seul: 310, chauffage_ecs: 410},
+        commerces:             {chauffage_seul: 280, chauffage_ecs: 320},
+        hotellerie_restauration:{chauffage_seul: 410, chauffage_ecs: 520},
+        autres:                {chauffage_seul: 240, chauffage_ecs: 260}
+      }
+    };
+    var byZone = {H1: 1.1, H2: 0.9, H3: 0.6};
+    var sectTable = (t[puiss] && t[puiss][fostKey]) || t.inf_400kW.autres;
+    var kwhcM2 = sectTable[usage] || sectTable.chauffage_seul;
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcM2 * qty * (byZone[ctx.zone] || 0.9), source: 'official_127'};
+  }
+
+  // V38.2b — Pattern 11 : absolute_per_zone_sector_type (BAT-TH-125 SF, BAT-TH-126 DF)
+  function calcAbsolutePerZoneSectorType(fiche, ctx) {
+    var s = ctx.smart || {};
+    var type, byZoneTable, sectFactorsTable;
+    if (fiche.ref === 'BAT-TH-125') {
+      type = s.type_vmc_125 || 'modulee_proportionnelle';
+      var t125 = {
+        modulee_proportionnelle: {
+          by_zone: {H1: 770, H2: 630, H3: 420},
+          by_sector: {bureaux: 0.48, enseignement: 1.0, restauration: 0.59, autres: 0.54}
+        },
+        modulee_detection_presence: {
+          by_zone: {H1: 690, H2: 560, H3: 380},
+          by_sector: {bureaux: 0.4, enseignement: 1.0, restauration: 0.45, autres: 0.51}
+        },
+        debit_constant: {
+          by_zone: {H1: 400, H2: 330, H3: 220},
+          by_sector: {bureaux: 0.4, enseignement: 1.0, restauration: 0.53, autres: 0.58}
+        }
+      };
+      byZoneTable = t125[type] && t125[type].by_zone;
+      sectFactorsTable = t125[type] && t125[type].by_sector;
+    } else if (fiche.ref === 'BAT-TH-126') {
+      type = s.type_vmc_126 || 'modulee_proportionnelle';
+      var t126 = {
+        modulee_proportionnelle: {
+          by_zone: {H1: 1000, H2: 830, H3: 560},
+          by_sector: {bureaux: 0.53, enseignement: 1.0, restauration: 0.68, autres: 0.71}
+        },
+        modulee_detection_presence: {
+          by_zone: {H1: 970, H2: 800, H3: 530},
+          by_sector: {bureaux: 0.51, enseignement: 1.0, restauration: 0.63, autres: 0.71}
+        },
+        debit_constant: {
+          by_zone: {H1: 850, H2: 700, H3: 460},
+          by_sector: {bureaux: 0.48, enseignement: 1.0, restauration: 0.61, autres: 0.71}
+        }
+      };
+      byZoneTable = t126[type] && t126[type].by_zone;
+      sectFactorsTable = t126[type] && t126[type].by_sector;
+    } else { return null; }
+    if (!byZoneTable || !sectFactorsTable) return null;
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    // Mapping fost → sector vmc (restauration = HCR, enseignement direct, bureaux direct, sinon autres)
+    var vmcKey = (fostKey === 'hotellerie_restauration') ? 'restauration'
+               : (fostKey === 'bureaux') ? 'bureaux'
+               : (fostKey === 'enseignement') ? 'enseignement'
+               : 'autres';
+    var kwhcM2 = (byZoneTable[ctx.zone] || byZoneTable.H2) * (sectFactorsTable[vmcKey] || sectFactorsTable.autres);
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcM2 * qty, source: 'official_' + fiche.ref};
+  }
+
+  // V38.2b — Pattern 12 : double_formula_chauffage_rafraichissement (BAT-TH-143 ventilo HP)
+  function calcDoubleFormulaChauffageRafraichissement(fiche, ctx) {
+    if (fiche.ref !== 'BAT-TH-143') return null;
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    // Mapping fost → sector_zone (143 a santé_avec_hebergement, hotels_autres_hebergements, santé_sans_hebergement, etc.)
+    var sectKey = (fostKey === 'sante') ? 'sante_sans_hebergement'
+                : (fostKey === 'hotellerie_restauration') ? 'hotels_autres_hebergements'
+                : (fostKey === 'bureaux' || fostKey === 'commerces') ? 'bureaux_restauration_commerces'
+                : 'autres_secteurs';
+    var ch = {
+      by_zone: {H1: 65, H2: 57, H3: 48},
+      by_sector_zone: {
+        sante_avec_hebergement:     {H1: 2.30, H2: 2.35, H3: 2.35},
+        hotels_autres_hebergements: {H1: 2.20, H2: 2.20, H3: 2.20},
+        sante_sans_hebergement:     {H1: 0.65, H2: 0.60, H3: 0.65},
+        bureaux_restauration_commerces:{H1: 0.60, H2: 0.60, H3: 0.60},
+        autres_secteurs:            {H1: 0.45, H2: 0.45, H3: 0.40}
+      }
+    };
+    var ra = {
+      by_zone: {H1: 9, H2: 13, H3: 24},
+      by_sector_zone: {
+        sante_avec_hebergement:     {H1: 2.05, H2: 2.10, H3: 2.05},
+        hotels_autres_hebergements: {H1: 3.10, H2: 3.35, H3: 2.60},
+        sante_sans_hebergement:     {H1: 0,    H2: 0,    H3: 0.80},
+        bureaux_restauration_commerces:{H1: 1.85, H2: 1.55, H3: 0.95},
+        autres_secteurs:            {H1: 0,    H2: 0,    H3: 0}
+      }
+    };
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    var Mch = (ch.by_zone[ctx.zone] || ch.by_zone.H2) * qty * ((ch.by_sector_zone[sectKey] || ch.by_sector_zone.autres_secteurs)[ctx.zone] || 0.6);
+    var Mra = (ra.by_zone[ctx.zone] || ra.by_zone.H2) * qty * ((ra.by_sector_zone[sectKey] || ra.by_sector_zone.autres_secteurs)[ctx.zone] || 0);
+    return {kwhcTotal: Mch + Mra, source: 'official_143_double_formula'};
+  }
+
+  // V38.2b — Pattern 13 : absolute_per_sector_zone_debits (BAT-TH-154 eaux grises)
+  function calcAbsolutePerSectorZoneDebits(fiche, ctx) {
+    if (fiche.ref !== 'BAT-TH-154') return null;
+    var s = ctx.smart || {};
+    var sec = s.secteur_154 || 'hotellerie';
+    var debits = s.debits_154 || 'egaux';
+    var N = parseFloat(s.N_154); var eps = parseFloat(s.epsilon_154) || 0.35;
+    if (!N || N <= 0) return null;
+    var t = {
+      inegaux: {
+        hotellerie:          {H1: 13000, H2: 12200, H3: 10900},
+        etablissement_sportif:{H1: 18100,H2: 17100, H3: 15300},
+        sante:               {H1: 6400,  H2: 6000,  H3: 5300},
+        terrain_camping:     {H1: 72200, H2: 67900, H3: 60900},
+        salon_coiffure:      {H1: 33300, H2: 27100, H3: 17900}
+      },
+      egaux: {
+        hotellerie:          {H1: 16500, H2: 15500, H3: 13800},
+        etablissement_sportif:{H1: 22900,H2: 21600, H3: 19300},
+        sante:               {H1: 8100,  H2: 7600,  H3: 6800},
+        terrain_camping:     {H1: 91400, H2: 86000, H3: 77000},
+        salon_coiffure:      {H1: 42100, H2: 34300, H3: 22700}
+      }
+    };
+    var sectTable = (t[debits] && t[debits][sec]) || t.egaux.hotellerie;
+    var montant = sectTable[ctx.zone] || sectTable.H2;
+    return {kwhcTotal: montant * N * eps, source: 'official_154'};
+  }
+
+  // V38.2b — Pattern 14 : absolute_per_perf_zone_usage_sector_R (BAT-TH-162 PAC géo)
+  function calcAbsolutePerPerfZoneUsageSectorR(fiche, ctx) {
+    if (fiche.ref !== 'BAT-TH-162') return null;
+    var s = ctx.smart || {};
+    var etas = s.etas_162 || '126_175';
+    var usage = s.usage_162 || 'chauffage';
+    var P_PAC = parseFloat(s.P_PAC_162); var P_chauf = parseFloat(s.P_chaufferie_162);
+    if (!P_PAC || P_PAC < 30 || !P_chauf) return null;
+    // Tables PAC ≤ 400 kW (pour simplifier, on prend ≤400kW comme défaut)
+    var t = {
+      '111_126':  {H1: {chauffage: 1400, chauffage_ecs: 1600}, H2: {chauffage: 1100, chauffage_ecs: 1400}, H3: {chauffage: 800, chauffage_ecs: 1000}},
+      '126_175':  {H1: {chauffage: 1500, chauffage_ecs: 1800}, H2: {chauffage: 1200, chauffage_ecs: 1500}, H3: {chauffage: 800, chauffage_ecs: 1100}},
+      'sup_175':  {H1: {chauffage: 1600, chauffage_ecs: 1900}, H2: {chauffage: 1300, chauffage_ecs: 1600}, H3: {chauffage: 900, chauffage_ecs: 1200}}
+    };
+    var sectFact = {bureaux: 1.2, enseignement: 0.8, commerces: 0.9, hotellerie_restauration: 0.7, sante: 1.1, autres: 0.7};
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    var perfTable = t[etas] || t['126_175'];
+    var zoneTable = perfTable[ctx.zone] || perfTable.H2;
+    var kwhcM2 = zoneTable[usage] || zoneTable.chauffage;
+    // Facteur R : 1.0 si P_PAC ≥ 40% chaufferie ; sinon R = P_PAC / P_chaufferie
+    var R = (P_PAC >= 0.4 * P_chauf) ? 1.0 : (P_PAC / P_chauf);
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcM2 * qty * (sectFact[fostKey] || 0.7) * R, source: 'official_162_PAC_geo'};
+  }
+
+  // V38.2b — Pattern 15 : absolute_per_perf_zone_sector_R (BAT-TH-163, 164 PAC)
+  function calcAbsolutePerPerfZoneSectorR(fiche, ctx) {
+    if (!['BAT-TH-163','BAT-TH-164'].includes(fiche.ref)) return null;
+    var s = ctx.smart || {};
+    var etasKey = (fiche.ref === 'BAT-TH-163') ? 'etas_163' : 'etas_164';
+    var pPacKey = (fiche.ref === 'BAT-TH-163') ? 'P_PAC_163' : 'P_PAC_164';
+    var pChaufKey = (fiche.ref === 'BAT-TH-163') ? 'P_chaufferie_163' : 'P_chaufferie_164';
+    var etas = s[etasKey] || '126_175';
+    var P_PAC = parseFloat(s[pPacKey]); var P_chauf = parseFloat(s[pChaufKey]);
+    if (!P_PAC || P_PAC < 30 || !P_chauf) return null;
+    var t = {
+      '111_126': {H1: 1100, H2: 900,  H3: 600},
+      '126_175': {H1: 1200, H2: 1000, H3: 700},
+      'sup_175': {H1: 1300, H2: 1000, H3: 700}
+    };
+    var sectFact = {bureaux: 1.2, enseignement: 0.8, commerces: 0.9, hotellerie_restauration: 0.7, sante: 1.1, autres: 0.7};
+    var fostKey = mapAppSectorToFost(ctx.sector || 'autres');
+    var perfTable = t[etas] || t['126_175'];
+    var kwhcM2 = perfTable[ctx.zone] || perfTable.H2;
+    var R = (P_PAC >= 0.4 * P_chauf) ? 1.0 : (P_PAC / P_chauf);
+    var qty = ctx.surface || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcM2 * qty * (sectFact[fostKey] || 0.7) * R, source: 'official_' + fiche.ref + '_PAC'};
   }
 
   // V30: Mapping secteur app → secteur FOST
