@@ -4126,11 +4126,15 @@
     {ref:"AGRI-TH-102",label:"Stockage eau chaude",sector:"AGRI",cat:"Thermique",unit:"m³",z:{H1:4800,H2:4000,H3:2800,DOM:2400},active:true,gisements:["ecs"]},
     {ref:"AGRI-TH-103",label:"Pré-refroidisseur de lait",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:5000,H2:5000,H3:5000,DOM:5000},active:true,gisements:["froid"]},
     {ref:"AGRI-TH-105",label:"Récupération chaleur tank à lait",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:8600,H2:8600,H3:8600,DOM:8600},active:true,gisements:["froid","ecs"],zeroEuro:true},
-    {ref:"AGRI-TH-108",label:"Chauffage infrarouge élevage",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:5700,H2:4700,H3:3300,DOM:2900},active:true,gisements:["chauffage_batiment"]},
+    // V38.4a — RELABEL critique : catalog disait "Chauffage infrarouge élevage" (FAUX). PDF officiel = PAC pour serres maraîchères.
+    // Source : https://www.ecologie.gouv.fr/sites/default/files/documents/AGRI-TH-108.pdf
+    {ref:"AGRI-TH-108",label:"PAC eau/eau ou air/eau pour serres maraîchères/horticoles",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:5700,H2:4700,H3:3300,DOM:2900},active:true,note:"V38.4a label corrigé (catalog avait FAUX label 'chauffage infrarouge élevage'). PDF = PAC serres avec COP ≥3.4 si P>400kW. Valeurs z à vérifier prochain audit.",gisements:["chauffage_batiment","ecs"]},
     {ref:"AGRI-TH-109",label:"Récupérateur condensation serre",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:4800,H2:4000,H3:2800,DOM:2400},active:true,gisements:["chauffage_batiment"]},
     {ref:"AGRI-TH-110",label:"Chaudière HPE serres",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:3200,H2:2700,H3:1900,DOM:1600},active:true,note:"vA54-3 01/01/2024",gisements:["chauffage_batiment"]},
     {ref:"AGRI-TH-113",label:"Échangeur récupérateur chaleur élevage volailles",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:5400,H2:4500,H3:3200,DOM:2700},active:true,gisements:["ventilation","chauffage_batiment"]},
-    {ref:"AGRI-TH-114",label:"Récupération chaleur fumées chaudière",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:4000,H2:3300,H3:2300,DOM:2000},active:true,gisements:["chauffage_batiment"]},
+    // V38.4a — DÉSACTIVÉE : AGRI-TH-114 n'existe PAS dans le référentiel ministériel (vérifié ATEE/ADEME 2025-2026).
+    // Probable confusion avec AGRI-TH-116 (récup chaleur fatale procédé pour serre/élevage).
+    {ref:"AGRI-TH-114",label:"Récupération chaleur fumées chaudière (FICHE INEXISTANTE)",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:4000,H2:3300,H3:2300,DOM:2000},active:false,note:"V38.4a — ABROGÉE/INEXISTANTE — voir AGRI-TH-116",gisements:["chauffage_batiment"]},
     {ref:"AGRI-TH-117",label:"Déshumidificateur thermodynamique serres",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:8200,H2:6800,H3:4800,DOM:4100},active:true,note:"vA73-3 01/09/2025",zeroEuro:true,gisements:["chauffage_batiment"]},
     {ref:"AGRI-TH-118",label:"Double tube de chauffage serres",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:3100,H2:2600,H3:1800,DOM:1500},active:true,gisements:["chauffage_batiment"]},
     {ref:"AGRI-TH-119",label:"Déshumidification air extérieur",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:4800,H2:4000,H3:2800,DOM:2400},active:true,gisements:["ventilation"]},
@@ -4309,7 +4313,10 @@
     {ref:"IND-UT-102",label:"VEV moteur asynchrone industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:4800,H2:4800,H3:4800,DOM:4800},active:true,gisements:["motorisation"]},
     {ref:"IND-UT-103",label:"Compresseur air performant industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:7800,H2:7800,H3:7800,DOM:7800},active:true,gisements:["air_comprime"]},
     {ref:"IND-UT-104",label:"Moteur haut rendement IE3/IE4",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:2200,H2:2200,H3:2200,DOM:2200},active:true,gisements:["motorisation"]},
-    {ref:"IND-UT-105",label:"Brûleur micro-modulant",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:18800,H2:15400,H3:11000,DOM:7400},active:true,gisements:["chauffage_batiment","process_thermique"]},
+    // V38.4a ⚠ FIX URGENCE PNCEE : catalog SUR-évalué ×8-30. Valeur conservatrice cas 1×8h (550 kWhc/kW).
+    // Source : PDF officiel mentionne table par mode horaires (1×8h=550, 2×8h=1200, 3×8h_arrêt_WE=1600, 3×8h_continu=2300).
+    // Pour vraie précision : besoin input mode horaires (V38.4b avec model_type).
+    {ref:"IND-UT-105",label:"Brûleur micro-modulant chaudière industrielle (P<20MW)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:550,H2:550,H3:550,DOM:550},active:true,note:"V38.4a — valeur cas 1×8h (PDF) — précisez horaires pour exactitude (jusqu'à 2300 kWhc/kW si 3×8h continu). Ancien catalog 18800 = SUR ×8-30, risque rejet PNCEE.",gisements:["chauffage_batiment","process_thermique"]},
     {ref:"IND-UT-113",label:"Récupérateur chaleur fumées chaudière",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12400,H2:10200,H3:7300,DOM:4900},active:true,gisements:["chauffage_batiment","process_thermique"]},
     {ref:"IND-UT-114",label:"Moto-variateur synchrone aimants",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:6100,H2:6100,H3:6100,DOM:6100},active:true,gisements:["motorisation"]},
     {ref:"IND-UT-116",label:"Régulation haute pression flottante",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:16400,H2:16400,H3:16400,DOM:16400},active:true,zeroEuro:true,gisements:["froid","regulation_gtb"]},
@@ -4337,7 +4344,9 @@
     // === RÉSEAU (RES) ==========================
     // ============================================
     {ref:"RES-CH-101",label:"Valorisation chaleur récupération réseau (ABROGÉE)",sector:"RES",cat:"Réseaux",unit:"logement",z:{H1:38600,H2:31600,H3:23900,DOM:15000},active:false,note:"V37.4.13 — ABROGÉE 01/10/2020 (calculateur ADEME ne la liste plus). Libellé code 'Raccordement réseau' INCORRECT. Raccordement tertiaire = BAT-TH-127, résidentiel = BAR-TH-137",gisements:["reseau_chaleur"]},
-    {ref:"RES-CH-102",label:"Comptage individuel réseau chaleur",sector:"RES",cat:"Réseaux",unit:"logement",z:{H1:4500,H2:3700,H3:2800,DOM:1800},active:true,note:"vA65-1",gisements:["reseau_chaleur"]},
+    // V38.4a — DÉSACTIVÉE : RES-CH-102 n'existe PAS dans référentiel ministériel ATEE/ADEME 2025-2026.
+    // Fiches RES-CH existantes : 101 (abrogée), 103, 104, 105, 106, 107 (abrogée), 108. Pas de 102.
+    {ref:"RES-CH-102",label:"Comptage individuel réseau chaleur (FICHE INEXISTANTE)",sector:"RES",cat:"Réseaux",unit:"logement",z:{H1:4500,H2:3700,H3:2800,DOM:1800},active:false,note:"V38.4a — INEXISTANTE référentiel ministériel — vérifier code ou supprimer",gisements:["reseau_chaleur"]},
     {ref:"RES-CH-103",label:"Réhabilitation poste livraison chaleur tertiaire",sector:"RES",cat:"Chaleur",unit:"unité",z:{H1:14200,H2:11600,H3:8300,DOM:5500},active:true,gisements:["reseau_chaleur"]},
     {ref:"RES-CH-104",label:"Réhabilitation poste livraison chaleur résidentiel",sector:"RES",cat:"Chaleur",unit:"unité",z:{H1:14200,H2:11600,H3:8300,DOM:5500},active:true,gisements:["reseau_chaleur"]},
     {ref:"RES-CH-105",label:"Passage réseau basse température",sector:"RES",cat:"Chaleur",unit:"m",z:{H1:75,H2:61,H3:44,DOM:29},active:true,gisements:["reseau_chaleur"]},
@@ -4397,7 +4406,9 @@
   {ref:"BAT-TH-121",surface_ratio:0.02,label:"Chauffe-eau solaire DOM tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:5500,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA35-3 [V26:ajouté]",gisements:["ecs"]},
   {ref:"BAT-TH-122",label:"Programmateur intermittence clim DOM",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:0,H2:0,H3:0,DOM:2400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"[V26:ajouté]",gisements:["regulation_gtb"]},
   // === INDUSTRIE ADDITIONNELLES ===
-  {ref:"IND-UT-101",label:"Management énergétique ISO 50001",sector:"IND",cat:"Management",unit:"site",z:{H1:850000,H2:850000,H3:850000,DOM:850000},active:true,note:"vA64 [V26:ajouté]",gisements:["process_thermique"]},
+  // V38.4a — DÉSACTIVÉE : IND-UT-101 N'EST PAS UNE FOST. C'est le programme PRO-SMEn (EDF), hors fiches standardisées.
+  // Le mesurage IPE pour bonification se fait via IND-UT-134 (vraie FOST). Catalog 850000/site invalide.
+  {ref:"IND-UT-101",label:"ISO 50001 — programme PRO-SMEn (PAS UNE FOST)",sector:"IND",cat:"Management",unit:"site",z:{H1:850000,H2:850000,H3:850000,DOM:850000},active:false,note:"V38.4a — PAS une fiche standardisée. Voir programme PRO-SMEn EDF (hors FOST) ou IND-UT-134 (mesurage IPE).",gisements:["process_thermique"]},
   {ref:"IND-UT-106",label:"Brûleur micro-modulant condensation",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:175,H2:150,H3:120,DOM:90},active:true,note:"vA64 [V26:ajouté]",gisements:["chauffage_batiment"]},
   {ref:"IND-UT-108",label:"Détection fuites réseau air comprimé",sector:"IND",cat:"Air comprimé",unit:"kW",z:{H1:3600,H2:3600,H3:3600,DOM:3600},active:true,note:"vA73 [V26:ajouté]",zeroEuro:true,gisements:["air_comprime"]},
   {ref:"IND-UT-109",label:"Optimisation production froid industriel",sector:"IND",cat:"Froid",unit:"kW froid",z:{H1:4200,H2:3800,H3:3200,DOM:2600},active:true,note:"vA64 [V26:ajouté]",gisements:["froid"]},
