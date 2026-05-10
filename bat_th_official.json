@@ -1,0 +1,252 @@
+{
+  "_meta": {
+    "version": "V37.4.25",
+    "date": "2026-05-10",
+    "source": "Audit agent ecologie.gouv.fr + calculateur-cee.ademe.fr",
+    "purpose": "Stockage formules officielles 22 fiches BAT-TH avec modèles INCOMPATIBLES avec sectFactor multiplicateur. Permet : (1) badge UI transparence PDF officiel, (2) refactor moteur calcul V38."
+  },
+  "model_types": {
+    "fixed_formula": "Formule pure sans secteur ni zone",
+    "absolute_per_sector_zone": "Table kWhc par (secteur, zone)",
+    "absolute_per_sector_zone_energy": "+ axe énergie (combustible/électricité)",
+    "absolute_per_sector_usage_class_zone": "Multi-axes GTB classe A/B",
+    "absolute_per_sector_usage_power_zone": "+ switch puissance ≤/>400 kW",
+    "absolute_per_zone_sector_type": "Modulé/constant + facteur correctif secteur",
+    "absolute_per_application_zone_condensation": "Froid : 3 applications × condensation",
+    "absolute_per_application": "Forfait par usage (refrigeration/climatisation)",
+    "absolute_per_zone_systeme_chauffage": "Zone × convectif/radiatif",
+    "double_formula_chauffage_rafraichissement": "Mch + Mra avec matrice secteur×zone",
+    "absolute_per_sector_zone_debits": "Eaux grises secteur × zone × débits égaux/inégaux",
+    "absolute_per_zone_temperature_secteur": "Freecooling zone × T° × DC coef",
+    "absolute_per_unit_power": "Forfait par groupe selon puissance",
+    "absolute_per_perf_zone_usage_sector_R": "PAC géothermie multi-axes + facteur R",
+    "absolute_per_perf_zone_sector_R": "PAC sans usage ECS + facteur R"
+  },
+  "fiches": {
+    "BAT-TH-108": {
+      "label": "Système de régulation par programmation d'intermittence",
+      "version": "vA22.1",
+      "model_type": "absolute_per_sector_zone_energy",
+      "unit": "m²",
+      "formula": "kWhc = montant(secteur, énergie) × surface × facteur_zone",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/169/BAT-TH-108",
+      "duree_vie_ans": 12,
+      "non_cumulable": ["BAT-TH-109", "BAT-TH-116"]
+    },
+    "BAT-TH-109": {
+      "label": "Optimiseur de relance en chauffage collectif (auto-adaptatif)",
+      "version": "vA54.3",
+      "model_type": "absolute_per_sector_zone",
+      "unit": "m²",
+      "formula": "kWhc = montant_secteur × surface × facteur_zone",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/232/BAT-TH-109",
+      "duree_vie_ans": 15,
+      "non_cumulable": ["BAT-TH-108", "BAT-TH-116"]
+    },
+    "BAT-TH-111": {
+      "label": "Chauffe-eau solaire collectif (France métropolitaine)",
+      "version": "vA17.1",
+      "model_type": "fixed_formula",
+      "unit": "kWh/an besoin ECS",
+      "formula": "kWhc = B × T × 0,196",
+      "inputs": {"B": "besoin annuel ECS solaire kWh/an", "T": "taux couverture solaire en %"},
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/145/BAT-TH-111",
+      "duree_vie_ans": 22,
+      "remplace_aussi": "BAT-TH-101 (n'existe pas en tertiaire)"
+    },
+    "BAT-TH-116": {
+      "label": "GTB chauffage/ECS/climatisation/éclairage/auxiliaires (classes A et B)",
+      "version": "vA62.6",
+      "model_type": "absolute_per_sector_usage_class_zone",
+      "unit": "m² par usage",
+      "formula": "kWhc = SOMME(usage : montant_secteur_classe_usage × surface_usage) × facteur_zone",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/153/BAT-TH-116",
+      "duree_vie_ans": 15,
+      "switch": "Classe A ou B"
+    },
+    "BAT-TH-125": {
+      "label": "VMC simple flux à débit constant ou modulé (tertiaire)",
+      "version": "vA32.2",
+      "model_type": "absolute_per_zone_sector_type",
+      "unit": "m² ventilé",
+      "formula": "kWhc = montant(zone,type) × surface × facteur_correctif_secteur",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAT-TH-125%20v%20A32-2%20%C3%A0%20compter%20du%2001-04-2020.pdf",
+      "duree_vie_ans": 17,
+      "switch": "Type ventilation : modulée proportionnelle / modulée détection présence / débit constant"
+    },
+    "BAT-TH-126": {
+      "label": "VMC double flux avec échangeur (tertiaire)",
+      "version": "vA32.2",
+      "model_type": "absolute_per_zone_sector_type",
+      "unit": "m² ventilé",
+      "formula": "kWhc = montant(zone,type) × surface × facteur_correctif_secteur",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAT-TH-126%20v%20A32-2%20%C3%A0%20compter%20du%2001-04-2020.pdf",
+      "duree_vie_ans": 17,
+      "switch": "Type ventilation : modulée proportionnelle / modulée détection présence / débit constant"
+    },
+    "BAT-TH-127": {
+      "label": "Raccordement d'un bâtiment tertiaire à un réseau de chaleur",
+      "version": "vA45.4",
+      "model_type": "absolute_per_sector_usage_power_zone",
+      "unit": "m² chauffé",
+      "formula": "kWhc = montant(secteur, usage, puissance) × surface × facteur_zone",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/309/BAT-TH-127",
+      "duree_vie_ans": 30,
+      "switch": "Puissance ≤ 400 kW ou > 400 kW · Usage chauffage seul ou +ECS"
+    },
+    "BAT-TH-134": {
+      "label": "Régulation HP flottante groupe froid (métropole)",
+      "version": "vA22.1",
+      "model_type": "absolute_per_application_zone_condensation",
+      "unit": "kW électrique",
+      "formula": "kWhc = montant(application, zone, condensation) × P_kW",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/172/BAT-TH-134",
+      "duree_vie_ans": 14,
+      "switch": "Application : confort/datacenter/réfrigération · Condensation : atmosphère/eau"
+    },
+    "BAT-TH-135": {
+      "label": "Régulation HP flottante groupe froid (DOM)",
+      "version": "vA26.1",
+      "model_type": "absolute_per_application",
+      "unit": "kW",
+      "formula": "kWhc = montant_application × P_kW",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/193/BAT-TH-135",
+      "duree_vie_ans": 10,
+      "scope": "DOM uniquement"
+    },
+    "BAT-TH-139": {
+      "label": "Récupération de chaleur sur groupe de production de froid",
+      "version": "vA35.3",
+      "model_type": "fixed_formula",
+      "unit": "kW thermique × heures",
+      "formula": "kWhc = D × 9,9 × P_recuperee",
+      "inputs": {"D": "durée annuelle utilisation chaleur récupérée (h)", "P_recuperee": "kW (cap : ≤ 2×P_compresseurs − P_deja_recup)"},
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/268/BAT-TH-139",
+      "duree_vie_ans": 14
+    },
+    "BAT-TH-142": {
+      "label": "Système de déstratification d'air (métropole)",
+      "version": "vA71.4",
+      "model_type": "absolute_per_zone_systeme_chauffage",
+      "unit": "kW puissance chauffage local",
+      "formula": "kWhc = montant(zone, type) × P_chauffage_kW",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/184/BAT-TH-142",
+      "duree_vie_ans": 15,
+      "exigences": "Hauteur sous plafond ≥ 5 m · T° consigne ≥ 15°C"
+    },
+    "BAT-TH-143": {
+      "label": "Ventilo-convecteurs haute performance",
+      "version": "vA16.1",
+      "model_type": "double_formula_chauffage_rafraichissement",
+      "unit": "m²",
+      "formula": "kWhc = Mch + Mra (chauffage + rafraîchissement, matrice secteur×zone)",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/129/BAT-TH-143",
+      "duree_vie_ans": 15,
+      "exigences": "Surface ≤ 10 000 m² · Label Eurovent classe A obligatoire"
+    },
+    "BAT-TH-145": {
+      "label": "Régulation BP flottante groupe froid (métropole)",
+      "version": "vA23.1",
+      "model_type": "absolute_per_application",
+      "unit": "kW",
+      "formula": "kWhc = montant_application × P_kW",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/176/BAT-TH-145",
+      "duree_vie_ans": 14,
+      "exclusions": "Datacenters EXCLUS"
+    },
+    "BAT-TH-153": {
+      "label": "Confinement allées froides/chaudes Data Center",
+      "version": "vA28.1",
+      "model_type": "fixed_formula",
+      "unit": "kW × °C",
+      "formula": "kWhc = 1500 × ΔT × P_kW",
+      "inputs": {"P": "puissance électrique groupe froid (kW)", "ΔT": "augmentation T° consigne eau glacée (°C)"},
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/221/BAT-TH-153",
+      "duree_vie_ans": 15,
+      "exigences": "T° soufflage ≥ 22°C · Parois rigides étanches"
+    },
+    "BAT-TH-154": {
+      "label": "Récupération chaleur sur eaux grises",
+      "version": "vA28.1",
+      "model_type": "absolute_per_sector_zone_debits",
+      "unit": "chambres / douches / salons / baigneurs",
+      "formula": "kWhc = montant(secteur, zone, débits) × N × ε (efficacité)",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/222/BAT-TH-154",
+      "duree_vie_ans": 15,
+      "switch": "Débits égaux ou inégaux · Efficacité ε ≥ 35%"
+    },
+    "BAT-TH-156": {
+      "label": "Freecooling par eau de refroidissement (climatisation)",
+      "version": "vA31.1",
+      "model_type": "absolute_per_zone_temperature_secteur",
+      "unit": "kW compresseurs",
+      "formula": "kWhc = montant(zone, T°) × P_compresseurs × coef_secteur (1 ou 4.5 si DC)",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/234/BAT-TH-156",
+      "duree_vie_ans": 14,
+      "switch": "Plage T° consigne [15;18[°C ou [18;20]°C · Datacenter ou non"
+    },
+    "BAT-TH-157": {
+      "label": "Chaudière biomasse collective (tertiaire)",
+      "version": "vA50.2",
+      "model_type": "fixed_formula",
+      "unit": "kWh/an chaleur nette utile",
+      "formula": "kWhc = Q × 4,8 (P≤500kW) ou Q × 3,4 (P>500kW)",
+      "inputs": {"Q": "chaleur nette utile produite (kWh/an, < 12 GWh/an)"},
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/315/BAT-TH-157",
+      "duree_vie_ans": 22,
+      "exigences": "Biomasse ligneuse · Régulateur classe IV+ · Silo ≥ 225 L"
+    },
+    "BAT-TH-159": {
+      "label": "Raccordement d'un bâtiment tertiaire à un réseau de froid",
+      "version": "vA40.1",
+      "model_type": "absolute_per_sector_zone",
+      "unit": "kW puissance souscrite",
+      "formula": "kWhc = montant_secteur × P_souscrite × facteur_zone (INVERSÉ : H3 plus chaud = plus de kWhc)",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/296/BAT-TH-159",
+      "duree_vie_ans": 36,
+      "warning": "Facteur zone INVERSÉ : H1=1.0 / H2=1.3 / H3=1.8 (différent fiches chauffage)"
+    },
+    "BAT-TH-161": {
+      "label": "Maintien T° groupes électrogènes par PAC air/eau",
+      "version": "vA62.1",
+      "model_type": "absolute_per_unit_power",
+      "unit": "groupe électrogène (forfait)",
+      "formula": "kWhc = forfait(puissance) × N (167 800 si 800-1200 kW · 279 600 si > 1200 kW)",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/355/BAT-TH-161",
+      "duree_vie_ans": 11,
+      "scope": "Data center OU hôpital · P_groupe ≥ 800 kW"
+    },
+    "BAT-TH-162": {
+      "label": "Système géothermique (PAC + captage)",
+      "version": "vA81.2",
+      "model_type": "absolute_per_perf_zone_usage_sector_R",
+      "unit": "m² chauffé par PAC",
+      "formula": "kWhc = montant(perf, zone, usage) × surface × facteur_secteur × R (atténuateur si chaufferie hybride)",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/374/BAT-TH-162",
+      "duree_vie_ans": 25,
+      "switch": "P_PAC ≤/>400 kW · Etas (111-126%, 126-175%, >175%) ou COP (4-5, >5) · Usage chauffage seul ou +ECS",
+      "facteur_R": "1.0 si P_PAC ≥ 40% chaufferie · sinon R = P_PAC / P_chaufferie"
+    },
+    "BAT-TH-163": {
+      "label": "Pompe à chaleur de type air/eau (tertiaire)",
+      "version": "vA81.2",
+      "model_type": "absolute_per_perf_zone_sector_R",
+      "unit": "m² chauffé par PAC",
+      "formula": "kWhc = montant(perf, zone) × surface × facteur_secteur × R",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/46/BAT-TH-163",
+      "duree_vie_ans": 22,
+      "switch": "P_PAC ≤/>400 kW · Etas (111-126%, 126-175%, >175%) ou COP (3.4-4.5, >4.5)",
+      "remplace": "BAT-TH-113 (abrogée 01/01/2026)"
+    },
+    "BAT-TH-164": {
+      "label": "Pompe à chaleur eau/eau ou eau glycolée/eau (hors géothermie)",
+      "version": "vA81.2",
+      "model_type": "absolute_per_perf_zone_sector_R",
+      "unit": "m² chauffé par PAC",
+      "formula": "kWhc = montant(perf, zone) × surface × facteur_secteur × R",
+      "pdf_url": "https://calculateur-cee.ademe.fr/pdf/display/373/BAT-TH-164",
+      "duree_vie_ans": 22,
+      "non_cumulable": ["BAT-TH-162"]
+    }
+  }
+}

@@ -14480,6 +14480,8 @@ window.V2 = {
     // V37.4.22 — Activer FAB Jarvis quand V2 actif
     var fab = document.getElementById('v2JarvisFab');
     if (fab) fab.style.display = 'flex';
+    // V37.4.25 — Précharger les formules officielles BAT-TH (background)
+    this._loadBatThOfficial().catch(function(){});
     this.go(this.state.currentPage);
   },
 
@@ -15897,6 +15899,11 @@ window.V2 = {
           var infoTitle = (f.formuleOfficielle ? 'Formule officielle : ' + f.formuleOfficielle + ' · ' : '') + (f.note || '');
           html += ' <span style="margin-left:6px;cursor:help;color:#58a6ff;" title="' + infoTitle.replace(/"/g,"'") + '">ⓘ</span>';
         }
+        // V37.4.25 — Badge PDF officiel ministère écologie pour fiches du registre bat_th_official.json
+        var off = this._getOfficialFormula(ref);
+        if (off && off.pdf_url) {
+          html += ' <a href="' + off.pdf_url + '" target="_blank" rel="noopener" style="margin-left:6px;color:#bc8cff;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.3);padding:1px 6px;border-radius:3px;" title="' + (off.formula || '').replace(/"/g,"'") + ' · ' + (off.version || '') + '">📄 PDF officiel</a>';
+        }
         html += '</div>';
         // V37.4.18 — Cumul CEE + MaPrimeRénov' si calculCumulAides V1 dispo
         if (typeof window.calculCumulAides === 'function') {
@@ -16373,6 +16380,22 @@ window.V2 = {
       if (e.code === 401) c.innerHTML = this._authModal('/post-signature/dashboard requiert connexion');
       else c.innerHTML = '<div style="padding:14px;background:rgba(248,81,73,.06);border-left:3px solid #ff7b72;border-radius:0 6px 6px 0;font-size:12px;color:rgba(245,245,247,.75);">⚠ Endpoint /post-signature/dashboard indisponible (' + (e.message || e) + ').<br>Le calendrier réglementaire ci-dessous reste utilisable comme référence universelle.</div>';
     }
+  },
+
+  // V37.4.25 — Cache des formules officielles BAT-TH (chargé au activate)
+  async _loadBatThOfficial() {
+    if (this._batThOfficialCache) return this._batThOfficialCache;
+    try {
+      var resp = await fetch('/bat_th_official.json', {cache:'force-cache'});
+      this._batThOfficialCache = await resp.json();
+    } catch (e) { this._batThOfficialCache = {fiches:{}}; }
+    return this._batThOfficialCache;
+  },
+  // Récupère l'entrée officielle pour une fiche (ou null)
+  _getOfficialFormula(ref) {
+    var c = this._batThOfficialCache;
+    if (!c || !c.fiches) return null;
+    return c.fiches[ref] || null;
   },
 
   // V37.4.21 — Onboarding ludique V2 ULTRA-COMPACT (1 ligne) + dismissable
@@ -17035,6 +17058,11 @@ window.V2 = {
         if (f.note || f.formuleOfficielle) {
           var infoTitleP6 = (f.formuleOfficielle ? 'Formule officielle : ' + f.formuleOfficielle + ' · ' : '') + (f.note || '');
           html += ' <span style="margin-left:6px;cursor:help;color:#58a6ff;" title="' + infoTitleP6.replace(/"/g,"'") + '">ⓘ</span>';
+        }
+        // V37.4.25 — Badge PDF officiel pour fiches BAT-TH du registre
+        var offP6 = this._getOfficialFormula(ref);
+        if (offP6 && offP6.pdf_url) {
+          html += ' <a href="' + offP6.pdf_url + '" target="_blank" rel="noopener" style="margin-left:6px;color:#bc8cff;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.3);padding:1px 6px;border-radius:3px;" title="' + (offP6.formula || '').replace(/"/g,"'") + ' · ' + (offP6.version || '') + '">📄 PDF officiel</a>';
         }
         html += '</div>';
         if (calc.unitWarning) {
