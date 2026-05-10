@@ -4347,14 +4347,24 @@
     // V38.4a — DÉSACTIVÉE : RES-CH-102 n'existe PAS dans référentiel ministériel ATEE/ADEME 2025-2026.
     // Fiches RES-CH existantes : 101 (abrogée), 103, 104, 105, 106, 107 (abrogée), 108. Pas de 102.
     {ref:"RES-CH-102",label:"Comptage individuel réseau chaleur (FICHE INEXISTANTE)",sector:"RES",cat:"Réseaux",unit:"logement",z:{H1:4500,H2:3700,H3:2800,DOM:1800},active:false,note:"V38.4a — INEXISTANTE référentiel ministériel — vérifier code ou supprimer",gisements:["reseau_chaleur"]},
-    {ref:"RES-CH-103",label:"Réhabilitation poste livraison chaleur tertiaire",sector:"RES",cat:"Chaleur",unit:"unité",z:{H1:14200,H2:11600,H3:8300,DOM:5500},active:true,gisements:["reseau_chaleur"]},
-    {ref:"RES-CH-104",label:"Réhabilitation poste livraison chaleur résidentiel",sector:"RES",cat:"Chaleur",unit:"unité",z:{H1:14200,H2:11600,H3:8300,DOM:5500},active:true,gisements:["reseau_chaleur"]},
-    {ref:"RES-CH-105",label:"Passage réseau basse température",sector:"RES",cat:"Chaleur",unit:"m",z:{H1:75,H2:61,H3:44,DOM:29},active:true,gisements:["reseau_chaleur"]},
-    {ref:"RES-CH-106",label:"Calorifugeage canalisations réseau",sector:"RES",cat:"Chaleur",unit:"m",z:{H1:22,H2:18,H3:13,DOM:9},active:true,gisements:["reseau_chaleur"]},
+    // V38.4b — RES-CH-103 FIX_CRITICAL : unit était "unité" (mauvaise) → réel = m² × secteur × zone
+    // Source PDF vA36-3 : kWh/m² par secteur × facteur_zone × Surface
+    {ref:"RES-CH-103",model_type:"fixed_formula_secteur_zone_surface",officialTable:{secteurs:{bureaux:210,enseignement:140,sante:200,commerces:170,hotellerie_restauration:260,autres:140},zone_factor:{H1:1.1,H2:0.9,H3:0.6}},label:"Réhab. poste livraison chaleur tertiaire",sector:"RES",cat:"Chaleur",unit:"m²",z:{H1:189,H2:126,H3:84,DOM:0},active:true,note:"vA36-3 12/10/2020 — calcul officiel si secteur+surface_m2 renseignés",gisements:["reseau_chaleur"]},
+    // V38.4b — RES-CH-104 FIX_CRITICAL : unit était "unité" → réel = par appartement raccordé
+    {ref:"RES-CH-104",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:18300,H2:15200,H3:11200}},label:"Réhab. poste livraison chaleur résidentiel",sector:"RES",cat:"Chaleur",unit:"appartement",z:{H1:18300,H2:15200,H3:11200,DOM:0},active:true,note:"vA36-3 12/10/2020 — par appartement (catalog avait FAUX 'unité' + valeurs SOUS ×65)",gisements:["reseau_chaleur"]},
+    // V38.4b — RES-CH-105 FIX : valeurs PDF cas display (DN150 / 12 mois eau chaude). REFACTO_V39 pour multi-axes DN×durée
+    {ref:"RES-CH-105",label:"Passage réseau de chaleur en basse température",sector:"RES",cat:"Chaleur",unit:"m",z:{H1:7200,H2:7200,H3:7200,DOM:0},active:true,note:"vA36-3 — display=DN150/12mois (kWhc varie ×8.7 selon DN). REFACTO V39 pour calcul DN exact",gisements:["reseau_chaleur"]},
+    // V38.4b — RES-CH-106 FIX : valeurs PDF cas display (DN100 eau surchauffée série 1-3). REFACTO_V39 pour multi-axes
+    {ref:"RES-CH-106",label:"Calorifugeage canalisations réseau de chaleur",sector:"RES",cat:"Chaleur",unit:"m",z:{H1:11500,H2:11500,H3:11500,DOM:0},active:true,note:"vA60-4 01/03/2024 — display=DN100 eau surchauffée (varie ×40 selon DN/fluide/classe). REFACTO V39",gisements:["reseau_chaleur","isolation_enveloppe"]},
     {ref:"RES-CH-107",label:"Isolation points singuliers réseau chaleur (ABROGÉE)",sector:"RES",cat:"Réseaux",unit:"ml",z:{H1:8500,H2:7000,H3:5200,DOM:3500},active:false,note:"V37.4.13 — ABROGÉE 01/08/2025 (71e arrêté JO 8/07/2025, JORFTEXT000051857168). Libellé code 'Extension réseau' INCORRECT (officiel : 'Isolation points singuliers')",gisements:["reseau_chaleur"]},
-    {ref:"RES-CH-108",label:"Récupération chaleur fatale réseau",sector:"RES",cat:"Chaleur",unit:"MWh",z:{H1:360,H2:360,H3:360,DOM:360},active:true,gisements:["reseau_chaleur","process_thermique"]},
-    {ref:"RES-EC-103",label:"Réhabilitation réseau de chaleur",sector:"RES",cat:"Réseaux",unit:"ml",z:{H1:3800,H2:3100,H3:2300,DOM:1500},active:true,note:"vA65-2",gisements:["reseau_chaleur"]},
-    {ref:"RES-EC-104",label:"Rénovation éclairage extérieur",sector:"RES",cat:"Éclairage",unit:"kW",z:{H1:21000,H2:21000,H3:21000,DOM:21000},active:true,note:"vA77 26/11/2025",gisements:["eclairage_exterieur"]},
+    // V38.4b — RES-CH-108 FIX_CRITICAL : SOUS ×39.3 ! Coef officiel = 14.134 par kWh/an (pas 360 par MWh)
+    // Source : PDF vA53-4 01/10/2023, abrogation prévue 01/10/2028
+    {ref:"RES-CH-108",model_type:"fixed_formula_Q",officialTable:{coefficient:14.134,unit_input:"kWh/an",max:11999999,abrogation_prevue:"2028-10-01"},label:"Récup. chaleur fatale → réseau ou tiers",sector:"RES",cat:"Chaleur",unit:"kWh/an",z:{H1:14.134,H2:14.134,H3:14.134,DOM:0},active:true,note:"vA53-4 01/10/2023 — métropole, Q<12 GWh/an. Catalog 360/MWh = SOUS ×39.3",gisements:["reseau_chaleur","process_thermique"]},
+    // V38.4b — RES-EC-103 ⚠ URGENCE : LABEL TOTALEMENT FAUX corrigé (catalog disait "réhab réseau chaleur" — c'est ÉCLAIRAGE !)
+    // Source : PDF vA14-1, formule kWhc = 8 × P(W). Note vA65-2 du catalog était INVENTÉE.
+    {ref:"RES-EC-103",model_type:"fixed_formula_per_W",officialTable:{coefficient:8,unit_input:"W"},label:"Système variation puissance éclairage extérieur",sector:"RES",cat:"Éclairage",unit:"W",z:{H1:8,H2:8,H3:8,DOM:8},active:true,note:"vA14-1 — formule 8×P(W). Non cumulable RES-EC-104 sur même luminaire. Catalog avait LABEL INVENTÉ 'réhab réseau chaleur' — corrigé V38.4b",gisements:["eclairage_exterieur"]},
+    // V38.4b — RES-EC-104 FIX : par luminaire (pas par kW). Restriction collectivité publique obligatoire.
+    {ref:"RES-EC-104",model_type:"absolute_per_luminaire_with_mode",officialTable:{by_mode:{gradation_seule:4000,gradation_et_detection_presence:5600},beneficiaire:"public_only",applicable_jusqu:"2030-01-01"},label:"Rénovation éclairage extérieur LED (collectivités)",sector:"RES",cat:"Éclairage",unit:"luminaire",z:{H1:5600,H2:5600,H3:5600,DOM:5600},active:true,note:"vA77-3 26/11/2025 — display=mode détection. Bénéficiaire OBLIGATOIRE = collectivité publique. Non cumulable RES-EC-103. Applicable jusqu'au 01/01/2030",gisements:["eclairage_exterieur"]},
 
     // ============================================
     // === TRANSPORT (TRA) =======================
@@ -5047,6 +5057,11 @@
         // V38.3 — 2 patterns BAR résidentiel simples
         case 'absolute_per_zone':                        return calcAbsolutePerZone(fiche, ctx);
         case 'absolute_per_logement':                    return calcAbsolutePerLogement(fiche, ctx);
+        // V38.4b — 4 patterns RES (réseaux chaleur/froid + éclairage extérieur)
+        case 'fixed_formula_Q':                          return calcFixedFormulaQ(fiche, ctx);
+        case 'fixed_formula_per_W':                      return calcFixedFormulaPerW(fiche, ctx);
+        case 'absolute_per_luminaire_with_mode':         return calcAbsolutePerLuminaireWithMode(fiche, ctx);
+        case 'fixed_formula_secteur_zone_surface':       return calcFixedFormulaSecteurZoneSurface(fiche, ctx);
         default: return null;
       }
     } catch (e) {
@@ -5420,6 +5435,57 @@
     var qty = parseFloat(s.surface_m2) || ctx.qty || 0;
     if (qty <= 0) return null;
     return {kwhcTotal: kwhcUnit * qty, source: 'official_per_zone_BAR'};
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // V38.4b — 4 calculateurs RES (réseaux chaleur/froid + éclairage extérieur)
+  // ════════════════════════════════════════════════════════════════
+
+  // V38.4b — Pattern 18 : fixed_formula_Q (RES-CH-108 récup chaleur fatale)
+  // kWhc = coef × Q (kWh/an), Q strictement < 12 GWh/an
+  function calcFixedFormulaQ(fiche, ctx) {
+    if (!fiche.officialTable || fiche.officialTable.coefficient == null) return null;
+    var s = ctx.smart || {};
+    var Q = parseFloat(s.Q_kWh_an); if (!Q || Q <= 0) return null;
+    var max = fiche.officialTable.max || Infinity;
+    if (Q >= max) Q = max - 1; // cap
+    return {kwhcTotal: fiche.officialTable.coefficient * Q, source: 'official_fixed_formula_Q'};
+  }
+
+  // V38.4b — Pattern 19 : fixed_formula_per_W (RES-EC-103 variation puissance éclairage)
+  // kWhc = 8 × P (W installée éclairage régulé)
+  function calcFixedFormulaPerW(fiche, ctx) {
+    var s = ctx.smart || {};
+    var P = parseFloat(s.puissance_W); if (!P || P <= 0) return null;
+    var coef = (fiche.officialTable && fiche.officialTable.coefficient) || 8;
+    return {kwhcTotal: coef * P, source: 'official_per_W'};
+  }
+
+  // V38.4b — Pattern 20 : absolute_per_luminaire_with_mode (RES-EC-104 rénov LED extérieur)
+  // kWhc = forfait_mode × N_luminaires
+  // Restriction : bénéficiaire DOIT être collectivité publique
+  function calcAbsolutePerLuminaireWithMode(fiche, ctx) {
+    if (!fiche.officialTable || !fiche.officialTable.by_mode) return null;
+    var s = ctx.smart || {};
+    var N = parseFloat(s.nombre_luminaires); if (!N || N <= 0) return null;
+    var mode = s.mode_gestion || 'gradation_seule';
+    var forfait = fiche.officialTable.by_mode[mode];
+    if (!forfait) return null;
+    return {kwhcTotal: forfait * N, source: 'official_per_luminaire_mode'};
+  }
+
+  // V38.4b — Pattern 21 : fixed_formula_secteur_zone_surface (RES-CH-103 réhab poste tertiaire)
+  // kWhc = kWh/m² (selon secteur) × facteur_zone × Surface
+  function calcFixedFormulaSecteurZoneSurface(fiche, ctx) {
+    if (!fiche.officialTable || !fiche.officialTable.secteurs || !fiche.officialTable.zone_factor) return null;
+    var s = ctx.smart || {};
+    var surf = parseFloat(s.surface_m2_127 || s.surface_m2 || ctx.surface || 0);
+    if (surf <= 0) return null;
+    var sectKey = s.secteur_127 || mapAppSectorToFost(ctx.sector || 'autres');
+    var sectKwh = fiche.officialTable.secteurs[sectKey];
+    if (sectKwh == null) sectKwh = fiche.officialTable.secteurs.autres || 0;
+    var zoneFactor = fiche.officialTable.zone_factor[ctx.zone] || fiche.officialTable.zone_factor.H2 || 0.9;
+    return {kwhcTotal: sectKwh * zoneFactor * surf, source: 'official_secteur_zone_surface'};
   }
 
   // V38.3 — Pattern 17 : absolute_per_logement (BAR-EN-109, BAR-TH-148)

@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "V38.3",
+    "version": "V38.4b",
     "date": "2026-05-10",
     "purpose": "Inputs requis par fiche BAT-TH pour calcul officiel exact (model_type). 22 fiches couvertes. Source : PDFs ministère écologie.",
-    "fiches_count": 34
+    "fiches_count": 39
   },
   "fiches": {
     "BAT-TH-111": {
@@ -828,6 +828,100 @@
           "type": "number",
           "min": 1,
           "default": 1
+        }
+      ]
+    },
+    "RES-CH-103": {
+      "model_type": "fixed_formula_secteur_zone_surface",
+      "label_fiche": "Réhab. poste livraison chaleur tertiaire",
+      "formula_summary": "kWhc = kWh/m²(secteur) × facteur_zone × Surface",
+      "inputs": [
+        {
+          "id": "secteur_127",
+          "label": "Secteur d'activité",
+          "type": "select",
+          "options": [
+            "bureaux",
+            "enseignement",
+            "sante",
+            "commerces",
+            "hotellerie_restauration",
+            "autres"
+          ]
+        },
+        {
+          "id": "surface_m2_127",
+          "label": "Surface chauffée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 50
+        }
+      ]
+    },
+    "RES-CH-104": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Réhab. poste livraison chaleur résidentiel (par appart)",
+      "formula_summary": "kWhc = montant_zone × N_appartements",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Nombre d'appartements raccordés",
+          "type": "number",
+          "unit": "appartement",
+          "min": 1
+        }
+      ]
+    },
+    "RES-CH-108": {
+      "model_type": "fixed_formula_Q",
+      "label_fiche": "Récupération chaleur fatale réseau",
+      "formula_summary": "kWhc = 14.134 × Q (kWh/an, max 12 GWh)",
+      "inputs": [
+        {
+          "id": "Q_kWh_an",
+          "label": "Chaleur valorisée annuelle (kWh/an, < 12 GWh)",
+          "type": "number",
+          "unit": "kWh/an",
+          "min": 1000,
+          "max": 11999999
+        }
+      ]
+    },
+    "RES-EC-103": {
+      "model_type": "fixed_formula_per_W",
+      "label_fiche": "Variation puissance éclairage extérieur",
+      "formula_summary": "kWhc = 8 × P (W installée régulée)",
+      "inputs": [
+        {
+          "id": "puissance_W",
+          "label": "Puissance éclairage régulée (W)",
+          "type": "number",
+          "unit": "W",
+          "min": 100
+        }
+      ]
+    },
+    "RES-EC-104": {
+      "model_type": "absolute_per_luminaire_with_mode",
+      "label_fiche": "Rénovation éclairage extérieur LED (collectivités)",
+      "formula_summary": "kWhc = forfait_mode × N (gradation 4000 / +détection 5600)",
+      "inputs": [
+        {
+          "id": "nombre_luminaires",
+          "label": "Nombre luminaires LED rééquipés",
+          "type": "number",
+          "unit": "luminaire",
+          "min": 1
+        },
+        {
+          "id": "mode_gestion",
+          "label": "Mode gestion",
+          "type": "select",
+          "options": [
+            "gradation_seule",
+            "gradation_et_detection_presence"
+          ],
+          "default": "gradation_et_detection_presence"
         }
       ]
     }
