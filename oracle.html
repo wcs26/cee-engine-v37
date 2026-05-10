@@ -4142,9 +4142,10 @@
     // ============================================
     // === RÉSIDENTIEL (BAR) =====================
     // ============================================
-    {ref:"BAR-EN-101",label:"Isolation combles/toitures",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1700,H2:1400,H3:920,DOM:600},z_elec:{H1:1300,H2:1070,H3:700,DOM:460},active:true,cofrac:true,note:"vA64-6 01/01/2025",gisements:["isolation_enveloppe"]},
-    {ref:"BAR-EN-102",label:"Isolation murs",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1600,H2:1300,H3:880,DOM:590},z_elec:{H1:1220,H2:990,H3:670,DOM:450},active:true,cofrac:true,note:"vA65-4 01/01/2025",gisements:["isolation_enveloppe"]},
-    {ref:"BAR-EN-103",label:"Isolation plancher",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1100,H2:890,H3:590,DOM:400},z_elec:{H1:840,H2:680,H3:450,DOM:305},active:true,cofrac:true,note:"vA64-6 01/01/2025",gisements:["isolation_enveloppe"]},
+    // V38.3 — model_type absolute_per_zone (PDF vA64-6 + vA65-4 + vA64-6, table officielle correspond au catalog)
+    {ref:"BAR-EN-101",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1700,H2:1400,H3:920}},label:"Isolation combles/toitures",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1700,H2:1400,H3:920,DOM:600},z_elec:{H1:1300,H2:1070,H3:700,DOM:460},active:true,cofrac:true,note:"vA64-6 01/01/2025 — calcul officiel si surface_m2 renseigné",gisements:["isolation_enveloppe"]},
+    {ref:"BAR-EN-102",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1600,H2:1300,H3:880}},label:"Isolation murs",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1600,H2:1300,H3:880,DOM:590},z_elec:{H1:1220,H2:990,H3:670,DOM:450},active:true,cofrac:true,note:"vA65-4 01/01/2025 — calcul officiel si surface_m2 renseigné",gisements:["isolation_enveloppe"]},
+    {ref:"BAR-EN-103",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1100,H2:890,H3:590}},label:"Isolation plancher",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1100,H2:890,H3:590,DOM:400},z_elec:{H1:840,H2:680,H3:450,DOM:305},active:true,cofrac:true,note:"vA64-6 01/01/2025 — calcul officiel si surface_m2 renseigné",gisements:["isolation_enveloppe"]},
     {ref:"BAR-EN-104",surface_ratio:0.2,label:"Fenêtre/porte-fenêtre isolante",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:5500,H2:4500,H3:2900,DOM:1900},z_elec:{H1:4200,H2:3430,H3:2210,DOM:1450},active:true,note:"vA54-2 01/01/2024",gisements:["isolation_enveloppe"]},
     {ref:"BAR-EN-105",label:"Isolation toitures terrasses",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1700,H2:1400,H3:920,DOM:600},z_elec:{H1:1300,H2:1070,H3:700,DOM:460},active:true,cofrac:true,note:"vA64-4 01/01/2025",gisements:["isolation_enveloppe"]},
     {ref:"BAR-TH-101",label:"Chauffe-eau solaire individuel",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:18500,H2:21000,H3:24200,DOM:29000},active:true,note:"vA62-2 01/01/2025",gisements:["ecs"]},
@@ -4157,7 +4158,8 @@
     {ref:"BAR-TH-129",label:"PAC air/air résidentiel",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:13200,H2:10800,H3:7700,DOM:5100},active:true,gisements:["chauffage_batiment"]},
     {ref:"BAR-TH-141",label:"Climatiseur performant DOM",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:0,H2:0,H3:0,DOM:3800},active:true,gisements:["froid"]},
     {ref:"BAR-TH-143",surface_ratio:0.01,label:"Système solaire combiné",sector:"BAR",cat:"Thermique",unit:"m²",z:{H1:78600,H2:89300,H3:102900,DOM:50000},active:true,note:"vA79-6 01/01/2026",gisements:["ecs","chauffage_batiment"]},
-    {ref:"BAR-TH-148",label:"Chauffe-eau thermodynamique",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:14000,H2:14000,H3:14000,DOM:14000},active:true,note:"vA78.4 01/01/2026",gisements:["ecs"]},
+    // V38.3 — model_type absolute_per_logement (PDF vA78.4, forfait par type maison/appart cohérent avec catalog ~14000)
+    {ref:"BAR-TH-148",model_type:"absolute_per_logement",officialTable:{maison_individuelle:14700,appartement:11800},label:"Chauffe-eau thermodynamique",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:14000,H2:14000,H3:14000,DOM:14000},active:true,note:"vA78.4 01/01/2026 — calcul officiel si type_logement+N_CET renseignés",gisements:["ecs"]},
     {ref:"BAR-TH-155",label:"Ventilation hybride hygroréglable",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:10400,H2:8400,H3:6200,DOM:4100},active:true,gisements:["ventilation"]},
     {ref:"BAR-TH-158",label:"Émetteur électrique régulation avancée",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:3300,H2:2700,H3:1900,DOM:1300},active:true,note:"vA73-3 01/11/2025",gisements:["chauffage_batiment"]},
     {ref:"BAR-TH-159",label:"PAC hybride individuelle",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:68000,H2:56000,H3:37000,DOM:25000},active:true,note:"vA50-4 01/04/2023",gisements:["chauffage_batiment"]},
@@ -5015,6 +5017,9 @@
         case 'absolute_per_sector_zone_debits':          return calcAbsolutePerSectorZoneDebits(fiche, ctx);
         case 'absolute_per_perf_zone_usage_sector_R':    return calcAbsolutePerPerfZoneUsageSectorR(fiche, ctx);
         case 'absolute_per_perf_zone_sector_R':          return calcAbsolutePerPerfZoneSectorR(fiche, ctx);
+        // V38.3 — 2 patterns BAR résidentiel simples
+        case 'absolute_per_zone':                        return calcAbsolutePerZone(fiche, ctx);
+        case 'absolute_per_logement':                    return calcAbsolutePerLogement(fiche, ctx);
         default: return null;
       }
     } catch (e) {
@@ -5370,6 +5375,44 @@
     var qty = ctx.surface || ctx.qty || 0;
     if (qty <= 0) return null;
     return {kwhcTotal: kwhcM2 * qty * (sectFact[fostKey] || 0.7) * R, source: 'official_162_PAC_geo'};
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  // V38.3 — 2 calculateurs BAR résidentiel (12 fiches couvertes)
+  // ════════════════════════════════════════════════════════════════
+
+  // V38.3 — Pattern 16 : absolute_per_zone (BAR-EN-101/102/103/104/105/108, BAR-SE-104, BAR-TH-112/113/143)
+  // Formule : kWhc = montant_zone × surface (ou autre quantité selon fiche.unit)
+  function calcAbsolutePerZone(fiche, ctx) {
+    if (!fiche.officialTable || !fiche.officialTable.by_zone) return null;
+    var s = ctx.smart || {};
+    var zoneTable = fiche.officialTable.by_zone;
+    var kwhcUnit = zoneTable[ctx.zone] || zoneTable.H2;
+    if (kwhcUnit == null || kwhcUnit <= 0) return null;
+    // Quantité : surface_m2 si présent dans inputs, sinon ctx.qty (fiche.unit)
+    var qty = parseFloat(s.surface_m2) || ctx.qty || 0;
+    if (qty <= 0) return null;
+    return {kwhcTotal: kwhcUnit * qty, source: 'official_per_zone_BAR'};
+  }
+
+  // V38.3 — Pattern 17 : absolute_per_logement (BAR-EN-109, BAR-TH-148)
+  // Forfait par type de logement × N (ou × surface si fiche le requiert)
+  function calcAbsolutePerLogement(fiche, ctx) {
+    if (!fiche.officialTable) return null;
+    var s = ctx.smart || {};
+    var t = fiche.officialTable;
+    // Choix type logement : maison_individuelle / batiment_collectif / appartement
+    var typeKey = s.type_logement || 'maison_individuelle';
+    var forfait = t[typeKey];
+    if (forfait == null) {
+      // Fallback : prendre le 1er type dispo
+      var firstKey = Object.keys(t)[0];
+      forfait = t[firstKey];
+    }
+    if (!forfait || forfait <= 0) return null;
+    // Multiplicateur : N (CET, etc.) ou surface_m2 ou défaut 1
+    var multiplier = parseFloat(s.N_CET) || parseFloat(s.surface_m2) || parseFloat(s.N_logements) || 1;
+    return {kwhcTotal: forfait * multiplier, source: 'official_per_logement_BAR'};
   }
 
   // V38.2b — Pattern 15 : absolute_per_perf_zone_sector_R (BAT-TH-163, 164 PAC)

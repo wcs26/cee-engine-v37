@@ -1,8 +1,9 @@
 {
   "_meta": {
-    "version": "V38.2b",
+    "version": "V38.3",
     "date": "2026-05-10",
-    "purpose": "Inputs requis par fiche BAT-TH pour calcul officiel exact (model_type). 22 fiches couvertes. Source : PDFs ministère écologie."
+    "purpose": "Inputs requis par fiche BAT-TH pour calcul officiel exact (model_type). 22 fiches couvertes. Source : PDFs ministère écologie.",
+    "fiches_count": 34
   },
   "fiches": {
     "BAT-TH-111": {
@@ -10,8 +11,23 @@
       "label_fiche": "Chauffe-eau solaire collectif tertiaire",
       "formula_summary": "kWhc = B × T × 0,196",
       "inputs": [
-        {"id": "B", "label": "Besoin annuel ECS solaire (kWh/an)", "type": "number", "unit": "kWh/an", "estimate_from": "surface * 30", "min": 1000},
-        {"id": "T", "label": "Taux couverture solaire (%)", "type": "number", "unit": "%", "default": 50, "min": 10, "max": 100}
+        {
+          "id": "B",
+          "label": "Besoin annuel ECS solaire (kWh/an)",
+          "type": "number",
+          "unit": "kWh/an",
+          "estimate_from": "surface * 30",
+          "min": 1000
+        },
+        {
+          "id": "T",
+          "label": "Taux couverture solaire (%)",
+          "type": "number",
+          "unit": "%",
+          "default": 50,
+          "min": 10,
+          "max": 100
+        }
       ]
     },
     "BAT-TH-139": {
@@ -19,9 +35,28 @@
       "label_fiche": "Récupération chaleur sur groupe froid",
       "formula_summary": "kWhc = D × 9,9 × P_recup (cap : ≤ 2×P_compresseurs)",
       "inputs": [
-        {"id": "D", "label": "Durée annuelle utilisation chaleur récupérée (h/an)", "type": "number", "unit": "h", "default": 4500, "min": 100},
-        {"id": "P_recuperee", "label": "Puissance thermique récupérée (kW)", "type": "number", "unit": "kW", "min": 1},
-        {"id": "P_compresseurs", "label": "Puissance compresseurs total (kW) — cap", "type": "number", "unit": "kW", "min": 1}
+        {
+          "id": "D",
+          "label": "Durée annuelle utilisation chaleur récupérée (h/an)",
+          "type": "number",
+          "unit": "h",
+          "default": 4500,
+          "min": 100
+        },
+        {
+          "id": "P_recuperee",
+          "label": "Puissance thermique récupérée (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        },
+        {
+          "id": "P_compresseurs",
+          "label": "Puissance compresseurs total (kW) — cap",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        }
       ]
     },
     "BAT-TH-153": {
@@ -29,8 +64,22 @@
       "label_fiche": "Confinement allées Data Center",
       "formula_summary": "kWhc = 1500 × ΔT × P",
       "inputs": [
-        {"id": "P_kW", "label": "Puissance électrique groupe froid (kW)", "type": "number", "unit": "kW", "min": 10},
-        {"id": "deltaT", "label": "Augmentation T° consigne eau glacée (°C)", "type": "number", "unit": "°C", "default": 4, "min": 1, "max": 10}
+        {
+          "id": "P_kW",
+          "label": "Puissance électrique groupe froid (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        },
+        {
+          "id": "deltaT",
+          "label": "Augmentation T° consigne eau glacée (°C)",
+          "type": "number",
+          "unit": "°C",
+          "default": 4,
+          "min": 1,
+          "max": 10
+        }
       ]
     },
     "BAT-TH-157": {
@@ -38,8 +87,21 @@
       "label_fiche": "Chaudière biomasse collective tertiaire",
       "formula_summary": "kWhc = Q × 4,8 (P≤500kW) ou Q × 3,4 (P>500kW)",
       "inputs": [
-        {"id": "Q", "label": "Chaleur nette utile produite (kWh/an, < 12 GWh)", "type": "number", "unit": "kWh/an", "min": 10000, "max": 12000000},
-        {"id": "P_kW", "label": "Puissance chaudière biomasse (kW)", "type": "number", "unit": "kW", "min": 50}
+        {
+          "id": "Q",
+          "label": "Chaleur nette utile produite (kWh/an, < 12 GWh)",
+          "type": "number",
+          "unit": "kWh/an",
+          "min": 10000,
+          "max": 12000000
+        },
+        {
+          "id": "P_kW",
+          "label": "Puissance chaudière biomasse (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 50
+        }
       ]
     },
     "BAT-TH-109": {
@@ -53,7 +115,13 @@
       "label_fiche": "Raccordement réseau de froid",
       "formula_summary": "kWhc = montant_secteur × P_souscrite × facteur_zone (zone INVERSÉE H3>H1)",
       "inputs": [
-        {"id": "P_souscrite_kW", "label": "Puissance froid souscrite au réseau (kW)", "type": "number", "unit": "kW", "min": 10}
+        {
+          "id": "P_souscrite_kW",
+          "label": "Puissance froid souscrite au réseau (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        }
       ]
     },
     "BAT-TH-135": {
@@ -61,8 +129,23 @@
       "label_fiche": "Régulation HP flottante froid (DOM)",
       "formula_summary": "kWhc = forfait_application × P_kW · DOM uniquement",
       "inputs": [
-        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
-        {"id": "application_135", "label": "Application", "type": "select", "options": ["refrigeration", "climatisation_hors_dc", "climatisation_dc"]}
+        {
+          "id": "P_kW",
+          "label": "Puissance compresseurs (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        },
+        {
+          "id": "application_135",
+          "label": "Application",
+          "type": "select",
+          "options": [
+            "refrigeration",
+            "climatisation_hors_dc",
+            "climatisation_dc"
+          ]
+        }
       ]
     },
     "BAT-TH-145": {
@@ -70,8 +153,22 @@
       "label_fiche": "Régulation BP flottante froid (métropole)",
       "formula_summary": "kWhc = forfait_application × P_kW · datacenters EXCLUS",
       "inputs": [
-        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
-        {"id": "application_145", "label": "Application", "type": "select", "options": ["refrigeration_hors_confort", "climatisation_confort_local"]}
+        {
+          "id": "P_kW",
+          "label": "Puissance compresseurs (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        },
+        {
+          "id": "application_145",
+          "label": "Application",
+          "type": "select",
+          "options": [
+            "refrigeration_hors_confort",
+            "climatisation_confort_local"
+          ]
+        }
       ]
     },
     "BAT-TH-161": {
@@ -79,8 +176,20 @@
       "label_fiche": "Maintien T° groupes électrogènes par PAC",
       "formula_summary": "kWhc = forfait(puissance) × N · DC ou hôpital uniquement",
       "inputs": [
-        {"id": "P_groupe_kW", "label": "Puissance par groupe électrogène (kW)", "type": "number", "unit": "kW", "min": 800},
-        {"id": "N_groupes", "label": "Nombre de groupes électrogènes", "type": "number", "default": 1, "min": 1}
+        {
+          "id": "P_groupe_kW",
+          "label": "Puissance par groupe électrogène (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 800
+        },
+        {
+          "id": "N_groupes",
+          "label": "Nombre de groupes électrogènes",
+          "type": "number",
+          "default": 1,
+          "min": 1
+        }
       ]
     },
     "BAT-TH-142": {
@@ -88,8 +197,23 @@
       "label_fiche": "Déstratification d'air (métropole)",
       "formula_summary": "kWhc = montant(zone, type) × P_chauffage_kW · hauteur ≥ 5m",
       "inputs": [
-        {"id": "P_chauffage_kW", "label": "Puissance chauffage local (kW)", "type": "number", "unit": "kW", "min": 5},
-        {"id": "type_destrat", "label": "Type chauffage actuel", "type": "select", "options": ["convectif", "radiatif"], "default": "convectif"}
+        {
+          "id": "P_chauffage_kW",
+          "label": "Puissance chauffage local (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        },
+        {
+          "id": "type_destrat",
+          "label": "Type chauffage actuel",
+          "type": "select",
+          "options": [
+            "convectif",
+            "radiatif"
+          ],
+          "default": "convectif"
+        }
       ]
     },
     "BAT-TH-134": {
@@ -97,9 +221,33 @@
       "label_fiche": "Régulation HP flottante froid (métropole)",
       "formula_summary": "kWhc = montant(application, zone, condensation) × P_kW",
       "inputs": [
-        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
-        {"id": "application_134", "label": "Application", "type": "select", "options": ["climatisation_confort_hors_dc", "climatisation_dc", "refrigeration_hors_confort"]},
-        {"id": "condensation_134", "label": "Condensation", "type": "select", "options": ["atmosphere", "eau_seul"], "default": "atmosphere"}
+        {
+          "id": "P_kW",
+          "label": "Puissance compresseurs (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        },
+        {
+          "id": "application_134",
+          "label": "Application",
+          "type": "select",
+          "options": [
+            "climatisation_confort_hors_dc",
+            "climatisation_dc",
+            "refrigeration_hors_confort"
+          ]
+        },
+        {
+          "id": "condensation_134",
+          "label": "Condensation",
+          "type": "select",
+          "options": [
+            "atmosphere",
+            "eau_seul"
+          ],
+          "default": "atmosphere"
+        }
       ]
     },
     "BAT-TH-156": {
@@ -107,9 +255,33 @@
       "label_fiche": "Freecooling par eau de refroidissement",
       "formula_summary": "kWhc = montant(zone, T°) × P_compresseurs × coef_secteur (×4.5 si DC)",
       "inputs": [
-        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
-        {"id": "T_consigne_156", "label": "Plage T° consigne réseau", "type": "select", "options": ["15_18C", "18_20C"], "default": "18_20C"},
-        {"id": "secteur_156", "label": "Type bâtiment", "type": "select", "options": ["climatisation_hors_dc", "climatisation_dc"], "default": "climatisation_hors_dc"}
+        {
+          "id": "P_kW",
+          "label": "Puissance compresseurs (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        },
+        {
+          "id": "T_consigne_156",
+          "label": "Plage T° consigne réseau",
+          "type": "select",
+          "options": [
+            "15_18C",
+            "18_20C"
+          ],
+          "default": "18_20C"
+        },
+        {
+          "id": "secteur_156",
+          "label": "Type bâtiment",
+          "type": "select",
+          "options": [
+            "climatisation_hors_dc",
+            "climatisation_dc"
+          ],
+          "default": "climatisation_hors_dc"
+        }
       ]
     },
     "BAT-TH-108": {
@@ -117,7 +289,16 @@
       "label_fiche": "Régulation programmation intermittence",
       "formula_summary": "kWhc = montant(secteur, énergie) × surface × facteur_zone",
       "inputs": [
-        {"id": "energie_chauffage_108", "label": "Énergie chauffage actuelle", "type": "select", "options": ["combustible", "electricite"], "default": "combustible"}
+        {
+          "id": "energie_chauffage_108",
+          "label": "Énergie chauffage actuelle",
+          "type": "select",
+          "options": [
+            "combustible",
+            "electricite"
+          ],
+          "default": "combustible"
+        }
       ]
     },
     "BAT-TH-116": {
@@ -125,7 +306,16 @@
       "label_fiche": "GTB classe A ou B",
       "formula_summary": "kWhc = SOMME(usage : montant_secteur_classe_usage × surface_usage) × facteur_zone (modèle simplifié : usage chauffage seul)",
       "inputs": [
-        {"id": "classe_gtb", "label": "Classe GTB visée", "type": "select", "options": ["B", "A"], "default": "B"}
+        {
+          "id": "classe_gtb",
+          "label": "Classe GTB visée",
+          "type": "select",
+          "options": [
+            "B",
+            "A"
+          ],
+          "default": "B"
+        }
       ]
     },
     "BAT-TH-127": {
@@ -133,8 +323,26 @@
       "label_fiche": "Raccordement réseau de chaleur",
       "formula_summary": "kWhc = montant(secteur, usage, puissance) × surface × facteur_zone",
       "inputs": [
-        {"id": "usage_127", "label": "Usage", "type": "select", "options": ["chauffage_seul", "chauffage_ecs"], "default": "chauffage_seul"},
-        {"id": "puiss_127", "label": "Puissance souscrite", "type": "select", "options": ["inf_400kW", "sup_400kW"], "default": "inf_400kW"}
+        {
+          "id": "usage_127",
+          "label": "Usage",
+          "type": "select",
+          "options": [
+            "chauffage_seul",
+            "chauffage_ecs"
+          ],
+          "default": "chauffage_seul"
+        },
+        {
+          "id": "puiss_127",
+          "label": "Puissance souscrite",
+          "type": "select",
+          "options": [
+            "inf_400kW",
+            "sup_400kW"
+          ],
+          "default": "inf_400kW"
+        }
       ]
     },
     "BAT-TH-125": {
@@ -142,7 +350,17 @@
       "label_fiche": "VMC simple flux tertiaire",
       "formula_summary": "kWhc = montant(zone, type) × surface × facteur_secteur",
       "inputs": [
-        {"id": "type_vmc_125", "label": "Type ventilation VMC SF", "type": "select", "options": ["modulee_proportionnelle", "modulee_detection_presence", "debit_constant"], "default": "modulee_proportionnelle"}
+        {
+          "id": "type_vmc_125",
+          "label": "Type ventilation VMC SF",
+          "type": "select",
+          "options": [
+            "modulee_proportionnelle",
+            "modulee_detection_presence",
+            "debit_constant"
+          ],
+          "default": "modulee_proportionnelle"
+        }
       ]
     },
     "BAT-TH-126": {
@@ -150,7 +368,17 @@
       "label_fiche": "VMC double flux tertiaire",
       "formula_summary": "kWhc = montant(zone, type) × surface × facteur_secteur",
       "inputs": [
-        {"id": "type_vmc_126", "label": "Type ventilation VMC DF", "type": "select", "options": ["modulee_proportionnelle", "modulee_detection_presence", "debit_constant"], "default": "modulee_proportionnelle"}
+        {
+          "id": "type_vmc_126",
+          "label": "Type ventilation VMC DF",
+          "type": "select",
+          "options": [
+            "modulee_proportionnelle",
+            "modulee_detection_presence",
+            "debit_constant"
+          ],
+          "default": "modulee_proportionnelle"
+        }
       ]
     },
     "BAT-TH-143": {
@@ -164,10 +392,43 @@
       "label_fiche": "Récupération chaleur eaux grises",
       "formula_summary": "kWhc = montant(secteur, zone, débits) × N × ε",
       "inputs": [
-        {"id": "secteur_154", "label": "Type bâtiment", "type": "select", "options": ["hotellerie", "etablissement_sportif", "sante", "terrain_camping", "salon_coiffure"], "default": "hotellerie"},
-        {"id": "N_154", "label": "Nombre d'unités (chambres/douches/salons)", "type": "number", "min": 1},
-        {"id": "epsilon_154", "label": "Efficacité ε (≥ 0,35)", "type": "number", "default": 0.35, "min": 0.35, "max": 0.9},
-        {"id": "debits_154", "label": "Configuration débits", "type": "select", "options": ["egaux", "inegaux"], "default": "egaux"}
+        {
+          "id": "secteur_154",
+          "label": "Type bâtiment",
+          "type": "select",
+          "options": [
+            "hotellerie",
+            "etablissement_sportif",
+            "sante",
+            "terrain_camping",
+            "salon_coiffure"
+          ],
+          "default": "hotellerie"
+        },
+        {
+          "id": "N_154",
+          "label": "Nombre d'unités (chambres/douches/salons)",
+          "type": "number",
+          "min": 1
+        },
+        {
+          "id": "epsilon_154",
+          "label": "Efficacité ε (≥ 0,35)",
+          "type": "number",
+          "default": 0.35,
+          "min": 0.35,
+          "max": 0.9
+        },
+        {
+          "id": "debits_154",
+          "label": "Configuration débits",
+          "type": "select",
+          "options": [
+            "egaux",
+            "inegaux"
+          ],
+          "default": "egaux"
+        }
       ]
     },
     "BAT-TH-162": {
@@ -175,10 +436,41 @@
       "label_fiche": "Système géothermique (PAC + captage)",
       "formula_summary": "kWhc = montant(perf, zone, usage) × surface × facteur_secteur × R",
       "inputs": [
-        {"id": "etas_162", "label": "Performance Etas (%)", "type": "select", "options": ["111_126", "126_175", "sup_175"], "default": "126_175"},
-        {"id": "usage_162", "label": "Usage", "type": "select", "options": ["chauffage", "chauffage_ecs"], "default": "chauffage"},
-        {"id": "P_PAC_162", "label": "Puissance PAC (kW)", "type": "number", "unit": "kW", "min": 30},
-        {"id": "P_chaufferie_162", "label": "Puissance chaufferie totale (kW)", "type": "number", "unit": "kW", "min": 30}
+        {
+          "id": "etas_162",
+          "label": "Performance Etas (%)",
+          "type": "select",
+          "options": [
+            "111_126",
+            "126_175",
+            "sup_175"
+          ],
+          "default": "126_175"
+        },
+        {
+          "id": "usage_162",
+          "label": "Usage",
+          "type": "select",
+          "options": [
+            "chauffage",
+            "chauffage_ecs"
+          ],
+          "default": "chauffage"
+        },
+        {
+          "id": "P_PAC_162",
+          "label": "Puissance PAC (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 30
+        },
+        {
+          "id": "P_chaufferie_162",
+          "label": "Puissance chaufferie totale (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 30
+        }
       ]
     },
     "BAT-TH-163": {
@@ -186,9 +478,31 @@
       "label_fiche": "PAC air/eau tertiaire",
       "formula_summary": "kWhc = montant(perf, zone) × surface × facteur_secteur × R",
       "inputs": [
-        {"id": "etas_163", "label": "Performance Etas (%)", "type": "select", "options": ["111_126", "126_175", "sup_175"], "default": "126_175"},
-        {"id": "P_PAC_163", "label": "Puissance PAC (kW)", "type": "number", "unit": "kW", "min": 30},
-        {"id": "P_chaufferie_163", "label": "Puissance chaufferie totale (kW)", "type": "number", "unit": "kW", "min": 30}
+        {
+          "id": "etas_163",
+          "label": "Performance Etas (%)",
+          "type": "select",
+          "options": [
+            "111_126",
+            "126_175",
+            "sup_175"
+          ],
+          "default": "126_175"
+        },
+        {
+          "id": "P_PAC_163",
+          "label": "Puissance PAC (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 30
+        },
+        {
+          "id": "P_chaufferie_163",
+          "label": "Puissance chaufferie totale (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 30
+        }
       ]
     },
     "BAT-TH-164": {
@@ -196,9 +510,325 @@
       "label_fiche": "PAC eau/eau ou eau glycolée/eau",
       "formula_summary": "kWhc = montant(perf, zone) × surface × facteur_secteur × R",
       "inputs": [
-        {"id": "etas_164", "label": "Performance Etas (%)", "type": "select", "options": ["111_126", "126_175", "sup_175"], "default": "126_175"},
-        {"id": "P_PAC_164", "label": "Puissance PAC (kW)", "type": "number", "unit": "kW", "min": 30},
-        {"id": "P_chaufferie_164", "label": "Puissance chaufferie totale (kW)", "type": "number", "unit": "kW", "min": 30}
+        {
+          "id": "etas_164",
+          "label": "Performance Etas (%)",
+          "type": "select",
+          "options": [
+            "111_126",
+            "126_175",
+            "sup_175"
+          ],
+          "default": "126_175"
+        },
+        {
+          "id": "P_PAC_164",
+          "label": "Puissance PAC (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 30
+        },
+        {
+          "id": "P_chaufferie_164",
+          "label": "Puissance chaufferie totale (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 30
+        }
+      ]
+    },
+    "BAR-EN-101": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Isolation combles ou toiture (résidentiel existant)",
+      "formula_summary": "kWhc = montant_zone × surface_isolée_m²",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface d'isolant posée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        },
+        {
+          "id": "type_pose",
+          "label": "Type de pose",
+          "type": "select",
+          "options": [
+            "combles_perdus",
+            "rampants_toiture"
+          ]
+        }
+      ]
+    },
+    "BAR-EN-102": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Isolation murs en façade ou pignon",
+      "formula_summary": "kWhc = montant_zone × surface_isolée_m²",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface d'isolant posée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        }
+      ]
+    },
+    "BAR-EN-103": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Isolation plancher bas",
+      "formula_summary": "kWhc = montant_zone × surface_isolée_m²",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface d'isolant posée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        }
+      ]
+    },
+    "BAR-EN-104": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Fenêtre/porte-fenêtre complète vitrage isolant",
+      "formula_summary": "kWhc = montant_zone × surface_fenêtre_m²",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface fenêtre/porte-fenêtre (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 0.5
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        }
+      ]
+    },
+    "BAR-EN-105": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Isolation toiture-terrasse",
+      "formula_summary": "kWhc = montant_zone × surface_isolée_m²",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface isolant (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        }
+      ]
+    },
+    "BAR-EN-108": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Fermeture isolante sur fenêtre/porte-fenêtre",
+      "formula_summary": "kWhc = montant_zone × surface_fermeture_isolante_m²",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface fermeture isolante (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 0.5
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        }
+      ]
+    },
+    "BAR-EN-109": {
+      "model_type": "absolute_per_logement",
+      "label_fiche": "Toiture protégée des apports solaires (DOM)",
+      "formula_summary": "kWhc = montant(type_logement) × surface_toiture_protégée_m² · DOM uniquement",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface toiture protégée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 5
+        },
+        {
+          "id": "type_logement",
+          "label": "Type logement",
+          "type": "select",
+          "options": [
+            "maison_individuelle",
+            "batiment_collectif"
+          ]
+        }
+      ]
+    },
+    "BAR-SE-104": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Réglage organes équilibrage chauffage eau chaude collectif",
+      "formula_summary": "kWhc = montant_zone × N_appartements",
+      "inputs": [
+        {
+          "id": "N_appartements",
+          "label": "Nombre d'appartements",
+          "type": "number",
+          "min": 2
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        }
+      ]
+    },
+    "BAR-TH-112": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Appareil indépendant chauffage bois (poêle/insert)",
+      "formula_summary": "Forfait par appareil installé selon zone (table)",
+      "inputs": [
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        },
+        {
+          "id": "N_appareils",
+          "label": "Nombre d'appareils",
+          "type": "number",
+          "min": 1,
+          "default": 1
+        }
+      ]
+    },
+    "BAR-TH-113": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Chaudière biomasse individuelle",
+      "formula_summary": "Forfait par chaudière selon zone (table)",
+      "inputs": [
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        },
+        {
+          "id": "N_chaudieres",
+          "label": "Nombre de chaudières",
+          "type": "number",
+          "min": 1,
+          "default": 1
+        }
+      ]
+    },
+    "BAR-TH-143": {
+      "model_type": "absolute_per_zone",
+      "label_fiche": "Système solaire combiné SSC (chauffage + ECS)",
+      "formula_summary": "Forfait par SSC selon zone (table)",
+      "inputs": [
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": [
+            "H1",
+            "H2",
+            "H3"
+          ]
+        },
+        {
+          "id": "N_SSC",
+          "label": "Nombre de SSC",
+          "type": "number",
+          "min": 1,
+          "default": 1
+        }
+      ]
+    },
+    "BAR-TH-148": {
+      "model_type": "absolute_per_logement",
+      "label_fiche": "Chauffe-eau thermodynamique individuel à accumulation",
+      "formula_summary": "Forfait par CET selon type logement (montant indépendant de la zone)",
+      "inputs": [
+        {
+          "id": "type_logement",
+          "label": "Type logement",
+          "type": "select",
+          "options": [
+            "maison_individuelle",
+            "appartement"
+          ]
+        },
+        {
+          "id": "N_CET",
+          "label": "Nombre CET",
+          "type": "number",
+          "min": 1,
+          "default": 1
+        }
       ]
     }
   }
