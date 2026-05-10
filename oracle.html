@@ -4372,25 +4372,37 @@
     {ref:"TRA-EQ-101",label:"Unité transport intermodal rail-route",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:2650,H2:2650,H3:2650,DOM:2650},active:true,gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-103",label:"Télématique embarquée suivi conduite",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:2650,H2:2650,H3:2650,DOM:2650},active:true,gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-104",label:"Lubrifiant économiseur énergie VL",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"vA14-1",gisements:["flotte_vehicules"]},
-    {ref:"TRA-EQ-106",label:"Pneus basse résistance roulement",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"vA14-1",gisements:["flotte_vehicules"]},
+    // V38.4c ⚠ FIX URGENCE — TRA-EQ-106 catalog SUR-évalué ×10 (1300/pneu = délirant). Formule réelle : Σ(coef_classe × N) × Y km/an
+    // Source : PDF vA14-1 — coef_A=0.011, coef_B=0.008, coef_C=0.006 par pneu × kilométrage. Mise valeur conservatrice 60 (4 pneus C × 30 000 km/an typique).
+    {ref:"TRA-EQ-106",label:"Pneus basse résistance roulement (formule par km)",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:60,H2:60,H3:60,DOM:60},active:true,note:"vA14-1 — formule officielle Σ(0.006 à 0.011 × N_pneu) × km/an. Catalog 1300 = SUR ×10 (FRAUDE). Précisez classe+km.",gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-107",label:"Unité transport intermodal fluvial-route",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:2650,H2:2650,H3:2650,DOM:2650},active:true,note:"vA17-1",gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-108",label:"Wagon autoroute ferroviaire",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:170000,H2:170000,H3:170000,DOM:170000},active:true,note:"vA37-6 01/04/2020",gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-109",label:"Barge fluviale",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:170000,H2:170000,H3:170000,DOM:170000},active:true,note:"vA17-1",gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-110",label:"Automoteur fluvial",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:230000,H2:230000,H3:230000,DOM:230000},active:true,note:"vA19-1",gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-111",label:"Groupe frigorifique haute efficacité",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:35000,H2:35000,H3:35000,DOM:35000},active:true,note:"vA24-1",gisements:["flotte_vehicules","froid"]},
-    {ref:"TRA-EQ-114",label:"Véhicule léger électrique personne morale",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:22000,H2:22000,H3:22000,DOM:22000},active:true,note:"vA68-3",gisements:["flotte_vehicules"]},
-    {ref:"TRA-EQ-117",label:"Véhicule léger électrique particulier",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:6400,H2:6400,H3:6400,DOM:6400},active:true,gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-EQ-114 SOUS ×3.4-7 — valeur conservatrice VL standard PM (74200), max VUL N1=156800
+    // Source PDF vA76-4 — table 12 cas (catégorie M1/N1 × neuf/retrofit × parc <100/>=100 × 2025-2026/2027/collec)
+    {ref:"TRA-EQ-114",label:"VL/VUL électrique personne morale",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:74200,H2:74200,H3:74200,DOM:74200},active:true,note:"vA76-4 — display=VL M1 standard. VUL N1=156800. Refacto V39 pour table 12 cas.",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-EQ-117 SOUS ×6-15 — valeur conservatrice M1 neuf (49100). Limite 5 véh/personne physique.
+    {ref:"TRA-EQ-117",label:"VL électrique particulier",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:49100,H2:49100,H3:49100,DOM:49100},active:true,note:"vA72-4 — M1 neuf. VUL N1 neuf=94800, retrofit M1=39500/N1=76400. Limite 5 véh/personne.",gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-120",label:"Rétrofit électrique poids lourd",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:230000,H2:230000,H3:230000,DOM:230000},active:true,gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-122",label:"Rétrofit électrique autocar",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:170000,H2:170000,H3:170000,DOM:170000},active:true,gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-124",label:"Branchement électrique navires quai",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:8200,H2:8200,H3:8200,DOM:8200},active:true,gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-126",label:"Remotorisation électrique/hybride bateau",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:230000,H2:230000,H3:230000,DOM:230000},active:true,gisements:["flotte_vehicules"]},
     {ref:"TRA-EQ-127",label:"Bateau électrique/hybride eaux intérieures",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:170000,H2:170000,H3:170000,DOM:170000},active:true,note:"vA54-1 01/10/2023",gisements:["flotte_vehicules"]},
-    {ref:"TRA-EQ-128",label:"Autocar/autobus électrique",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:170000,H2:170000,H3:170000,DOM:170000},active:true,note:"vA68-3",gisements:["flotte_vehicules"]},
-    {ref:"TRA-EQ-129",label:"Poids lourd électrique",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:230000,H2:230000,H3:230000,DOM:230000},active:true,gisements:["flotte_vehicules"]},
-    {ref:"TRA-EQ-130",label:"Quadricycle électrique",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:35000,H2:35000,H3:35000,DOM:35000},active:true,note:"vA73-3",gisements:["flotte_vehicules"]},
-    {ref:"TRA-EQ-131",label:"Vélos-cargos électriques",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:810,H2:810,H3:810,DOM:810},active:true,note:"vA73-2 23/08/2025",gisements:["flotte_vehicules"]},
-    {ref:"TRA-SE-101",label:"Formation chauffeur transport économe",sector:"TRA",cat:"Services",unit:"personne",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,gisements:["flotte_vehicules"]},
-    {ref:"TRA-SE-116",label:"Fret ferroviaire",sector:"TRA",cat:"Services",unit:"UTI.km",z:{H1:8,H2:8,H3:8,DOM:8},active:true,note:"vA65-2 01/01/2025",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-EQ-128 SOUS ×4.5-19 — autobus standard aggl <250K (2 350 700). Catalog 170000 = SOUS ×14
+    // Source PDF vA68-3 — table 9 cas (autocar/autobus × standard/grande capa/retrofit × aggl <250K/>=250K)
+    {ref:"TRA-EQ-128",label:"Autocar/autobus électrique (collectivités)",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1602800,H2:1602800,H3:1602800,DOM:1602800},active:true,note:"vA68-3 — display=autocar standard. Bus aggl <250K=2350700, grande capa=3291000. Refacto V39 pour table 9 cas.",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-EQ-129 SOUS ×0.96-8.34 — PL 26t neuf 1 918 500. Catalog 230 000 = SOUS ×8.3
+    {ref:"TRA-EQ-129",label:"Poids lourd électrique transport marchandises",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:824000,H2:824000,H3:824000,DOM:824000},active:true,note:"vA73-3 — display=PL 12-19t neuf. Tracteur ≥26t=1918500. BOM aggl <250K=1572900. Refacto V39 table 16 cas.",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-EQ-130 — quadricycle L7e PM (72900). Catalog 35000 = SOUS ×2.1 (collectivité)
+    {ref:"TRA-EQ-130",label:"Quadricycle électrique",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:72900,H2:72900,H3:72900,DOM:72900},active:true,note:"vA73-3 — display=L7e PM. Particulier L7e=36400, L6e=19000, collectivité L7e=86100.",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-EQ-131 SOUS ×102 — vélo-cargo AE 83 000. Catalog 810 = SOUS ×102 délirant !
+    {ref:"TRA-EQ-131",label:"Vélos-cargos à assistance électrique",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:83000,H2:83000,H3:83000,DOM:83000},active:true,note:"vA73-2 23/08/2025 — 83000 kWhc/vélo. Limite N <= effectif salarié déclaré (ou 15 si association). Catalog 810 = SOUS ×102.",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-SE-101 SOUS ×7-9.5 — formation chauffeur PL N2/N3 (12400). Catalog 1300 = SOUS ×9.5
+    {ref:"TRA-SE-101",label:"Formation chauffeur transport conduite économe",sector:"TRA",cat:"Services",unit:"personne",z:{H1:12400,H2:12400,H3:12400,DOM:12400},active:true,note:"vA14-1 — display=marchandises N2/N3. Personnes M2/M3=9100. Hors FCO/FIMO obligatoires.",gisements:["flotte_vehicules"]},
+    // V38.4c FIX TRA-SE-116 — UNITÉ FAUSSE (UTI.km vs t.km). Display valeur cas existant route 0.190.
+    {ref:"TRA-SE-116",label:"Fret ferroviaire (contrat prestation t.km)",sector:"TRA",cat:"Services",unit:"t.km",z:{H1:0.190,H2:0.190,H3:0.190,DOM:0.190},active:true,note:"vA65-2 01/01/2025 — UNITÉ CORRIGÉE (était UTI.km, vrai = t.km). Coef varie 0.105-0.190 selon NST. Formule × C/R durée. Refacto V39.",gisements:["flotte_vehicules"]},
     {ref:"TRA-SE-117",label:"Fret fluvial",sector:"TRA",cat:"Services",unit:"t.km",z:{H1:2,H2:2,H3:2,DOM:2},active:true,note:"vA65-1 01/01/2025",gisements:["flotte_vehicules"]},
 
   // ═══ V26 DEFINITIVE — FICHES ADDITIONNELLES ═══
@@ -4427,7 +4439,9 @@
   // === TRANSPORT ADDITIONNELS ===
   {ref:"TRA-EQ-113",label:"Lubrifiant économiseur énergie transport",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
   {ref:"TRA-EQ-115",label:"Véhicule transport marchandises optimisé",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"vA14-1 [V26:ajouté]",gisements:["flotte_vehicules"]},
-  {ref:"TRA-EQ-118",label:"Aérodynamique poids lourd",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
+  // V38.4c ⚠ URGENCE LABEL_SWAP TOTAL — catalog disait "Aérodynamique poids lourd" (FAUX). PDF officiel = "Lubrifiant économiseur pour pêche professionnelle"
+  // Désactivée car formule complexe par navire/façade/type pêche, refacto V39.
+  {ref:"TRA-EQ-118",label:"Lubrifiant économiseur pour pêche professionnelle",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:false,note:"V38.4c — LABEL CORRIGÉ (catalog disait 'Aérodynamique PL' FAUX, vrai = pêche pro). Désactivée — formule complexe, refacto V39.",gisements:["flotte_vehicules"]},
   {ref:"TRA-EQ-119",label:"Aide au démarrage poids lourd",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
   {ref:"TRA-EQ-121",label:"Aérodynamique autocar",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
   {ref:"TRA-EQ-123",label:"Simulateur de conduite",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
@@ -4443,7 +4457,8 @@
   {ref:"TRA-SE-109",label:"Formation écoconduite VUL",sector:"TRA",cat:"Services",unit:"personne",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
   {ref:"TRA-SE-110",label:"Gestion poste pneumatique marchandises",sector:"TRA",cat:"Services",unit:"véhicule",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
   {ref:"TRA-SE-111",label:"Gestion poste pneumatique personnes",sector:"TRA",cat:"Services",unit:"véhicule",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
-  {ref:"TRA-SE-112",label:"Service autopartage en boucle",sector:"TRA",cat:"Services",unit:"unité",z:{H1:36,H2:36,H3:36,DOM:36},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
+  // V38.4c FIX TRA-SE-112 SOUS ×166.7 délirant — abonnement annuel 6000. Catalog 36 = SOUS ×166.7
+  {ref:"TRA-SE-112",label:"Service autopartage en boucle (par abonnement)",sector:"TRA",cat:"Services",unit:"abonnement",z:{H1:6000,H2:6000,H3:6000,DOM:6000},active:true,note:"vA15-1 — 6000 kWhc/abonnement annuel utilisé ≥1 fois/12 mois. Limite 1 abo/personne sur 5 ans. Catalog 36 = SOUS ×166.",gisements:["flotte_vehicules"]},
   {ref:"TRA-SE-113",label:"Suivi conso carburants cartes privatives",sector:"TRA",cat:"Services",unit:"véhicule",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"vA14-1 [V26:ajouté]",gisements:["flotte_vehicules"]},
 ];
 
