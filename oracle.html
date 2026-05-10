@@ -4969,6 +4969,66 @@
     return 1.0;
   }
 
+  // ════════════════════════════════════════════════════════════════
+  // V38.0 — DISPATCHER MODEL_TYPE OFFICIEL
+  // Permet aux fiches d'avoir un model_type (fixed_formula, absolute_per_sector_zone, etc.)
+  // qui route vers un calculateur spécifique aligné PDF officiel ministère.
+  // Si fiche.model_type absent → return null → fallback legacy (zéro régression).
+  // ════════════════════════════════════════════════════════════════
+  function calcByModelType(fiche, ctx) {
+    if (!fiche || !fiche.model_type) return null;
+    try {
+      switch (fiche.model_type) {
+        case 'fixed_formula':            return calcFixedFormula(fiche, ctx);
+        case 'absolute_per_sector_zone': return calcAbsolutePerSectorZone(fiche, ctx);
+        default: return null; // model_type non encore implémenté → fallback legacy
+      }
+    } catch (e) {
+      console.warn('[V38.0 calcByModelType]', fiche.ref, e);
+      return null;
+    }
+  }
+
+  // Pattern 1 — fixed_formula : formule pure sans secteur ni zone (4 fiches : 111/139/153/157)
+  // Inputs lus depuis ctx.smart (STATE._proAnswers ou modal calculateur)
+  function calcFixedFormula(fiche, ctx) {
+    var s = ctx.smart || {};
+    switch (fiche.ref) {
+      case 'BAT-TH-111':
+        if (!s.B || !s.T) return null;
+        return {kwhcTotal: s.B * s.T * 0.196, source: 'PDF vA17.1'};
+      case 'BAT-TH-139':
+        if (!s.D || !s.P_recuperee) return null;
+        var pCap = Math.min(s.P_recuperee, 2 * (s.P_compresseurs || s.P_recuperee));
+        return {kwhcTotal: s.D * 9.9 * pCap, source: 'PDF vA35.3'};
+      case 'BAT-TH-153':
+        if (!s.deltaT || !s.P_kW) return null;
+        return {kwhcTotal: 1500 * s.deltaT * s.P_kW, source: 'PDF vA28.1'};
+      case 'BAT-TH-157':
+        if (!s.Q || !s.P_kW) return null;
+        var f = (s.P_kW <= 500) ? 4.8 : 3.4;
+        return {kwhcTotal: s.Q * f, source: 'PDF vA50.2'};
+      default: return null;
+    }
+  }
+
+  // Pattern 2 — absolute_per_sector_zone : table kWhc par (secteur, zone) × surface ou puissance
+  // Lit fiche.officialTable.by_sector + fiche.officialTable.by_zone
+  // Quantité multiplicateur = ctx.qty (surface m² ou puissance kW selon fiche.unit)
+  function calcAbsolutePerSectorZone(fiche, ctx) {
+    if (!fiche.officialTable) return null;
+    var t = fiche.officialTable;
+    if (!t.by_sector || !t.by_zone) return null;
+    var actSector = (ctx.sector || 'autres');
+    var fostKey = mapAppSectorToFost(actSector);
+    var sectorKwhc = t.by_sector[fostKey];
+    if (sectorKwhc == null) sectorKwhc = t.by_sector.autres || 0;
+    var zoneFactor = t.by_zone[ctx.zone];
+    if (zoneFactor == null) zoneFactor = t.by_zone.H2 || 1.0;
+    var kwhcTotal = sectorKwhc * (ctx.qty || 1) * zoneFactor;
+    return {kwhcTotal: kwhcTotal, source: 'official_table_sector_zone'};
+  }
+
   // V30: Mapping secteur app → secteur FOST
   function mapAppSectorToFost(appSector) {
     const map = {
@@ -4994,9 +5054,25 @@
   // Modifie: RIEN (fonction pure → retourne un objet)
   // ════════════════════════════════════════════════════════════════
   function getFullCalc(fiche, qty, zone, energyType) {
-    // 1) kWhc effectif
-    const kwhcUnit = getEffectiveKwhc(fiche, zone, energyType);
-    const kwhcTotal = kwhcUnit * qty;
+    // V38.0 — Tentative calcul officiel si fiche.model_type défini (PDF ministère)
+    var officialCalc = null;
+    if (fiche.model_type) {
+      officialCalc = calcByModelType(fiche, {
+        zone: zone, energyType: energyType, qty: qty,
+        sector: STATE.diagnostic.activitySector || 'autres',
+        surface: STATE.diagnostic.surface || 0,
+        smart: STATE._proAnswers || {}
+      });
+    }
+    // 1) kWhc effectif (officiel si dispo, sinon legacy)
+    var kwhcUnit, kwhcTotal;
+    if (officialCalc && officialCalc.kwhcTotal != null && officialCalc.kwhcTotal > 0) {
+      kwhcTotal = officialCalc.kwhcTotal;
+      kwhcUnit = qty > 0 ? Math.round(kwhcTotal / qty) : kwhcTotal;
+    } else {
+      kwhcUnit = getEffectiveKwhc(fiche, zone, energyType);
+      kwhcTotal = kwhcUnit * qty;
+    }
 
     // 2) Prime brute (p6Bonus = multiplicateur Coup de Pouce, default 1)
     var p6Active = (fiche.p6Bonus > 1 && STATE.coupDePouce && ['gaz','fioul'].includes(STATE.diagnostic.energyType || ''));
@@ -5090,7 +5166,9 @@
       coutMarche: ct,
       unitFactor: unitFactor, // V37.3.35 — exposé pour badge UI ratio
       unitWarning: unitWarning, // V37.4.10 — flag heuristique coût travaux
-      unitWarningReason: unitWarningReason
+      unitWarningReason: unitWarningReason,
+      officialMode: !!officialCalc, // V38.0 — true si calcul PDF officiel utilisé
+      officialSource: officialCalc ? officialCalc.source : null
     };
   }
 
