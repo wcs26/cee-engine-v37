@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "V38.1",
+    "version": "V38.2a",
     "date": "2026-05-10",
     "purpose": "Inputs requis par fiche BAT-TH pour calcul officiel exact (model_type). Source : PDFs ministère écologie. Utilisé par smart Q auto-génération + calculateurs V38.0+."
   },
@@ -40,6 +40,76 @@
       "inputs": [
         {"id": "Q", "label": "Chaleur nette utile produite (kWh/an, < 12 GWh)", "type": "number", "unit": "kWh/an", "min": 10000, "max": 12000000},
         {"id": "P_kW", "label": "Puissance chaudière biomasse (kW)", "type": "number", "unit": "kW", "min": 50}
+      ]
+    },
+    "BAT-TH-109": {
+      "model_type": "absolute_per_sector_zone",
+      "label_fiche": "Optimiseur relance chauffage collectif",
+      "formula_summary": "kWhc = montant_secteur × surface × facteur_zone (table V38.2a hardcodée)",
+      "inputs": []
+    },
+    "BAT-TH-159": {
+      "model_type": "absolute_per_sector_zone",
+      "label_fiche": "Raccordement réseau de froid",
+      "formula_summary": "kWhc = montant_secteur × P_souscrite × facteur_zone (zone INVERSÉE H3>H1)",
+      "inputs": [
+        {"id": "P_souscrite_kW", "label": "Puissance froid souscrite au réseau (kW)", "type": "number", "unit": "kW", "min": 10}
+      ]
+    },
+    "BAT-TH-135": {
+      "model_type": "absolute_per_application",
+      "label_fiche": "Régulation HP flottante froid (DOM)",
+      "formula_summary": "kWhc = forfait_application × P_kW · DOM uniquement",
+      "inputs": [
+        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
+        {"id": "application_135", "label": "Application", "type": "select", "options": ["refrigeration", "climatisation_hors_dc", "climatisation_dc"]}
+      ]
+    },
+    "BAT-TH-145": {
+      "model_type": "absolute_per_application",
+      "label_fiche": "Régulation BP flottante froid (métropole)",
+      "formula_summary": "kWhc = forfait_application × P_kW · datacenters EXCLUS",
+      "inputs": [
+        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
+        {"id": "application_145", "label": "Application", "type": "select", "options": ["refrigeration_hors_confort", "climatisation_confort_local"]}
+      ]
+    },
+    "BAT-TH-161": {
+      "model_type": "absolute_per_unit_power",
+      "label_fiche": "Maintien T° groupes électrogènes par PAC",
+      "formula_summary": "kWhc = forfait(puissance) × N · DC ou hôpital uniquement",
+      "inputs": [
+        {"id": "P_groupe_kW", "label": "Puissance par groupe électrogène (kW)", "type": "number", "unit": "kW", "min": 800},
+        {"id": "N_groupes", "label": "Nombre de groupes électrogènes", "type": "number", "default": 1, "min": 1}
+      ]
+    },
+    "BAT-TH-142": {
+      "model_type": "absolute_per_zone_systeme_chauffage",
+      "label_fiche": "Déstratification d'air (métropole)",
+      "formula_summary": "kWhc = montant(zone, type) × P_chauffage_kW · hauteur ≥ 5m",
+      "inputs": [
+        {"id": "P_chauffage_kW", "label": "Puissance chauffage local (kW)", "type": "number", "unit": "kW", "min": 5},
+        {"id": "type_destrat", "label": "Type chauffage actuel", "type": "select", "options": ["convectif", "radiatif"], "default": "convectif"}
+      ]
+    },
+    "BAT-TH-134": {
+      "model_type": "absolute_per_application_zone_condensation",
+      "label_fiche": "Régulation HP flottante froid (métropole)",
+      "formula_summary": "kWhc = montant(application, zone, condensation) × P_kW",
+      "inputs": [
+        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
+        {"id": "application_134", "label": "Application", "type": "select", "options": ["climatisation_confort_hors_dc", "climatisation_dc", "refrigeration_hors_confort"]},
+        {"id": "condensation_134", "label": "Condensation", "type": "select", "options": ["atmosphere", "eau_seul"], "default": "atmosphere"}
+      ]
+    },
+    "BAT-TH-156": {
+      "model_type": "absolute_per_zone_temperature_secteur",
+      "label_fiche": "Freecooling par eau de refroidissement",
+      "formula_summary": "kWhc = montant(zone, T°) × P_compresseurs × coef_secteur (×4.5 si DC)",
+      "inputs": [
+        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "unit": "kW", "min": 5},
+        {"id": "T_consigne_156", "label": "Plage T° consigne réseau", "type": "select", "options": ["15_18C", "18_20C"], "default": "18_20C"},
+        {"id": "secteur_156", "label": "Type bâtiment", "type": "select", "options": ["climatisation_hors_dc", "climatisation_dc"], "default": "climatisation_hors_dc"}
       ]
     }
   }
