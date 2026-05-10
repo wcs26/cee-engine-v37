@@ -4306,27 +4306,41 @@
     // ============================================
     // === INDUSTRIE (IND) =======================
     // ============================================
-    {ref:"IND-BA-110",label:"Déstratificateur air industriel",sector:"IND",cat:"Bâtiment",unit:"unité",z:{H1:38000,H2:31000,H3:22000,DOM:15000},active:true,note:"vA71-4 01/08/2025",zeroEuro:true,gisements:["chauffage_batiment"]},
-    {ref:"IND-EN-101",label:"Isolation combles/toitures industriel",sector:"IND",cat:"Enveloppe",unit:"m²",z:{H1:22,H2:18,H3:13,DOM:9},active:true,gisements:["isolation_enveloppe"]},
-    {ref:"IND-EN-102",label:"Isolation murs industriel",sector:"IND",cat:"Enveloppe",unit:"m²",z:{H1:36,H2:29,H3:21,DOM:14},active:true,gisements:["isolation_enveloppe"]},
+    // V38.4d FIX BA-110 — concept WRONG : forfait/unité → forfait par kW chauffage × hauteur × horaires
+    // Source PDF vA69-3 01/07/2025 — display=convectif H1 4000 cas standard
+    {ref:"IND-BA-110",label:"Déstratificateur ou brasseur d'air industriel (h≥5m)",sector:"IND",cat:"Bâtiment",unit:"kW",z:{H1:4000,H2:4000,H3:4000,DOM:4000},active:true,note:"vA69-3 01/07/2025 — display=convectif. Réel = 1300-4000 conv / 470-1400 rad × coef hauteur 1-3.7 × horaires. Catalog 38000/unité = WRONG concept",zeroEuro:true,gisements:["chauffage_batiment"]},
+    // V38.4d ⚠ FIX LABEL_SWAP EN-101 : catalog dit "Combles" mais PDF vA23-1 = "Murs DOM-TOM uniquement"
+    {ref:"IND-EN-101",label:"Isolation murs industriel (DOM-TOM uniquement)",sector:"IND",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:270},active:true,note:"vA23-1 — DOM-TOM EXCLUSIVEMENT (270 kWhc/m² existant, 240 neuf). Catalog avait LABEL 'combles' + zone H1/H2/H3 = WRONG. Vrai 'combles industriel' = IND-EN-102",gisements:["isolation_enveloppe"]},
+    // V38.4d ⚠ FIX LABEL_SWAP EN-102 : catalog dit "Murs" mais PDF = "Combles/toitures DOM-TOM"
+    {ref:"IND-EN-102",label:"Isolation combles/toitures industriel (DOM-TOM uniquement)",sector:"IND",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:110},active:true,note:"V38.4d — DOM-TOM EXCLUSIVEMENT. Catalog avait LABEL 'murs' = SWAP avec EN-101 corrigé",gisements:["isolation_enveloppe"]},
     {ref:"IND-EN-103",label:"Isolation plancher industriel",sector:"IND",cat:"Enveloppe",unit:"m²",z:{H1:21,H2:17,H3:12,DOM:8},active:true,gisements:["isolation_enveloppe"]},
-    {ref:"IND-UT-102",label:"VEV moteur asynchrone industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:4800,H2:4800,H3:4800,DOM:4800},active:true,gisements:["motorisation"]},
-    {ref:"IND-UT-103",label:"Compresseur air performant industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:7800,H2:7800,H3:7800,DOM:7800},active:true,gisements:["air_comprime"]},
-    {ref:"IND-UT-104",label:"Moteur haut rendement IE3/IE4",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:2200,H2:2200,H3:2200,DOM:2200},active:true,gisements:["motorisation"]},
+    // V38.4d FIX UT-102 SOUS ×2.5 — table par application (pompage 12400, ventilation 12200, comp_air 11900, comp_frigo 7100, autres 5500)
+    {ref:"IND-UT-102",label:"VEV moteur asynchrone industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:5500,H2:5500,H3:5500,DOM:5500},active:true,note:"vA19.2 — display=autres (5500). Pompage=12400, ventilation=12200, comp_air=11900, comp_frigo=7100. Catalog 4800 = SOUS ×1.15-2.6",gisements:["motorisation"]},
+    // V38.4d ⚠ FIX LABEL_SWAP UT-103 : catalog "Compresseur air performant" mais PDF = "Récupération chaleur sur compresseur d'air"
+    {ref:"IND-UT-103",label:"Récupération chaleur sur compresseur d'air industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:6400,H2:6400,H3:6400,DOM:6400},active:true,note:"vA17-2 — LABEL CORRIGÉ (catalog disait 'compresseur perf' FAUX). Display=process 1×8h. Table 6400-43100 selon usage×horaires (3×8h continu chauffage = 43100)",gisements:["air_comprime","chauffage_batiment"]},
+    // V38.4d ⚠ URGENCE LABEL_SWAP UT-104 : catalog dit "Moteur IE3/IE4" mais PDF = "Économiseur fumées chaudière vapeur" (vrai moteur IE3/IE4 = UT-132)
+    {ref:"IND-UT-104",label:"Économiseur effluents gazeux chaudière vapeur (P<20MW)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:330,H2:330,H3:330,DOM:330},active:true,note:"vA14-1 — LABEL CORRIGÉ (catalog disait 'Moteur IE3/IE4' FAUX, vrai = IND-UT-132). Display=1×8h (330). Table 330-1400 selon horaires. Catalog 2200 = SUR ×1.6-6.7",gisements:["chauffage_batiment","process_thermique","vapeur"]},
     // V38.4a ⚠ FIX URGENCE PNCEE : catalog SUR-évalué ×8-30. Valeur conservatrice cas 1×8h (550 kWhc/kW).
     // Source : PDF officiel mentionne table par mode horaires (1×8h=550, 2×8h=1200, 3×8h_arrêt_WE=1600, 3×8h_continu=2300).
     // Pour vraie précision : besoin input mode horaires (V38.4b avec model_type).
     {ref:"IND-UT-105",label:"Brûleur micro-modulant chaudière industrielle (P<20MW)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:550,H2:550,H3:550,DOM:550},active:true,note:"V38.4a — valeur cas 1×8h (PDF) — précisez horaires pour exactitude (jusqu'à 2300 kWhc/kW si 3×8h continu). Ancien catalog 18800 = SUR ×8-30, risque rejet PNCEE.",gisements:["chauffage_batiment","process_thermique"]},
     {ref:"IND-UT-113",label:"Récupérateur chaleur fumées chaudière",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12400,H2:10200,H3:7300,DOM:4900},active:true,gisements:["chauffage_batiment","process_thermique"]},
-    {ref:"IND-UT-114",label:"Moto-variateur synchrone aimants",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:6100,H2:6100,H3:6100,DOM:6100},active:true,gisements:["motorisation"]},
-    {ref:"IND-UT-116",label:"Régulation haute pression flottante",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:16400,H2:16400,H3:16400,DOM:16400},active:true,zeroEuro:true,gisements:["froid","regulation_gtb"]},
-    {ref:"IND-UT-120",label:"Compresseur air basse pression",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:7800,H2:7800,H3:7800,DOM:7800},active:true,gisements:["air_comprime"]},
-    {ref:"IND-UT-122",label:"Sécheur air comprimé adsorption",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:18200,H2:18200,H3:18200,DOM:18200},active:true,gisements:["air_comprime"]},
-    {ref:"IND-UT-124",label:"Séquenceur centrale air comprimé",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:7800,H2:7800,H3:7800,DOM:7800},active:true,gisements:["air_comprime","regulation_gtb"]},
-    {ref:"IND-UT-125",label:"Traitement eau chaudière vapeur",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:18800,H2:15400,H3:11000,DOM:7400},active:true,gisements:["vapeur"]},
+    // V38.4d FIX UT-114 SOUS ×1.5-2.9 — table par application (pompage 17800, ventilation 17600, comp_air 9200, comp_frigo 14500, autres 11400)
+    {ref:"IND-UT-114",label:"Moto-variateur synchrone aimants permanents (industrie P≤1MW)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:11400,H2:11400,H3:11400,DOM:11400},active:true,note:"vA24-2 — display=autres. Pompage=17800, vent=17600, comp_frigo=14500, comp_air=9200. Catalog 6100 = SOUS ×1.5-2.9",gisements:["motorisation"]},
+    // V38.4d FIX UT-116 SUR ×1.15-1.58 — valeur conservatrice
+    {ref:"IND-UT-116",label:"Régulation haute pression flottante (industrie)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:10400,H2:10400,H3:10400,DOM:10400},active:true,zeroEuro:true,note:"PDF — 10400-14300 selon zone×condensation. Catalog 16400 = SUR ×1.15-1.58",gisements:["froid","regulation_gtb"]},
+    // V38.4d FIX UT-120 SOUS ×2.47 — valeur officielle 19300
+    {ref:"IND-UT-120",label:"Compresseur air basse pression",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:19300,H2:19300,H3:19300,DOM:19300},active:true,note:"vA14-1 — 19300 kWhc/kW forfait. Catalog 7800 = SOUS ×2.47",gisements:["air_comprime"]},
+    // V38.4d ⚠ FIX UT-122 SUR ×1.9-7.9 (urgence PNCEE) — display=1×8h (2300)
+    {ref:"IND-UT-122",label:"Sécheur air comprimé adsorption (régénération calorifique)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:2300,H2:2300,H3:2300,DOM:2300},active:true,note:"vA14-1 — display=1×8h (2300). Table 2300/5000/6800/9500 selon horaires. Catalog 18200 = SUR ×1.9-7.9 RISQUE PNCEE",gisements:["air_comprime"]},
+    // V38.4d ⚠ FIX UT-124 SUR ×1.4-13.9 (urgence PNCEE)
+    {ref:"IND-UT-124",label:"Séquenceur centrale air comprimé",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:560,H2:560,H3:560,DOM:560},active:true,note:"vA13-1 — display=cas conservateur 560. Table 560-5600 selon nb compresseurs+optimisation. Catalog 7800 = SUR ×1.4-13.9",gisements:["air_comprime","regulation_gtb"]},
+    // V38.4d ⚠ FIX UT-125 SUR ×7-110 (urgence PNCEE — délirant)
+    {ref:"IND-UT-125",label:"Traitement eau chaudière vapeur",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:70,H2:70,H3:70,DOM:70},active:true,note:"PDF — 70-2700 selon zone géographique A/B/C/D × horaires. Catalog 18800/15400/11000/7400 = SUR ×7-110 délirant",gisements:["vapeur"]},
     {ref:"IND-UT-127",label:"Système transmission performant",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:6100,H2:6100,H3:6100,DOM:6100},active:true,gisements:["motorisation"]},
     {ref:"IND-UT-129",label:"Presse injection tout électrique/hybride",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12000,H2:12000,H3:12000,DOM:12000},active:true,gisements:["motorisation"]},
-    {ref:"IND-UT-130",label:"Condenseur effluents gazeux chaudière",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12400,H2:10200,H3:7300,DOM:4900},active:true,gisements:["chauffage_batiment","process_thermique"]},
+    // V38.4d ⚠ FIX UT-130 SUR ×3.5-36 (urgence PNCEE)
+    {ref:"IND-UT-130",label:"Condenseur effluents gazeux chaudière",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:340,H2:340,H3:340,DOM:340},active:true,note:"PDF — display=1×8h (340). Table 340/740/1000/1400 selon horaires. Catalog 12400/10200/7300/4900 = SUR ×3.5-36",gisements:["chauffage_batiment","process_thermique"]},
     {ref:"IND-UT-131",label:"Isolation parois planes/cylindriques",sector:"IND",cat:"Utilités",unit:"m²",z:{H1:4200,H2:4200,H3:4200,DOM:4200},active:true,note:"vA37-2 01/04/2021",zeroEuro:true,gisements:["isolation_enveloppe","process_thermique"]},
     {ref:"IND-UT-132",label:"Moteur asynchrone IE4",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:2200,H2:2200,H3:2200,DOM:2200},active:true,gisements:["motorisation"]},
     {ref:"IND-UT-133",label:"Système pilotage moteur récupération",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:6100,H2:6100,H3:6100,DOM:6100},active:true,gisements:["motorisation"]},
@@ -4334,7 +4348,8 @@
     {ref:"IND-UT-137",label:"PAC rehausse T° chaleur fatale",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:14200,H2:14200,H3:14200,DOM:14200},active:true,note:"vA65-2 01/01/2025",p6Bonus:2,gisements:["froid","process_thermique"]},
     {ref:"IND-UT-138",label:"Conversion chaleur fatale électricité/air",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12000,H2:12000,H3:12000,DOM:12000},active:true,note:"vA62-1 01/01/2025",gisements:["process_thermique"]},
     {ref:"IND-UT-139",label:"Stockage chaleur fatale",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:14200,H2:14200,H3:14200,DOM:14200},active:true,note:"vA73-2 01/11/2025",gisements:["process_thermique"]},
-    {ref:"IND-UT-140",label:"Mise en veille machine air comprimé",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:9400,H2:9400,H3:9400,DOM:9400},active:true,note:"vA65-1 01/01/2025",gisements:["air_comprime"]},
+    // V38.4d ⚠ FIX UT-140 UNITÉ FAUSSE — kW au lieu de L/min !
+    {ref:"IND-UT-140",label:"Mise en veille automatique machine air comprimé",sector:"IND",cat:"Utilités",unit:"L/min",z:{H1:30,H2:30,H3:30,DOM:30},active:true,note:"vA65-1 01/01/2025 — UNITÉ CORRIGÉE (catalog avait 'kW' = WRONG, vrai = L/min). Display=3×8h continu (30). Jusqu'à 71 si 1×8h",gisements:["air_comprime"]},
     // V25 CORRECTED: Fiches IND manquantes ajoutées
     {ref:"IND-UT-118",label:"Brûleur récup chaleur four industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12000,H2:12000,H3:12000,DOM:12000},active:true,note:"[V25:ajouté]",gisements:["process_thermique"]},
     {ref:"IND-UT-117",label:"Récup chaleur groupe froid industriel",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:12400,H2:10200,H3:7300,DOM:4900},active:false,note:"ABROGÉE 01/08/2025 surfinancement [V25:marqueur]",gisements:["froid","process_thermique"]},
@@ -4434,7 +4449,9 @@
   {ref:"IND-UT-106",label:"Brûleur micro-modulant condensation",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:175,H2:150,H3:120,DOM:90},active:true,note:"vA64 [V26:ajouté]",gisements:["chauffage_batiment"]},
   {ref:"IND-UT-108",label:"Détection fuites réseau air comprimé",sector:"IND",cat:"Air comprimé",unit:"kW",z:{H1:3600,H2:3600,H3:3600,DOM:3600},active:true,note:"vA73 [V26:ajouté]",zeroEuro:true,gisements:["air_comprime"]},
   {ref:"IND-UT-109",label:"Optimisation production froid industriel",sector:"IND",cat:"Froid",unit:"kW froid",z:{H1:4200,H2:3800,H3:3200,DOM:2600},active:true,note:"vA64 [V26:ajouté]",gisements:["froid"]},
-  {ref:"IND-UT-112",label:"Système mesurage indicateurs énergétiques",sector:"IND",cat:"Management",unit:"site",z:{H1:320000,H2:320000,H3:320000,DOM:320000},active:true,note:"vA64 [V26:ajouté]",gisements:["process_thermique"]},
+  // V38.4d ⚠ DÉSACTIVÉE — UT-112 catalog avait LABEL FAUX "Mesurage IPE" mais c'était "Moteur HR IE2" ABROGÉE 01/04/2022
+  // Le vrai mesurage IPE = IND-UT-134 (déjà actif V38.4a)
+  {ref:"IND-UT-112",label:"Moteur HR IE2 — ABROGÉE 01/04/2022 (label catalog 'Mesurage IPE' WRONG, vrai = IND-UT-134)",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:0,H2:0,H3:0,DOM:0},active:false,note:"V38.4d — DÉSACTIVÉE. Abrogée 01/04/2022. Catalog 320000/site INVENTÉ",gisements:[]},
   {ref:"IND-UT-134",label:"Mesurage indicateurs performance énergétique",sector:"IND",cat:"Utilités",unit:"kW",z:{H1:330,H2:330,H3:330,DOM:330},active:true,note:"vA35-2 — formule officielle: 29.4×coefActivité×P×F. Cas représentatif (3×8h arrêt WE, engagement 4 ans) = 29.4×3.0×3.78 = 333 kWhc/kW. Max théorique (3×8h continu, 6 ans) = 671. Précisez profil opérationnel pour exactitude.",formuleOfficielle:"29.4×coefActivité×P(kW)×F(engagement)",gisements:["process_thermique"]},
   // === TRANSPORT ADDITIONNELS ===
   {ref:"TRA-EQ-113",label:"Lubrifiant économiseur énergie transport",sector:"TRA",cat:"Équipements",unit:"unité",z:{H1:1300,H2:1300,H3:1300,DOM:1300},active:true,note:"[V26:ajouté]",gisements:["flotte_vehicules"]},
