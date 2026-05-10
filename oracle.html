@@ -4230,14 +4230,17 @@
     {ref:"BAT-TH-127",label:"Raccordement bâtiment tertiaire à un réseau de chaleur",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:27700,H2:22700,H3:16300,DOM:10900,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA79-5 P6 01/01/2026 — modèle absolu, refactor V38",gisements:["chauffage_batiment","reseau_chaleur"]},
     {ref:"BAT-TH-134",label:"Régulation haute pression flottante froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,zeroEuro:true,gisements:["froid","regulation_gtb"]},
     {ref:"BAT-TH-135",label:"Régulation haute pression flottante froid DOM",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:0,H2:0,H3:0,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["froid","regulation_gtb"]},
-    {ref:"BAT-TH-139",label:"Récupération chaleur groupe froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA35-3 01/10/2020",zeroEuro:true,gisements:["froid","ecs"]},
+    // V38.1 — model_type fixed_formula : calcul officiel exact si inputs D + P_recuperee + P_compresseurs renseignés
+    {ref:"BAT-TH-139",model_type:"fixed_formula",label:"Récupération chaleur groupe froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA35-3 01/10/2020 — formule officielle D×9.9×P",zeroEuro:true,gisements:["froid","ecs"]},
     {ref:"BAT-TH-142",label:"Déstratification d'air",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:38000,H2:31000,H3:22000,DOM:15000,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA71-4 01/08/2025",zeroEuro:true,gisements:["chauffage_batiment"]},
     {ref:"BAT-TH-143",label:"Ventilo-convecteurs haute performance",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:1650,H2:1350,H3:970,DOM:650,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["chauffage_batiment"]},
     {ref:"BAT-TH-145",label:"Régulation basse pression flottante froid",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5600,H2:5600,H3:5600,DOM:5600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,zeroEuro:true,gisements:["froid","regulation_gtb"]},
-    {ref:"BAT-TH-153",label:"Confinement allées Data Center",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:10400,H2:10400,H3:10400,DOM:10400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["froid"]},
+    // V38.1 — model_type fixed_formula : calcul officiel exact si inputs P_kW + deltaT renseignés
+    {ref:"BAT-TH-153",model_type:"fixed_formula",label:"Confinement allées Data Center",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:10400,H2:10400,H3:10400,DOM:10400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA28.1 — formule officielle 1500×ΔT×P",gisements:["froid"]},
     {ref:"BAT-TH-154",label:"Récupération chaleur eaux grises",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:22000,H2:22000,H3:22000,DOM:22000,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["ecs"]},
     {ref:"BAT-TH-156",label:"Freecooling climatisation",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:9400,H2:9400,H3:9400,DOM:9400,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,gisements:["froid"]},
-    {ref:"BAT-TH-157",label:"Chaudière biomasse collective tertiaire",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5400,H2:4400,H3:3200,DOM:2100,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,gisements:["chauffage_batiment"]},
+    // V38.1 — model_type fixed_formula : calcul officiel exact si inputs Q + P_kW renseignés
+    {ref:"BAT-TH-157",model_type:"fixed_formula",label:"Chaudière biomasse collective tertiaire",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:5400,H2:4400,H3:3200,DOM:2100,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA50.2 — formule officielle Q×4.8 (P≤500kW) ou Q×3.4",gisements:["chauffage_batiment"]},
     // V37.4.23 — sectFactors alignés PDF officiel ministère écologie BAT-TH-158 v.A42.2 (31/01/2022)
     // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAT-TH-158%20vA42-2%20%C3%A0%20compter%20du%2031-01-2022.pdf
     // Pattern PAC tertiaire : HCR=0.7 (PAC réversible utilisée surtout en clim → moins favorisée HCR).
@@ -4354,7 +4357,8 @@
   {ref:"BAT-EN-106",label:"Isolation murs tertiaire DOM",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:1130,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA64.3 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
   {ref:"BAT-EN-108",label:"Isolation plancher tertiaire DOM",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:1700,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,cofrac:true,note:"vA64.4 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
   {ref:"BAT-EN-109",surface_ratio:0.2,label:"Fenêtre/porte-fenêtre tertiaire DOM",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:2270,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA64.3 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
-  {ref:"BAT-TH-111",surface_ratio:0.02,label:"Chauffe-eau solaire collectif tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:2600,H2:2600,H3:2600,DOM:2600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"[V26:ajouté]",gisements:["ecs"]},
+  // V38.1 — model_type fixed_formula : calcul officiel exact si inputs B + T renseignés (PDF vA17.1)
+  {ref:"BAT-TH-111",model_type:"fixed_formula",surface_ratio:0.02,label:"Chauffe-eau solaire collectif tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:2600,H2:2600,H3:2600,DOM:2600,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA17.1 — formule officielle B×T×0.196",gisements:["ecs"]},
   {ref:"BAT-TH-112",label:"VEV moteur asynchrone tertiaire",sector:"BAT",cat:"Thermique",unit:"kW",z:{H1:4800,H2:4800,H3:4800,DOM:4800,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"[V26:ajouté]",gisements:["motorisation"]},
   {ref:"BAT-TH-115",label:"Climatiseur performant DOM",sector:"BAT",cat:"Thermique",unit:"unité",z:{H1:0,H2:0,H3:0,DOM:3800,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"[V26:ajouté]",gisements:["froid"]},
   {ref:"BAT-TH-121",surface_ratio:0.02,label:"Chauffe-eau solaire DOM tertiaire",sector:"BAT",cat:"Thermique",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:5500,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA35-3 [V26:ajouté]",gisements:["ecs"]},
@@ -7441,6 +7445,41 @@
             source: anneeBat ? 'Estimation depuis construction ' + anneeBat : null
           });
         }
+
+        // ════════════════════════════════════════════════════════════════
+        // V38.1 — AUTO-GÉNÉRATION smart Q pour fiches avec model_type officiel
+        // Pour chaque fiche du state.pack qui a model_type défini, générer les
+        // questions correspondant à ses inputs manquants (lus depuis bat_th_inputs.json).
+        // Active le calcul officiel exact dès que Jimmy renseigne les valeurs.
+        // ════════════════════════════════════════════════════════════════
+        try {
+          if (typeof window.V2 !== 'undefined' && window.V2._batThInputsCache && window.V2._batThInputsCache.fiches) {
+            var inputsCatalog = window.V2._batThInputsCache.fiches;
+            var packRefs = (window.STATE && window.STATE.selectedFiches) ? Array.from(window.STATE.selectedFiches.keys()) : [];
+            // Si state.pack non rempli, utiliser FICHES filtrées par activitySector
+            if (!packRefs.length && typeof FICHES !== 'undefined') {
+              packRefs = FICHES.filter(function(f){return f.model_type;}).slice(0,5).map(function(f){return f.ref;});
+            }
+            var alreadyAsked = new Set(smartQuestions.map(function(q){return q.field;}));
+            packRefs.forEach(function(ref) {
+              var spec = inputsCatalog[ref];
+              if (!spec || !spec.inputs) return;
+              spec.inputs.forEach(function(inp) {
+                if (alreadyAsked.has(inp.id)) return;
+                alreadyAsked.add(inp.id);
+                var defVal = inp.default || '';
+                if (!defVal && inp.estimate_from === 'surface * 30' && surfCalc) defVal = Math.round(surfCalc * 30);
+                smartQuestions.push({
+                  q: '[' + ref + '] ' + inp.label,
+                  field: inp.id, type: inp.type || 'number',
+                  defaut: defVal,
+                  impact: '🎯 Active calcul officiel exact ' + ref + ' (' + (spec.formula_summary || '') + ')',
+                  source: 'PDF officiel ministère écologie'
+                });
+              });
+            });
+          }
+        } catch (_e) { console.warn('[V38.1 smart Q auto]', _e); }
 
         // ════════════════════════════════════════════════════════════════
         // V37.4.14 — INPUTS CRITIQUES MANQUANTS (audit Jimmy 2026-05-08)
@@ -14560,6 +14599,8 @@ window.V2 = {
     if (fab) fab.style.display = 'flex';
     // V37.4.25 — Précharger les formules officielles BAT-TH (background)
     this._loadBatThOfficial().catch(function(){});
+    // V38.1 — Précharger les inputs requis pour smart Q auto + calcul officiel
+    this._loadBatThInputs().catch(function(){});
     this.go(this.state.currentPage);
   },
 
@@ -15982,7 +16023,14 @@ window.V2 = {
         if (off && off.pdf_url) {
           var canCalc = (off.model_type === 'fixed_formula');
           if (canCalc) {
-            html += ' <button onclick="event.stopPropagation();V2._openOfficialCalc(\'' + ref + '\');return false;" style="margin-left:6px;color:#bc8cff;background:none;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.5);padding:1px 6px;border-radius:3px;cursor:pointer;font-family:inherit;" title="Calculateur officiel exact selon ' + (off.version || '') + '">📐 Calc officiel</button>';
+            // V38.1 — Badge dynamique : vert si calcul officiel actif, violet sinon
+            var hasAll = this._hasAllInputs(ref);
+            var missing = this._getMissingInputsForFiche(ref);
+            var badgeColor = hasAll ? '#3fb950' : '#bc8cff';
+            var badgeBg = hasAll ? 'rgba(63,185,80,.15)' : 'rgba(188,140,255,.08)';
+            var badgeText = hasAll ? '✅ Calcul officiel actif' : '📐 ' + missing.length + ' input(s) à renseigner';
+            var badgeTitle = hasAll ? 'Calcul exact selon ' + (off.version || '') : 'Renseigner : ' + missing.map(function(i){return i.label;}).join(', ');
+            html += ' <button onclick="event.stopPropagation();V2._openOfficialCalc(\'' + ref + '\');return false;" style="margin-left:6px;color:' + badgeColor + ';background:' + badgeBg + ';text-decoration:none;font-size:10px;border:1px solid ' + badgeColor + ';padding:1px 6px;border-radius:3px;cursor:pointer;font-family:inherit;" title="' + badgeTitle.replace(/"/g,"'") + '">' + badgeText + '</button>';
           } else {
             html += ' <a href="' + off.pdf_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="margin-left:6px;color:#bc8cff;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.3);padding:1px 6px;border-radius:3px;" title="' + (off.formula || '').replace(/"/g,"'") + ' · ' + (off.version || '') + '">📄 PDF officiel</a>';
           }
@@ -16463,6 +16511,39 @@ window.V2 = {
       if (e.code === 401) c.innerHTML = this._authModal('/post-signature/dashboard requiert connexion');
       else c.innerHTML = '<div style="padding:14px;background:rgba(248,81,73,.06);border-left:3px solid #ff7b72;border-radius:0 6px 6px 0;font-size:12px;color:rgba(245,245,247,.75);">⚠ Endpoint /post-signature/dashboard indisponible (' + (e.message || e) + ').<br>Le calendrier réglementaire ci-dessous reste utilisable comme référence universelle.</div>';
     }
+  },
+
+  // V38.1 — Cache des inputs requis par fiche (smart Q auto-génération)
+  async _loadBatThInputs() {
+    if (this._batThInputsCache) return this._batThInputsCache;
+    try {
+      var resp = await fetch('/bat_th_inputs.json', {cache:'force-cache'});
+      this._batThInputsCache = await resp.json();
+    } catch (e) { this._batThInputsCache = {fiches:{}}; }
+    return this._batThInputsCache;
+  },
+  // Retourne les inputs définis pour une fiche (ou null)
+  _getInputsSpec(ref) {
+    var c = this._batThInputsCache;
+    if (!c || !c.fiches) return null;
+    var entry = c.fiches[ref];
+    return entry ? entry.inputs : null;
+  },
+  // Retourne la liste des inputs MANQUANTS pour une fiche (croise avec STATE._proAnswers)
+  _getMissingInputsForFiche(ref) {
+    var spec = this._getInputsSpec(ref);
+    if (!spec) return [];
+    var smart = (typeof STATE !== 'undefined' && STATE._proAnswers) || {};
+    return spec.filter(function(i) {
+      var v = smart[i.id];
+      return v == null || v === '' || (i.type === 'number' && (isNaN(parseFloat(v)) || parseFloat(v) <= 0));
+    });
+  },
+  // Retourne true si la fiche a tous ses inputs renseignés (calcul officiel actif)
+  _hasAllInputs(ref) {
+    var spec = this._getInputsSpec(ref);
+    if (!spec) return false;
+    return this._getMissingInputsForFiche(ref).length === 0;
   },
 
   // V37.4.25 — Cache des formules officielles BAT-TH (chargé au activate)
