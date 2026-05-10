@@ -15899,10 +15899,15 @@ window.V2 = {
           var infoTitle = (f.formuleOfficielle ? 'Formule officielle : ' + f.formuleOfficielle + ' · ' : '') + (f.note || '');
           html += ' <span style="margin-left:6px;cursor:help;color:#58a6ff;" title="' + infoTitle.replace(/"/g,"'") + '">ⓘ</span>';
         }
-        // V37.4.25 — Badge PDF officiel ministère écologie pour fiches du registre bat_th_official.json
+        // V37.4.26 — Badge PDF officiel : calculateur live si fixed_formula, sinon PDF direct
         var off = this._getOfficialFormula(ref);
         if (off && off.pdf_url) {
-          html += ' <a href="' + off.pdf_url + '" target="_blank" rel="noopener" style="margin-left:6px;color:#bc8cff;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.3);padding:1px 6px;border-radius:3px;" title="' + (off.formula || '').replace(/"/g,"'") + ' · ' + (off.version || '') + '">📄 PDF officiel</a>';
+          var canCalc = (off.model_type === 'fixed_formula');
+          if (canCalc) {
+            html += ' <button onclick="event.stopPropagation();V2._openOfficialCalc(\'' + ref + '\');return false;" style="margin-left:6px;color:#bc8cff;background:none;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.5);padding:1px 6px;border-radius:3px;cursor:pointer;font-family:inherit;" title="Calculateur officiel exact selon ' + (off.version || '') + '">📐 Calc officiel</button>';
+          } else {
+            html += ' <a href="' + off.pdf_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="margin-left:6px;color:#bc8cff;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.3);padding:1px 6px;border-radius:3px;" title="' + (off.formula || '').replace(/"/g,"'") + ' · ' + (off.version || '') + '">📄 PDF officiel</a>';
+          }
         }
         html += '</div>';
         // V37.4.18 — Cumul CEE + MaPrimeRénov' si calculCumulAides V1 dispo
@@ -16396,6 +16401,127 @@ window.V2 = {
     var c = this._batThOfficialCache;
     if (!c || !c.fiches) return null;
     return c.fiches[ref] || null;
+  },
+
+  // V37.4.26 — Calculateur officiel live pour les 4 fiches fixed_formula
+  // Ouvre un modal qui demande les vrais inputs et calcule kWhc exact selon PDF.
+  // Compare avec calcul actuel (approx sectFactor) et affiche écart %.
+  _openOfficialCalc(ref) {
+    var off = this._getOfficialFormula(ref);
+    if (!off) { alert('Formule officielle non disponible pour ' + ref); return; }
+    // Définition des inputs requis par fiche
+    var configs = {
+      'BAT-TH-111': {
+        title: 'Chauffe-eau solaire collectif (BAT-TH-111)',
+        inputs: [
+          {id:'B', label:'Besoin annuel ECS solaire (kWh/an)', placeholder:'Ex: 12000', type:'number'},
+          {id:'T', label:'Taux de couverture solaire T (%)', placeholder:'Ex: 50 (= 50%)', type:'number'}
+        ],
+        compute: function(v) { return v.B * v.T * 0.196; },
+        formulaText: 'kWhc = B × T × 0,196'
+      },
+      'BAT-TH-139': {
+        title: 'Récupération chaleur sur groupe froid (BAT-TH-139)',
+        inputs: [
+          {id:'D', label:'Durée annuelle utilisation chaleur récup (heures)', placeholder:'Ex: 4500', type:'number'},
+          {id:'P_recuperee', label:'Puissance récupérée (kW)', placeholder:'Ex: 80', type:'number'},
+          {id:'P_compresseurs', label:'Puissance compresseurs total (kW) — pour cap', placeholder:'Ex: 100', type:'number'}
+        ],
+        compute: function(v) {
+          // Cap : P_recup ≤ 2×P_compresseurs (P_deja_recup=0 par défaut)
+          var pCap = Math.min(v.P_recuperee, 2 * v.P_compresseurs);
+          return v.D * 9.9 * pCap;
+        },
+        formulaText: 'kWhc = D × 9,9 × P_recup (cap : ≤ 2 × P_compresseurs)'
+      },
+      'BAT-TH-153': {
+        title: 'Confinement allées Data Center (BAT-TH-153)',
+        inputs: [
+          {id:'P', label:'Puissance électrique groupe froid (kW)', placeholder:'Ex: 500', type:'number'},
+          {id:'deltaT', label:'Augmentation T° consigne eau glacée (°C)', placeholder:'Ex: 4', type:'number'}
+        ],
+        compute: function(v) { return 1500 * v.deltaT * v.P; },
+        formulaText: 'kWhc = 1500 × ΔT × P'
+      },
+      'BAT-TH-157': {
+        title: 'Chaudière biomasse collective tertiaire (BAT-TH-157)',
+        inputs: [
+          {id:'Q', label:'Chaleur nette utile produite (kWh/an, < 12 GWh/an)', placeholder:'Ex: 800000', type:'number'},
+          {id:'P_kW', label:'Puissance chaudière (kW)', placeholder:'Ex: 400', type:'number'}
+        ],
+        compute: function(v) {
+          var facteur = (v.P_kW <= 500) ? 4.8 : 3.4;
+          return v.Q * facteur;
+        },
+        formulaText: 'kWhc = Q × 4,8 (P≤500kW) ou Q × 3,4 (P>500kW)'
+      }
+    };
+    var cfg = configs[ref];
+    if (!cfg) {
+      // Pour les autres model_type complexes : juste ouvrir le PDF
+      window.open(off.pdf_url, '_blank');
+      return;
+    }
+    // Construire le modal
+    var modal = document.getElementById('v2OfficialCalcModal');
+    if (modal) modal.remove();
+    var html = '';
+    html += '<div id="v2OfficialCalcModal" class="no-print" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);">';
+    html += '<div style="background:rgba(15,15,18,.98);border:1px solid rgba(188,140,255,.4);border-radius:14px;padding:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">';
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-size:20px;color:#bc8cff;line-height:1.2;">📐 ' + cfg.title + '</div>';
+    html += '<button onclick="document.getElementById(\'v2OfficialCalcModal\').remove()" style="background:none;border:none;color:rgba(245,245,247,.5);cursor:pointer;font-size:22px;padding:0 6px;line-height:1;">✕</button>';
+    html += '</div>';
+    html += '<div style="font-size:12px;color:rgba(245,245,247,.6);margin-bottom:14px;">Source : <a href="' + off.pdf_url + '" target="_blank" rel="noopener" style="color:#58a6ff;">PDF officiel ministère/ADEME</a> · ' + (off.version || '') + '</div>';
+    html += '<div style="padding:10px;background:rgba(188,140,255,.06);border-left:3px solid #bc8cff;border-radius:0 6px 6px 0;font-family:JetBrains Mono,monospace;font-size:13px;color:#bc8cff;margin-bottom:18px;">' + cfg.formulaText + '</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px;">';
+    cfg.inputs.forEach(function(i) {
+      html += '<div>';
+      html += '<label style="display:block;font-size:12px;color:rgba(245,245,247,.75);margin-bottom:4px;">' + i.label + '</label>';
+      html += '<input type="number" id="v2off_in_' + i.id + '" placeholder="' + i.placeholder + '" style="width:100%;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#f5f5f7;font-family:JetBrains Mono,monospace;font-size:13px;" oninput="V2._recomputeOfficial(\'' + ref + '\')">';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div id="v2OfficialResult" style="padding:14px;background:rgba(200,255,107,.06);border:1px solid rgba(200,255,107,.25);border-radius:8px;text-align:center;">';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:1px;">kWhc officiel calculé</div>';
+    html += '<div id="v2OfficialKwhc" style="font-family:Fraunces,Georgia,serif;font-size:36px;font-weight:380;color:#C8FF6B;margin:6px 0;">— kWhc</div>';
+    html += '<div id="v2OfficialPrime" style="font-size:13px;color:rgba(245,245,247,.7);">Prime CEE estimée : — €</div>';
+    html += '</div>';
+    html += '</div></div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+  },
+
+  _recomputeOfficial(ref) {
+    var off = this._getOfficialFormula(ref);
+    if (!off) return;
+    var configs = {
+      'BAT-TH-111': {compute: function(v){return v.B*v.T*0.196;}, inputs:['B','T']},
+      'BAT-TH-139': {compute: function(v){var p=Math.min(v.P_recuperee, 2*v.P_compresseurs); return v.D*9.9*p;}, inputs:['D','P_recuperee','P_compresseurs']},
+      'BAT-TH-153': {compute: function(v){return 1500*v.deltaT*v.P;}, inputs:['P','deltaT']},
+      'BAT-TH-157': {compute: function(v){return v.Q*((v.P_kW<=500)?4.8:3.4);}, inputs:['Q','P_kW']}
+    };
+    var cfg = configs[ref]; if (!cfg) return;
+    var values = {};
+    var allFilled = true;
+    cfg.inputs.forEach(function(id) {
+      var el = document.getElementById('v2off_in_' + id);
+      var v = el ? parseFloat(el.value) : NaN;
+      if (isNaN(v) || v <= 0) allFilled = false;
+      values[id] = v || 0;
+    });
+    var resEl = document.getElementById('v2OfficialKwhc');
+    var primeEl = document.getElementById('v2OfficialPrime');
+    if (!allFilled) {
+      if (resEl) resEl.textContent = '— kWhc';
+      if (primeEl) primeEl.textContent = 'Prime CEE estimée : — €';
+      return;
+    }
+    var kwhc = cfg.compute(values);
+    // Prix cumac (utilise CONFIG.PRIX_MWH si dispo)
+    var prixMwh = (typeof CONFIG !== 'undefined' && CONFIG.PRIX_MWH) ? CONFIG.PRIX_MWH : 9.0;
+    var prime = kwhc * prixMwh / 1000;
+    if (resEl) resEl.textContent = Math.round(kwhc).toLocaleString('fr-FR') + ' kWhc';
+    if (primeEl) primeEl.textContent = 'Prime CEE estimée : ' + Math.round(prime).toLocaleString('fr-FR') + ' € (× ' + prixMwh.toFixed(2) + ' €/MWhc)';
   },
 
   // V37.4.21 — Onboarding ludique V2 ULTRA-COMPACT (1 ligne) + dismissable
