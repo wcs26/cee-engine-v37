@@ -4109,39 +4109,62 @@
     // ============================================
     // === AGRICULTURE (AGRI) ====================
     // ============================================
-    {ref:"AGRI-EQ-101",label:"Module température ordinateur climatique",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:6240,H2:5200,H3:3640,DOM:3120},active:true,gisements:["regulation_gtb"]},
-    {ref:"AGRI-EQ-102",label:"Double écran thermique",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:22,H2:18,H3:13,DOM:11},active:true,note:"vA65-2 01/04/2025",gisements:["isolation_enveloppe"]},
-    {ref:"AGRI-EQ-104",label:"Écrans thermiques latéraux",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:17,H2:14,H3:10,DOM:8},active:true,note:"vA62-2 01/01/2025",gisements:["isolation_enveloppe"]},
-    {ref:"AGRI-EQ-105",label:"Stop & Start véhicules agricoles",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:6100,H2:6100,H3:6100,DOM:6100},active:true,gisements:["flotte_vehicules"]},
-    {ref:"AGRI-EQ-106",label:"Régulation ventilation silos",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:2540,H2:2540,H3:2540,DOM:2540},active:true,gisements:["ventilation","regulation_gtb"]},
-    {ref:"AGRI-EQ-107",label:"Isolation parois de serre",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:14,H2:12,H3:8,DOM:7},active:true,gisements:["isolation_enveloppe"]},
+    // V38.4e — AGRI-EQ-101 FIX_CRITICAL : faux modèle (forfait/unité → m² serre × type). Display=horticole 70 (conservateur)
+    {ref:"AGRI-EQ-101",label:"Module intégration T° ordinateur climatique (serres)",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:70,H2:70,H3:70,DOM:70},active:true,note:"vA14-1 — display=horticole 70/m². Maraichère=83/m². Catalog 6240/unité = WRONG concept",gisements:["regulation_gtb"]},
+    // V38.4e — AGRI-EQ-102 SOUS ×13 (maraichere). Display=horticole 240 (conservateur)
+    {ref:"AGRI-EQ-102",label:"Double écran thermique serres",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:240,H2:240,H3:240,DOM:0},active:true,note:"vA65-2 01/04/2025 — display=horticole 240/m². Maraichère=290. Catalog 22 = SOUS ×13. Butoir 01/04/2030",gisements:["isolation_enveloppe"]},
+    // V38.4e — AGRI-EQ-104 SOUS ×2.8 (maraichère). Display=horticole 22
+    {ref:"AGRI-EQ-104",label:"Écrans thermiques latéraux serres",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:22,H2:22,H3:22,DOM:0},active:true,note:"vA62-2 01/01/2025 — display=horticole 22/m². Maraichère=48. Butoir 01/01/2030",gisements:["isolation_enveloppe"]},
+    // V38.4e — AGRI-EQ-105 SOUS ×3 — vrai forfait PDF = 18400/véhicule (briefing erroné disait 11400)
+    {ref:"AGRI-EQ-105",label:"Stop & Start véhicules agricoles",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:18400,H2:18400,H3:18400,DOM:18400},active:true,note:"vA28-1 — 18400 kWhc/véhicule. Catalog 6100 = SOUS ×3.",gisements:["flotte_vehicules"]},
+    // V38.4e — AGRI-EQ-106 FAUX MODÈLE forfait/unité → m³ céréales × type régulation. Display=thermique seul 10
+    {ref:"AGRI-EQ-106",label:"Régulation ventilation silos céréales",sector:"AGRI",cat:"Équipements",unit:"m³",z:{H1:10,H2:10,H3:10,DOM:10},active:true,note:"vA32-1 — display=régulation thermique seule 10/m³. Thermique+vitesse=12/m³. Catalog 2540/unité = WRONG. Non cumul AGRI-UT-102",gisements:["ventilation","regulation_gtb"]},
+    // V38.4e — AGRI-EQ-107 SOUS ×12 (maraichère). Display=horticole 92
+    {ref:"AGRI-EQ-107",label:"Isolation parois de serre",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:92,H2:92,H3:92,DOM:0},active:true,note:"vA38-1 31/07/2021 — display=horticole 92/m². Maraichère=170. Catalog 14 = SOUS ×6-12",gisements:["isolation_enveloppe"]},
     {ref:"AGRI-EQ-108",label:"Stockage eau serre bioclimatique",sector:"AGRI",cat:"Équipements",unit:"m³",z:{H1:2200,H2:1800,H3:1300,DOM:1100},active:true,gisements:["chauffage_batiment"]},
-    {ref:"AGRI-EQ-109",label:"Couverture performante de serre",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:18,H2:15,H3:11,DOM:9},active:true,gisements:["isolation_enveloppe"]},
+    // V38.4e — AGRI-EQ-109 SOUS ×60-107 (énorme). Display=ETFE horticole 490 (conservateur). Maraichère verre = 1930
+    {ref:"AGRI-EQ-109",label:"Couverture performante serre (neuves uniquement)",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:490,H2:490,H3:490,DOM:0},active:true,note:"vA58-2 01/02/2024 — display=ETFE horticole 490/m². Verre maraichère=1930. Catalog 18 = SOUS ×60-107. Butoir 31/12/2028",gisements:["isolation_enveloppe"]},
     {ref:"AGRI-EQ-110",label:"Séchage solaire panneaux hybrides",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:15600,H2:15600,H3:15600,DOM:15600},active:true,gisements:["process_thermique"]},
-    {ref:"AGRI-EQ-111",label:"Simple écran thermique",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:11,H2:9,H3:7,DOM:6},active:true,note:"vA62-1 31/08/2024",gisements:["isolation_enveloppe"]},
-    {ref:"AGRI-EQ-112",label:"Double paroi gonflable",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:13,H2:11,H3:8,DOM:7},active:true,note:"vA73-3 01/09/2025",gisements:["isolation_enveloppe"]},
-    {ref:"AGRI-EQ-113",label:"Régulation éclairage serre",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:4800,H2:4800,H3:4800,DOM:4800},active:true,gisements:["eclairage_interieur","regulation_gtb"]},
-    {ref:"AGRI-SE-101",label:"Contrôle réglage moteur tracteur",sector:"AGRI",cat:"Services",unit:"unité",z:{H1:6100,H2:6100,H3:6100,DOM:6100},active:true,gisements:["flotte_vehicules"]},
-    {ref:"AGRI-TH-101",label:"Stockage eau chaude Open Buffer",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:24000,H2:20000,H3:14000,DOM:12000},active:true,gisements:["ecs","chauffage_batiment"]},
+    // V38.4e — AGRI-EQ-111 SOUS ×33 (maraichère). Display=horticole 240
+    {ref:"AGRI-EQ-111",label:"Simple écran thermique serres",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:240,H2:240,H3:240,DOM:0},active:true,note:"vA62-1 31/08/2024 — display=horticole 240/m². Maraichère=360. Catalog 11 = SOUS ×22-33. Butoir 01/08/2029",gisements:["isolation_enveloppe"]},
+    // V38.4e — AGRI-EQ-112 SOUS ×31 (maraichère). Display=horticole 290
+    {ref:"AGRI-EQ-112",label:"Double paroi gonflable serres",sector:"AGRI",cat:"Équipements",unit:"m²",z:{H1:290,H2:290,H3:290,DOM:0},active:true,note:"vA73-3 01/09/2025 — display=horticole 290/m². Maraichère=410. Butoir 01/09/2030. Non cumul EQ-108",gisements:["isolation_enveloppe"]},
+    // V38.4e — AGRI-EQ-113 ⚠ DÉSACTIVÉE — FANTÔME (n'existe pas dans référentiel ADEME/ATEE)
+    {ref:"AGRI-EQ-113",label:"Régulation éclairage serre (FICHE INEXISTANTE)",sector:"AGRI",cat:"Équipements",unit:"unité",z:{H1:0,H2:0,H3:0,DOM:0},active:false,note:"V38.4e — INEXISTANTE référentiel ADEME/ATEE 2026. Désactivée pour éviter rejet PNCEE",gisements:["eclairage_interieur","regulation_gtb"]},
+    // V38.4e — AGRI-SE-101 FAUX MODÈLE forfait → table par puissance tracteur. Display=cas standard 79-133ch (16800)
+    {ref:"AGRI-SE-101",label:"Contrôle réglage moteur tracteur",sector:"AGRI",cat:"Services",unit:"unité",z:{H1:16800,H2:16800,H3:16800,DOM:16800},active:true,note:"vA40-2 01/04/2022 — display=79-133ch (16800). 0-78ch=8000, ≥134ch=22400. Catalog 6100 = SOUS ×3.7 grands tracteurs. DVC 2 ans",gisements:["flotte_vehicules"]},
+    // V38.4e — AGRI-TH-101 FAUX MODÈLE forfait/unité → m² serre. Display=96/m² (maraichère uniquement)
+    {ref:"AGRI-TH-101",label:"Stockage eau chaude Open Buffer (serres maraîchères)",sector:"AGRI",cat:"Thermique",unit:"m²",z:{H1:96,H2:96,H3:96,DOM:0},active:true,zeroEuro:true,note:"vA62-2 01/01/2025 — 96 kWhc/m² serre maraichère. Catalog 24000/unité = WRONG concept. Butoir 01/01/2030",gisements:["ecs","chauffage_batiment"]},
     {ref:"AGRI-TH-102",label:"Stockage eau chaude",sector:"AGRI",cat:"Thermique",unit:"m³",z:{H1:4800,H2:4000,H3:2800,DOM:2400},active:true,gisements:["ecs"]},
-    {ref:"AGRI-TH-103",label:"Pré-refroidisseur de lait",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:5000,H2:5000,H3:5000,DOM:5000},active:true,gisements:["froid"]},
-    {ref:"AGRI-TH-105",label:"Récupération chaleur tank à lait",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:8600,H2:8600,H3:8600,DOM:8600},active:true,gisements:["froid","ecs"],zeroEuro:true},
+    // V38.4e — AGRI-TH-103 FAUX MODÈLE — formule officielle 0.113 × L (litres lait/an). Display=cas 50000 L (5650 cumac)
+    {ref:"AGRI-TH-103",label:"Pré-refroidisseur de lait (formule par L)",sector:"AGRI",cat:"Thermique",unit:"L_lait/an",z:{H1:0.113,H2:0.113,H3:0.113,DOM:0.113},active:true,note:"vA15-1 — formule M=0.113×L litres lait/an. Catalog 5000/unité = WRONG. Cas 500K L/an = 56500 cumac (×11 vs catalog)",gisements:["froid"]},
+    // V38.4e — AGRI-TH-105 FAUX MODÈLE — formule 0.138 × L. Cas exploit 500K L/an = 69000 cumac vs catalog 8600 (×8)
+    {ref:"AGRI-TH-105",label:"Récupération chaleur tank à lait (formule par L)",sector:"AGRI",cat:"Thermique",unit:"L_lait/an",z:{H1:0.138,H2:0.138,H3:0.138,DOM:0.138},active:true,zeroEuro:true,note:"vA16-1 — formule M=0.138×L litres lait/an. Catalog 8600/unité = WRONG. Cas 500K L/an = 69000 cumac (×8 vs catalog), 2M L/an = 276000 (×32)",gisements:["froid","ecs"]},
     // V38.4a — RELABEL critique : catalog disait "Chauffage infrarouge élevage" (FAUX). PDF officiel = PAC pour serres maraîchères.
     // Source : https://www.ecologie.gouv.fr/sites/default/files/documents/AGRI-TH-108.pdf
     {ref:"AGRI-TH-108",label:"PAC eau/eau ou air/eau pour serres maraîchères/horticoles",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:5700,H2:4700,H3:3300,DOM:2900},active:true,note:"V38.4a label corrigé (catalog avait FAUX label 'chauffage infrarouge élevage'). PDF = PAC serres avec COP ≥3.4 si P>400kW. Valeurs z à vérifier prochain audit.",gisements:["chauffage_batiment","ecs"]},
-    {ref:"AGRI-TH-109",label:"Récupérateur condensation serre",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:4800,H2:4000,H3:2800,DOM:2400},active:true,gisements:["chauffage_batiment"]},
-    {ref:"AGRI-TH-110",label:"Chaudière HPE serres",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:3200,H2:2700,H3:1900,DOM:1600},active:true,note:"vA54-3 01/01/2024",gisements:["chauffage_batiment"]},
+    // V38.4e ⚠ AGRI-TH-109 SUR ×3-35 (urgence PNCEE). FAUX MODÈLE. Display=horticole 86/m²
+    {ref:"AGRI-TH-109",label:"Récup chaleur condensation serre",sector:"AGRI",cat:"Thermique",unit:"m²",z:{H1:86,H2:86,H3:86,DOM:0},active:true,note:"vA54-2 01/01/2024 — display=horticole 86/m². Maraichère=9/m². Catalog 4800/kW = SUR ×3-35. Butoir 30/06/2028. Non cumul TH-110",gisements:["chauffage_batiment"]},
+    // V38.4e ⚠ AGRI-TH-110 SUR ×4 (urgence PNCEE). FAUX MODÈLE. Display=horticole 150/m² capped
+    {ref:"AGRI-TH-110",label:"Chaudière HPE serres (>400kW)",sector:"AGRI",cat:"Thermique",unit:"m²",z:{H1:150,H2:150,H3:150,DOM:0},active:true,note:"vA54-3 01/01/2024 — display=horticole 150 × min(S, 31×P). Maraichère=19. Catalog 3200/kW = SUR ×4. Butoir 30/06/2028. Non cumul TH-109",gisements:["chauffage_batiment"]},
     {ref:"AGRI-TH-113",label:"Échangeur récupérateur chaleur élevage volailles",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:5400,H2:4500,H3:3200,DOM:2700},active:true,gisements:["ventilation","chauffage_batiment"]},
     // V38.4a — DÉSACTIVÉE : AGRI-TH-114 n'existe PAS dans le référentiel ministériel (vérifié ATEE/ADEME 2025-2026).
     // Probable confusion avec AGRI-TH-116 (récup chaleur fatale procédé pour serre/élevage).
     {ref:"AGRI-TH-114",label:"Récupération chaleur fumées chaudière (FICHE INEXISTANTE)",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:4000,H2:3300,H3:2300,DOM:2000},active:false,note:"V38.4a — ABROGÉE/INEXISTANTE — voir AGRI-TH-116",gisements:["chauffage_batiment"]},
-    {ref:"AGRI-TH-117",label:"Déshumidificateur thermodynamique serres",sector:"AGRI",cat:"Thermique",unit:"kW",z:{H1:8200,H2:6800,H3:4800,DOM:4100},active:true,note:"vA73-3 01/09/2025",zeroEuro:true,gisements:["chauffage_batiment"]},
-    {ref:"AGRI-TH-118",label:"Double tube de chauffage serres",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:3100,H2:2600,H3:1800,DOM:1500},active:true,gisements:["chauffage_batiment"]},
-    {ref:"AGRI-TH-119",label:"Déshumidification air extérieur",sector:"AGRI",cat:"Thermique",unit:"unité",z:{H1:4800,H2:4000,H3:2800,DOM:2400},active:true,gisements:["ventilation"]},
-    {ref:"AGRI-UT-101",label:"Moto-variateur synchrone aimants",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:4800,H2:4800,H3:4800,DOM:4800},active:true,gisements:["motorisation"]},
-    {ref:"AGRI-UT-102",label:"VEV moteur asynchrone",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:4800,H2:4800,H3:4800,DOM:4800},active:true,gisements:["motorisation"]},
-    {ref:"AGRI-UT-103",label:"Régulation basse pression flottante",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:7800,H2:7800,H3:7800,DOM:7800},active:true,gisements:["froid","regulation_gtb"]},
-    {ref:"AGRI-UT-104",label:"Régulation haute pression flottante",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:9400,H2:9400,H3:9400,DOM:9400},active:true,gisements:["froid","regulation_gtb"]},
+    // V38.4e — AGRI-TH-117 FAUX MODÈLE (kW → m² serre). Display 710/m²
+    {ref:"AGRI-TH-117",label:"Déshumidificateur thermodynamique fixe serres chauffées",sector:"AGRI",cat:"Thermique",unit:"m²",z:{H1:710,H2:710,H3:710,DOM:710},active:true,note:"vA73-3 01/09/2025 — 710 kWhc/m² serre. Catalog 8200/kW = SOUS ×8.6 typique. Étude dimensionnement obligatoire. Butoir 01/09/2030",zeroEuro:true,gisements:["chauffage_batiment"]},
+    // V38.4e — AGRI-TH-118 FAUX MODÈLE (forfait → m²). Display 370/m²
+    {ref:"AGRI-TH-118",label:"Double tube chauffage serres maraîchères",sector:"AGRI",cat:"Thermique",unit:"m²",z:{H1:370,H2:370,H3:370,DOM:0},active:true,note:"vA14-1 — 370 kWhc/m² maraichère. Catalog 3100/unité = SOUS ×477",gisements:["chauffage_batiment"]},
+    // V38.4e — AGRI-TH-119 FAUX MODÈLE (forfait → m²). Display=simple flux 440 (conservateur)
+    {ref:"AGRI-TH-119",label:"Déshumidification air extérieur serres maraîchères",sector:"AGRI",cat:"Thermique",unit:"m²",z:{H1:440,H2:440,H3:440,DOM:0},active:true,note:"vA65-2 01/04/2025 — display=simple flux 440. Double flux=760. Catalog 4800/unité = SOUS ×475 typique. Butoir 01/04/2030",gisements:["ventilation"]},
+    // V38.4e — AGRI-UT-101 FAUX MODÈLE (table par application). Display=autres 4500
+    {ref:"AGRI-UT-101",label:"Moto-variateur synchrone aimants/réluctance (agriculture)",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:4500,H2:4500,H3:4500,DOM:4500},active:true,note:"vA24-2 — display=autres 4500. Pompage_irrig=2100, vent_elevage=18300, vent_serre=14900, pompe_vide=2100, chauf_serre=6400. Catalog 4800 ~conforme cas autres",gisements:["motorisation"]},
+    // V38.4e — AGRI-UT-102 FAUX MODÈLE (table par application). Display=autres 2300
+    {ref:"AGRI-UT-102",label:"VEV moteur asynchrone (agriculture)",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:2300,H2:2300,H3:2300,DOM:2300},active:true,note:"vA22-2 — display=autres 2300. Pompe_irrig=1600, vent_elevage=19600, vent_serre=11500, pompe_vide=2800, chauf_serre=7700. Catalog 4800 = SUR ×2 typique",gisements:["motorisation"]},
+    // V38.4e ⚠ AGRI-UT-103 SUR ×9.4 (urgence PNCEE)
+    {ref:"AGRI-UT-103",label:"Régulation basse pression flottante (groupe froid agri)",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:830,H2:830,H3:830,DOM:830},active:true,note:"vA19-1 — 830 kWhc/kW. Catalog 7800 = SUR ×9.4 RISQUE REJET PNCEE",gisements:["froid","regulation_gtb"]},
+    // V38.4e — AGRI-UT-104 (HP flottante) — display=H1H2 atmosphère 10600 (conservateur)
+    {ref:"AGRI-UT-104",label:"Régulation haute pression flottante (groupe froid agri)",sector:"AGRI",cat:"Utilités",unit:"kW",z:{H1:10600,H2:10600,H3:9700,DOM:9700},active:true,note:"vA23-1 — display=condensation atmosphère. Eau seule H1/H2=6200, H3=5400. Étude technique préalable obligatoire",gisements:["froid","regulation_gtb"]},
 
     // ============================================
     // === RÉSIDENTIEL (BAR) =====================
