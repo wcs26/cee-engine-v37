@@ -15008,6 +15008,8 @@ window.V2 = {
     this._loadBatThOfficial().catch(function(){});
     // V38.1 — Précharger les inputs requis pour smart Q auto + calcul officiel
     this._loadBatThInputs().catch(function(){});
+    // V38.5 — Précharger mapping NAF→fiches pour détection prédictive
+    this._loadNafToFiches().catch(function(){});
     this.go(this.state.currentPage);
   },
 
@@ -16438,7 +16440,17 @@ window.V2 = {
             var badgeText = hasAll ? '✅ Calcul officiel actif' : '📐 ' + missing.length + ' input(s) à renseigner';
             var badgeTitle = hasAll ? 'Calcul exact selon ' + (off.version || '') : 'Renseigner : ' + missing.map(function(i){return i.label;}).join(', ');
             html += ' <button onclick="event.stopPropagation();V2._openOfficialCalc(\'' + ref + '\');return false;" style="margin-left:6px;color:' + badgeColor + ';background:' + badgeBg + ';text-decoration:none;font-size:10px;border:1px solid ' + badgeColor + ';padding:1px 6px;border-radius:3px;cursor:pointer;font-family:inherit;" title="' + badgeTitle.replace(/"/g,"'") + '">' + badgeText + '</button>';
-          } else {
+          }
+          // V38.5 — Badge pertinence NAF (orange/jaune selon score)
+          var relevance = this._getFicheRelevance(ref, this.state.profil);
+          if (relevance) {
+            var sc = relevance.score || 0;
+            var relColor = sc >= 90 ? '#C8FF6B' : sc >= 75 ? '#d29922' : '#58a6ff';
+            var relIcon = sc >= 90 ? '🎯' : sc >= 75 ? '⭐' : '✓';
+            html += ' <span style="margin-left:6px;color:' + relColor + ';background:transparent;font-size:10px;border:1px solid ' + relColor + ';padding:1px 6px;border-radius:3px;" title="' + (relevance.raison || '').replace(/"/g,"'") + '">' + relIcon + ' Pertinent NAF (' + sc + '/100)</span>';
+          }
+          if (!canCalc) {
+            // Fiches sans calculateur fixed_formula : PDF direct
             html += ' <a href="' + off.pdf_url + '" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="margin-left:6px;color:#bc8cff;text-decoration:none;font-size:10px;border:1px solid rgba(188,140,255,.3);padding:1px 6px;border-radius:3px;" title="' + (off.formula || '').replace(/"/g,"'") + ' · ' + (off.version || '') + '">📄 PDF officiel</a>';
           }
         }
@@ -16918,6 +16930,37 @@ window.V2 = {
       if (e.code === 401) c.innerHTML = this._authModal('/post-signature/dashboard requiert connexion');
       else c.innerHTML = '<div style="padding:14px;background:rgba(248,81,73,.06);border-left:3px solid #ff7b72;border-radius:0 6px 6px 0;font-size:12px;color:rgba(245,245,247,.75);">⚠ Endpoint /post-signature/dashboard indisponible (' + (e.message || e) + ').<br>Le calendrier réglementaire ci-dessous reste utilisable comme référence universelle.</div>';
     }
+  },
+
+  // V38.5 — Cache mapping NAF → fiches pertinentes (détection prédictive)
+  async _loadNafToFiches() {
+    if (this._nafCache) return this._nafCache;
+    try {
+      var resp = await fetch('/naf_to_fiches.json', {cache:'force-cache'});
+      this._nafCache = await resp.json();
+    } catch (e) { this._nafCache = {by_naf_prefix:{}}; }
+    return this._nafCache;
+  },
+  // Retourne la liste des fiches pertinentes triées par score décroissant pour un profil
+  _detectFichesForProfil(profil) {
+    var c = this._nafCache;
+    if (!c || !c.by_naf_prefix || !profil) return [];
+    var naf = (profil.naf || profil.ape || '').replace(/\s/g, '');
+    if (!naf) return [];
+    // Try prefix 4 puis 2
+    var prefix4 = naf.substring(0, 4); // ex: 86.10
+    var prefix2 = naf.substring(0, 2); // ex: 86
+    var entry = c.by_naf_prefix[prefix4] || c.by_naf_prefix[prefix2];
+    if (!entry || !entry.fiches) return [];
+    return entry.fiches.slice().sort(function(a,b){return (b.score||0)-(a.score||0);});
+  },
+  // Pour une ref donnée, retourne {score, raison} si pertinente pour le profil
+  _getFicheRelevance(ref, profil) {
+    var fiches = this._detectFichesForProfil(profil);
+    for (var i = 0; i < fiches.length; i++) {
+      if (fiches[i].ref === ref) return fiches[i];
+    }
+    return null;
   },
 
   // V38.1 — Cache des inputs requis par fiche (smart Q auto-génération)

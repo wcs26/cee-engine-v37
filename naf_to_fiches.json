@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "version": "V38.5",
+    "date": "2026-05-10",
+    "purpose": "Mapping NAF prefix → fiches CEE pertinentes avec score (1-100). Permet détection prédictive : à partir du SIRET/NAF du profil, on suggère les fiches probablement éligibles en priorité, avec smart Q auto-générées pour leurs inputs."
+  },
+  "by_naf_prefix": {
+    "86": {
+      "label": "Activités pour la santé humaine (hôpitaux, cliniques, médecine)",
+      "fiches": [
+        {"ref": "BAT-EN-103", "score": 90, "raison": "Plancher tertiaire santé : facteur sectoriel élevé"},
+        {"ref": "BAT-EN-102", "score": 90, "raison": "Murs tertiaire santé : facteur sectoriel 1.3 (gros gisement)"},
+        {"ref": "BAT-EN-101", "score": 85, "raison": "Combles toiture santé : exposition thermique forte"},
+        {"ref": "BAT-TH-127", "score": 85, "raison": "Raccordement réseau chaleur : santé secteur fort cumac"},
+        {"ref": "BAT-TH-116", "score": 80, "raison": "GTB classe B : décret BACS oblige > 290 kW"},
+        {"ref": "BAT-TH-154", "score": 75, "raison": "Récup chaleur eaux grises : douches patients/personnel"},
+        {"ref": "BAT-TH-110", "score": 70, "raison": "Récup chaleur condensation chaudière"},
+        {"ref": "BAT-TH-162", "score": 65, "raison": "Géothermie : santé secteur 1.1 + p6Bonus 5"},
+        {"ref": "BAT-TH-163", "score": 65, "raison": "PAC air/eau tertiaire santé"},
+        {"ref": "BAT-TH-161", "score": 70, "raison": "Maintien T° groupes électrogènes : hôpitaux requis"}
+      ]
+    },
+    "87": {
+      "label": "Hébergement médico-social (EHPAD, foyers handicap)",
+      "fiches": [
+        {"ref": "BAT-EN-103", "score": 85, "raison": "Plancher tertiaire santé"},
+        {"ref": "BAT-EN-102", "score": 85, "raison": "Murs tertiaire santé"},
+        {"ref": "BAT-EN-101", "score": 80, "raison": "Combles toiture"},
+        {"ref": "BAT-TH-127", "score": 80, "raison": "Raccordement réseau chaleur"},
+        {"ref": "BAT-TH-154", "score": 85, "raison": "Récup chaleur eaux grises : douches résidents (forte conso)"},
+        {"ref": "BAT-TH-148", "score": 75, "raison": "CET individuel : ECS résidents"},
+        {"ref": "BAT-TH-116", "score": 75, "raison": "GTB obligatoire si > 1000m²"}
+      ]
+    },
+    "55": {
+      "label": "Hébergement (hôtels, résidences de tourisme)",
+      "fiches": [
+        {"ref": "BAT-TH-127", "score": 90, "raison": "Réseau chaleur : HCR = secteur 1.4 (gros bonus)"},
+        {"ref": "BAT-TH-154", "score": 95, "raison": "Récup eaux grises hôtels : ratio chambres × débit énorme"},
+        {"ref": "BAT-EN-103", "score": 80, "raison": "Plancher tertiaire HCR"},
+        {"ref": "BAT-EN-102", "score": 80, "raison": "Murs tertiaire HCR"},
+        {"ref": "BAT-EN-101", "score": 75, "raison": "Combles toiture"},
+        {"ref": "BAT-TH-110", "score": 70, "raison": "Récup chaleur chaudière condensation"},
+        {"ref": "BAT-TH-143", "score": 75, "raison": "Ventilo-convecteurs HP : hôtels secteur 2.20 (gros bonus)"},
+        {"ref": "BAT-TH-162", "score": 65, "raison": "Géothermie : HCR p6Bonus 5"},
+        {"ref": "BAT-TH-126", "score": 70, "raison": "VMC double flux : restauration secteur 0.68"}
+      ]
+    },
+    "56": {
+      "label": "Restauration",
+      "fiches": [
+        {"ref": "BAT-TH-139", "score": 95, "raison": "Récup chaleur groupe froid : restau = froid massif"},
+        {"ref": "BAT-TH-154", "score": 80, "raison": "Récup eaux grises : eaux de plonge"},
+        {"ref": "BAT-TH-134", "score": 85, "raison": "Régulation HP froid : armoires positives/négatives"},
+        {"ref": "BAT-TH-145", "score": 80, "raison": "Régulation BP froid"},
+        {"ref": "BAT-EN-103", "score": 70, "raison": "Plancher tertiaire HCR"},
+        {"ref": "BAT-TH-127", "score": 75, "raison": "Réseau chaleur"},
+        {"ref": "BAT-TH-126", "score": 80, "raison": "VMC double flux : restauration secteur 0.61-0.68"}
+      ]
+    },
+    "47": {
+      "label": "Commerce de détail (supermarchés, boutiques)",
+      "fiches": [
+        {"ref": "BAT-TH-134", "score": 95, "raison": "Régul HP froid : froid alimentaire = poste majeur"},
+        {"ref": "BAT-TH-139", "score": 90, "raison": "Récup chaleur condenseurs froid → chauffage gratuit"},
+        {"ref": "BAT-TH-145", "score": 85, "raison": "Régul BP froid"},
+        {"ref": "BAT-TH-156", "score": 75, "raison": "Freecooling climatisation"},
+        {"ref": "BAT-EN-101", "score": 70, "raison": "Combles toiture"},
+        {"ref": "BAT-TH-127", "score": 75, "raison": "Réseau chaleur"},
+        {"ref": "BAT-TH-126", "score": 70, "raison": "VMC double flux"}
+      ]
+    },
+    "68": {
+      "label": "Activités immobilières (bureaux, location)",
+      "fiches": [
+        {"ref": "BAT-EN-103", "score": 90, "raison": "Plancher tertiaire bureaux : secteur 1.2"},
+        {"ref": "BAT-EN-102", "score": 90, "raison": "Murs tertiaire bureaux"},
+        {"ref": "BAT-EN-101", "score": 85, "raison": "Combles toiture"},
+        {"ref": "BAT-EN-104", "score": 80, "raison": "Fenêtres isolantes"},
+        {"ref": "BAT-TH-116", "score": 90, "raison": "GTB obligatoire BACS > 290kW (2025) / > 70kW (2027)"},
+        {"ref": "BAT-TH-108", "score": 75, "raison": "Régulation programmation intermittence : bureaux haute occup."},
+        {"ref": "BAT-TH-109", "score": 75, "raison": "Optimiseur relance chauffage"},
+        {"ref": "BAT-TH-103", "score": 70, "raison": "Plancher chauffant BT : bureaux secteur 1.2"},
+        {"ref": "BAT-TH-105", "score": 70, "raison": "Radiateur BT"},
+        {"ref": "BAT-TH-127", "score": 85, "raison": "Réseau chaleur urbain"},
+        {"ref": "BAT-TH-163", "score": 75, "raison": "PAC air/eau tertiaire bureaux"},
+        {"ref": "BAT-TH-156", "score": 65, "raison": "Freecooling climatisation"}
+      ]
+    },
+    "85": {
+      "label": "Enseignement (écoles, collèges, universités)",
+      "fiches": [
+        {"ref": "BAT-EN-103", "score": 80, "raison": "Plancher tertiaire enseignement"},
+        {"ref": "BAT-EN-102", "score": 80, "raison": "Murs tertiaire enseignement"},
+        {"ref": "BAT-EN-101", "score": 80, "raison": "Combles toiture (gros bâti scolaire)"},
+        {"ref": "BAT-EN-104", "score": 75, "raison": "Fenêtres isolantes"},
+        {"ref": "BAT-TH-127", "score": 80, "raison": "Réseau chaleur urbain"},
+        {"ref": "BAT-TH-125", "score": 85, "raison": "VMC simple flux : enseignement secteur 1.0 (max)"},
+        {"ref": "BAT-TH-126", "score": 85, "raison": "VMC double flux : enseignement secteur 1.0"},
+        {"ref": "BAT-TH-108", "score": 80, "raison": "Régulation intermittence : occupation discontinue"},
+        {"ref": "BAT-TH-109", "score": 80, "raison": "Optimiseur relance"},
+        {"ref": "BAT-TH-116", "score": 75, "raison": "GTB"}
+      ]
+    },
+    "01": {
+      "label": "Agriculture (élevage, cultures)",
+      "fiches": [
+        {"ref": "AGRI-TH-105", "score": 95, "raison": "Récup chaleur tank lait : bovin lait"},
+        {"ref": "IND-UT-114", "score": 90, "raison": "VEV moteur : pompe à vide traite, ventilateurs"},
+        {"ref": "IND-BA-110", "score": 75, "raison": "Déstratificateur air : stabulation/poulailler"},
+        {"ref": "BAR-EN-101", "score": 65, "raison": "Isolation combles bâtiment exploitation"}
+      ]
+    },
+    "10": {
+      "label": "Industries alimentaires",
+      "fiches": [
+        {"ref": "IND-UT-102", "score": 95, "raison": "Récup chaleur compresseur"},
+        {"ref": "IND-UT-105", "score": 90, "raison": "Groupe froid haute efficacité"},
+        {"ref": "IND-UT-114", "score": 85, "raison": "VEV moteur process"},
+        {"ref": "IND-UT-104", "score": 80, "raison": "Économiseur fumées chaudière vapeur"},
+        {"ref": "BAT-TH-139", "score": 80, "raison": "Récup chaleur groupe froid"},
+        {"ref": "BAT-EN-101", "score": 60, "raison": "Isolation toiture entrepôts"}
+      ]
+    },
+    "25": {
+      "label": "Industrie métal (mécanique, forge, soudure)",
+      "fiches": [
+        {"ref": "IND-UT-102", "score": 95, "raison": "Récup chaleur compresseur air comprimé"},
+        {"ref": "IND-UT-114", "score": 95, "raison": "VEV moteur : tours, fraiseuses, broyeurs"},
+        {"ref": "IND-BA-101", "score": 75, "raison": "Isolation four"},
+        {"ref": "IND-UT-134", "score": 85, "raison": "Mesurage indicateurs perf énergétique"},
+        {"ref": "BAT-TH-142", "score": 80, "raison": "Déstratification air atelier > 5m"}
+      ]
+    },
+    "52": {
+      "label": "Logistique (entrepôts, transports)",
+      "fiches": [
+        {"ref": "BAT-TH-142", "score": 95, "raison": "Déstratification air entrepôts grande hauteur"},
+        {"ref": "BAT-EN-101", "score": 80, "raison": "Isolation toiture entrepôts"},
+        {"ref": "IND-UT-114", "score": 70, "raison": "VEV moteur convoyeurs/tris"},
+        {"ref": "BAT-TH-127", "score": 60, "raison": "Réseau chaleur si zone urbaine"}
+      ]
+    }
+  }
+}
