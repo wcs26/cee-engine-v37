@@ -4146,18 +4146,28 @@
     {ref:"BAR-EN-101",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1700,H2:1400,H3:920}},label:"Isolation combles/toitures",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1700,H2:1400,H3:920,DOM:600},z_elec:{H1:1300,H2:1070,H3:700,DOM:460},active:true,cofrac:true,note:"vA64-6 01/01/2025 — calcul officiel si surface_m2 renseigné",gisements:["isolation_enveloppe"]},
     {ref:"BAR-EN-102",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1600,H2:1300,H3:880}},label:"Isolation murs",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1600,H2:1300,H3:880,DOM:590},z_elec:{H1:1220,H2:990,H3:670,DOM:450},active:true,cofrac:true,note:"vA65-4 01/01/2025 — calcul officiel si surface_m2 renseigné",gisements:["isolation_enveloppe"]},
     {ref:"BAR-EN-103",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1100,H2:890,H3:590}},label:"Isolation plancher",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1100,H2:890,H3:590,DOM:400},z_elec:{H1:840,H2:680,H3:450,DOM:305},active:true,cofrac:true,note:"vA64-6 01/01/2025 — calcul officiel si surface_m2 renseigné",gisements:["isolation_enveloppe"]},
-    {ref:"BAR-EN-104",surface_ratio:0.2,label:"Fenêtre/porte-fenêtre isolante",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:5500,H2:4500,H3:2900,DOM:1900},z_elec:{H1:4200,H2:3430,H3:2210,DOM:1450},active:true,note:"vA54-2 01/01/2024",gisements:["isolation_enveloppe"]},
-    {ref:"BAR-EN-105",label:"Isolation toitures terrasses",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1700,H2:1400,H3:920,DOM:600},z_elec:{H1:1300,H2:1070,H3:700,DOM:460},active:true,cofrac:true,note:"vA64-4 01/01/2025",gisements:["isolation_enveloppe"]},
+    // V38.3b — FIX BAR-EN-104 : valeurs alignées PDF vA54.2 (catalog était ×1.45 trop haut + z_elec inventé)
+    // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-104%20vA54-2%20%C3%A0%20compter%20du%2001-01-2024_0.pdf
+    {ref:"BAR-EN-104",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:3800,H2:3100,H3:2100}},surface_ratio:0.2,label:"Fenêtre/porte-fenêtre isolante",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:3800,H2:3100,H3:2100,DOM:0},active:true,note:"vA54.2 01/01/2024 — métropole uniquement (pas DOM)",gisements:["isolation_enveloppe"]},
+    // V38.3b — FIX BAR-EN-105 : valeurs alignées PDF vA39.3 (catalog était ×1.4 trop haut + version vA64-4 inventée)
+    // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-105%20vA39-3%20%C3%A0%20compter%20du%2001-05-2022.pdf
+    {ref:"BAR-EN-105",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:1200,H2:1000,H3:670}},label:"Isolation toitures terrasses",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:1200,H2:1000,H3:670,DOM:0},active:true,cofrac:true,note:"vA39.3 01/05/2022 — abrogée 01/05/2027, métropole uniquement",gisements:["isolation_enveloppe"]},
     {ref:"BAR-TH-101",label:"Chauffe-eau solaire individuel",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:18500,H2:21000,H3:24200,DOM:29000},active:true,note:"vA62-2 01/01/2025",gisements:["ecs"]},
-    {ref:"BAR-TH-112",label:"Appareil chauffage bois",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:54000,H2:44000,H3:29000,DOM:19000},active:false,gisements:["chauffage_batiment"]},
-    {ref:"BAR-TH-113",label:"Chaudière biomasse individuelle",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:89000,H2:73000,H3:49000,DOM:33000},active:true,note:"vA79-4 01/01/2026",p6Bonus:5,gisements:["chauffage_batiment"]},
+    // V38.3b — FIX BAR-TH-112 : RÉACTIVÉE + valeurs alignées PDF vA35.2 (catalog active:false faux + ×1.4 trop haut)
+    // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-112.pdf
+    {ref:"BAR-TH-112",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:38200,H2:31300,H3:20900}},label:"Appareil chauffage bois indépendant",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:38200,H2:31300,H3:20900,DOM:0},active:true,note:"vA35.2 — métropole uniquement (active:false était faux)",gisements:["chauffage_batiment"]},
+    // V38.3b — FIX BAR-TH-113 : valeurs alignées PDF vA79.4 (catalog était ×2.15 trop haut — bug double-multiplication p6Bonus)
+    // Source: https://aida.ineris.fr/sites/default/files/2026-01/BAR-TH-113+annexe_20251227.pdf (JO 30/12/2025)
+    {ref:"BAR-TH-113",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:41300,H2:33800,H3:26300}},label:"Chaudière biomasse individuelle",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:41300,H2:33800,H3:26300,DOM:0},active:true,note:"vA79.4 JO 30/12/2025 — applicable jusqu'au 31/12/2030, métropole",p6Bonus:5,gisements:["chauffage_batiment"]},
     {ref:"BAR-TH-123",label:"Optimiseur relance chauffage collectif",sector:"BAR",cat:"Thermique",unit:"logement",z:{H1:1380,H2:1130,H3:810,DOM:540},active:true,gisements:["chauffage_batiment","regulation_gtb"]},
     {ref:"BAR-TH-124",label:"Chaudière condensation",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:27700,H2:22700,H3:16300,DOM:10900},active:true,note:"vA78 01/01/2026",gisements:["chauffage_batiment"]},
     {ref:"BAR-TH-125",label:"VMC double flux",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:10400,H2:8400,H3:6200,DOM:4100},active:true,gisements:["ventilation"]},
     {ref:"BAR-TH-127",label:"VMC simple flux hygroréglable",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:9100,H2:7400,H3:5500,DOM:3600},active:true,gisements:["ventilation"]},
     {ref:"BAR-TH-129",label:"PAC air/air résidentiel",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:13200,H2:10800,H3:7700,DOM:5100},active:true,gisements:["chauffage_batiment"]},
     {ref:"BAR-TH-141",label:"Climatiseur performant DOM",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:0,H2:0,H3:0,DOM:3800},active:true,gisements:["froid"]},
-    {ref:"BAR-TH-143",surface_ratio:0.01,label:"Système solaire combiné",sector:"BAR",cat:"Thermique",unit:"m²",z:{H1:78600,H2:89300,H3:102900,DOM:50000},active:true,note:"vA79-6 01/01/2026",gisements:["ecs","chauffage_batiment"]},
+    // V38.3b — FIX BAR-TH-143 : valeurs PDF vA79.6 + zones rétablies (catalog était inversé H1<H2<H3) + unité corrigée + Coup-de-pouce ×2 ajouté
+    // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-143%20vA79-6%20%C3%A0%20compter%20du%2001-01-2026.pdf
+    {ref:"BAR-TH-143",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:134800,H2:121000,H3:100500}},label:"Système solaire combiné (SSC)",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:134800,H2:121000,H3:100500,DOM:0},active:true,note:"vA79.6 01/01/2026 — métropole, ×2 Coup-de-pouce arrêté 24/02/2026",p6Bonus:2,gisements:["ecs","chauffage_batiment"]},
     // V38.3 — model_type absolute_per_logement (PDF vA78.4, forfait par type maison/appart cohérent avec catalog ~14000)
     {ref:"BAR-TH-148",model_type:"absolute_per_logement",officialTable:{maison_individuelle:14700,appartement:11800},label:"Chauffe-eau thermodynamique",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:14000,H2:14000,H3:14000,DOM:14000},active:true,note:"vA78.4 01/01/2026 — calcul officiel si type_logement+N_CET renseignés",gisements:["ecs"]},
     {ref:"BAR-TH-155",label:"Ventilation hybride hygroréglable",sector:"BAR",cat:"Thermique",unit:"unité",z:{H1:10400,H2:8400,H3:6200,DOM:4100},active:true,gisements:["ventilation"]},
@@ -4182,7 +4192,9 @@
     {ref:"BAR-TH-180",label:"PAC collective eau/eau",sector:"BAR",cat:"Thermique",unit:"kW",z:{H1:6500,H2:5300,H3:3800,DOM:2500},active:true,note:"vA75-1 01/01/2026",p6Bonus:4,gisements:["chauffage_batiment"]},
     {ref:"BAR-EQ-110",label:"Luminaire LED parties communes",sector:"BAR",cat:"Équipements",unit:"logement",z:{H1:1600,H2:1600,H3:1600,DOM:1600},active:false,gisements:["eclairage_interieur"]},
     {ref:"BAR-EQ-115",label:"Affichage consommations énergie",sector:"BAR",cat:"Équipements",unit:"logement",z:{H1:1460,H2:1190,H3:860,DOM:570},active:true,gisements:["regulation_gtb"]},
-    {ref:"BAR-SE-104",label:"Réglage équilibrage chauffage",sector:"BAR",cat:"Services",unit:"logement",z:{H1:1650,H2:1350,H3:970,DOM:650},active:true,gisements:["chauffage_batiment"]},
+    // V38.3b — FIX BAR-SE-104 ⚠ CRITIQUE : valeurs PDF vA19.1 (catalog était ×6 SOUS-évalué — perte massive copros)
+    // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-SE-104.pdf
+    {ref:"BAR-SE-104",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:9800,H2:8000,H3:5300}},label:"Réglage équilibrage chauffage collectif",sector:"BAR",cat:"Services",unit:"appartement",z:{H1:9800,H2:8000,H3:5300,DOM:0},active:true,note:"vA19.1 — métropole, par appartement (catalog ×6 sous-évalué corrigé)",gisements:["chauffage_batiment"]},
     {ref:"BAR-SE-105",label:"CPE Services résidentiel",sector:"BAR",cat:"Services",unit:"logement",z:{H1:7200,H2:5900,H3:4200,DOM:2800},active:true,gisements:["chauffage_batiment","regulation_gtb"]},
     {ref:"BAR-SE-106",label:"Suivi consommations énergie",sector:"BAR",cat:"Services",unit:"logement",z:{H1:810,H2:660,H3:470,DOM:320},active:true,gisements:["regulation_gtb"]},
     {ref:"BAR-SE-108",label:"Désembouage individuel",sector:"BAR",cat:"Services",unit:"unité",z:{H1:11800,H2:9700,H3:6900,DOM:4600},active:true,note:"Modifiée 71e 01/08/2025",gisements:["chauffage_batiment"]},
@@ -4366,8 +4378,12 @@
   // === DOM-SPÉCIFIQUES (BAR) ===
   {ref:"BAR-EN-106",label:"Isolation combles/toitures DOM",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:600},active:true,cofrac:true,note:"vA64-5 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
   {ref:"BAR-EN-107",label:"Isolation murs DOM",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:590},active:true,cofrac:true,note:"vA64-4 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
-  {ref:"BAR-EN-108",label:"Isolation plancher DOM",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:400},active:true,note:"vA64-5 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
-  {ref:"BAR-EN-109",surface_ratio:0.2,label:"Fenêtre/porte-fenêtre DOM",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:1900},active:true,note:"vA64-4 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
+  // V38.3b — FIX BAR-EN-108 : LABEL CORRIGÉ "Fermeture isolante" (catalog avait FAUX label "Isolation plancher DOM") + valeurs PDF vA54.3
+  // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-108%20vA54-3%20%C3%A0%20compter%20du%2001-01-2024_0.pdf
+  {ref:"BAR-EN-108",model_type:"absolute_per_zone",officialTable:{by_zone:{H1:510,H2:420,H3:280}},label:"Fermeture isolante (volet/persienne sur fenêtre)",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:510,H2:420,H3:280,DOM:0},active:true,note:"vA54.3 01/01/2024 — métropole uniquement (catalog avait FAUX LABEL 'plancher DOM' corrigé)",gisements:["isolation_enveloppe"]},
+  // V38.3b — FIX BAR-EN-109 : LABEL CORRIGÉ "Réduction apports solaires toiture DOM" (catalog avait FAUX label "Fenêtre DOM") + valeurs PDF vA24.1
+  // Source: https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-109.pdf
+  {ref:"BAR-EN-109",label:"Réduction apports solaires toiture (DOM)",sector:"BAR",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:400},active:true,note:"vA24.1 — DOM uniquement, 400 kWh/m² maison indiv. / 520 kWh/m² bât. collectif (catalog avait FAUX LABEL 'fenêtre DOM' corrigé)",gisements:["isolation_enveloppe"]},
   {ref:"BAR-TH-135",surface_ratio:0.02,label:"Chauffe-eau solaire collectif DOM",sector:"BAR",cat:"Thermique",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:5500},active:true,note:"[V26:ajouté]",gisements:["ecs"]},
   // === DOM-SPÉCIFIQUES (BAT) ===
   {ref:"BAT-EN-105",label:"Isolation combles/toitures tertiaire DOM",sector:"BAT",cat:"Enveloppe",unit:"m²",z:{H1:0,H2:0,H3:0,DOM:870,sectFactors:{bureaux:0.6,enseignement:0.6,commerces:0.6,hotellerie_restauration:0.7,sante:1.2,sport:0.6,autres:0.6}},active:true,note:"vA64.4 01/01/2025 [V26:ajouté]",gisements:["isolation_enveloppe"]},
