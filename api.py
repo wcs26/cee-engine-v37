@@ -386,6 +386,34 @@ def legacy_index():
 
 _APP_BOOT_TS = None  # défini à la première requête (uptime)
 
+# V39.0 — Endpoint tracking minimal (Cumac analytics)
+@app.route("/api/track", methods=["POST"])
+def cumac_track():
+    """Tracking minimal events utilisateurs Cumac. Append JSONL pour analyse offline."""
+    import json as _json, os as _os, time as _time
+    try:
+        data = request.get_json(silent=True) or {}
+        # Anonymisation IP : ne garder que /16 pour conformité RGPD
+        ip = (request.headers.get("X-Forwarded-For", request.remote_addr or "") or "").split(",")[0].strip()
+        ip_anon = ".".join(ip.split(".")[:2]) + ".x.x" if "." in ip else "unknown"
+        record = {
+            "ts": data.get("ts") or int(_time.time() * 1000),
+            "event": data.get("event", "unknown"),
+            "props": data.get("props", {}),
+            "session": data.get("session", "anon"),
+            "ip_anon": ip_anon,
+            "ua": (request.headers.get("User-Agent", "") or "")[:120],
+        }
+        track_dir = _os.environ.get("CEE_DATA_DIR", ".") + "/track"
+        try: _os.makedirs(track_dir, exist_ok=True)
+        except Exception: pass
+        with open(track_dir + "/events.jsonl", "a", encoding="utf-8") as fh:
+            fh.write(_json.dumps(record, ensure_ascii=False) + "\n")
+        return ("", 204)
+    except Exception:
+        return ("", 204)
+
+
 @app.route("/health", methods=["GET"])
 def health():
     """V37 — Health check enrichi pour monitoring.
