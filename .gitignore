@@ -10,3 +10,6 @@ conformite_data/
 # MemPalace per-project files (issue #185)
 mempalace.yaml
 entities.json
+
+# Cache graphify (AST + reports) — généré, ne pas versionner
+graphify-out/
