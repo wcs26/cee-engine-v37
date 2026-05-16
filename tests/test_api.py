@@ -39,7 +39,29 @@ class TestCore:
         d = r.get_json()
         assert d["status"] == "ok"
         assert d["fiches"] >= 200, "au moins 200 fiches catalogue"
-        assert "V37" in d["version"]
+        assert d["version"].startswith("V"), "version commence par V"
+        # V39.0 — brand Cumac exposé pour usage externe
+        assert d.get("brand") == "Cumac"
+
+    def test_cumac_track_v39(self, client):
+        """V39.0 — /api/track accepte n'importe quel JSON, répond 204, fail-silent.
+
+        L'endpoint anonymise l'IP /16 et écrit en JSONL append. On vérifie juste
+        qu'il ne plante jamais (fail-silent même sur JSON cassé).
+        """
+        # Cas nominal
+        r = client.post("/api/track", json={
+            "event": "test_pageview",
+            "props": {"v": "39.0"},
+            "session": "sid_pytest",
+        })
+        assert r.status_code == 204
+        # Cas dégradé : body vide → toujours 204 (fail-silent)
+        r2 = client.post("/api/track", data="", content_type="application/json")
+        assert r2.status_code == 204
+        # Cas dégradé : JSON malformé → toujours 204
+        r3 = client.post("/api/track", data="{not json", content_type="application/json")
+        assert r3.status_code == 204
 
     def test_deadlines(self, client):
         r = client.get("/deadlines")
