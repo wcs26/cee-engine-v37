@@ -1,0 +1,669 @@
+{
+  "_meta": {
+    "version": "V38.8c",
+    "date": "2026-05-11",
+    "source": "PDF ministère + ATEE — arrêtés P6 2025-2026 + Légifrance",
+    "total_entries": 36
+  },
+  "fiches": {
+    "BAT-EN-101": {
+      "label": "Isolation combles/toitures tertiaire",
+      "model_type": "absolute_per_sector_zone",
+      "formula_summary": "kWhc = forfait(secteur, zone) × surface_m2",
+      "inputs": [
+        {"id": "secteur", "label": "Secteur tertiaire", "type": "select", "options": ["bureaux", "enseignement", "commerces", "hotellerie_restauration", "sante", "autres"], "default": "bureaux"},
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface isolée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {
+        "bureaux":              {"H1": 2600, "H2": 2100, "H3": 1400, "DOM": 870},
+        "enseignement":         {"H1": 1500, "H2": 1300, "H3": 850,  "DOM": 870},
+        "commerces":            {"H1": 3300, "H2": 2700, "H3": 1900, "DOM": 870},
+        "hotellerie_restauration": {"H1": 3700, "H2": 3100, "H3": 2200, "DOM": 870},
+        "sante":                {"H1": 4400, "H2": 3700, "H3": 2700, "DOM": 870},
+        "autres":               {"H1": 2600, "H2": 2100, "H3": 1400, "DOM": 870}
+      },
+      "test_cases": [
+        {"smart": {"secteur": "bureaux", "zone": "H1", "surface_m2": 100}, "expected": 260000, "desc": "100 m² bureaux H1 = 260k cumac"},
+        {"smart": {"secteur": "commerces", "zone": "H2", "surface_m2": 200}, "expected": 540000, "desc": "200 m² commerces H2 = 540k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-1 ATEE (BAR-EN-101 transposé tertiaire)",
+      "note": "Forfait par secteur × zone × m² isolés. Référence basique tertiaire."
+    },
+    "BAT-EN-102": {
+      "label": "Isolation murs tertiaire",
+      "model_type": "absolute_per_sector_zone",
+      "formula_summary": "kWhc = forfait(secteur, zone) × surface_m2",
+      "inputs": [
+        {"id": "secteur", "label": "Secteur tertiaire", "type": "select", "options": ["bureaux", "enseignement", "commerces", "hotellerie_restauration", "sante", "autres"], "default": "bureaux"},
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface murs isolés (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {
+        "bureaux":              {"H1": 4800, "H2": 3900, "H3": 2600, "DOM": 1700},
+        "enseignement":         {"H1": 2800, "H2": 2300, "H3": 1600, "DOM": 1700},
+        "commerces":            {"H1": 6100, "H2": 5000, "H3": 3500, "DOM": 1700},
+        "hotellerie_restauration": {"H1": 6900, "H2": 5700, "H3": 4000, "DOM": 1700},
+        "sante":                {"H1": 8200, "H2": 6800, "H3": 4900, "DOM": 1700},
+        "autres":               {"H1": 4800, "H2": 3900, "H3": 2600, "DOM": 1700}
+      },
+      "test_cases": [
+        {"smart": {"secteur": "bureaux", "zone": "H1", "surface_m2": 100}, "expected": 480000, "desc": "100 m² murs bureaux H1 = 480k cumac"},
+        {"smart": {"secteur": "sante", "zone": "H1", "surface_m2": 50}, "expected": 410000, "desc": "50 m² murs santé H1 = 410k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-2 ATEE",
+      "note": "Forfait par secteur × zone × m² murs isolés."
+    },
+    "BAT-EN-103": {
+      "label": "Isolation plancher tertiaire",
+      "model_type": "absolute_per_sector_zone",
+      "formula_summary": "kWhc = forfait(secteur, zone) × surface_m2",
+      "inputs": [
+        {"id": "secteur", "label": "Secteur tertiaire", "type": "select", "options": ["bureaux", "enseignement", "commerces", "hotellerie_restauration", "sante", "autres"], "default": "bureaux"},
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface plancher isolée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {
+        "bureaux":              {"H1": 5200, "H2": 4200, "H3": 2800, "DOM": 1700},
+        "enseignement":         {"H1": 3000, "H2": 2500, "H3": 1700, "DOM": 1700},
+        "commerces":            {"H1": 6600, "H2": 5400, "H3": 3800, "DOM": 1700},
+        "hotellerie_restauration": {"H1": 7400, "H2": 6200, "H3": 4400, "DOM": 1700},
+        "sante":                {"H1": 8800, "H2": 7400, "H3": 5300, "DOM": 1700},
+        "autres":               {"H1": 5200, "H2": 4200, "H3": 2800, "DOM": 1700}
+      },
+      "test_cases": [
+        {"smart": {"secteur": "bureaux", "zone": "H1", "surface_m2": 100}, "expected": 520000, "desc": "100 m² plancher bureaux H1 = 520k cumac"},
+        {"smart": {"secteur": "commerces", "zone": "H3", "surface_m2": 200}, "expected": 760000, "desc": "200 m² plancher commerces H3 = 760k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-3 ATEE",
+      "note": "Cf BAT-EN-101/102 — même structure secteur × zone × m²."
+    },
+    "BAT-EN-104": {
+      "label": "Fenêtre/porte-fenêtre isolante tertiaire",
+      "model_type": "absolute_per_sector_zone",
+      "formula_summary": "kWhc = forfait(secteur, zone) × surface_m2",
+      "inputs": [
+        {"id": "secteur", "label": "Secteur tertiaire", "type": "select", "options": ["bureaux", "enseignement", "commerces", "hotellerie_restauration", "sante", "autres"], "default": "bureaux"},
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface fenêtres remplacées (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {
+        "bureaux":              {"H1": 6200, "H2": 5050, "H3": 3400, "DOM": 2270},
+        "enseignement":         {"H1": 3600, "H2": 3000, "H3": 2050, "DOM": 2270},
+        "commerces":            {"H1": 7800, "H2": 6400, "H3": 4400, "DOM": 2270},
+        "hotellerie_restauration": {"H1": 8800, "H2": 7300, "H3": 5100, "DOM": 2270},
+        "sante":                {"H1": 10500, "H2": 8800, "H3": 6300, "DOM": 2270},
+        "autres":               {"H1": 6200, "H2": 5050, "H3": 3400, "DOM": 2270}
+      },
+      "test_cases": [
+        {"smart": {"secteur": "bureaux", "zone": "H1", "surface_m2": 10}, "expected": 62000, "desc": "10 m² fenêtre bureaux H1 = 62k cumac"},
+        {"smart": {"secteur": "hotellerie_restauration", "zone": "H2", "surface_m2": 20}, "expected": 146000, "desc": "20 m² fenêtre hotel H2 = 146k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-4 ATEE",
+      "note": "Forfait fenêtre/porte-fenêtre isolante. Uw < 1.3 W/m².K requis."
+    },
+    "BAT-EN-105": {
+      "label": "Isolation combles/toitures tertiaire DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2 (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "surface_m2", "label": "Surface isolée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 870},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "surface_m2": 100}, "expected": 87000, "desc": "100 m² toiture DOM = 87k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 250}, "expected": 217500, "desc": "250 m² toiture DOM = 217.5k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-5 ATEE",
+      "note": "Spécifique DOM. Forfait fixe 870 cumac/m²."
+    },
+    "BAT-EN-106": {
+      "label": "Isolation murs tertiaire DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2 (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "surface_m2", "label": "Surface murs isolés (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 1130},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "surface_m2": 100}, "expected": 113000, "desc": "100 m² murs DOM = 113k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 50}, "expected": 56500, "desc": "50 m² murs DOM = 56.5k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-6 ATEE",
+      "note": "Spécifique DOM. Forfait fixe 1130 cumac/m²."
+    },
+    "BAT-EN-107": {
+      "label": "Isolation toitures-terrasses tertiaire",
+      "model_type": "absolute_per_sector_zone",
+      "formula_summary": "kWhc = forfait(secteur, zone) × surface_m2",
+      "inputs": [
+        {"id": "secteur", "label": "Secteur tertiaire", "type": "select", "options": ["bureaux", "enseignement", "commerces", "hotellerie_restauration", "sante", "autres"], "default": "bureaux"},
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface toiture-terrasse isolée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {
+        "bureaux":              {"H1": 2600, "H2": 2100, "H3": 1400, "DOM": 870},
+        "enseignement":         {"H1": 1500, "H2": 1300, "H3": 850,  "DOM": 870},
+        "commerces":            {"H1": 3300, "H2": 2700, "H3": 1900, "DOM": 870},
+        "hotellerie_restauration": {"H1": 3700, "H2": 3100, "H3": 2200, "DOM": 870},
+        "sante":                {"H1": 4400, "H2": 3700, "H3": 2700, "DOM": 870},
+        "autres":               {"H1": 2600, "H2": 2100, "H3": 1400, "DOM": 870}
+      },
+      "test_cases": [
+        {"smart": {"secteur": "bureaux", "zone": "H1", "surface_m2": 200}, "expected": 520000, "desc": "200 m² toit-terrasse bureaux H1 = 520k cumac"},
+        {"smart": {"secteur": "commerces", "zone": "H2", "surface_m2": 300}, "expected": 810000, "desc": "300 m² toit-terrasse commerces H2 = 810k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-7 ATEE",
+      "note": "Même barème que BAT-EN-101 — isolation toiture-terrasse non accessible."
+    },
+    "BAT-EN-108": {
+      "label": "Isolation plancher tertiaire DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2 (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "surface_m2", "label": "Surface plancher isolée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 1700},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "surface_m2": 100}, "expected": 170000, "desc": "100 m² plancher DOM = 170k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 75}, "expected": 127500, "desc": "75 m² plancher DOM = 127.5k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-8 ATEE",
+      "note": "Spécifique DOM. Forfait fixe 1700 cumac/m²."
+    },
+    "BAT-EN-109": {
+      "label": "Fenêtre/porte-fenêtre tertiaire DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2 (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "surface_m2", "label": "Surface fenêtre (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 2270},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "surface_m2": 10}, "expected": 22700, "desc": "10 m² fenêtre DOM = 22.7k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 25}, "expected": 56750, "desc": "25 m² fenêtre DOM = 56.75k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-9 ATEE",
+      "note": "Spécifique DOM. Vitrage performant Uw < 2.6 W/m².K."
+    },
+    "BAT-EN-110": {
+      "label": "Fenêtre pariétodynamique tertiaire",
+      "model_type": "absolute_per_sector_zone",
+      "formula_summary": "kWhc = forfait(secteur, zone) × surface_m2",
+      "inputs": [
+        {"id": "secteur", "label": "Secteur tertiaire", "type": "select", "options": ["bureaux", "enseignement", "commerces", "hotellerie_restauration", "sante", "autres"], "default": "bureaux"},
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface fenêtre pariétodynamique (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {
+        "bureaux":              {"H1": 9200, "H2": 7500, "H3": 5400, "DOM": 3600},
+        "enseignement":         {"H1": 5300, "H2": 4400, "H3": 3200, "DOM": 3600},
+        "commerces":            {"H1": 11700, "H2": 9500, "H3": 6900, "DOM": 3600},
+        "hotellerie_restauration": {"H1": 13100, "H2": 10800, "H3": 7800, "DOM": 3600},
+        "sante":                {"H1": 15600, "H2": 13100, "H3": 9500, "DOM": 3600},
+        "autres":               {"H1": 9200, "H2": 7500, "H3": 5400, "DOM": 3600}
+      },
+      "test_cases": [
+        {"smart": {"secteur": "bureaux", "zone": "H1", "surface_m2": 10}, "expected": 92000, "desc": "10 m² parietodyn. bureaux H1 = 92k cumac"},
+        {"smart": {"secteur": "sante", "zone": "H1", "surface_m2": 5}, "expected": 78000, "desc": "5 m² parietodyn. santé H1 = 78k cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-10 ATEE",
+      "note": "Pariétodynamique = fenêtre récupération chaleur. Forfait majoré vs BAT-EN-104."
+    },
+    "BAT-EN-111": {
+      "label": "Fenêtre/porte-fenêtre vitrage pariétodynamique DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2 (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "surface_m2", "label": "Surface fenêtre pariétodynamique (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 1400},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "surface_m2": 10}, "expected": 14000, "desc": "10 m² parietodyn. DOM = 14k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 30}, "expected": 42000, "desc": "30 m² parietodyn. DOM = 42k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-11 ATEE",
+      "note": "Spécifique DOM. Forfait 1400 cumac/m²."
+    },
+    "BAT-EN-112": {
+      "label": "Revêtements réflectifs en toiture (cool roof tertiaire)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H3"},
+        {"id": "surface_m2", "label": "Surface toiture revêtue (m²)", "type": "number", "default": 200}
+      ],
+      "official_table": {"H1": 160, "H2": 215, "H3": 270, "DOM": 270},
+      "test_cases": [
+        {"smart": {"zone": "H3", "surface_m2": 200}, "expected": 54000, "desc": "200 m² cool roof H3 = 54k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 500}, "expected": 135000, "desc": "500 m² cool roof DOM = 135k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-12 ATEE",
+      "note": "Cool roof. Forfait croît du Nord vers le Sud (effet refroidissement)."
+    },
+    "BAT-EN-113": {
+      "label": "Façade rideau ou semi-rideau avec vitrage isolant",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface façade rideau (m²)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 1500, "H2": 1200, "H3": 800, "DOM": 0},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 50}, "expected": 75000, "desc": "50 m² façade rideau H1 = 75k cumac"},
+        {"smart": {"zone": "H2", "surface_m2": 100}, "expected": 120000, "desc": "100 m² façade rideau H2 = 120k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-13 ATEE",
+      "note": "Mur rideau. Métropole uniquement, pas de DOM."
+    },
+    "BAT-TH-101": {
+      "label": "Chauffe-eau solaire collectif tertiaire",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_capteurs_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface capteurs solaires (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 2600, "H2": 2600, "H3": 2600, "DOM": 2600},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 10}, "expected": 26000, "desc": "10 m² CESC H1 = 26k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 20}, "expected": 52000, "desc": "20 m² CESC DOM = 52k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-14 ATEE",
+      "note": "Forfait uniforme toutes zones (effet ECS solaire stable)."
+    },
+    "BAT-TH-103": {
+      "label": "Plancher chauffant basse température",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface plancher chauffant (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 5200, "H2": 4200, "H3": 3000, "DOM": 2000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 100}, "expected": 520000, "desc": "100 m² PCBT H1 = 520k cumac"},
+        {"smart": {"zone": "H3", "surface_m2": 200}, "expected": 600000, "desc": "200 m² PCBT H3 = 600k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-15 ATEE",
+      "note": "Plancher chauffant basse T° (≤ 40°C)."
+    },
+    "BAT-TH-105": {
+      "label": "Radiateur basse température",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × nombre_radiateurs",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "nombre_unites", "label": "Nombre de radiateurs basse T°", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 470, "H2": 380, "H3": 270, "DOM": 180},
+      "test_cases": [
+        {"smart": {"zone": "H1", "nombre_unites": 10}, "expected": 4700, "desc": "10 radiateurs BT H1 = 4.7k cumac"},
+        {"smart": {"zone": "H2", "nombre_unites": 50}, "expected": 19000, "desc": "50 radiateurs BT H2 = 19k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-16 ATEE",
+      "note": "Forfait par unité radiateur basse T°."
+    },
+    "BAT-TH-110": {
+      "label": "Récupérateur chaleur condensation",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance récupérée (kW)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 8100, "H2": 6600, "H3": 4800, "DOM": 3200},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 50}, "expected": 405000, "desc": "50 kW récup H1 = 405k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 100}, "expected": 660000, "desc": "100 kW récup H2 = 660k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-17 ATEE",
+      "note": "Récupérateur condensation chaudière. Forfait par kW."
+    },
+    "BAT-TH-112": {
+      "label": "VEV moteur asynchrone tertiaire",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance moteur (kW)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 4800, "H2": 4800, "H3": 4800, "DOM": 4800},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 10}, "expected": 48000, "desc": "10 kW VEV H1 = 48k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 22}, "expected": 105600, "desc": "22 kW VEV H2 = 105.6k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-18 ATEE",
+      "note": "Variateur électronique vitesse moteur asynchrone. Forfait uniforme zone."
+    },
+    "BAT-TH-115": {
+      "label": "Climatiseur performant DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × nombre_unites (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "nombre_unites", "label": "Nombre de climatiseurs", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 3800},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "nombre_unites": 1}, "expected": 3800, "desc": "1 clim performant DOM = 3.8k cumac"},
+        {"smart": {"zone": "DOM", "nombre_unites": 10}, "expected": 38000, "desc": "10 clims DOM = 38k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-19 ATEE",
+      "note": "Climatiseur DOM classe énergétique haute. SEER ≥ 7."
+    },
+    "BAT-TH-121": {
+      "label": "Chauffe-eau solaire DOM tertiaire",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_m2 (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "surface_m2", "label": "Surface capteurs solaires (m²)", "type": "number", "default": 5}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 5500},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "surface_m2": 5}, "expected": 27500, "desc": "5 m² CESC DOM = 27.5k cumac"},
+        {"smart": {"zone": "DOM", "surface_m2": 12}, "expected": 66000, "desc": "12 m² CESC DOM = 66k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-20 ATEE",
+      "note": "CESC DOM tertiaire. Forfait majoré vs métropole (BAT-TH-101)."
+    },
+    "BAT-TH-122": {
+      "label": "Programmateur intermittence clim DOM",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × nombre_programmateurs (DOM uniquement)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique (DOM uniquement)", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "nombre_unites", "label": "Nombre de programmateurs", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 2400},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "nombre_unites": 1}, "expected": 2400, "desc": "1 programmateur DOM = 2.4k cumac"},
+        {"smart": {"zone": "DOM", "nombre_unites": 5}, "expected": 12000, "desc": "5 programmateurs DOM = 12k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-21 ATEE",
+      "note": "Programmateur de réduction période d'inoccupation."
+    },
+    "BAT-TH-140": {
+      "label": "PAC à absorption air/eau ou eau/eau (tertiaire)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance thermique PAC absorption (kW)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 300, "H2": 250, "H3": 200, "DOM": 150},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 50}, "expected": 15000, "desc": "50 kW PAC absorption H1 = 15k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 100}, "expected": 25000, "desc": "100 kW PAC absorption H2 = 25k cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-22 ATEE",
+      "note": "PAC à absorption gaz, alternative aux chaudières classiques."
+    },
+    "BAT-TH-141": {
+      "label": "PAC à moteur gaz air/eau (tertiaire)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance thermique PAC moteur gaz (kW)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 280, "H2": 230, "H3": 180, "DOM": 140},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 50}, "expected": 14000, "desc": "50 kW PAC moteur gaz H1 = 14k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 80}, "expected": 18400, "desc": "80 kW PAC moteur gaz H2 = 18.4k cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-23 ATEE",
+      "note": "PAC moteur gaz GHP. Sous-spécification BAT-TH-140."
+    },
+    "BAT-TH-158": {
+      "label": "PAC réversible air/air tertiaire",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_chauffee_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface chauffée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 860, "H2": 760, "H3": 620, "DOM": 400},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 100}, "expected": 86000, "desc": "100 m² PAC air/air H1 = 86k cumac"},
+        {"smart": {"zone": "H2", "surface_m2": 200}, "expected": 152000, "desc": "200 m² PAC air/air H2 = 152k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-24 ATEE",
+      "note": "PAC réversible air/air, fiche tertiaire phare en métropole."
+    },
+    "BAT-EQ-117": {
+      "label": "Installation frigo CO2 sub/transcritique",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW_compresseurs",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance compresseurs frigo (kW)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 19200, "H2": 19200, "H3": 19200, "DOM": 19200},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 50}, "expected": 960000, "desc": "50 kW frigo CO2 = 960k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 100}, "expected": 1920000, "desc": "100 kW frigo CO2 = 1.92M cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-25 ATEE",
+      "note": "Frigo CO2 transcritique pour supermarchés. Forfait uniforme par zone."
+    },
+    "BAT-EQ-123": {
+      "label": "Moto-variateur synchrone à aimants tertiaire",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance moto-variateur (kW)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 4800, "H2": 4800, "H3": 4800, "DOM": 4800},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 10}, "expected": 48000, "desc": "10 kW moto-var aimants = 48k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 22}, "expected": 105600, "desc": "22 kW moto-var aimants = 105.6k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-26 ATEE",
+      "note": "Moteur synchrone à aimants permanents + variateur intégré. Voir IND-UT-114."
+    },
+    "BAT-EQ-124": {
+      "label": "Fermeture meubles frigo T+",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × longueur_lineaire_m",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "longueur_lineaire_m", "label": "Longueur linéaire de meubles fermés (m)", "type": "number", "default": 5}
+      ],
+      "official_table": {"H1": 9200, "H2": 9200, "H3": 9200, "DOM": 9200},
+      "test_cases": [
+        {"smart": {"zone": "H1", "longueur_lineaire_m": 5}, "expected": 46000, "desc": "5 m linéaire T+ = 46k cumac"},
+        {"smart": {"zone": "H2", "longueur_lineaire_m": 10}, "expected": 92000, "desc": "10 m linéaire T+ = 92k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-27 ATEE",
+      "note": "Fermeture (porte) meubles frigo positifs (T+). Forfait par mètre."
+    },
+    "BAT-EQ-125": {
+      "label": "Fermeture meubles frigo T-",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × longueur_lineaire_m",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "longueur_lineaire_m", "label": "Longueur linéaire de meubles fermés (m)", "type": "number", "default": 5}
+      ],
+      "official_table": {"H1": 16800, "H2": 16800, "H3": 16800, "DOM": 16800},
+      "test_cases": [
+        {"smart": {"zone": "H1", "longueur_lineaire_m": 5}, "expected": 84000, "desc": "5 m linéaire T- = 84k cumac"},
+        {"smart": {"zone": "H2", "longueur_lineaire_m": 10}, "expected": 168000, "desc": "10 m linéaire T- = 168k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-28 ATEE",
+      "note": "Fermeture meubles frigo négatifs (T-). Forfait majoré vs T+ (consommation x2)."
+    },
+    "BAT-EQ-129": {
+      "label": "Lanterneaux éclairage zénithal",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_lanterneaux_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface lanterneaux (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 2800, "H2": 2800, "H3": 2800, "DOM": 2800},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 10}, "expected": 28000, "desc": "10 m² lanterneaux = 28k cumac"},
+        {"smart": {"zone": "H2", "surface_m2": 25}, "expected": 70000, "desc": "25 m² lanterneaux = 70k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-29 ATEE",
+      "note": "Lanterneaux zénithaux pour éclairage naturel bâtiments tertiaires."
+    },
+    "BAT-EQ-130": {
+      "label": "Condensation frigo haute efficacité",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kW_compresseurs",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance compresseurs (kW)", "type": "number", "default": 30}
+      ],
+      "official_table": {"H1": 9400, "H2": 9400, "H3": 9400, "DOM": 9400},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 30}, "expected": 282000, "desc": "30 kW condensation HE = 282k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 50}, "expected": 470000, "desc": "50 kW condensation HE = 470k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-30 ATEE",
+      "note": "Condenseurs frigo haute efficacité (variateur, T° glissante)."
+    },
+    "BAT-EQ-131": {
+      "label": "Conduits de lumière naturelle (tertiaire)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × surface_emergence_m2",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface d'émergence des conduits (m²)", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 28500, "H2": 28500, "H3": 28500, "DOM": 28500},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 1}, "expected": 28500, "desc": "1 m² conduit lumière = 28.5k cumac"},
+        {"smart": {"zone": "H2", "surface_m2": 3}, "expected": 85500, "desc": "3 m² conduits lumière = 85.5k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-31 ATEE",
+      "note": "Conduits Solatube/Velux. Forfait élevé : très efficace en éclairage zone aveugle."
+    },
+    "BAT-EQ-134": {
+      "label": "Meuble frigo performant intégré",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × longueur_lineaire_m",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "longueur_lineaire_m", "label": "Longueur linéaire meubles intégrés (m)", "type": "number", "default": 5}
+      ],
+      "official_table": {"H1": 12400, "H2": 12400, "H3": 12400, "DOM": 12400},
+      "test_cases": [
+        {"smart": {"zone": "H1", "longueur_lineaire_m": 5}, "expected": 62000, "desc": "5 m meuble intégré = 62k cumac"},
+        {"smart": {"zone": "H2", "longueur_lineaire_m": 8}, "expected": 99200, "desc": "8 m meuble intégré = 99.2k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-32 ATEE",
+      "note": "Meuble frigo avec groupe froid intégré classe A+. Magasin proximité."
+    },
+    "BAT-EQ-135": {
+      "label": "ASI onduleur Data Center",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × P_kVA",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "P_kW", "label": "Puissance ASI (kVA ≈ kW)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 2100, "H2": 2100, "H3": 2100, "DOM": 2100},
+      "test_cases": [
+        {"smart": {"zone": "H1", "P_kW": 100}, "expected": 210000, "desc": "100 kVA ASI = 210k cumac"},
+        {"smart": {"zone": "H2", "P_kW": 250}, "expected": 525000, "desc": "250 kVA ASI = 525k cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-33 ATEE",
+      "note": "Onduleur ASI haute efficacité Data Center. Rendement > 96% en mode online."
+    },
+    "BAT-SE-103": {
+      "label": "Réglage équilibrage chauffage tertiaire",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × nombre_appartements_ou_locaux",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "nombre_unites", "label": "Nombre de locaux/appartements équilibrés", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 14200, "H2": 11600, "H3": 8300, "DOM": 5500},
+      "test_cases": [
+        {"smart": {"zone": "H1", "nombre_unites": 10}, "expected": 142000, "desc": "10 locaux équilibrés H1 = 142k cumac"},
+        {"smart": {"zone": "H2", "nombre_unites": 20}, "expected": 232000, "desc": "20 locaux équilibrés H2 = 232k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-34 ATEE",
+      "note": "Équilibrage hydraulique réseau chauffage tertiaire. Service de réglage."
+    },
+    "BAT-SE-104": {
+      "label": "CPE Services chauffage tertiaire",
+      "model_type": "forfait_legacy",
+      "formula_summary": "kWhc = forfait(zone) × surface_chauffee × durée CPE (modèle complexe — V39)",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "surface_m2", "label": "Surface chauffée (m²)", "type": "number", "default": 1000}
+      ],
+      "official_table": {"H1": 13, "H2": 11, "H3": 8, "DOM": 5},
+      "test_cases": [
+        {"smart": {"zone": "H1", "surface_m2": 1000}, "expected": 13000, "desc": "1000 m² CPE H1 = 13k cumac/an (durée non incluse)"}
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA22-35 ATEE — formule complexe CPE",
+      "note": "Contrat de Performance Énergétique. Modèle complet inclut durée CPE et économies réelles. À traiter en V39."
+    },
+    "BAT-SE-105": {
+      "label": "Abaissement T° retour réseau chaleur",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait(zone) × nombre_logements",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "nombre_unites", "label": "Nombre de logements raccordés", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 7200, "H2": 5900, "H3": 4200, "DOM": 2800},
+      "test_cases": [
+        {"smart": {"zone": "H1", "nombre_unites": 50}, "expected": 360000, "desc": "50 logements abaissement T° H1 = 360k cumac"},
+        {"smart": {"zone": "H2", "nombre_unites": 100}, "expected": 590000, "desc": "100 logements H2 = 590k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-36 ATEE",
+      "note": "Abaissement T° retour vers réseau de chaleur. Forfait par logement raccordé."
+    }
+  }
+}

@@ -1,0 +1,3292 @@
+{
+  "/Users/azert/CEE_ENGINE/portail.py": {
+    "mtime": 1777618366.7932477,
+    "ast_hash": "45e9560b19dd624780cb8e1c8259229e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/naf_to_fiches.json": {
+    "mtime": 1778654260.8145907,
+    "ast_hash": "e7a0d76b69cd932a11cc7282cb2a16a6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/auth.py": {
+    "mtime": 1777969465.8725128,
+    "ast_hash": "891e3eae3039e2b4a63641007aa050c6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite.py": {
+    "mtime": 1777328564.0509863,
+    "ast_hash": "90c036e0434f68415dc08536de5643ea",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/couts_chantier.py": {
+    "mtime": 1777310886.8618333,
+    "ast_hash": "2c5957fb61c1ca3a566998b481179ed3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/predictions.py": {
+    "mtime": 1777310887.8752434,
+    "ast_hash": "c77e58e577985f99f9ffd680d5e534ec",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/deadlines.json": {
+    "mtime": 1777310886.8622403,
+    "ast_hash": "4e6b3164a8a23f496f1eb41176cb0a82",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers.py": {
+    "mtime": 1777619534.6292412,
+    "ast_hash": "cde2d6a850c0c43e0db0ac76a21df2c6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/documents_client.py": {
+    "mtime": 1777529346.4155536,
+    "ast_hash": "c019c580130793f03108a2a415e0a5f5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/config.py": {
+    "mtime": 1778251304.7228553,
+    "ast_hash": "e5c390692735e8dd20359b2f6113a70d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/multisite.py": {
+    "mtime": 1777310886.8801832,
+    "ast_hash": "e5995d33f21cb5de63f4da82749c74d6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/closing.py": {
+    "mtime": 1777310886.8588884,
+    "ast_hash": "247208c969b4c3404e262e1feac6c273",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/extract_fiches.py": {
+    "mtime": 1777310886.8693244,
+    "ast_hash": "985442e2019e3b35694f5eea59849682",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/gisement_sirat.py": {
+    "mtime": 1777310886.874482,
+    "ast_hash": "149951080a4c616a2ea0faa938c8a82f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/mapping_naf_fiches.py": {
+    "mtime": 1777310886.8777668,
+    "ast_hash": "b2ead9b31e3f1a398510292c2489ecc7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/merge_oracle.py": {
+    "mtime": 1777310886.8782835,
+    "ast_hash": "86a19f4b857e63b63f5efe8ead7de117",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/formation.py": {
+    "mtime": 1777618382.1441483,
+    "ast_hash": "19a1daf274b60ff43c975bdc714f708d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/apidocs.py": {
+    "mtime": 1777310886.8553488,
+    "ast_hash": "96df7c98c0323070fdea96d0e1732183",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/ind_inputs_v2.json": {
+    "mtime": 1778482578.476198,
+    "ast_hash": "9aeee271ab57a957b483332509667bb5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/validate_fiches.py": {
+    "mtime": 1777310887.8835483,
+    "ast_hash": "3b7a9fe4caea941eb424024678f2ef1c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/negociation.py": {
+    "mtime": 1777310886.8808434,
+    "ast_hash": "4e6769331c9751268c18de36f734880c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/monday_sync.py": {
+    "mtime": 1777528018.9865527,
+    "ast_hash": "94790a0072b45f0374613b7874b97ffa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/cout_travaux.json": {
+    "mtime": 1777310886.8610744,
+    "ast_hash": "72e3b122c5e0f6915685c0c647d89dd6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/ratelimit.py": {
+    "mtime": 1777310887.8789463,
+    "ast_hash": "7f428d651ee81b37b7066737642cb5ad",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tunnel.py": {
+    "mtime": 1777619277.6466763,
+    "ast_hash": "910ed210d70d5dad7a99ca0ae76b052b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/parse_pdf.py": {
+    "mtime": 1777310886.8919241,
+    "ast_hash": "ccb61210b1761daee1b6bfec9484cb6c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature.py": {
+    "mtime": 1777781047.3783581,
+    "ast_hash": "16aa3980fc003c3f3d010027e3bf2459",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/api.py": {
+    "mtime": 1778364199.5389137,
+    "ast_hash": "03fe73c0b9d646dbb92957ba9a4b03c5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/entities.json": {
+    "mtime": 1777297559.4803212,
+    "ast_hash": "da278fcf6995f9d148645c42cdffb754",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/chat.py": {
+    "mtime": 1778364159.5534513,
+    "ast_hash": "b59f0d5d2ba34ffe387c8c5403da00ec",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/rag.py": {
+    "mtime": 1777310887.8777506,
+    "ast_hash": "e8ab23c027f2c22006f210d6215108b9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pipeline.py": {
+    "mtime": 1777970333.6538596,
+    "ast_hash": "c8fb41e2e50ae77e230db07119e4b08a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/qualification.py": {
+    "mtime": 1777310887.8773077,
+    "ast_hash": "b375b8ca408e72071f5ed00317069f1c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/fidelisation.py": {
+    "mtime": 1777328618.8760056,
+    "ast_hash": "300c484f52e1717390f2a5ee2a672d04",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/moteur_cee_master.py": {
+    "mtime": 1777310886.879559,
+    "ast_hash": "057b2dc7d9bfa5675b866984201e06ff",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tra_inputs_audit.json": {
+    "mtime": 1778423695.2523136,
+    "ast_hash": "527aa1ece47ae33932c3d971c7c16c49",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/bat_th_inputs.json": {
+    "mtime": 1778414747.0942993,
+    "ast_hash": "2dc379f03b42998dc20e0f4f860a798b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/manifest.json": {
+    "mtime": 1777310886.8772178,
+    "ast_hash": "6eb4ae52d5a7fee993584cce37398cce",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/parse_atee.py": {
+    "mtime": 1777310886.8908353,
+    "ast_hash": "84e64ac9908557c1eea4019da0d07a2a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/DEPLOY_NOW.sh": {
+    "mtime": 1776803801.655027,
+    "ast_hash": "9728e60441a6f8c977c751a26bff5114",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/cee_excellence_pro.py": {
+    "mtime": 1777382022.5674853,
+    "ast_hash": "f7c40e9d629657424a9081ac9e24d152",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/deploy.sh": {
+    "mtime": 1777310886.8626235,
+    "ast_hash": "1e274f623b5e58755c5d9ece4cca45f2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/bat_th_official.json": {
+    "mtime": 1778378507.2998502,
+    "ast_hash": "525cff2fcfab9c3bc2dd5e0def80151d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/bat_inputs_v2.json": {
+    "mtime": 1778482502.4752994,
+    "ast_hash": "31b632b520201f8b398428d7339502e5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/rnb_client.py": {
+    "mtime": 1777411992.7639244,
+    "ast_hash": "0c60f72a83ea3d49a363687a4a27a415",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/analytics.py": {
+    "mtime": 1777328601.8959622,
+    "ast_hash": "add728ea20a8d5ad785b8ee3bb1c7119",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tra_inputs_v2.json": {
+    "mtime": 1778647405.6036682,
+    "ast_hash": "364c4eb514f7764809d9b9236524e29d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/activity_factors.json": {
+    "mtime": 1777310886.8524592,
+    "ast_hash": "5491b634537bf83ff0fe2fdc31adcf99",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/agri_inputs_v2.json": {
+    "mtime": 1778482449.236791,
+    "ast_hash": "2280998132f8f3dffee4dfd1561da6b7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/rotate_keys.sh": {
+    "mtime": 1777784037.1041684,
+    "ast_hash": "c65e6a327980dd8e4f377d4d540aa6d4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/fiches_oracle_raw.json": {
+    "mtime": 1777310886.8728619,
+    "ast_hash": "be75e4a4c941afe787cee2744c17d205",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/scrape_fiches.py": {
+    "mtime": 1777310887.8807836,
+    "ast_hash": "20403147166e9843a9adc21582eec3c1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pncee.py": {
+    "mtime": 1777310887.873111,
+    "ast_hash": "8828c93179705397c040839aa50e3858",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/integrations.py": {
+    "mtime": 1777618361.7565808,
+    "ast_hash": "cbd38499e2e08a3a2e78245808c0b39c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/bdnb_client.py": {
+    "mtime": 1777310886.8571086,
+    "ast_hash": "12892c633c295176ecd20ca901bdafc2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/bar_inputs_v2.json": {
+    "mtime": 1778482449.2496853,
+    "ast_hash": "e62bb38762de9fcadcbcd29caed29431",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/fiches.json": {
+    "mtime": 1777310886.8703437,
+    "ast_hash": "b2af016bbf79ec74d8ff9afeced26c1d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/sw.js": {
+    "mtime": 1778363224.2723334,
+    "ast_hash": "6ebc35ee1571ab9814dc22cd2fba02c3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/auto_detect.py": {
+    "mtime": 1777310886.8566074,
+    "ast_hash": "62e67d3b1e733aca48da221aac4eaa9c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pv_cotation.py": {
+    "mtime": 1777310887.876404,
+    "ast_hash": "81bbac28f2c57478a564b25757db0316",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/top_fiches_secteur.py": {
+    "mtime": 1777310887.8829415,
+    "ast_hash": "6cd6dca392f3ce63eb85117214008a41",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/prospection.py": {
+    "mtime": 1777783893.654059,
+    "ast_hash": "44e15cecb8681cb8232339ac826361d6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_8ab1a9945b2a9542.json": {
+    "mtime": 1777618453.8998249,
+    "ast_hash": "ce223c8188c57c0db2b2c83b5cddcb17",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_e027e80174495b97.json": {
+    "mtime": 1776360566.6037686,
+    "ast_hash": "b326ccf3f7fd39bf277f86045fb7abbd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/chain_state.json": {
+    "mtime": 1777781108.622356,
+    "ast_hash": "515350ed0bd52ee4b8850c3dff2c3bc5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_dd07f5b758fe7067.json": {
+    "mtime": 1776554587.9012759,
+    "ast_hash": "cec76c97cfafff3756a1a7d355c97a11",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_dd3db6d92fae8757.json": {
+    "mtime": 1777781108.6220894,
+    "ast_hash": "0d5db9c2c9f8595bb0ff206f5a1b9851",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_4eb58420e8a01092.json": {
+    "mtime": 1776377994.0692651,
+    "ast_hash": "3355918e8fc3175f48c3395af3acc3c2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_9c78238fa0a93478.json": {
+    "mtime": 1776377994.0607529,
+    "ast_hash": "24758c1269e5c9727580fd51ddac674a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_3c0cb11eb5bf6641.json": {
+    "mtime": 1776475321.6664364,
+    "ast_hash": "c1aa27bbf99749e0c0cc2a8b45e6d19a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_8f846db3c8f45253.json": {
+    "mtime": 1777618453.8771007,
+    "ast_hash": "bebda43f92e1e9bbdb3a7d3b52d55611",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_914241bd88f0e73b.json": {
+    "mtime": 1776640213.304273,
+    "ast_hash": "80a508f98769024008c58fffe7ab831e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_c618b082eb049d7c.json": {
+    "mtime": 1777328678.645126,
+    "ast_hash": "94acf01c52c204138865c151b3a5fe26",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_f414855fd261af5c.json": {
+    "mtime": 1776554587.9474394,
+    "ast_hash": "34be65e112dbbe90aa7923a127542c31",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_19a31c499b3cae97.json": {
+    "mtime": 1776795818.305364,
+    "ast_hash": "8b23cf6f85d4051039ea42847c050ef2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_16203453b771f60e.json": {
+    "mtime": 1776332780.7266822,
+    "ast_hash": "6d29695db070cfd67b9f5929505f0353",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_d5ea3944ad34f228.json": {
+    "mtime": 1777528079.2743173,
+    "ast_hash": "3995cb5da8c7d2c23d450390708baf2f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_c07233a5b31b8caf.json": {
+    "mtime": 1777781108.6103103,
+    "ast_hash": "f5b758f5d057144d602aa45cfb587e02",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_f5621cc2a6ed3221.json": {
+    "mtime": 1777295844.7083762,
+    "ast_hash": "560de42dcdd21aa02eb3cd4dbf5b5734",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_43d50a4d53af5984.json": {
+    "mtime": 1776640213.3119373,
+    "ast_hash": "398e9c1d3c79ce1362ee8a222ddf5249",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_131f989a9c2057b2.json": {
+    "mtime": 1776360926.9690492,
+    "ast_hash": "dcbea42b42097c556e6531d46aeb34f7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_68e180a7191fc65b.json": {
+    "mtime": 1776475321.6528237,
+    "ast_hash": "df49f81b80dbaab57bfc5e2a7eb169c0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_583009c6253f9a0f.json": {
+    "mtime": 1776795818.2923713,
+    "ast_hash": "05ce8f62a7385a524bb8ada721842e60",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_5d098bd3dd058b8d.json": {
+    "mtime": 1776332780.7498126,
+    "ast_hash": "e88ffb5d335fdfeee9b7011e799afd6d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_c52d58aa690b1ed4.json": {
+    "mtime": 1776360926.9797924,
+    "ast_hash": "c8bd54f0e85022189f1ec7af27ee0212",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_7165e17f535fa79b.json": {
+    "mtime": 1776359748.6220214,
+    "ast_hash": "fdae32d48f0999840effce9b05ad846a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_cd83be0ceddc4146.json": {
+    "mtime": 1777328678.6373596,
+    "ast_hash": "f94271a06d9bbf1a5ae430312a9e64a3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_ea07ffed40890b5d.json": {
+    "mtime": 1776360566.611693,
+    "ast_hash": "346fbb15a0f6d2550122aa3908c08717",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_d186272a9bafb566.json": {
+    "mtime": 1777528079.2652283,
+    "ast_hash": "b1601c42bae07db162035e00fe922a7a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_3f50a3c81f9a01f1.json": {
+    "mtime": 1777295844.6818097,
+    "ast_hash": "25b5fab321ae114eecb4d14ccab574c3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/conformite_data/dossier_97de3bc75812f993.json": {
+    "mtime": 1776359748.6149487,
+    "ast_hash": "d3fa28d8fc82fc6aebaf4adfe1f3764f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/js/cee-pdfs.js": {
+    "mtime": 1777310886.876777,
+    "ast_hash": "c75c177a03ee141e2bfb04f522e3cffb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_negociation.py": {
+    "mtime": 1777310949.8386545,
+    "ast_hash": "65a7aded38e3d82b28577d90383a9dd5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_auth.py": {
+    "mtime": 1777310949.8127508,
+    "ast_hash": "0410e0ae3df15ee0e99a68c95631bdd0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_pncee.py": {
+    "mtime": 1777310949.8134353,
+    "ast_hash": "16e7298c45a7761754aafe35875408ce",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_snapshot_ahbfc.py": {
+    "mtime": 1777310949.8137798,
+    "ast_hash": "15e93af326585085cdc0ebdcc736fe20",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_pv_cotation.py": {
+    "mtime": 1777310949.8392546,
+    "ast_hash": "d622e9ae234017d7e1eda3c0fef50c57",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_api.py": {
+    "mtime": 1777310887.88228,
+    "ast_hash": "78eed733325cd82e5a620d81a1bdf934",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_conformite.py": {
+    "mtime": 1777310949.813111,
+    "ast_hash": "d98685aec309ef8aeeb99171875fc386",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tests/test_tunnel.py": {
+    "mtime": 1777329270.9759824,
+    "ast_hash": "cb3a5031fdc8bf1c6e7a5c17f43433eb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/.claude/settings.local.json": {
+    "mtime": 1778880865.6643999,
+    "ast_hash": "8a08e335f955cdfd30dd30bd0c378a41",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/scripts/smoke.sh": {
+    "mtime": 1777310949.8597786,
+    "ast_hash": "db2a6c30bf5146dc375718ef0b975bb2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/scripts/setup_git_remote.sh": {
+    "mtime": 1777310950.023952,
+    "ast_hash": "5d578a789b481d99958449e0793a2233",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/scripts/rotate_keys.sh": {
+    "mtime": 1777310950.0231545,
+    "ast_hash": "97115f3e699a86e0bdc1d86e3619903a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/tunnel_data/_index.json": {
+    "mtime": 1777781216.142997,
+    "ast_hash": "d751713988987e9331980363e24189ce",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/13fcd8b366e741a1.json": {
+    "mtime": 1776795773.3987637,
+    "ast_hash": "402b0738c279f39ae823ce1269340a94",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/17f67c2309b84265.json": {
+    "mtime": 1776373979.449965,
+    "ast_hash": "1aabbe64fef6d28a44440203d1196d5a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/a865db67e3a94a04.json": {
+    "mtime": 1776373944.7108161,
+    "ast_hash": "45dec7b50258b38370d973db5ef499f7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/0c510e82c182431c.json": {
+    "mtime": 1776373980.2786248,
+    "ast_hash": "e9c934a6ef16faba75dc97d966d7e749",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/d4f4924ca3a9466a.json": {
+    "mtime": 1776558027.1125689,
+    "ast_hash": "3589cb3766082e1fe667fa542bddf0ab",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/38c4e11b6e9d43fd.json": {
+    "mtime": 1776372613.0205739,
+    "ast_hash": "2caabdc6cbb4c4e77cb6d467ad5ec829",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/c705f7de296d4b87.json": {
+    "mtime": 1776373948.8144636,
+    "ast_hash": "d77f6e14edd5a04933a838820ba2d919",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/e257724e145743da.json": {
+    "mtime": 1776373949.3822045,
+    "ast_hash": "f2d50c3d46de59e7b5f6a0f7a3255091",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/_index.json": {
+    "mtime": 1776795773.4132745,
+    "ast_hash": "12d0817150f99ff70c52579e1a496a9a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/34d282ab4a264fd6.json": {
+    "mtime": 1776558323.7973669,
+    "ast_hash": "4ffaef8db0c6b72e0ebedb1d47a1aaa6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/25bdefc88d1545f0.json": {
+    "mtime": 1776558656.5375433,
+    "ast_hash": "baef0e01697a8db308e26e802eed7b43",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossiers_data/31de7ea7f26349a5.json": {
+    "mtime": 1776373949.5643957,
+    "ast_hash": "f5f33382ca84d4177ba97b8f97477656",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-b5cc1068d784.json": {
+    "mtime": 1777329652.4538777,
+    "ast_hash": "33c7b06caefb348d33f8dcc71d8a54b3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-a727fd0e5e7c.json": {
+    "mtime": 1777328707.5314279,
+    "ast_hash": "184c8dafa664117a64d542943a350e25",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-ec93a1cd0e12.json": {
+    "mtime": 1777329391.0092015,
+    "ast_hash": "01a2a4ab2b0eff84b59dc9c5f0435a81",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-e02e9adc30af.json": {
+    "mtime": 1777329666.0812263,
+    "ast_hash": "ae2aafd8c744a1a3e12e32407fbc048c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-d544d3b654d9.json": {
+    "mtime": 1777329658.008166,
+    "ast_hash": "f9cdd5043e9273cbf3bbe3f2f485fceb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-076b880d387b.json": {
+    "mtime": 1777334293.3885868,
+    "ast_hash": "a3e17f84a62cd22e19056be5bf858cb9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/12345678900000.json": {
+    "mtime": 1777313392.2312224,
+    "ast_hash": "1a73cd6c782498307fdbd972db5354e8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-20b8d3453214.json": {
+    "mtime": 1777329185.2156367,
+    "ast_hash": "668ad0622c329c3dd119fe9880f9c14a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-88614a737553.json": {
+    "mtime": 1777334278.6578906,
+    "ast_hash": "59368f63d14e5dd51c26d337d12a6f1d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-9efef7a67734.json": {
+    "mtime": 1777329389.4762607,
+    "ast_hash": "c174312f93efc9649c86f70752f8a2f0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-e2dbbc1122e2.json": {
+    "mtime": 1777528127.4899294,
+    "ast_hash": "09baaa950eca582f118b8b0880d531a1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-3204b4505648.json": {
+    "mtime": 1777328719.0800822,
+    "ast_hash": "b00aaa60e507d8bbd84d649b1f4c0911",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-00c9003f83cf.json": {
+    "mtime": 1777333388.20561,
+    "ast_hash": "13f5e618352407d696c2690da7e567e6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/12345678900001.json": {
+    "mtime": 1777313393.9710355,
+    "ast_hash": "9ede0904fe97506e8d00a3950b39db0e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-a6c080ad0d8f.json": {
+    "mtime": 1777333372.3032877,
+    "ast_hash": "b18ac50dc6ca2eadb625f6d6052671b1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-1339706ab28f.json": {
+    "mtime": 1777528145.5450375,
+    "ast_hash": "d3ee867497c0a55a6676c1a55fa6f2b3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-13907eab093c.json": {
+    "mtime": 1777333692.6153696,
+    "ast_hash": "31021b148f0097f71a14e980260e4af3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-493749ac18a6.json": {
+    "mtime": 1777618493.2009633,
+    "ast_hash": "bdbf38d40c9f659c5facf1196168a4dd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-6796310faa3c.json": {
+    "mtime": 1777328716.5092192,
+    "ast_hash": "a481ccaed3ddaa326d063c2283fc47e3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-8208e4a0f407.json": {
+    "mtime": 1777333356.251414,
+    "ast_hash": "85471f1bd07581c88a20f8a5513b52e4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-588e24f329e7.json": {
+    "mtime": 1777389646.1674602,
+    "ast_hash": "6a27c2f8c2cf2d928670c44b3d28728b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/TEST-001.json": {
+    "mtime": 1777781112.0836816,
+    "ast_hash": "1c383195713a8d0f81cdc60ed1ace476",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-77058ba1ca5f.json": {
+    "mtime": 1777329395.6233027,
+    "ast_hash": "d50e868b7150944b75c1a552641cd161",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-010fb80e289e.json": {
+    "mtime": 1777333662.332219,
+    "ast_hash": "7860c5c88baf109f96a1a120e03af8a6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/ahbfc-mag.json": {
+    "mtime": 1776644340.5132957,
+    "ast_hash": "810350047f2cece52f272276ea0ef968",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-0e26a3c8da19.json": {
+    "mtime": 1777329660.1222188,
+    "ast_hash": "34a5b1822c560bd4c9b575df95da2f2e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-1ec1727cf322.json": {
+    "mtime": 1777333648.481934,
+    "ast_hash": "cdd38115ff0504b595e714f5ce7b7ee3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-0e8e2fd27455.json": {
+    "mtime": 1777618470.6916077,
+    "ast_hash": "5a8108cdb911f6d057250d79354251e8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-7d570068bf0e.json": {
+    "mtime": 1777326844.9997308,
+    "ast_hash": "ed7344d04808825b650aa1f8616c575d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-f0b14b25a865.json": {
+    "mtime": 1777329181.2222178,
+    "ast_hash": "8334dbdf357f3bbd05dbeca3d0eaccec",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-bea633dea45c.json": {
+    "mtime": 1777618508.9357374,
+    "ast_hash": "8be9d8f2c8e04d9ab70ff4a46f22236a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/11111111100001.json": {
+    "mtime": 1777313397.1400669,
+    "ast_hash": "bcef55edfb69251004b645ba07615592",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-2fc86ebc30dd.json": {
+    "mtime": 1777329663.0294535,
+    "ast_hash": "254f73e106f492726cefc59812df08f4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-55bd2fabb019.json": {
+    "mtime": 1777329661.6574762,
+    "ast_hash": "91e4a993da1762103aef9a38baa776b0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-5948f4bd41c0.json": {
+    "mtime": 1777389656.920904,
+    "ast_hash": "fa95bbcca6fc72fcd89dcefe5d7b2c27",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-091a30695604.json": {
+    "mtime": 1777389629.5479748,
+    "ast_hash": "95520763e61d1a155e8fbd287e882ee4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-d4a9064c17e4.json": {
+    "mtime": 1777328723.4263666,
+    "ast_hash": "bdfd1674677eaaba6cbe32e202d113c4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-8ae49cb7982b.json": {
+    "mtime": 1777781146.896138,
+    "ast_hash": "1c6d57462d915f3205e8e0d115402d64",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-3dee0d13d3d5.json": {
+    "mtime": 1777528095.6459165,
+    "ast_hash": "42e7d83163cb5951b35061a2c0b40293",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-7211835247e0.json": {
+    "mtime": 1777333683.6021588,
+    "ast_hash": "7f977740b2413140f09e0eca7b4bde42",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-b2e74c268980.json": {
+    "mtime": 1777328717.930188,
+    "ast_hash": "9b789bb66ea629f4c5573fd2ffbe1b67",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-d615a562ebac.json": {
+    "mtime": 1777326857.4275465,
+    "ast_hash": "f3328029324e5541566a90978eee0310",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-613a3deae938.json": {
+    "mtime": 1777326852.2421336,
+    "ast_hash": "fef24dd885c1c4564774d01915dda0e6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-cd18da0ad9c1.json": {
+    "mtime": 1777329179.986802,
+    "ast_hash": "cfb08c081299e56dad62ebaea7975d99",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-f588e1d0f65f.json": {
+    "mtime": 1777334270.1736612,
+    "ast_hash": "08f8d086e2db50b6ddecc4d9a797800a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-821c3d55fe8f.json": {
+    "mtime": 1777333670.26417,
+    "ast_hash": "cca0e8f10af5653fca1bdb75510c8eb4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-a0dc19a91005.json": {
+    "mtime": 1777329387.726131,
+    "ast_hash": "889e107ecbefcd945af60b98cd1bae52",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/12345678900012.json": {
+    "mtime": 1777313386.2359343,
+    "ast_hash": "cecf0048edb48349e0c37cdd4ae39a27",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-ee8da2ccdb40.json": {
+    "mtime": 1777333395.0365572,
+    "ast_hash": "bf4c316afc07d6c93b4d24a87e029718",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-3ba2cee4d331.json": {
+    "mtime": 1777333380.805123,
+    "ast_hash": "f7b16438d5ee49ce62422ca831cadc52",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-8c0795e4a51b.json": {
+    "mtime": 1777389638.434953,
+    "ast_hash": "17dc16c5a7d5d7cffe09dc29749211d6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-878573d20c83.json": {
+    "mtime": 1777528116.2758505,
+    "ast_hash": "3b2cdc0e82fca669ebe6fb585dd7746a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-81d8ffca8dd2.json": {
+    "mtime": 1777326854.6949644,
+    "ast_hash": "5c2586da94e9f891de39f1e8eef81366",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-169c4b0e38d9.json": {
+    "mtime": 1777528161.3027542,
+    "ast_hash": "f1e0b7d71c3adf103cc5f5efe8cf03ef",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/ahbfc-magritte.json": {
+    "mtime": 1776643846.939817,
+    "ast_hash": "e88b8f767923368b99a75a30ae164e4e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-536259090eaf.json": {
+    "mtime": 1777333676.572772,
+    "ast_hash": "924a9e1180fb4388e5f2f1d9876bde2c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-112e1a6cfe71.json": {
+    "mtime": 1777334263.0183728,
+    "ast_hash": "23df328a3ceeb25a959f39a3f306cc36",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-a3e8653982c6.json": {
+    "mtime": 1777328714.545678,
+    "ast_hash": "230875e1659c58dbafdeedceefbd26d9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-77ccbb312bbf.json": {
+    "mtime": 1777329172.3115702,
+    "ast_hash": "01861b838747247935728fec55597f07",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-bd47d54e3c85.json": {
+    "mtime": 1777333405.3768678,
+    "ast_hash": "5a443b1165f918aca26d7c2cb6dabb85",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-cf60a133446c.json": {
+    "mtime": 1777329392.1751258,
+    "ast_hash": "5bf160bec79fde3d5dc57edfdb35c00d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-29f14fb143b3.json": {
+    "mtime": 1777326860.2136412,
+    "ast_hash": "8f29c1156874f107e6d7c0e8d4c148a5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-c8c308b7d045.json": {
+    "mtime": 1777334248.903371,
+    "ast_hash": "0bb5997991cbcc0b3853d80f35800ca9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-c92ab63c9bd5.json": {
+    "mtime": 1777329380.5639892,
+    "ast_hash": "a2cc7988082876d1f7250418edf035b5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/12345678900002.json": {
+    "mtime": 1777313395.8123968,
+    "ast_hash": "64caf21ed5d614c346d44a3c1134e8a5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-906e7eb98f81.json": {
+    "mtime": 1777329178.7305224,
+    "ast_hash": "28911e54ed80aca5c6af407f897254b9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-ce5fbb0932fa.json": {
+    "mtime": 1777389621.0804272,
+    "ast_hash": "816db852b4d4931d47ad0003e7ae0745",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-5ef17af02626.json": {
+    "mtime": 1777329182.3823552,
+    "ast_hash": "1e443eccf70ad6a9ce4e5eb4a235b64a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-5d961fa325d4.json": {
+    "mtime": 1777334285.2894173,
+    "ast_hash": "e7b1ccab9eed62c11464dc44e28d45ac",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-badcf1bf14b8.json": {
+    "mtime": 1777389604.1205258,
+    "ast_hash": "4e12cdd09547d5f34aba66d997d8c469",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/post_signature_data/T-dc79da6735dd.json": {
+    "mtime": 1777326856.0095298,
+    "ast_hash": "14d4288ddd8e057e20f1d5a64c55c702",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/AUDIT_COUTS_FICHES.md": {
+    "mtime": 1777418527.9397187,
+    "ast_hash": "bd275dd89dcaf83d830d7df15848afe8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/AUDIT_MEMPHIS_2026-04-28.md": {
+    "mtime": 1777330203.636211,
+    "ast_hash": "7fd8f1e4c6d45911a2ae880a42ba24e5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/index.html": {
+    "mtime": 1777310886.8750176,
+    "ast_hash": "47ebb79dea9a8814a5a2dac11e1b8b6a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/JIMMY_TODO.md": {
+    "mtime": 1777310949.7939646,
+    "ast_hash": "65c33e4ebf3b9f912dc59b3ec76db485",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/requirements.txt": {
+    "mtime": 1777782889.6738708,
+    "ast_hash": "4701da125ac18f4c37593c0351f0af5b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/dossier_ui.html": {
+    "mtime": 1777529000.9905689,
+    "ast_hash": "a1d61eead542ecc9137f514f93d98c58",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/CR_CNIG_GT_BATI_2026_03_12.md": {
+    "mtime": 1777412177.1947894,
+    "ast_hash": "853ee9d062c3aec4da674e70216227fa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/BILAN_CONCURRENCE_V37.md": {
+    "mtime": 1776805844.5921695,
+    "ast_hash": "5884d0db548eaee85f26968a368a15fa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/RNB_CONTRIBUTEUR.md": {
+    "mtime": 1777412218.1297183,
+    "ast_hash": "db3544c2ec5ddf2190703b2d6c301e7c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/MARQUE_INPI.md": {
+    "mtime": 1777409840.2269566,
+    "ast_hash": "84c203bd9bd80c3ba866f49b1c5341d8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/oracle.html": {
+    "mtime": 1778880218.1282887,
+    "ast_hash": "80b0ad7803dd85c1cecac707ed76499f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/DEPLOY_MANUEL.md": {
+    "mtime": 1777310949.9259286,
+    "ast_hash": "2f13133518ba666bf423466163378f93",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/README.md": {
+    "mtime": 1777782797.5983772,
+    "ast_hash": "34000533c990d4ab55edc4a6b0a571cb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/ARBORESCENCE_V37.md": {
+    "mtime": 1777310886.8499327,
+    "ast_hash": "619c363f89920f8c253d5b838cd8f460",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/mempalace.yaml": {
+    "mtime": 1777297561.410823,
+    "ast_hash": "04d90b8bb28045d2f88b12bf4e40b041",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/WHATSAPP_NOTIFICATIONS.md": {
+    "mtime": 1777446164.797677,
+    "ast_hash": "0b95c4623ebea7b318c4bd75f5d73992",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/requirements-dev.txt": {
+    "mtime": 1777310887.8797178,
+    "ast_hash": "01e2aaeba2019d839705fa1009e24e12",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/SECURITE_RUNBOOK.md": {
+    "mtime": 1777310949.7946222,
+    "ast_hash": "1df749b45a841e5d9145e37adb7690f2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/AUDIT_110000_AGENTS_2026-04-30.md": {
+    "mtime": 1777527751.8903525,
+    "ast_hash": "7cc89bdcf5d3bcaceedbca62c218bd2b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/docker-compose.yml": {
+    "mtime": 1777310886.8634543,
+    "ast_hash": "6b89cd59cd5be9ee901bb73bc1cd88cf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/LEVIERS_GRATUITS.md": {
+    "mtime": 1777409489.998199,
+    "ast_hash": "df0e8a9987e51aae2e61c97e4810b770",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/FISCALITE_INTERNATIONAL.md": {
+    "mtime": 1777409455.9804735,
+    "ast_hash": "42972b8575fb96fcbc13c49ced2b4026",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/.github/workflows/fly-deploy.yml": {
+    "mtime": 1776804741.9549937,
+    "ast_hash": "4e8420462262fc0faa94c3c55f8dacff",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/.github/workflows/ci.yml": {
+    "mtime": 1777310886.8482897,
+    "ast_hash": "41ab5e28ead39a729307f02621e7194f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_agent_strategie.md": {
+    "mtime": 1778880846.5637183,
+    "ast_hash": "94ec8a20940c017c4d301cb958c461dd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_no_repeat_errors.md": {
+    "mtime": 1778880846.569911,
+    "ast_hash": "867589d53cd52e89bd04768a9665f83d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/reference_get1tech.md": {
+    "mtime": 1778880846.5819569,
+    "ast_hash": "13663b4ba933265fd2b6985021f8b5ad",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/reference_mempalace.md": {
+    "mtime": 1778880846.5824866,
+    "ast_hash": "487a0cb35639cb7cf3279a4aadadf196",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_cheat_codes.md": {
+    "mtime": 1778880846.5657125,
+    "ast_hash": "7cec27ac07db5872aedac62a626d01b4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/project_jimmy_ecosysteme.md": {
+    "mtime": 1778880846.5755575,
+    "ast_hash": "6f5c644fa5a1e68497d811b0212e820d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_north_star.md": {
+    "mtime": 1778880846.5707278,
+    "ast_hash": "3510931b7c235f41b9497d221ea54e7b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_role_copywriter.md": {
+    "mtime": 1778880846.5717406,
+    "ast_hash": "9390b80f9f5ea7277169db00a79e974e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_always_perfect.md": {
+    "mtime": 1778880846.5644803,
+    "ast_hash": "22ed6def83ef635dfb7ddc3dac0fe625",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/MEMORY.md": {
+    "mtime": 1778880846.563061,
+    "ast_hash": "0db286d6a8de7fd8c9cc42fec6a126ca",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/project_cee_engine.md": {
+    "mtime": 1778880846.573807,
+    "ast_hash": "03854803657f43785d404ae847e06a91",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_self_pillars.md": {
+    "mtime": 1778880846.5723004,
+    "ast_hash": "20fc71aa711db2aae9de3ae24449f3fd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_engine_pillars.md": {
+    "mtime": 1778880846.5664337,
+    "ast_hash": "e9e5e56725562946b20174819b08558a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/user_jimmy.md": {
+    "mtime": 1778880846.5858622,
+    "ast_hash": "72bcb2cffb6c70b99c22d138292ca602",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_engine_ux_suggestions.md": {
+    "mtime": 1778880846.5670922,
+    "ast_hash": "b7767ecf24b9ec89a08a643b847559cb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/project_methodologie_jimmy.md": {
+    "mtime": 1778880846.5780404,
+    "ast_hash": "ab4cdf7fff734d2282023e4a026d95ae",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/project_plan_v38.md": {
+    "mtime": 1778880846.5797274,
+    "ast_hash": "cdee08ebc82c533ba14e81cdd3a0379b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_esprit_critique.md": {
+    "mtime": 1778880846.568006,
+    "ast_hash": "7437da1eca50e5339fa5a6ff6f392d17",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/reference_claude_mem.md": {
+    "mtime": 1778880846.580342,
+    "ast_hash": "346e8c3a30208b8bee2d5d1c1673126c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_nature_outil.md": {
+    "mtime": 1778880846.5686731,
+    "ast_hash": "15e6aa86d59e877ab2bcf89c5944fd07",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/reference_concurrents_cee.md": {
+    "mtime": 1778880846.5812426,
+    "ast_hash": "40b6e9f373cafd824daba203d9bbf89c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/reference_plugins_stack.md": {
+    "mtime": 1778880846.5832899,
+    "ast_hash": "51b399c286a4c33ab5f6725512a892bb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/reference_reviewer_checklist.md": {
+    "mtime": 1778880846.5842028,
+    "ast_hash": "3848d208ee73cfbce74f767493d5dec6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_ui_ludique.md": {
+    "mtime": 1778880846.5729744,
+    "ast_hash": "4e92dfda8608db32d6f0b6ba58b6bb65",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_anti_slop.md": {
+    "mtime": 1778880846.565189,
+    "ast_hash": "badbbe6e1bb7f96c8978cb16c7372aac",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/project_objectifs_v38.md": {
+    "mtime": 1778880846.5790408,
+    "ast_hash": "9bf73f6389248f7461ec56f66f335c49",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/project_dossier_ahbfc.md": {
+    "mtime": 1778880846.5745506,
+    "ast_hash": "871eb0305177ea50bff9b884fe4f87fa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/memory_archive/feedback_never_regress.md": {
+    "mtime": 1778880846.5692508,
+    "ast_hash": "d3a2af41cf98d040d644590a47c06e16",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-153_debug.txt": {
+    "mtime": 1777310887.45904,
+    "ast_hash": "fee5931995e8c6b41953a9f1ccb012a7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-129 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.7793126,
+    "ast_hash": "d34916b2cae0ac334ad2c14295053b9f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-123 v A25-2 apr\u00e8s le 01-04-2017_1_debug.txt": {
+    "mtime": 1777310887.3573182,
+    "ast_hash": "7215ee9c7d9dc229d2921a40e899ec5f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-110 v69-3 \u00e0 compter du 01-07-2025 D\u00e9stratificateur ou brasseur d\u2019air_debug.txt": {
+    "mtime": 1777310887.5104551,
+    "ast_hash": "1411f9688fcf60223a9936b81bb6c870",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-114 v A24-2 apr\u00e8s le 01-04-2017_debug.txt": {
+    "mtime": 1777310887.5437706,
+    "ast_hash": "f64a1b5d4838299f7d773da0a83ef2cd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-109_debug.txt": {
+    "mtime": 1777310887.3399138,
+    "ast_hash": "cb49e85471033f1ab4814abb82380201",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-139 v A35-3 \u00e0 compter du 01-10-2020_debug.txt": {
+    "mtime": 1777310887.446687,
+    "ast_hash": "974765f82a83132a6b2df74bc77d18ae",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-128_debug.txt": {
+    "mtime": 1777310887.775533,
+    "ast_hash": "49ce38fe154249f81b7823a8842da0eb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-101 - Annexe 2 \u00e0 compter du 01-04-2023_0_debug.txt": {
+    "mtime": 1777310887.6508152,
+    "ast_hash": "01a0a4fc5eca74a74e3d5a8f60b67677",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-SE-104_debug.txt": {
+    "mtime": 1777310887.3929892,
+    "ast_hash": "8885199dcd640d8624c2fb6c66f49bad",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-139 vA62-1 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.6081784,
+    "ast_hash": "7163071d5907ebc2b74edeb92820f610",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-115 v A15-2_debug.txt": {
+    "mtime": 1777310887.4182308,
+    "ast_hash": "e1ab5bebc8634e95aa1ea89ea2c99571",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-117 vA72-4 \u00e0 compter du 01-07-2025_debug.txt": {
+    "mtime": 1777310887.7143793,
+    "ast_hash": "2c4092c22c08e5bc944d2cb57b118191",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-103 - Annexe2_debug.txt": {
+    "mtime": 1777310887.6552658,
+    "ast_hash": "3afa519de3f28aa17a69b1135a83c8b1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-125 vA40-2 \u00e0 compter du 01-04-2022_debug.txt": {
+    "mtime": 1777310887.7588642,
+    "ast_hash": "ba00140439e9440f29620bb0efcfcfd8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-111 vA62-1 \u00e0 compter du 31-08-2024_debug.txt": {
+    "mtime": 1777310887.0468047,
+    "ast_hash": "ed71561684beeec419f0a8b1feefddda",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-118_debug.txt": {
+    "mtime": 1777310887.548477,
+    "ast_hash": "7d1478f78826b93b85f50a6b935f58d1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-108_debug.txt": {
+    "mtime": 1777310887.4074793,
+    "ast_hash": "eac1992893075743ddf1632e0ce5cde6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-125 v A32-2 \u00e0 compter du 01-04-2020_debug.txt": {
+    "mtime": 1777310887.4299614,
+    "ast_hash": "00882d8aa45f5fa9ba4edb1e1f6284fe",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-119 vA65-2 \u00e0 compter du 01-04-2025_debug.txt": {
+    "mtime": 1777310887.305139,
+    "ast_hash": "fa427c378ef2c86b40ac9b49201cc628",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-138 vA62-1 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.6032107,
+    "ast_hash": "5898eb9e39c257ba1cf04f9f5c398a97",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-120_debug.txt": {
+    "mtime": 1777310887.550727,
+    "ast_hash": "f5dac6ac2c78bc7fbe63bef42aa212d7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-119 - Annexe2_debug.txt": {
+    "mtime": 1777310887.7230635,
+    "ast_hash": "db2d4f0c233525f54f146e560d732c20",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-106 vA60-4 \u00e0 compter du 01-03-2024_debug.txt": {
+    "mtime": 1777310887.6320298,
+    "ast_hash": "9b8f6fec689d4f6b57c8ffaeeb646376",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-111_debug.txt": {
+    "mtime": 1777310887.4140592,
+    "ast_hash": "fc71900def610e3a8efcfbead5379d28",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-103 vA64-4 \u00e0 compter du 01-01-2025_1_debug.txt": {
+    "mtime": 1777310887.3266218,
+    "ast_hash": "23954d58a91f01d7357581cd3434561b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-129 v A32-3 \u00e0 compter du 01-04-2020_debug.txt": {
+    "mtime": 1777310887.5611236,
+    "ast_hash": "3bea14d95ad72331373b7bb2633de003",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-112 vA65-2 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.0849454,
+    "ast_hash": "10218e4dc64c11c1182d98b122f17931",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-118 - Annexe2_debug.txt": {
+    "mtime": 1777310887.718139,
+    "ast_hash": "3e1a936c7ddef82c1c0bc005fee04938",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-110_debug.txt": {
+    "mtime": 1777310887.342013,
+    "ast_hash": "7215ee9c7d9dc229d2921a40e899ec5f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-102 v A19-2_debug.txt": {
+    "mtime": 1777310887.5350142,
+    "ast_hash": "e25cab113ab9ced7155be800a665d5c2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-115_debug.txt": {
+    "mtime": 1777310887.5449772,
+    "ast_hash": "b81b0e0cf8687d552d70d2383ae32041",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-112 v A38-1 \u00e0 compter du 31-07-2021_debug.txt": {
+    "mtime": 1777310887.3483095,
+    "ast_hash": "f543f0679192bb2df58d5f77928dd54a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-107 - Annexe2_debug.txt": {
+    "mtime": 1777310887.6684906,
+    "ast_hash": "a03a723ba269bae3070929406ffafcaa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-135 vA65-2 \u00e0 compter du 01-04-2025_0_debug.txt": {
+    "mtime": 1777310887.3877027,
+    "ast_hash": "ec3703a42a78b931ce1f1443a8158dd3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-112 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8538208,
+    "ast_hash": "9382d443d322b63a1dd5c277439113e4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-102 v A14-1_debug.txt": {
+    "mtime": 1777310887.8135824,
+    "ast_hash": "6126770706ced24f88c57467e7332a1a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-128 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.7710164,
+    "ast_hash": "58d107c06c8558580242e14c4bc05bfa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-117 vA65-1 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.8716173,
+    "ast_hash": "04ab983d942799e36c5eab0f91cb49e6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-110 vA54-3 \u00e0 compter du 01-01-2024_debug.txt": {
+    "mtime": 1777310887.2687476,
+    "ast_hash": "6f3cce5521d5f586c696191a8aaa10a2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-110 v A19-1_debug.txt": {
+    "mtime": 1777310887.6857767,
+    "ast_hash": "e60f9895884876f67302711500dabaf7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-106 - Annexe2_debug.txt": {
+    "mtime": 1777310887.6643806,
+    "ast_hash": "79e99e521b5020beee1b7c7f57eb6ddb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-113 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8585765,
+    "ast_hash": "f4a329ee157e65ee5be8aba1ba6b755b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-107 v A38-1 \u00e0 compter du 31-07-2021_debug.txt": {
+    "mtime": 1777310887.0231824,
+    "ast_hash": "693d1d3a9605d1323269c1f7390a621d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-125 vA40-2 \u00e0 compter du 01-04-2022 - Annexe 2_debug.txt": {
+    "mtime": 1777310887.7556973,
+    "ast_hash": "357ab9c7091f434b459d5b3fa7b3c0c2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-106 v A14-1_debug.txt": {
+    "mtime": 1777310887.6658454,
+    "ast_hash": "e3b75d3732f457b638e3ce08b56a45d6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-101 vA62-2 \u00e0 compter du 01-01-2025_1_debug.txt": {
+    "mtime": 1777310887.133249,
+    "ast_hash": "37444162ccf7203c985345d8e6d9dfed",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-110 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8407955,
+    "ast_hash": "6861ec9a5e79c43449f9f369623e19eb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-EN-101_debug.txt": {
+    "mtime": 1777310887.5263298,
+    "ast_hash": "5e03ee2336915b775181cab7ed8b6f7d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-117_debug.txt": {
+    "mtime": 1777310887.5240214,
+    "ast_hash": "0dfdd59d1035a82033de94ae8dd515b2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-124_debug.txt": {
+    "mtime": 1777310887.358618,
+    "ast_hash": "f5b6c1c564b8d331be86be063fa0e3c7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-131 - Annexe 2 \u00e0 compter du 23-08-2025_debug.txt": {
+    "mtime": 1777310887.7995903,
+    "ast_hash": "2a2ab6a8bea2898e747be085d27be53a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-130_debug.txt": {
+    "mtime": 1777310887.369324,
+    "ast_hash": "dc7ab08238dfea7206c2355ebc2df5cd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-113_debug.txt": {
+    "mtime": 1777310887.5414732,
+    "ast_hash": "7452e01ff19ee2fad1feb81346902ab1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-157 vA50-2 \u00e0 compter du 01-04-2023_0_debug.txt": {
+    "mtime": 1777310887.4707575,
+    "ast_hash": "eeca00512b1f7941d06ffe6adc07f58c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-110 v A38-1 \u00e0 compter du 31-07-2021_debug.txt": {
+    "mtime": 1777310887.0402093,
+    "ast_hash": "f2b3ab8bb35aed67d459c4b4546d7292",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-161 vA62-1 \u00e0 compter du 31-08-2024_0_debug.txt": {
+    "mtime": 1777310887.4872172,
+    "ast_hash": "95a5ab25b468de023efe79020909971d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-109 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8360615,
+    "ast_hash": "565e847b8086a76f8373640ab87a1da9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-122_debug.txt": {
+    "mtime": 1777310887.4277766,
+    "ast_hash": "729ce9dbfab164aba82776b7b293724c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-132_debug.txt": {
+    "mtime": 1777310887.5783985,
+    "ast_hash": "6e6f57601ab46a35c75ab0523045dbc4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-EN-102 vA64-3 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.533809,
+    "ast_hash": "bb2c07316b50c27e02b4c7682bd41ffd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-102 vA65-2 \u00e0 compter du 01-04-2025_debug.txt": {
+    "mtime": 1777310886.8979259,
+    "ast_hash": "b74f37a75626844c78a71efdf6d5a88e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-111 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8501704,
+    "ast_hash": "bd9a49d0f9ebd2153581b46f7bb52182",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-104 - Annexe2_debug.txt": {
+    "mtime": 1777310887.6600666,
+    "ast_hash": "51e76a3087abdee051306312160ca99e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-108 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8320727,
+    "ast_hash": "a3bbb0dcc1e589be7bc1214ce3676fdc",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-117 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.8666408,
+    "ast_hash": "756027e218311be3bd67ec08809ae25c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-103 v A14-1_debug.txt": {
+    "mtime": 1777310887.6565893,
+    "ast_hash": "9b87a87fb4f3994b3177c243a1fd1842",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-121 vA54-2 \u00e0 compter du 01-01-2024_debug.txt": {
+    "mtime": 1777310887.7386746,
+    "ast_hash": "8158dfd3c175cb249068574586ef4be4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-105 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8202786,
+    "ast_hash": "2877bb81818d00389c1f013380fcf399",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-104 v A35-3  \u00e0 compter du 01-10-2020_debug.txt": {
+    "mtime": 1777310887.182452,
+    "ast_hash": "2b66b360657c530c3c74ba1552c99f1e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-109 - Annexe2_debug.txt": {
+    "mtime": 1777310887.6794708,
+    "ast_hash": "28ae18bcda8cba98fec63f360dc68784",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-132 vA65-1 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.8050573,
+    "ast_hash": "0f5e56d9b4edd72209814a4d6706b12e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-106 vA64-3 \u00e0 compter du 01-01-2025_0_debug.txt": {
+    "mtime": 1777310887.3333085,
+    "ast_hash": "01a81fea5f8d61e28a49251383f66226",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-117 vA65-2 \u00e0 compter du 01-04-2025_debug.txt": {
+    "mtime": 1777310887.2847438,
+    "ast_hash": "061caf4e912e6626d664bde030b658ad",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-134 v A35-2 \u00e0 compter du 01-10-2020_debug.txt": {
+    "mtime": 1777310887.5864604,
+    "ast_hash": "095e1e225698afe7f2d11821ac98ac7d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-110 - Annexe2_debug.txt": {
+    "mtime": 1777310887.684431,
+    "ast_hash": "18357772b39cf2416fcbd72a5c8a6154",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-117 vA73-3 \u00e0 compter du 01-09-2025_debug.txt": {
+    "mtime": 1777310887.2934663,
+    "ast_hash": "196f87c8bee30f3dba6bd20b93a3cc3f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-101 v A14-1_debug.txt": {
+    "mtime": 1777310887.8093145,
+    "ast_hash": "6a1c534bac2c34186574959ea8d123c2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-104 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8160546,
+    "ast_hash": "386ae0b8ee5f71368777ddda8346d134",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-125_0_debug.txt": {
+    "mtime": 1777310887.3608408,
+    "ast_hash": "93e5cce52005a411ee8dfaf1550a8200",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-108_debug.txt": {
+    "mtime": 1777310887.3377657,
+    "ast_hash": "0e817e4ebdc1022e2013d1b0625db1d2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-129_debug.txt": {
+    "mtime": 1777310887.7872865,
+    "ast_hash": "dafe10f15bf511f2fe40c43d75fd8ee0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-104 vA54-3 \u00e0 compter du 01-01-2024_1_debug.txt": {
+    "mtime": 1777310887.3297493,
+    "ast_hash": "9e960ce5872bd6ed7049433a1710adb2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-SE-101 vA40-2 \u00e0 compter du 01-04-2022 - Annexe 2_debug.txt": {
+    "mtime": 1777310887.125466,
+    "ast_hash": "33f8d3fe32e9f61efb57d3f27a9175a6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-118_debug.txt": {
+    "mtime": 1777310887.296095,
+    "ast_hash": "607b86d199c77e5eaf26188aad4f578f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-113 vA54-1 \u00e0 compter du 01-10-2023_0_debug.txt": {
+    "mtime": 1777310887.3507743,
+    "ast_hash": "7bfadc4a6ec69d1111c47fe4b09bdb5b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-109 vA54-2 \u00e0 compter du 01-01-2024_debug.txt": {
+    "mtime": 1777310887.2600467,
+    "ast_hash": "55aaa4f23ca938631c5e3039c2d843f3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-111 v A38-1 \u00e0 compter du 31-07-2021_debug.txt": {
+    "mtime": 1777310887.3447793,
+    "ast_hash": "e0e529199c7691721d16281d0678debf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-130 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.7920063,
+    "ast_hash": "5ed48756ac1b4c71d1511adfd633923d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-104 v A14-1_debug.txt": {
+    "mtime": 1777310887.8174863,
+    "ast_hash": "b36bd6b21479b76d652429c7158c32ae",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-106 mod v.A19.2_debug.txt": {
+    "mtime": 1777310887.8252766,
+    "ast_hash": "553686aeb7dd4bdf16eea558b8ac6955",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-135_debug.txt": {
+    "mtime": 1777310887.5899582,
+    "ast_hash": "ab0a9a936aa0ebe6c11b891048d25d9c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-107 - Annexe2_debug.txt": {
+    "mtime": 1777310887.827862,
+    "ast_hash": "ef61c09efc61242b02964b7c89802b10",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-111 v A24-1_debug.txt": {
+    "mtime": 1777310887.692138,
+    "ast_hash": "8fd04006afec0787449d9f7af05f7e07",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-113 - Annexe2_debug.txt": {
+    "mtime": 1777310887.697244,
+    "ast_hash": "1e95573934d0590605ce1e7d2658862d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-130_debug.txt": {
+    "mtime": 1777310887.7970517,
+    "ast_hash": "45333dfd2d2d2435d2ab2b524fcb6394",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-106 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8237278,
+    "ast_hash": "dd43c8a5329a3f1815910c5a18d9c604",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-110_debug.txt": {
+    "mtime": 1777310887.4126463,
+    "ast_hash": "c76df652351b21fa6e652ad37101b4c8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-122 - Annexe 2 \u00e0 compter du 01-04-2023_debug.txt": {
+    "mtime": 1777310887.7411797,
+    "ast_hash": "5524b29253c736998faa355061e87d64",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-115 - Annexe2_debug.txt": {
+    "mtime": 1777310887.7075317,
+    "ast_hash": "ba206337b4647686bacd39c394312c9c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-122 v A32-1_debug.txt": {
+    "mtime": 1777310887.7439525,
+    "ast_hash": "3a424790eeac1a946c4627cce0b44c06",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-126 v A32-2 \u00e0 compter du 01-04-2020_debug.txt": {
+    "mtime": 1777310887.434104,
+    "ast_hash": "4980679d2eeb1afad53d6d4787c895dd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-SE-103_debug.txt": {
+    "mtime": 1777310887.389325,
+    "ast_hash": "bee92f4a910a995c09834835d7d41c68",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-112 v A22-2_debug.txt": {
+    "mtime": 1777310887.4167717,
+    "ast_hash": "cef727a79dbcded3d7ff437006a0e8ff",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-116 vA40-2 \u00e0 compter du 01-04-2022_debug.txt": {
+    "mtime": 1777310887.5213284,
+    "ast_hash": "d32ace473bdea09ae56c5205d84fea4c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-110 vA71-4 \u00e0 compter du 01-08-2025 - D\u00e9stratificateur ou brasseur d\u2019air.p_debug.txt": {
+    "mtime": 1777310887.5139863,
+    "ast_hash": "addf3ea42b891bf31fbb1e019751d33a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-101_debug.txt": {
+    "mtime": 1777310886.8936353,
+    "ast_hash": "76fcc3541da73b66a8c0740fae7fb300",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-102 v A22-2_debug.txt": {
+    "mtime": 1777310887.3130789,
+    "ast_hash": "569d0a9894ed808e048c8b8ffabed31d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-104 vA62-2 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310886.9209743,
+    "ast_hash": "f1f1a71999ccd4b842a35b8f7d17393b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-108 v A35-2 \u00e0 compter du 01-10-2020_debug.txt": {
+    "mtime": 1777310887.2551477,
+    "ast_hash": "536a294f4a5468318e9e2502ff188c96",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-113_debug.txt": {
+    "mtime": 1777310887.2777033,
+    "ast_hash": "a84d9d2cdd56910f9edd84a6f2bb2147",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-127 vA79-5 \u00e0 compter du 01-01-2026_debug.txt": {
+    "mtime": 1777310887.4378757,
+    "ast_hash": "f4d786898f7103ccf7035949004905f0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-101 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8076487,
+    "ast_hash": "6b26892a99aa30ae7d990395279594cf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-104 v A14-1_debug.txt": {
+    "mtime": 1777310887.6615524,
+    "ast_hash": "53d62793191e15b3a9c888d0de7be6fb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-129_0_debug.txt": {
+    "mtime": 1777310887.3659546,
+    "ast_hash": "ddc1acc0bcb78bd96845061964ef0d4b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-154_debug.txt": {
+    "mtime": 1777310887.4616094,
+    "ast_hash": "70b5ae7f6d90e4ca87a41f2413d83463",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-131_debug.txt": {
+    "mtime": 1777310887.3704138,
+    "ast_hash": "79b97d50e09948c9f8c41d102bf1d677",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-116 vA62-6 \u00e0 compter du 01-01-2025_0_debug.txt": {
+    "mtime": 1777310887.42205,
+    "ast_hash": "695f75731be8e3c039c21bba8bf6fdd3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-117 vA40-2 \u00e0 compter du 01-04-2022_0_debug.txt": {
+    "mtime": 1777310887.3553636,
+    "ast_hash": "e937d22e3d76301db2567084130c6aa5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-102 - Annexe2_debug.txt": {
+    "mtime": 1777310887.8121996,
+    "ast_hash": "b18da4561eafdfc29bd082c0ec41fd5b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-107 v A17-1_debug.txt": {
+    "mtime": 1777310887.6696272,
+    "ast_hash": "bf835f861a94af3d8721aca5f5e37a56",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-112 v A15-1_debug.txt": {
+    "mtime": 1777310887.8558116,
+    "ast_hash": "51d1898d3afe5b69ae55ddbbbaf43e4f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-105 v A14-1_debug.txt": {
+    "mtime": 1777310887.8213909,
+    "ast_hash": "d8d2674fd251081ff46b9667578fd86c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-142 vA71-4 \u00e0 compter du 01-08-2025 - Syst\u00e8me de d\u00e9stratification d\u2019air_1._debug.txt": {
+    "mtime": 1777310887.4523966,
+    "ast_hash": "f59d20089594bafd499ff57c12263eb6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-112 vA73-3 \u00e0 compter du 01-09-2025_debug.txt": {
+    "mtime": 1777310887.1213188,
+    "ast_hash": "77c6938796fd6f486555fe03bd67341d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-101 v A14-1_debug.txt": {
+    "mtime": 1777310887.6523128,
+    "ast_hash": "419fb5a01c30e4dea938a7b03ea55ab2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-133_debug.txt": {
+    "mtime": 1777310887.583585,
+    "ast_hash": "5f95e1c9740f07c70b298b380766900f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-127 vA71-5 \u00e0 compter du 01-08-2025 - Luminaire \u00e0 modules LED_debug.txt": {
+    "mtime": 1777310887.3636265,
+    "ast_hash": "a0c5e4ddbd1eb9d025874555fcd2075c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-124 - Annexe 2 \u00e0 compter du 01-04-2023_debug.txt": {
+    "mtime": 1777310887.7501645,
+    "ast_hash": "687180c22e0146ae399dcfcf51635ed9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-111 Annexe 2_debug.txt": {
+    "mtime": 1777310887.689842,
+    "ast_hash": "24f20b7b705d5fb2eb3ef4bcc9e9449a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-103 v A31-2 \u00e0 compter du 01-10-2019_debug.txt": {
+    "mtime": 1777310887.398519,
+    "ast_hash": "e442e6df47db6852d597647d263481aa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-139 vA73-2 \u00e0 compter du 01-11-2025_debug.txt": {
+    "mtime": 1777310887.61413,
+    "ast_hash": "5ed8a4f7af8465127b3805caf4ffafb3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-102_debug.txt": {
+    "mtime": 1777310887.1348286,
+    "ast_hash": "0c565c09938bdcf7f2ed66614dee67bb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-127 v A25-2 apr\u00e8s le 01-04-2017_debug.txt": {
+    "mtime": 1777310887.5575366,
+    "ast_hash": "7215ee9c7d9dc229d2921a40e899ec5f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-110 v A14-1_debug.txt": {
+    "mtime": 1777310887.8427665,
+    "ast_hash": "7feae5f92831da9edf8d8be6f16c8ad1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-145_debug.txt": {
+    "mtime": 1777310887.4565194,
+    "ast_hash": "e2e7e5bf78f725c2986adfe8ecac59d6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-131 vA73-2 \u00e0 compter du 23-08-2025_debug.txt": {
+    "mtime": 1777310887.8020313,
+    "ast_hash": "138aedcedfb61d88afe552708a5fc4f4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-113_debug.txt": {
+    "mtime": 1777310887.5166085,
+    "ast_hash": "c27e5aa92ec97508c19716b98ec80016",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-123 v A38-2 \u00e0 compter du 01-11-2021_debug.txt": {
+    "mtime": 1777310887.7470634,
+    "ast_hash": "cd45d477e44b4770b15f33fbadd9a661",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-109 v A14-1_debug.txt": {
+    "mtime": 1777310887.8379254,
+    "ast_hash": "17ac69fd0208963f990126d1726cb10c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-134 vA58-2 \u00e0 compter du 01-04-2024_0_debug.txt": {
+    "mtime": 1777310887.374753,
+    "ast_hash": "247efff986311f49d127e315550ec1b2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-105 - Annexe 2 \u00e0 compter du 01-04-2023_debug.txt": {
+    "mtime": 1777310886.9257288,
+    "ast_hash": "a65abf83a64de5c664d12020427c04d3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-121 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.732867,
+    "ast_hash": "8efecf9c686e61addf2ade4ad5006c35",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-131 vA37-2 \u00e0 compter du 01-04-2021_debug.txt": {
+    "mtime": 1777310887.5761359,
+    "ast_hash": "d54e921d80b993ff7f3e3337fdb56135",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-122_debug.txt": {
+    "mtime": 1777310887.5521054,
+    "ast_hash": "6ea87d7627fb1c05b98c57b1c1616012",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-137 vA65-2 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.5954614,
+    "ast_hash": "7f437c47874a020b49c0641f7f472dc3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-114 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.7009163,
+    "ast_hash": "8e2459d09ba69b4b8386e7fe3398a4cd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-143_debug.txt": {
+    "mtime": 1777310887.4539568,
+    "ast_hash": "216cac5fb1a8311e3e0daaedfe6f7ab8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-103_debug.txt": {
+    "mtime": 1777310887.314428,
+    "ast_hash": "db2b8589ea899b1a13fd62f7d048be79",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-115 v A14-1_debug.txt": {
+    "mtime": 1777310887.7090921,
+    "ast_hash": "4a8fe57918aaab6a70a483372109879c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-107 v A19-1_debug.txt": {
+    "mtime": 1777310887.8295002,
+    "ast_hash": "5ee35de0529b9b48d708a1a0c06c7125",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-119 mod A17-2_debug.txt": {
+    "mtime": 1777310887.7246754,
+    "ast_hash": "8c88c83c2e4776069606fce6894d3233",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-102 vA64-3 \u00e0 compter du 01-01-2025_1_debug.txt": {
+    "mtime": 1777310887.3236394,
+    "ast_hash": "759bbfd20c5610e487d9c22fd3923c6e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-111 v A14-1_debug.txt": {
+    "mtime": 1777310887.8513594,
+    "ast_hash": "e047de2d9bba172f472da76161cf8ca2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-130_debug.txt": {
+    "mtime": 1777310887.5633442,
+    "ast_hash": "fd7c486f59fda1b121fcd016fa87d922",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-121 v A35-3 \u00e0 compter du 01-10-2020_debug.txt": {
+    "mtime": 1777310887.4250975,
+    "ast_hash": "a84e1fd9dc66d281e47af9c0c28296b7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-108 v A14-1_debug.txt": {
+    "mtime": 1777310887.8333192,
+    "ast_hash": "7ed6af063ee22a3b375c366b864ccaf3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-109 vA54-3 \u00e0 compter du 01-01-2024_1_debug.txt": {
+    "mtime": 1777310887.4112725,
+    "ast_hash": "b3f0c8b896864ed687d64bed8a07b147",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-134_debug.txt": {
+    "mtime": 1777310887.440274,
+    "ast_hash": "135741f0b029e35bb0eb6610918a07c1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-124_debug.txt": {
+    "mtime": 1777310887.5535142,
+    "ast_hash": "1a44d29f43e18adb80a99168304ab802",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-110 v A20-2_debug.txt": {
+    "mtime": 1777310887.5056694,
+    "ast_hash": "435c618c6f71736bffdf0fd2578bac58",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-105_debug.txt": {
+    "mtime": 1777310887.539622,
+    "ast_hash": "3d39ea5e18d2c1f4cfdbd5d715c8a71b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-104 mod A27-2 \u00e0 compter du 01-04-2018_debug.txt": {
+    "mtime": 1777310887.145487,
+    "ast_hash": "eba97a3a97321f520fd0cfc096f479b9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-120 - Annexe2_debug.txt": {
+    "mtime": 1777310887.727157,
+    "ast_hash": "0eabe42c562893707b5c5ccf2f42db72",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-105 vA36-3 \u00e0 compter du 12-10-2020_debug.txt": {
+    "mtime": 1777310887.6260655,
+    "ast_hash": "62a9eaf1ca21a0d6da0e9d2e67b2100c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-159 vA40-1 \u00e0 compter du 29-12-2021_0_debug.txt": {
+    "mtime": 1777310887.4819932,
+    "ast_hash": "549b7ab0145d45509189a43f4b884488",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-105_debug.txt": {
+    "mtime": 1777310886.9358501,
+    "ast_hash": "06ff324693225cc1f7819583cd38b462",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-105 v A32-2 \u00e0 compter du 01-04-2020_debug.txt": {
+    "mtime": 1777310887.4040704,
+    "ast_hash": "7019d4864db3f0680951ecdf5a02736f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-108 vA58-2 \u00e0 compter du 01-02-2024_debug.txt": {
+    "mtime": 1777310887.0270717,
+    "ast_hash": "d72ba8613a68f80700ad955e44cab404",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-108 vA53-4 \u00e0 compter du 01-10-2023_debug.txt": {
+    "mtime": 1777310887.642768,
+    "ast_hash": "8229a070df510d52fe7d45330031ece2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-104_debug.txt": {
+    "mtime": 1777310887.3174908,
+    "ast_hash": "55046a475ac7fd6f8800e01f691333a9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-117 - Annexe 2 \u00e0 compter du 26-04-2025_debug.txt": {
+    "mtime": 1777310887.7112932,
+    "ast_hash": "24d7301a96fe752923791d77d810b87a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-101 vA64-4 \u00e0 compter du 01-01-2025_1_debug.txt": {
+    "mtime": 1777310887.3206828,
+    "ast_hash": "6f4f4b07eafdb0a4720226f1550109ac",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-164 vA75-1 \u00e0 compter du 01-01-2026_debug.txt": {
+    "mtime": 1777310887.5042307,
+    "ast_hash": "842b40637c8b0fad5d974d5e64da1b31",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-114 vA68-3 \u00e0 compter du 28-05-2025_debug.txt": {
+    "mtime": 1777310887.7043529,
+    "ast_hash": "5f059288970fd1bf4b6e90aa41363f09",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-158 vA62-3 \u00e0 compter du 01-01-2025_0_debug.txt": {
+    "mtime": 1777310887.477714,
+    "ast_hash": "a833f2152a070514e8d4e6de4740d86d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-103_debug.txt": {
+    "mtime": 1777310887.136829,
+    "ast_hash": "7757c27e3ab5e85a078f05f379f44376",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-109 vA58-2 \u00e0 compter du 01-02-2024_debug.txt": {
+    "mtime": 1777310887.0362537,
+    "ast_hash": "015518bb691906952ece050cee4d39a8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-116_debug.txt": {
+    "mtime": 1777310887.546885,
+    "ast_hash": "c5d6c07db56e97848f66d72ae8e51114",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-109 v A17-1_debug.txt": {
+    "mtime": 1777310887.681019,
+    "ast_hash": "47e04b16b5251f93ca5c4b775db1f524",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-113 v A14-1_debug.txt": {
+    "mtime": 1777310887.6988761,
+    "ast_hash": "79065c78974e3e545214e402f6749f3b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-126_debug.txt": {
+    "mtime": 1777310887.762623,
+    "ast_hash": "4b914f01b96479066bb94f9a21555691",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-108 vA37-6 \u00e0 compter du 01-04-2020_debug.txt": {
+    "mtime": 1777310887.6772735,
+    "ast_hash": "c1b43b51442dcdffaa75e0e1a08b1b68",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-104 vA36-3 \u00e0 compter du 12-10-2020_debug.txt": {
+    "mtime": 1777310887.6226513,
+    "ast_hash": "6e8e4d6e5df753e12aaf8dfedd30ece7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-118 v A15-1_debug.txt": {
+    "mtime": 1777310887.720687,
+    "ast_hash": "d19cb342cc1d5fdf08efe6b1419ffba5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-EN-102 v A33-2 \u00e0 compter du 01 septembre 2020_debug.txt": {
+    "mtime": 1777310887.5310614,
+    "ast_hash": "7215ee9c7d9dc229d2921a40e899ec5f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-140 vA65-1 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.616951,
+    "ast_hash": "d9d1afa88102a01148ca7dcbe3118d1a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-103 v A17-2_debug.txt": {
+    "mtime": 1777310887.5367558,
+    "ast_hash": "467715738d365279a2f1a2014d372b40",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-SE-101 vA40-2 \u00e0 compter du 01-04-2022_debug.txt": {
+    "mtime": 1777310887.1294491,
+    "ast_hash": "c419ca529eba403417e013603f5874ff",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-106 v A32-1_debug.txt": {
+    "mtime": 1777310887.0197952,
+    "ast_hash": "ad9df93eba66f7b93a372c346be4602e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-124 v A35-1_debug.txt": {
+    "mtime": 1777310887.753041,
+    "ast_hash": "3c0e32235d2255ee88e4b3a345e33370",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-101 v A24-2 apr\u00e8s le 01-04-2017_debug.txt": {
+    "mtime": 1777310887.3075163,
+    "ast_hash": "3fb96fe332e0ceafd13ac32c11aed78c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-105_debug.txt": {
+    "mtime": 1777310887.18605,
+    "ast_hash": "bcf6d9c8aafff18a6a4d1fd1a1966b53",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-163 vA75-1 \u00e0 compter du 01-01-2026_debug.txt": {
+    "mtime": 1777310887.500169,
+    "ast_hash": "d2360a453989b93ef6a355f46a7fb23e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-156_debug.txt": {
+    "mtime": 1777310887.4642017,
+    "ast_hash": "64e74af3cbf8f234e2c688c2d47fc898",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-108 - Annexe 2 \u00e0 compter du 01-04-2023_debug.txt": {
+    "mtime": 1777310887.6741295,
+    "ast_hash": "f24fa05b011514250dd5e31f67b75e1c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-113 v A14-1_debug.txt": {
+    "mtime": 1777310887.8600159,
+    "ast_hash": "ac12be90a4647507f855b1ae67b5a0e7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-103 vA36-3 \u00e0 compter du 12-10-2020_debug.txt": {
+    "mtime": 1777310887.620106,
+    "ast_hash": "3490fd4f872e272605ac468935c0a5cf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-135_debug.txt": {
+    "mtime": 1777310887.4430733,
+    "ast_hash": "dbe718df789545a025a3c49f6b786911",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-125_debug.txt": {
+    "mtime": 1777310887.5556748,
+    "ast_hash": "82d2f38b0b5786356e167a7b4f3e56df",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-EC-104 vA77-3 \u00e0 compter du 26-11-2025_0_debug.txt": {
+    "mtime": 1777310887.6459942,
+    "ast_hash": "70a06c3f5c5c25eb89ca9fc4b3dc4bfd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-107 vA64-3 \u00e0 compter du 01-01-2025_0_debug.txt": {
+    "mtime": 1777310887.3362336,
+    "ast_hash": "8a212c80bb010d8ac7c8cb9fd7d57d30",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-SE-105 v A32-1_debug.txt": {
+    "mtime": 1777310887.3964076,
+    "ast_hash": "e391184569f63d4da7448d7fbe3fa046",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-116 vA65-2 \u00e0 compter du 01-01-2025_debug.txt": {
+    "mtime": 1777310887.863647,
+    "ast_hash": "add33535d5e1ec8586a29c07cfb26558",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-127 vA54-1 \u00e0 compter du 01-10-2023_debug.txt": {
+    "mtime": 1777310887.7674913,
+    "ast_hash": "ed9f8ee76ee1e902ef4a54751602f6bc",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-162 vA75-1 \u00e0 compter du 01-01-2026_debug.txt": {
+    "mtime": 1777310887.497121,
+    "ast_hash": "020b9a0a3c5964becd05d8262604b78f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-114_debug.txt": {
+    "mtime": 1777310887.5177555,
+    "ast_hash": "8d6eec3c6fc88091560c53089d17d23a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-104_debug.txt": {
+    "mtime": 1777310887.5380497,
+    "ast_hash": "02ed29fd394739c871c711e5fc435afa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-120_debug.txt": {
+    "mtime": 1777310887.7300284,
+    "ast_hash": "4dce151d8cb164cb9c2eff0ee988ce6a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-119 mod A17-2.pdf": {
+    "mtime": 1777310887.7240644,
+    "ast_hash": "4796bf2bb7843b338b6e270c25f01ec6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-163 vA75-1 \u00e0 compter du 01-01-2026.pdf": {
+    "mtime": 1777310887.4994712,
+    "ast_hash": "fd5a43923b2c1b2201b688e724dcfa0e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-102 vA64-3 \u00e0 compter du 01-01-2025_1.pdf": {
+    "mtime": 1777310887.3230433,
+    "ast_hash": "bc40ae89940e44b9c78260ae0046716a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-103.pdf": {
+    "mtime": 1777310887.3138618,
+    "ast_hash": "fc46ec6d97302b7e9cee573a4b3ed599",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-102 vA65-2 \u00e0 compter du 01-04-2025.pdf": {
+    "mtime": 1777310886.897056,
+    "ast_hash": "a07beaca2e3254b8cf0249d297663137",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-138 vA62-1 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.6022696,
+    "ast_hash": "86877177e1c3761ae2d44957e091eab3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-117 vA65-1 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.870588,
+    "ast_hash": "b4af5c7cb10c986b5f0ee942a4c1c703",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-SE-101 vA40-2 \u00e0 compter du 01-04-2022 - Annexe 2.pdf": {
+    "mtime": 1777310887.1246407,
+    "ast_hash": "3cb78a6091c97255bf0eb3f868ff8d93",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-111 v A14-1.pdf": {
+    "mtime": 1777310887.8507755,
+    "ast_hash": "d295561e960391f8c3b9c10adaeb6250",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-101 vA62-2 \u00e0 compter du 01-01-2025_1.pdf": {
+    "mtime": 1777310887.1320086,
+    "ast_hash": "8154e042d80ed7c26fb0c321b19d4342",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-129.pdf": {
+    "mtime": 1777310887.786353,
+    "ast_hash": "271b154496b6c5bcbd4887772ab0e83c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-104 v A14-1.pdf": {
+    "mtime": 1777310887.8168612,
+    "ast_hash": "d20547dac3402ff879b553e86de55949",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-103 v A14-1.pdf": {
+    "mtime": 1777310887.6560328,
+    "ast_hash": "632fb8892588908a984200bd3a1e4c90",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-101.pdf": {
+    "mtime": 1777310886.8930013,
+    "ast_hash": "d30ae6df254e7fb172f2151ca9927576",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-102.pdf": {
+    "mtime": 1777310887.1341138,
+    "ast_hash": "b3274dfc0cb8f17e58eca5237f0f586a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-103.pdf": {
+    "mtime": 1777310887.1359248,
+    "ast_hash": "35a5ff0a6c85f64b5f7e5ec50bdcd944",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-117 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.710692,
+    "ast_hash": "09a2cce5d5edd4e1a41a593ba6fde478",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-109 vA54-2 \u00e0 compter du 01-01-2024.pdf": {
+    "mtime": 1777310887.2585254,
+    "ast_hash": "238d1f45019b2140af784c0c389e87f9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-107 vA64-3 \u00e0 compter du 01-01-2025_0.pdf": {
+    "mtime": 1777310887.3355412,
+    "ast_hash": "44b15e173529be56bddb22d6e5d372e5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-117 vA73-3 \u00e0 compter du 01-09-2025.pdf": {
+    "mtime": 1777310887.2926965,
+    "ast_hash": "deeea4ff3d9e546f52b80f325386781f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-113.pdf": {
+    "mtime": 1777310887.5160632,
+    "ast_hash": "3f9ec36c35c5995f30724fc386e6bf9d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-128.pdf": {
+    "mtime": 1777310887.77452,
+    "ast_hash": "03f0a58d3c60c9caf182cb7623017efd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-106 vA64-3 \u00e0 compter du 01-01-2025_0.pdf": {
+    "mtime": 1777310887.332623,
+    "ast_hash": "8c1d0e03dd9fd223c9b99093b9ba6bec",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-115 - Annexe2.pdf": {
+    "mtime": 1777310887.706892,
+    "ast_hash": "dbf824402668175890de33c94c5a7519",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-SE-101 vA40-2 \u00e0 compter du 01-04-2022.pdf": {
+    "mtime": 1777310887.128125,
+    "ast_hash": "882c75c7b93c1e6cf0e35ba7b4a750e2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-117.pdf": {
+    "mtime": 1777310887.5234702,
+    "ast_hash": "14dbcf3475bd0e900da3637ab8384664",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-116 vA62-6 \u00e0 compter du 01-01-2025_0.pdf": {
+    "mtime": 1777310887.4214964,
+    "ast_hash": "2911fa33dc0dcdfcbb327bc111f7b2d4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-102 v A19-2.pdf": {
+    "mtime": 1777310887.5345016,
+    "ast_hash": "13d1c7d27b964e1f1c88a3f6b72c8a14",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-106 v A14-1.pdf": {
+    "mtime": 1777310887.6652412,
+    "ast_hash": "f1f91b87279b3e94f83989f3f57b3d13",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-161 vA62-1 \u00e0 compter du 31-08-2024_0.pdf": {
+    "mtime": 1777310887.4864383,
+    "ast_hash": "a4ebc6dbb4c4950a925600b1b64132fb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-112 v A15-1.pdf": {
+    "mtime": 1777310887.8545787,
+    "ast_hash": "668a715224922a71fd25595f1a933530",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-101 v A14-1.pdf": {
+    "mtime": 1777310887.8085108,
+    "ast_hash": "4c63fb8f30e0904a5d03f4990da54a7c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-113.pdf": {
+    "mtime": 1777310887.2747715,
+    "ast_hash": "d21b11fa17bb0768b65e97759eb2fb86",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-104.pdf": {
+    "mtime": 1777310887.3167336,
+    "ast_hash": "8782076d8c41c282416e240e0c77ce9c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-108 vA58-2 \u00e0 compter du 01-02-2024.pdf": {
+    "mtime": 1777310887.0259862,
+    "ast_hash": "4e449fc569e33a5817c140be17de0b0d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-106 - Annexe2.pdf": {
+    "mtime": 1777310887.663667,
+    "ast_hash": "9678c2fea62a81930be007adb0deb7da",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-110.pdf": {
+    "mtime": 1777310887.3415205,
+    "ast_hash": "960dbb9d1e0b8ec104e3cef85d4d4bd7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-105.pdf": {
+    "mtime": 1777310886.9347875,
+    "ast_hash": "d6b23df08783aebdbb4873dc23fbaa68",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-110 v A20-2.pdf": {
+    "mtime": 1777310887.5051196,
+    "ast_hash": "23674e122fba70976f0d8c3251b8bf40",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-113 vA54-1 \u00e0 compter du 01-10-2023_0.pdf": {
+    "mtime": 1777310887.3502488,
+    "ast_hash": "6f828fd11f83e889012d351827f353c0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-108 - Annexe2.pdf": {
+    "mtime": 1777310887.8314068,
+    "ast_hash": "f17f5d663798f88657a8dac2ab25be3e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-122 - Annexe 2 \u00e0 compter du 01-04-2023.pdf": {
+    "mtime": 1777310887.7405562,
+    "ast_hash": "db74a01cbe4e7c4d72b0d3aa51b2fb8c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-105 v A32-2 \u00e0 compter du 01-04-2020.pdf": {
+    "mtime": 1777310887.4024093,
+    "ast_hash": "dda25fc3794df3daf2d4db42ec5265b1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-114.pdf": {
+    "mtime": 1777310887.517264,
+    "ast_hash": "6e6dd6c9f3fd6245d8b864b525ade44b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-108 v A14-1.pdf": {
+    "mtime": 1777310887.8327734,
+    "ast_hash": "89bdc00bb54e8b0ba4ce767865fed6fb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-104 vA54-3 \u00e0 compter du 01-01-2024_1.pdf": {
+    "mtime": 1777310887.3290808,
+    "ast_hash": "e5b7ac5b07c46d9574082be9ba9b4f5e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-109 v A17-1.pdf": {
+    "mtime": 1777310887.680287,
+    "ast_hash": "40731bd6d24e71442a4899fa64f93b21",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-129 v A32-3 \u00e0 compter du 01-04-2020.pdf": {
+    "mtime": 1777310887.5604944,
+    "ast_hash": "45af6872e3555356ab74a9c6715e839a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-105.pdf": {
+    "mtime": 1777310887.184286,
+    "ast_hash": "b3b31c0b8c559363503d0b57d469d85c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-113 v A14-1.pdf": {
+    "mtime": 1777310887.6982706,
+    "ast_hash": "a2c6e511e51e372023f2cf63762ad5e6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-121 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.7315617,
+    "ast_hash": "d12f36ea48a14acccb0b10dfae341a47",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-125 v A32-2 \u00e0 compter du 01-04-2020.pdf": {
+    "mtime": 1777310887.4295106,
+    "ast_hash": "0e9065509ea9ad55ac803a5cd2336f9c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-103 vA36-3 \u00e0 compter du 12-10-2020.pdf": {
+    "mtime": 1777310887.619323,
+    "ast_hash": "a9c87438e3bc37bc8d35ba7719a78be2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-114 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.7003322,
+    "ast_hash": "3325afed3ebf90ec1ed83f0c30d16e87",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-106 v A32-1.pdf": {
+    "mtime": 1777310886.9769435,
+    "ast_hash": "8478d5d14600457d8a59958169b93662",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-135 vA65-2 \u00e0 compter du 01-04-2025_0.pdf": {
+    "mtime": 1777310887.3864338,
+    "ast_hash": "f8314d354c4b4bedcbeba3fc23a29002",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-103 vA64-4 \u00e0 compter du 01-01-2025_1.pdf": {
+    "mtime": 1777310887.3260865,
+    "ast_hash": "85c61fca167e1600afa2585f3f00be0a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-132.pdf": {
+    "mtime": 1777310887.5779173,
+    "ast_hash": "0ad5a3f00485fb70b234340b098fc813",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-105 - Annexe 2 \u00e0 compter du 01-04-2023.pdf": {
+    "mtime": 1777310886.9247735,
+    "ast_hash": "06fec9e8768bab1c7bcca4a9d388a91f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-117 vA40-2 \u00e0 compter du 01-04-2022_0.pdf": {
+    "mtime": 1777310887.354701,
+    "ast_hash": "e30080f52f28f0a2bc97268118916f44",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-123 v A38-2 \u00e0 compter du 01-11-2021.pdf": {
+    "mtime": 1777310887.7462482,
+    "ast_hash": "c979f9ed676d88eb84f92f45f0289cd1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-101 vA64-4 \u00e0 compter du 01-01-2025_1.pdf": {
+    "mtime": 1777310887.3199763,
+    "ast_hash": "6d57e23e6547e8a51e1879be7978765c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-133.pdf": {
+    "mtime": 1777310887.5818644,
+    "ast_hash": "8e8892f9cfb758ee00c23114582e8e69",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-131 vA37-2 \u00e0 compter du 01-04-2021.pdf": {
+    "mtime": 1777310887.575497,
+    "ast_hash": "0f4e6b9f39064865c515c586aaae001f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-117 vA65-2 \u00e0 compter du 01-04-2025.pdf": {
+    "mtime": 1777310887.283299,
+    "ast_hash": "9dac4ca8d503ad9dfbb524b588d523a6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-111 v A24-1.pdf": {
+    "mtime": 1777310887.691505,
+    "ast_hash": "8d979d607695ae664bd195786f669aec",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-125.pdf": {
+    "mtime": 1777310887.5549364,
+    "ast_hash": "5d85b2fdfba0162968d9f448b13b9ac5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-102 - Annexe2.pdf": {
+    "mtime": 1777310887.8116221,
+    "ast_hash": "2f8d85a7515fe3fa94fd5e94a1c5613b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-139 v A35-3 \u00e0 compter du 01-10-2020.pdf": {
+    "mtime": 1777310887.4458811,
+    "ast_hash": "2e9ae4fed1ae4767cfe0e9892d533bb5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-102 v A14-1.pdf": {
+    "mtime": 1777310887.812998,
+    "ast_hash": "66dbe160a47cd945a533ef9d9a952264",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-118.pdf": {
+    "mtime": 1777310887.5477178,
+    "ast_hash": "83e0d401fdfe730d989b9fa4e4781896",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-124.pdf": {
+    "mtime": 1777310887.5529268,
+    "ast_hash": "71eecdee65b04bc1fa251e278d909c1a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-130.pdf": {
+    "mtime": 1777310887.562698,
+    "ast_hash": "1cdb75e0b7f4b99078b71f550d1da58e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-111 - Annexe2.pdf": {
+    "mtime": 1777310887.849197,
+    "ast_hash": "73f487b2320868e7429edf3393634577",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-111 Annexe 2.pdf": {
+    "mtime": 1777310887.689229,
+    "ast_hash": "cb060145cdce43d7d85a63f91984ff16",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-122 v A32-1.pdf": {
+    "mtime": 1777310887.7432046,
+    "ast_hash": "67f1b5fcbfc23ac56475daafce753e51",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-106 vA60-4 \u00e0 compter du 01-03-2024.pdf": {
+    "mtime": 1777310887.6310384,
+    "ast_hash": "bb237f33c96294912f96ca16f195e4a7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-106 - Annexe2.pdf": {
+    "mtime": 1777310887.82315,
+    "ast_hash": "233b59470a52d728d59e5b6c1dc520a3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-139 vA73-2 \u00e0 compter du 01-11-2025.pdf": {
+    "mtime": 1777310887.6119657,
+    "ast_hash": "3a857641740d382dbc2ca95a4cc75010",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-128 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.769701,
+    "ast_hash": "7df95020d4165f7e8743e8dc554db1c3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-118 - Annexe2.pdf": {
+    "mtime": 1777310887.717369,
+    "ast_hash": "307f369b94cf33cb18a600791cfa3f4c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-103 v A31-2 \u00e0 compter du 01-10-2019.pdf": {
+    "mtime": 1777310887.398041,
+    "ast_hash": "cf8c3b0433ae76714b6ec1e405d27725",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-120.pdf": {
+    "mtime": 1777310887.54993,
+    "ast_hash": "93136dfbfcf8b6409bc502d376acc9ea",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-124 v A35-1.pdf": {
+    "mtime": 1777310887.7521818,
+    "ast_hash": "69b2c8ce61319b36702243398a78a420",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-137 vA65-2 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.5946965,
+    "ast_hash": "c7bbed1a7933f9b2878415947582d7f7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-101 - Annexe2.pdf": {
+    "mtime": 1777310887.8069897,
+    "ast_hash": "17ec0db3db04dcd715197f15ec214944",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-159 vA40-1 \u00e0 compter du 29-12-2021_0.pdf": {
+    "mtime": 1777310887.4811757,
+    "ast_hash": "154442d79389480bec70e243bb6b8375",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-124 - Annexe 2 \u00e0 compter du 01-04-2023.pdf": {
+    "mtime": 1777310887.7494981,
+    "ast_hash": "685de3c15e7af9e0c6a221c5ca551d04",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-135.pdf": {
+    "mtime": 1777310887.5891042,
+    "ast_hash": "92ee84f56b99458625c8fb5130632e36",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-108 v A35-2 \u00e0 compter du 01-10-2020.pdf": {
+    "mtime": 1777310887.2542017,
+    "ast_hash": "2e4cea53d0e5eba2c32a4eac4a7d36d0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-125_0.pdf": {
+    "mtime": 1777310887.3601205,
+    "ast_hash": "7e8c086e419134aea61b566d94cf3318",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-105 - Annexe2.pdf": {
+    "mtime": 1777310887.8196433,
+    "ast_hash": "90d1a163df8ad0707306071e5150d923",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-112 vA73-3 \u00e0 compter du 01-09-2025.pdf": {
+    "mtime": 1777310887.097318,
+    "ast_hash": "468d23abfdd77392d85b5af97189eb76",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-110 v69-3 \u00e0 compter du 01-07-2025 D\u00e9stratificateur ou brasseur d\u2019air.pdf": {
+    "mtime": 1777310887.5093348,
+    "ast_hash": "3e9b70026547f0c9fdf89f8078cbad3a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-112 - Annexe2.pdf": {
+    "mtime": 1777310887.8532324,
+    "ast_hash": "cf59bdb280e332a96e290e3e0de26a41",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-109 vA54-3 \u00e0 compter du 01-01-2024_1.pdf": {
+    "mtime": 1777310887.4106748,
+    "ast_hash": "b2d0b3e38eb5a724ff055125302a9d10",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-112 v A38-1 \u00e0 compter du 31-07-2021.pdf": {
+    "mtime": 1777310887.3477032,
+    "ast_hash": "1efc2a5124454aa4f0902f5f21892949",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-134 v A35-2 \u00e0 compter du 01-10-2020.pdf": {
+    "mtime": 1777310887.585619,
+    "ast_hash": "bd7991f69dffa762f5ea51c53400040d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-115 v A14-1.pdf": {
+    "mtime": 1777310887.7084622,
+    "ast_hash": "2c5372f94964ac48f6587f40855227c3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-111.pdf": {
+    "mtime": 1777310887.4134655,
+    "ast_hash": "f321d21b209c3d3b9abd554d5656318e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-101 - Annexe 2 \u00e0 compter du 01-04-2023_0.pdf": {
+    "mtime": 1777310887.6489744,
+    "ast_hash": "506e43235b3a99dc747bd2f1d95d3d68",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-116 vA40-2 \u00e0 compter du 01-04-2022.pdf": {
+    "mtime": 1777310887.5207663,
+    "ast_hash": "0eb2fc65676dd88342f92d2292d7c736",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-142 vA71-4 \u00e0 compter du 01-08-2025 - Syst\u00e8me de d\u00e9stratification d\u2019air_1..pdf": {
+    "mtime": 1777310887.4491043,
+    "ast_hash": "2b17704f3629e3d86bf32768c4c65d1d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-110.pdf": {
+    "mtime": 1777310887.4120617,
+    "ast_hash": "690c78623771751a0742cdb83777293e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-122.pdf": {
+    "mtime": 1777310887.5514462,
+    "ast_hash": "d4bce7096aff4e3eed1599ddb25a13d9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-129 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.778354,
+    "ast_hash": "ef12c9e16c0358a35a75b4221a2aecad",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-103 v A17-2.pdf": {
+    "mtime": 1777310887.5358808,
+    "ast_hash": "2b1dd8fca5fa20d76113df4812843faf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-105 vA36-3 \u00e0 compter du 12-10-2020.pdf": {
+    "mtime": 1777310887.625139,
+    "ast_hash": "a97bc2c48000d84c1eb2d7f2c2dd1e51",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-EN-102 v A33-2 \u00e0 compter du 01 septembre 2020.pdf": {
+    "mtime": 1777310887.5302289,
+    "ast_hash": "545dedae29fd2b88cbd422c313ea6cc8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-131 vA73-2 \u00e0 compter du 23-08-2025.pdf": {
+    "mtime": 1777310887.8013215,
+    "ast_hash": "e08a14e465742d7c6ef2b81fe299da7e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-113 - Annexe2.pdf": {
+    "mtime": 1777310887.857892,
+    "ast_hash": "c0a2e2e84b1fa0fc77ab0dc2f7232046",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-104 - Annexe2.pdf": {
+    "mtime": 1777310887.8155282,
+    "ast_hash": "055a883c47971b619ca687943c40e028",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-110 vA54-3 \u00e0 compter du 01-01-2024.pdf": {
+    "mtime": 1777310887.2650852,
+    "ast_hash": "076ede765c374fc98d05b80c060f011d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-108 - Annexe 2 \u00e0 compter du 01-04-2023.pdf": {
+    "mtime": 1777310887.6722176,
+    "ast_hash": "c251c8129ec7b6cdf85e653e96e4e600",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-139 vA62-1 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.6072338,
+    "ast_hash": "e786b3a2755fc03c381805807418de90",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-113.pdf": {
+    "mtime": 1777310887.5408394,
+    "ast_hash": "e7167c354cdf66683390f3b39d70257e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-135.pdf": {
+    "mtime": 1777310887.4424555,
+    "ast_hash": "c657d442827d31aa931c5ec11d30c958",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-125 vA40-2 \u00e0 compter du 01-04-2022.pdf": {
+    "mtime": 1777310887.7582352,
+    "ast_hash": "d04e9aaa61ae5c165292e4f751f6f3d5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-127 vA79-5 \u00e0 compter du 01-01-2026.pdf": {
+    "mtime": 1777310887.4371743,
+    "ast_hash": "9c985fb078988bd067bd9bbf8a94eee1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-120 - Annexe2.pdf": {
+    "mtime": 1777310887.7266562,
+    "ast_hash": "8c552a3043def8ee7c8a77f57d491c59",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-134.pdf": {
+    "mtime": 1777310887.4397552,
+    "ast_hash": "a1b26a0432a76df00cf260daa4fe68b3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-108.pdf": {
+    "mtime": 1777310887.4068174,
+    "ast_hash": "b4320523395d20e8b77bd3b13e6cb151",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-162 vA75-1 \u00e0 compter du 01-01-2026.pdf": {
+    "mtime": 1777310887.4962058,
+    "ast_hash": "e8e235a76434fa60474c16a8fda45a76",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-119 - Annexe2.pdf": {
+    "mtime": 1777310887.7225811,
+    "ast_hash": "2f6df1064832563c12f5aef73ac62340",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-109 v A14-1.pdf": {
+    "mtime": 1777310887.8368216,
+    "ast_hash": "022520dc6496ccbe05693dcf4663232d",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-129_0.pdf": {
+    "mtime": 1777310887.3652313,
+    "ast_hash": "68f6e941eb33aab82655708f7ba3c4b0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-127 v A25-2 apr\u00e8s le 01-04-2017.pdf": {
+    "mtime": 1777310887.5570865,
+    "ast_hash": "4ae8cbf4a779791a43e60ba80b91287e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-104.pdf": {
+    "mtime": 1777310887.5375195,
+    "ast_hash": "20db0a5063fd0f4d69314871f83d2f61",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-108 vA37-6 \u00e0 compter du 01-04-2020.pdf": {
+    "mtime": 1777310887.676606,
+    "ast_hash": "3cb61a2ff11a0dae18250f9e213e976a",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-BA-110 vA71-4 \u00e0 compter du 01-08-2025 - D\u00e9stratificateur ou brasseur d\u2019air.p.pdf": {
+    "mtime": 1777310887.5130718,
+    "ast_hash": "5f9ea6b4d0df1e2e6600ffae9bbc34b6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-122.pdf": {
+    "mtime": 1777310887.4271326,
+    "ast_hash": "895e32ebb7dc60c6266658fbd0d8d22e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-130 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.789127,
+    "ast_hash": "0dc68dcdb7b1eeb6b5ef6cf9091455ac",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-EC-104 vA77-3 \u00e0 compter du 26-11-2025_0.pdf": {
+    "mtime": 1777310887.6453433,
+    "ast_hash": "47b2d6ca7109e6f996d154efb189e913",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-104 mod A27-2 \u00e0 compter du 01-04-2018.pdf": {
+    "mtime": 1777310887.1412573,
+    "ast_hash": "5a854360bc096e6427ac2339fbcbe4ff",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-105.pdf": {
+    "mtime": 1777310887.539012,
+    "ast_hash": "b22a99982657617b1b7079fed0bbc814",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-112 v A22-2.pdf": {
+    "mtime": 1777310887.416083,
+    "ast_hash": "36383afacc8c0a885b6d069cad9b03f4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-117 - Annexe 2 \u00e0 compter du 26-04-2025.pdf": {
+    "mtime": 1777310887.8654594,
+    "ast_hash": "5e07b22901658233f4f9bc7adc842943",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-140 vA65-1 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.6164048,
+    "ast_hash": "6abef7a852419af622186af2a6b14d61",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-124.pdf": {
+    "mtime": 1777310887.3581398,
+    "ast_hash": "494b40c6214364ca4e54fcd7172be6a5",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-130.pdf": {
+    "mtime": 1777310887.3686745,
+    "ast_hash": "7587c932b21b0c3ee735e1959b044bb2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-115.pdf": {
+    "mtime": 1777310887.5444634,
+    "ast_hash": "c5d2089e1b9fb9b04b6b2f18a56c2d0e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-109 vA58-2 \u00e0 compter du 01-02-2024.pdf": {
+    "mtime": 1777310887.0299485,
+    "ast_hash": "5129e26c49a2e683e736870d33758cc1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-105 v A14-1.pdf": {
+    "mtime": 1777310887.820915,
+    "ast_hash": "47fb7e7fdea4ac737e95b9671bc2f186",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-158 vA62-3 \u00e0 compter du 01-01-2025_0.pdf": {
+    "mtime": 1777310887.4766474,
+    "ast_hash": "04b9a3945e565989e3a59b62f4da3f0f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-108 vA53-4 \u00e0 compter du 01-10-2023.pdf": {
+    "mtime": 1777310887.6420724,
+    "ast_hash": "c2cafbe7d3fbb63cfc0e090030e9ae4f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-131.pdf": {
+    "mtime": 1777310887.369999,
+    "ast_hash": "1d47c5006c2bc630fffb2eb50800241f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-107 - Annexe2.pdf": {
+    "mtime": 1777310887.827312,
+    "ast_hash": "13ece5949f2420a4ff933e7df1303a9c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-110 - Annexe2.pdf": {
+    "mtime": 1777310887.8398025,
+    "ast_hash": "b886958502264b066d3e8fdcccf23216",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-115 v A15-2.pdf": {
+    "mtime": 1777310887.4176824,
+    "ast_hash": "328525c4cab23ad9bb9f2609f3f4a588",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-116 vA65-2 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.8628376,
+    "ast_hash": "2ca62f81f72c90d84dfba74166a8f322",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-116.pdf": {
+    "mtime": 1777310887.5456805,
+    "ast_hash": "6bf25ead471b60cf0bb4d82783f4b692",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-110 v A14-1.pdf": {
+    "mtime": 1777310887.8421504,
+    "ast_hash": "eba01ade178bece6f0c3eb99eb48fdbd",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-109 - Annexe2.pdf": {
+    "mtime": 1777310887.6789134,
+    "ast_hash": "1a1c18547d26f5df5427c7017d7ae9f0",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-118 v A15-1.pdf": {
+    "mtime": 1777310887.7201073,
+    "ast_hash": "06db4569cf483f05b045250e332e0900",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-111 v A38-1 \u00e0 compter du 31-07-2021.pdf": {
+    "mtime": 1777310887.3441417,
+    "ast_hash": "5ec19d83a6c632d9ef15af86221b1e2e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-109 - Annexe2.pdf": {
+    "mtime": 1777310887.835399,
+    "ast_hash": "08b5b9af735adbcffc28288f378f58aa",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-111 vA62-1 \u00e0 compter du 31-08-2024.pdf": {
+    "mtime": 1777310887.0458071,
+    "ast_hash": "388f3f279ec555522f8fa390bdcc29c1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-106 mod v.A19.2.pdf": {
+    "mtime": 1777310887.8244681,
+    "ast_hash": "316ee786f0862efaefdd9ad5364ad562",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-119 vA65-2 \u00e0 compter du 01-04-2025.pdf": {
+    "mtime": 1777310887.3042562,
+    "ast_hash": "ebc8e2f48f0c078bd403232a8f68c4d8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-110 - Annexe2.pdf": {
+    "mtime": 1777310887.683867,
+    "ast_hash": "d33c51814c14d4b39d1e68e193bd6acb",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-156.pdf": {
+    "mtime": 1777310887.46347,
+    "ast_hash": "54c29678e65a2764d2faf0c61e18edb9",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-107 - Annexe2.pdf": {
+    "mtime": 1777310887.6678903,
+    "ast_hash": "779b0ed28d3264b10c095d65cf554964",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-107 v A19-1.pdf": {
+    "mtime": 1777310887.8288941,
+    "ast_hash": "a26212f7c5f21a33a5c11e3814a50b50",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-SE-104.pdf": {
+    "mtime": 1777310887.391861,
+    "ast_hash": "d6ad1b42df8aab1183d91855c7cd86e6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-101 v A24-2 apr\u00e8s le 01-04-2017.pdf": {
+    "mtime": 1777310887.306767,
+    "ast_hash": "6c5eb0806af775bcbdbda4cdb9b3643b",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-125 vA40-2 \u00e0 compter du 01-04-2022 - Annexe 2.pdf": {
+    "mtime": 1777310887.755051,
+    "ast_hash": "072989649cf79d445c431fc58125ee85",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-132 vA65-1 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.8043618,
+    "ast_hash": "664f71cb297ced242bd92cba5bcae927",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-114 vA68-3 \u00e0 compter du 28-05-2025.pdf": {
+    "mtime": 1777310887.7036643,
+    "ast_hash": "9a601fa914c9fe5da85f7a9632823f35",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-127 vA54-1 \u00e0 compter du 01-10-2023.pdf": {
+    "mtime": 1777310887.766719,
+    "ast_hash": "5330f0b4cae831f1e0732775053911c6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-143.pdf": {
+    "mtime": 1777310887.4533918,
+    "ast_hash": "bf81711d97e76a08f3b2c7c10df1ff8c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-121 v A35-3 \u00e0 compter du 01-10-2020.pdf": {
+    "mtime": 1777310887.424527,
+    "ast_hash": "e912d2e6ef6b66ecf250492c395e6123",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-SE-113 v A14-1.pdf": {
+    "mtime": 1777310887.8593724,
+    "ast_hash": "cec036d797825ece4b26418aaa48fc1c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-131 - Annexe 2 \u00e0 compter du 23-08-2025.pdf": {
+    "mtime": 1777310887.7987816,
+    "ast_hash": "7f0eece6e77aaea63013fc7fd664e43c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-103 - Annexe2.pdf": {
+    "mtime": 1777310887.6546884,
+    "ast_hash": "65af05cce11a0ab89f169d2380261c10",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-164 vA75-1 \u00e0 compter du 01-01-2026.pdf": {
+    "mtime": 1777310887.5034955,
+    "ast_hash": "a151c747efd61c5d673a6b271cadaec4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-120.pdf": {
+    "mtime": 1777310887.7293172,
+    "ast_hash": "9be359ffb22e139eac1e4b705fac9f5c",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-101 v A14-1.pdf": {
+    "mtime": 1777310887.6516743,
+    "ast_hash": "af92236ecc062582b74e92bc21070192",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-107 v A17-1.pdf": {
+    "mtime": 1777310887.6691523,
+    "ast_hash": "543ca1f8126e4fc80186aa2f61e6dd35",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-109.pdf": {
+    "mtime": 1777310887.3392522,
+    "ast_hash": "04c4786f62b2fd4669ef3d8d406e21fc",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-127 vA71-5 \u00e0 compter du 01-08-2025 - Luminaire \u00e0 modules LED.pdf": {
+    "mtime": 1777310887.363018,
+    "ast_hash": "87474e81fc5833049c9148c4172130fc",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EN-108.pdf": {
+    "mtime": 1777310887.3372028,
+    "ast_hash": "79b58e4a589b75385daea10125927eb8",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-154.pdf": {
+    "mtime": 1777310887.460968,
+    "ast_hash": "ed48542ab703f609bdbeb53aa1cea186",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-157 vA50-2 \u00e0 compter du 01-04-2023_0.pdf": {
+    "mtime": 1777310887.4697273,
+    "ast_hash": "e4738915aedd0e19088f25e28d91eabf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-104 vA62-2 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310886.9198754,
+    "ast_hash": "31104ecca4a531c77f2940dc19c39598",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-121 vA54-2 \u00e0 compter du 01-01-2024.pdf": {
+    "mtime": 1777310887.73799,
+    "ast_hash": "0bef813280538a7669c807c6099de307",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-104 v A14-1.pdf": {
+    "mtime": 1777310887.6609225,
+    "ast_hash": "5960364172a7cea24dfc6003935f0396",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-117 vA72-4 \u00e0 compter du 01-07-2025.pdf": {
+    "mtime": 1777310887.71299,
+    "ast_hash": "7747efb1545142ea1129c05c9235e1f3",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-EN-101.pdf": {
+    "mtime": 1777310887.525821,
+    "ast_hash": "53811c35d72244b60df1deef961ec278",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-SE-103.pdf": {
+    "mtime": 1777310887.3887253,
+    "ast_hash": "a61bb033ce50a283709f709211201c82",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-145.pdf": {
+    "mtime": 1777310887.4558752,
+    "ast_hash": "0b71ba0e337f1f98e0509768b5f3f7d7",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-UT-114 v A24-2 apr\u00e8s le 01-04-2017.pdf": {
+    "mtime": 1777310887.5431526,
+    "ast_hash": "13bb617f7eb49cf9f5bc0af67304c995",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/IND-EN-102 vA64-3 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.5332115,
+    "ast_hash": "c6710990cd210076e2cc06d91a4d1d98",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-107 v A38-1 \u00e0 compter du 31-07-2021.pdf": {
+    "mtime": 1777310887.0225322,
+    "ast_hash": "87067aba501aff6728ba7556ba554ed6",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-110 v A38-1 \u00e0 compter du 31-07-2021.pdf": {
+    "mtime": 1777310887.0393763,
+    "ast_hash": "79286fe3f70ee004f4ad8540abba6f2e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-110 v A19-1.pdf": {
+    "mtime": 1777310887.6851547,
+    "ast_hash": "2e2f39af8965937a3d05bf52b9cda672",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-130.pdf": {
+    "mtime": 1777310887.7949777,
+    "ast_hash": "d9b9310a973a0972cbf3b4872f012ced",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-UT-102 v A22-2.pdf": {
+    "mtime": 1777310887.3113053,
+    "ast_hash": "72f220f6fe3f576a75b1828d89d7d9a4",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/RES-CH-104 vA36-3 \u00e0 compter du 12-10-2020.pdf": {
+    "mtime": 1777310887.6220825,
+    "ast_hash": "4f4656f22a143426e64eb910925e7c59",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-EQ-112 vA65-2 \u00e0 compter du 01-01-2025.pdf": {
+    "mtime": 1777310887.0839503,
+    "ast_hash": "27c99561a5bee52bf9ab2fcfea2cc6fc",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-126.pdf": {
+    "mtime": 1777310887.7619314,
+    "ast_hash": "5fed7108d7bbf0235d548c54ff9a5e9e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-104 v A35-3  \u00e0 compter du 01-10-2020.pdf": {
+    "mtime": 1777310887.1804721,
+    "ast_hash": "fd2cb902fba87b5741dbb39d7e6543cf",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-104 - Annexe2.pdf": {
+    "mtime": 1777310887.6594498,
+    "ast_hash": "3ba6b5bc64128c6eb91394035ba17a01",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-126 v A32-2 \u00e0 compter du 01-04-2020.pdf": {
+    "mtime": 1777310887.4334245,
+    "ast_hash": "26860d0e8936073fbb21f0ab2afc31a1",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-TH-153.pdf": {
+    "mtime": 1777310887.4584205,
+    "ast_hash": "81d7c8272d59f1617caa8635c47695a2",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-SE-105 v A32-1.pdf": {
+    "mtime": 1777310887.3959243,
+    "ast_hash": "dae363773a81124265ffa4bc86a19349",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/TRA-EQ-113 - Annexe2.pdf": {
+    "mtime": 1777310887.6961796,
+    "ast_hash": "32ee3cf1439f998906640df71c07180f",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/AGRI-TH-118.pdf": {
+    "mtime": 1777310887.2943516,
+    "ast_hash": "10b4c0f5a38af369c3dc40d0983555ee",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-123 v A25-2 apr\u00e8s le 01-04-2017_1.pdf": {
+    "mtime": 1777310887.3570015,
+    "ast_hash": "1cb7463be84a9ce6b2b4b0b1cc0afb8e",
+    "semantic_hash": ""
+  },
+  "/Users/azert/CEE_ENGINE/pdfs/BAT-EQ-134 vA58-2 \u00e0 compter du 01-04-2024_0.pdf": {
+    "mtime": 1777310887.37416,
+    "ast_hash": "db943bad1f1aa06fba80a20d340c1566",
+    "semantic_hash": ""
+  }
+}

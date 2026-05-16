@@ -28,7 +28,7 @@
         {"ref": "BAT-EN-101", "score": 80, "raison": "Combles toiture"},
         {"ref": "BAT-TH-127", "score": 80, "raison": "Raccordement réseau chaleur"},
         {"ref": "BAT-TH-154", "score": 85, "raison": "Récup chaleur eaux grises : douches résidents (forte conso)"},
-        {"ref": "BAT-TH-148", "score": 75, "raison": "CET individuel : ECS résidents"},
+        {"ref": "BAR-TH-148", "score": 75, "raison": "CET individuel : ECS résidents (BAR-TH-148 résid uniquement, pas BAT-TH-148 fantôme)"},
         {"ref": "BAT-TH-116", "score": 75, "raison": "GTB obligatoire si > 1000m²"}
       ]
     },

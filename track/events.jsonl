@@ -1,0 +1,6 @@
+{"ts": 1778903184383, "event": "test_pageview", "props": {"v": "39.0"}, "session": "sid_pytest", "ip_anon": "127.0.x.x", "ua": "Werkzeug/3.1.6"}
+{"ts": 1778903184386, "event": "unknown", "props": {}, "session": "anon", "ip_anon": "127.0.x.x", "ua": "Werkzeug/3.1.6"}
+{"ts": 1778903184388, "event": "unknown", "props": {}, "session": "anon", "ip_anon": "127.0.x.x", "ua": "Werkzeug/3.1.6"}
+{"ts": 1778903199984, "event": "test_pageview", "props": {"v": "39.0"}, "session": "sid_pytest", "ip_anon": "127.0.x.x", "ua": "Werkzeug/3.1.6"}
+{"ts": 1778903199986, "event": "unknown", "props": {}, "session": "anon", "ip_anon": "127.0.x.x", "ua": "Werkzeug/3.1.6"}
+{"ts": 1778903199988, "event": "unknown", "props": {}, "session": "anon", "ip_anon": "127.0.x.x", "ua": "Werkzeug/3.1.6"}

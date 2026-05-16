@@ -1,0 +1,648 @@
+{
+  "_meta": {
+    "version": "V38.8b",
+    "date": "2026-05-11",
+    "source": "PDF ministère + ATEE + Légifrance arrêtés P6 2025-2026",
+    "total_entries": 36,
+    "note": "Migration BAR résidentiel — 36 fiches. Calculs officiels exacts pour fiches simples; forfait_legacy + V39 pour fiches complexes (rénovation ampleur/globale, multi-axis)."
+  },
+  "fiches": {
+    "BAR-TH-101": {
+      "label": "Chauffe-eau solaire individuel",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par unité installée selon zone climatique (H1/H2/H3/DOM). Surface capteurs ≥ 2 m² requise; CESI certifié SolarKeymark.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de CESI installés", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 18500, "H2": 21000, "H3": 24200, "DOM": 29000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 18500, "desc": "1 CESI zone H1"},
+        {"smart": {"zone": "H2", "qty": 2}, "expected": 42000, "desc": "2 CESI zone H2"},
+        {"smart": {"zone": "DOM", "qty": 1}, "expected": 29000, "desc": "1 CESI DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA29-1 ATEE BAR-TH-101",
+      "note": "Forfait simple par zone × qty"
+    },
+    "BAR-TH-123": {
+      "label": "Optimiseur de relance pour chauffage collectif",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par logement chauffé par la chaufferie collective équipée, selon zone climatique.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "qty", "label": "Nombre de logements", "type": "number", "default": 30}
+      ],
+      "official_table": {"H1": 1380, "H2": 1130, "H3": 810, "DOM": 540},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 30}, "expected": 41400, "desc": "30 logements H1"},
+        {"smart": {"zone": "H2", "qty": 50}, "expected": 56500, "desc": "50 logements H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-1 ATEE BAR-TH-123",
+      "note": "Forfait par logement raccordé"
+    },
+    "BAR-TH-124": {
+      "label": "Chaudière individuelle à haute performance énergétique (condensation)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par chaudière condensation installée selon zone (logement individuel). ETAS ≥ 92%.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de chaudières", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 27700, "H2": 22700, "H3": 16300, "DOM": 10900},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 27700, "desc": "1 chaudière H1"},
+        {"smart": {"zone": "H2", "qty": 1}, "expected": 22700, "desc": "1 chaudière H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA39-2 ATEE BAR-TH-124",
+      "note": "Forfait simple par unité installée"
+    },
+    "BAR-TH-125": {
+      "label": "Ventilation mécanique double flux autoréglable ou modulée à haute performance",
+      "model_type": "absolute_per_zone_qty_factor",
+      "formula_summary": "Forfait par logement équipé selon zone × type bâtiment (maison individuelle / immeuble collectif). Valeurs maison plus élevées que collectif.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "type_logement", "label": "Type logement", "type": "select", "options": ["maison", "appartement"], "default": "maison"},
+        {"id": "qty", "label": "Nombre de logements équipés", "type": "number", "default": 1}
+      ],
+      "official_table": {
+        "maison": {"H1": 10400, "H2": 8400, "H3": 6200, "DOM": 4100},
+        "appartement": {"H1": 4900, "H2": 4000, "H3": 2900, "DOM": 1900}
+      },
+      "test_cases": [
+        {"smart": {"zone": "H1", "type_logement": "maison", "qty": 1}, "expected": 10400, "desc": "VMC DF maison H1"},
+        {"smart": {"zone": "H2", "type_logement": "appartement", "qty": 10}, "expected": 40000, "desc": "10 appts VMC DF H2"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA34-2 ATEE BAR-TH-125",
+      "note": "Valeurs maison utilisées par défaut dans z[]; appartements via official_table sub-key"
+    },
+    "BAR-TH-127": {
+      "label": "Ventilation mécanique simple flux hygroréglable",
+      "model_type": "absolute_per_zone_qty_factor",
+      "formula_summary": "Forfait par logement équipé VMC SF hygro-B selon zone × type logement (maison/appartement).",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "type_logement", "label": "Type logement", "type": "select", "options": ["maison", "appartement"], "default": "maison"},
+        {"id": "qty", "label": "Nombre de logements équipés", "type": "number", "default": 1}
+      ],
+      "official_table": {
+        "maison": {"H1": 9100, "H2": 7400, "H3": 5500, "DOM": 3600},
+        "appartement": {"H1": 4300, "H2": 3500, "H3": 2600, "DOM": 1700}
+      },
+      "test_cases": [
+        {"smart": {"zone": "H1", "type_logement": "maison", "qty": 1}, "expected": 9100, "desc": "VMC SF hygro maison H1"},
+        {"smart": {"zone": "H3", "type_logement": "appartement", "qty": 20}, "expected": 52000, "desc": "20 appts H3"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA21-2 ATEE BAR-TH-127",
+      "note": "Hygro type B uniquement (hygro A retiré)"
+    },
+    "BAR-TH-129": {
+      "label": "Pompe à chaleur de type air/air",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par PAC air/air installée en résidentiel selon zone. SCOP ≥ 3,9.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de PAC installées", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 13200, "H2": 10800, "H3": 7700, "DOM": 5100},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 13200, "desc": "1 PAC air/air H1"},
+        {"smart": {"zone": "H2", "qty": 2}, "expected": 21600, "desc": "2 PAC air/air H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA17-2 ATEE BAR-TH-129",
+      "note": "Forfait par unité"
+    },
+    "BAR-TH-141": {
+      "label": "Climatiseur performant (DOM)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par climatiseur performant DOM uniquement. Classe A+++. SEER ≥ 8,5.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "qty", "label": "Nombre de climatiseurs", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 3800},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "qty": 1}, "expected": 3800, "desc": "1 climatiseur DOM"},
+        {"smart": {"zone": "DOM", "qty": 5}, "expected": 19000, "desc": "5 climatiseurs DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA13-1 ATEE BAR-TH-141",
+      "note": "DOM uniquement — H1/H2/H3 = 0"
+    },
+    "BAR-TH-155": {
+      "label": "Ventilation hybride hygroréglable",
+      "model_type": "absolute_per_zone_qty_factor",
+      "formula_summary": "Forfait par logement équipé ventilation hybride hygro selon zone × type logement.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "type_logement", "label": "Type logement", "type": "select", "options": ["maison", "appartement"], "default": "maison"},
+        {"id": "qty", "label": "Nombre de logements équipés", "type": "number", "default": 1}
+      ],
+      "official_table": {
+        "maison": {"H1": 10400, "H2": 8400, "H3": 6200, "DOM": 4100},
+        "appartement": {"H1": 4900, "H2": 4000, "H3": 2900, "DOM": 1900}
+      },
+      "test_cases": [
+        {"smart": {"zone": "H1", "type_logement": "maison", "qty": 1}, "expected": 10400, "desc": "VMC hybride maison H1"},
+        {"smart": {"zone": "H2", "type_logement": "appartement", "qty": 5}, "expected": 20000, "desc": "5 appts VMC hybride H2"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA8-1 ATEE BAR-TH-155",
+      "note": "Calcul similaire BAR-TH-125"
+    },
+    "BAR-TH-158": {
+      "label": "Émetteur électrique à régulation électronique avancée",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par émetteur électrique installé (radiateur connecté avec régulation avancée) selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre d'émetteurs installés", "type": "number", "default": 5}
+      ],
+      "official_table": {"H1": 3300, "H2": 2700, "H3": 1900, "DOM": 1300},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 5}, "expected": 16500, "desc": "5 émetteurs H1"},
+        {"smart": {"zone": "H2", "qty": 8}, "expected": 21600, "desc": "8 émetteurs H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA9-1 ATEE BAR-TH-158",
+      "note": "Forfait par appareil"
+    },
+    "BAR-TH-159": {
+      "label": "Pompe à chaleur hybride individuelle (PAC + chaudière)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par PAC hybride installée selon zone. Système combiné PAC + chaudière condensation gaz.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de PAC hybrides installées", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 68000, "H2": 56000, "H3": 37000, "DOM": 25000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 68000, "desc": "1 PAC hybride H1"},
+        {"smart": {"zone": "H2", "qty": 1}, "expected": 56000, "desc": "1 PAC hybride H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-2 ATEE BAR-TH-159",
+      "note": "Forfait par unité installée. Cumac très élevé (gros poste éco)"
+    },
+    "BAR-TH-161": {
+      "label": "Isolation des points singuliers d'un réseau",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par point singulier isolé (vanne, robinet, bride, échangeur) sur réseau hydraulique de chauffage/ECS collectif.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de points singuliers isolés", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 2400, "H2": 2000, "H3": 1400, "DOM": 900},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 10}, "expected": 24000, "desc": "10 points H1"},
+        {"smart": {"zone": "H2", "qty": 25}, "expected": 50000, "desc": "25 points H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA10-1 ATEE BAR-TH-161",
+      "note": "Forfait par point isolé (housse/coquille)"
+    },
+    "BAR-TH-162": {
+      "label": "Système hybride photovoltaïque thermique (PVT)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par m² de capteurs PVT installés selon zone. Surface utile capteurs.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Surface capteurs PVT (m²)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 2600, "H2": 2100, "H3": 1500, "DOM": 1000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 10}, "expected": 26000, "desc": "10 m² PVT H1"},
+        {"smart": {"zone": "H2", "qty": 15}, "expected": 31500, "desc": "15 m² PVT H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA5-1 ATEE BAR-TH-162",
+      "note": "Forfait par m² capteur"
+    },
+    "BAR-TH-164": {
+      "label": "Rénovation globale d'une maison individuelle",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Calcul complexe basé sur économies d'énergie réalisées (kWh/m²/an avant-après) × surface habitable. Bonus selon % réduction. Audit énergétique obligatoire. Différencié par énergie chauffage initiale.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de logements rénovés", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 140000, "H2": 114000, "H3": 82000, "DOM": 55000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 140000, "desc": "1 maison rénovée globalement H1 (forfait moyen)"},
+        {"smart": {"zone": "H2", "qty": 1}, "expected": 114000, "desc": "1 maison H2"}
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA46-2 ATEE BAR-TH-164",
+      "note": "V39: implémenter calcul exact (économies kWh × surface × coef énergie). Forfait moyen utilisé temporairement"
+    },
+    "BAR-TH-165": {
+      "label": "Chaudière biomasse collective",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par kW de puissance chaudière biomasse collective installée selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "qty", "label": "Puissance chaudière (kW)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 5400, "H2": 4400, "H3": 3200, "DOM": 2100},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 100}, "expected": 540000, "desc": "100 kW biomasse H1"},
+        {"smart": {"zone": "H2", "qty": 200}, "expected": 880000, "desc": "200 kW biomasse H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA12-2 ATEE BAR-TH-165",
+      "note": "Forfait par kW puissance nominale"
+    },
+    "BAR-TH-168": {
+      "label": "Dispositif solaire thermique collectif",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par m² de capteurs solaires thermiques collectifs installés selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Surface capteurs (m²)", "type": "number", "default": 20}
+      ],
+      "official_table": {"H1": 2800, "H2": 2300, "H3": 1600, "DOM": 1100},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 20}, "expected": 56000, "desc": "20 m² solaire collectif H1"},
+        {"smart": {"zone": "DOM", "qty": 50}, "expected": 55000, "desc": "50 m² DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA8-1 ATEE BAR-TH-168",
+      "note": "Forfait par m² capteur thermique"
+    },
+    "BAR-TH-169": {
+      "label": "Pompe à chaleur collective de type air/eau pour ECS",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par kW de puissance PAC collective air/eau ECS installée selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Puissance PAC (kW)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 12100, "H2": 9900, "H3": 7100, "DOM": 4700},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 50}, "expected": 605000, "desc": "50 kW PAC ECS H1"},
+        {"smart": {"zone": "H2", "qty": 100}, "expected": 990000, "desc": "100 kW H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA6-1 ATEE BAR-TH-169",
+      "note": "Forfait par kW puissance"
+    },
+    "BAR-TH-170": {
+      "label": "Récupération de chaleur sur serveurs informatiques",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par kW de puissance récupérée sur serveurs (datacenter résidentiel/tertiaire). Indépendant de la zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Puissance récupérée (kW)", "type": "number", "default": 10}
+      ],
+      "official_table": {"H1": 18000, "H2": 18000, "H3": 18000, "DOM": 18000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 10}, "expected": 180000, "desc": "10 kW récup H1"},
+        {"smart": {"zone": "H2", "qty": 25}, "expected": 450000, "desc": "25 kW récup"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA3-1 ATEE BAR-TH-170",
+      "note": "Forfait identique toutes zones"
+    },
+    "BAR-TH-171": {
+      "label": "Pompe à chaleur de type air/eau (résidentiel)",
+      "model_type": "absolute_per_zone_qty_factor",
+      "formula_summary": "Forfait par PAC air/eau installée selon zone × type logement (maison/appartement).",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "type_logement", "label": "Type logement", "type": "select", "options": ["maison", "appartement"], "default": "maison"},
+        {"id": "qty", "label": "Nombre de PAC installées", "type": "number", "default": 1}
+      ],
+      "official_table": {
+        "maison": {"H1": 68000, "H2": 56000, "H3": 37000, "DOM": 25000},
+        "appartement": {"H1": 32000, "H2": 26000, "H3": 17000, "DOM": 12000}
+      },
+      "test_cases": [
+        {"smart": {"zone": "H1", "type_logement": "maison", "qty": 1}, "expected": 68000, "desc": "1 PAC air/eau maison H1"},
+        {"smart": {"zone": "H2", "type_logement": "appartement", "qty": 5}, "expected": 130000, "desc": "5 PAC air/eau appts H2"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA61-1 ATEE BAR-TH-171",
+      "note": "Maison par défaut dans z[]; appartement via sub-key"
+    },
+    "BAR-TH-172": {
+      "label": "Pompe à chaleur eau/eau ou sol/eau (résidentiel)",
+      "model_type": "absolute_per_zone_qty_factor",
+      "formula_summary": "Forfait par PAC géothermique eau/eau ou sol/eau selon zone × type logement.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "type_logement", "label": "Type logement", "type": "select", "options": ["maison", "appartement"], "default": "maison"},
+        {"id": "qty", "label": "Nombre de PAC installées", "type": "number", "default": 1}
+      ],
+      "official_table": {
+        "maison": {"H1": 93000, "H2": 77000, "H3": 51000, "DOM": 34000},
+        "appartement": {"H1": 44000, "H2": 36000, "H3": 24000, "DOM": 16000}
+      },
+      "test_cases": [
+        {"smart": {"zone": "H1", "type_logement": "maison", "qty": 1}, "expected": 93000, "desc": "1 PAC géo maison H1"},
+        {"smart": {"zone": "H2", "type_logement": "maison", "qty": 1}, "expected": 77000, "desc": "1 PAC géo maison H2"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA28-1 ATEE BAR-TH-172",
+      "note": "PAC géothermique (sol/eau ou eau/eau)"
+    },
+    "BAR-TH-173": {
+      "label": "Régulation par programmation horaire pièce par pièce (chaud/clim)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par logement équipé d'un système de régulation pièce par pièce (thermostat connecté multi-zones).",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de logements équipés", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 21600, "H2": 17800, "H3": 11800, "DOM": 7900},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 21600, "desc": "1 logement régulation H1"},
+        {"smart": {"zone": "H2", "qty": 3}, "expected": 53400, "desc": "3 logements H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA4-1 ATEE BAR-TH-173",
+      "note": "Forfait par logement équipé"
+    },
+    "BAR-TH-174": {
+      "label": "Rénovation d'ampleur d'une maison individuelle",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Calcul basé sur sauts de classe énergétique DPE (≥2 sauts requis). Bonus selon nombre de classes gagnées. Audit énergétique + accompagnement Mon Accompagnateur Rénov' obligatoire.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de maisons rénovées", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 460000, "H2": 376000, "H3": 271000, "DOM": 180000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 460000, "desc": "1 maison rénovation ampleur H1 (forfait moyen)"},
+        {"smart": {"zone": "H2", "qty": 1}, "expected": 376000, "desc": "1 maison H2"}
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA20-2 ATEE BAR-TH-174",
+      "note": "V39: bonus DPE par sauts de classe (2/3/4+ classes). Forfait moyen 3 classes utilisé"
+    },
+    "BAR-TH-175": {
+      "label": "Rénovation d'ampleur d'un appartement",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Calcul basé sur sauts de classe DPE (≥2 sauts) pour appartement individuel en copropriété. Bonus selon classes gagnées + audit + MAR.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre d'appartements rénovés", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 350000, "H2": 286000, "H3": 206000, "DOM": 137000},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 350000, "desc": "1 appt rénovation ampleur H1 (forfait moyen)"},
+        {"smart": {"zone": "H2", "qty": 1}, "expected": 286000, "desc": "1 appt H2"}
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA12-1 ATEE BAR-TH-175",
+      "note": "V39: bonus selon sauts DPE. Idem BAR-TH-174 mais appartement"
+    },
+    "BAR-TH-176": {
+      "label": "Régulation chauffe-eau électrique à effet Joule",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par chauffe-eau électrique équipé d'une régulation programmable selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de chauffe-eau équipés", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 3100, "H2": 2500, "H3": 1800, "DOM": 1200},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 3100, "desc": "1 régul CE Joule H1"},
+        {"smart": {"zone": "H2", "qty": 5}, "expected": 12500, "desc": "5 régul H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA2-1 ATEE BAR-TH-176",
+      "note": "Forfait par appareil"
+    },
+    "BAR-TH-177": {
+      "label": "Rénovation globale d'un bâtiment résidentiel collectif",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Calcul par logement basé sur économies réalisées (gain Cep ≥ 35%) × surface. Audit énergétique obligatoire. Bonus selon % gain.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H1"},
+        {"id": "qty", "label": "Nombre de logements collectifs rénovés", "type": "number", "default": 30}
+      ],
+      "official_table": {"H1": 2100, "H2": 2100, "H3": 2100, "DOM": 1400},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 30}, "expected": 63000, "desc": "30 logements collectifs rénovés H1 (forfait moyen)"},
+        {"smart": {"zone": "DOM", "qty": 50}, "expected": 70000, "desc": "50 logts DOM"}
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA9-1 ATEE BAR-TH-177",
+      "note": "V39: calcul par gain Cep × surface. Forfait par logt utilisé"
+    },
+    "BAR-TH-178": {
+      "label": "Système géothermique résidentiel (sondes verticales)",
+      "model_type": "absolute_per_zone_qty_factor",
+      "formula_summary": "Forfait par système géothermique installé (sondes verticales) selon zone × type logement.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "type_logement", "label": "Type logement", "type": "select", "options": ["maison", "appartement"], "default": "maison"},
+        {"id": "qty", "label": "Nombre de systèmes installés", "type": "number", "default": 1}
+      ],
+      "official_table": {
+        "maison": {"H1": 72000, "H2": 59000, "H3": 42000, "DOM": 28000},
+        "appartement": {"H1": 34000, "H2": 28000, "H3": 20000, "DOM": 13000}
+      },
+      "test_cases": [
+        {"smart": {"zone": "H1", "type_logement": "maison", "qty": 1}, "expected": 72000, "desc": "1 géo maison H1"},
+        {"smart": {"zone": "H2", "type_logement": "maison", "qty": 1}, "expected": 59000, "desc": "1 géo maison H2"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA4-1 ATEE BAR-TH-178",
+      "note": "Géothermie sondes verticales (forage)"
+    },
+    "BAR-TH-179": {
+      "label": "Pompe à chaleur collective de type air/eau",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par kW de puissance PAC collective air/eau (chauffage/ECS bâtiment collectif) selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Puissance PAC (kW)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 5400, "H2": 4400, "H3": 3200, "DOM": 2100},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 100}, "expected": 540000, "desc": "100 kW PAC collective air/eau H1"},
+        {"smart": {"zone": "H2", "qty": 200}, "expected": 880000, "desc": "200 kW H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA3-1 ATEE BAR-TH-179",
+      "note": "Forfait par kW"
+    },
+    "BAR-TH-180": {
+      "label": "Pompe à chaleur collective de type eau/eau",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par kW de puissance PAC collective eau/eau ou géothermique sol/eau (collectif) selon zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Puissance PAC (kW)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 6500, "H2": 5300, "H3": 3800, "DOM": 2500},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 100}, "expected": 650000, "desc": "100 kW PAC géo collective H1"},
+        {"smart": {"zone": "H2", "qty": 200}, "expected": 1060000, "desc": "200 kW H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA3-1 ATEE BAR-TH-180",
+      "note": "Forfait par kW PAC eau/eau"
+    },
+    "BAR-EQ-115": {
+      "label": "Système d'affichage des consommations d'énergie",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par logement équipé d'un système d'affichage en temps réel des consommations.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de logements équipés", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 1460, "H2": 1190, "H3": 860, "DOM": 570},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 1460, "desc": "1 logement affichage H1"},
+        {"smart": {"zone": "H2", "qty": 50}, "expected": 59500, "desc": "50 logts H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA3-1 ATEE BAR-EQ-115",
+      "note": "Forfait par logement"
+    },
+    "BAR-SE-105": {
+      "label": "Contrat de performance énergétique services (CPE résidentiel)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par logement couvert par un CPE services. Engagement contractuel sur économies mesurées.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de logements", "type": "number", "default": 30}
+      ],
+      "official_table": {"H1": 7200, "H2": 5900, "H3": 4200, "DOM": 2800},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 30}, "expected": 216000, "desc": "30 logements CPE H1"},
+        {"smart": {"zone": "H2", "qty": 50}, "expected": 295000, "desc": "50 logements H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA2-1 ATEE BAR-SE-105",
+      "note": "Forfait par logement engagé"
+    },
+    "BAR-SE-106": {
+      "label": "Service de suivi des consommations d'énergie",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par logement bénéficiaire du service de suivi (durée minimale 3 ans).",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de logements suivis", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 810, "H2": 660, "H3": 470, "DOM": 320},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 810, "desc": "1 logement suivi H1"},
+        {"smart": {"zone": "H2", "qty": 100}, "expected": 66000, "desc": "100 logts H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA2-1 ATEE BAR-SE-106",
+      "note": "Forfait par logement"
+    },
+    "BAR-SE-108": {
+      "label": "Désembouage individuel d'un circuit de chauffage",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par opération de désembouage hydraulique individuelle (maison/logement).",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre d'opérations de désembouage", "type": "number", "default": 1}
+      ],
+      "official_table": {"H1": 11800, "H2": 9700, "H3": 6900, "DOM": 4600},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 1}, "expected": 11800, "desc": "1 désembouage H1"},
+        {"smart": {"zone": "H2", "qty": 2}, "expected": 19400, "desc": "2 opérations H2"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA2-1 ATEE BAR-SE-108",
+      "note": "Forfait par opération"
+    },
+    "BAR-EQ-112": {
+      "label": "Systèmes hydro-économes (résidentiel)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par point d'eau équipé d'un système hydro-économe (mousseur, douchette, mitigeur thermostatique). Indépendant de la zone.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"], "default": "H2"},
+        {"id": "qty", "label": "Nombre de points d'eau équipés", "type": "number", "default": 5}
+      ],
+      "official_table": {"H1": 920, "H2": 920, "H3": 920, "DOM": 920},
+      "test_cases": [
+        {"smart": {"zone": "H1", "qty": 5}, "expected": 4600, "desc": "5 points d'eau H1"},
+        {"smart": {"zone": "H2", "qty": 10}, "expected": 9200, "desc": "10 points d'eau"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA4-1 ATEE BAR-EQ-112",
+      "note": "Forfait identique toutes zones"
+    },
+    "BAR-EN-106": {
+      "label": "Isolation des combles ou de toitures (DOM)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par m² isolé en combles/toitures DOM uniquement. R ≥ 1,5 m².K/W.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "qty", "label": "Surface isolée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 600},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "qty": 100}, "expected": 60000, "desc": "100 m² combles DOM"},
+        {"smart": {"zone": "DOM", "qty": 200}, "expected": 120000, "desc": "200 m² DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA20-1 ATEE BAR-EN-106",
+      "note": "DOM uniquement"
+    },
+    "BAR-EN-107": {
+      "label": "Isolation des murs (DOM)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par m² isolé en murs DOM uniquement. R ≥ 0,5 m².K/W.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "qty", "label": "Surface murs isolés (m²)", "type": "number", "default": 50}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 590},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "qty": 50}, "expected": 29500, "desc": "50 m² murs DOM"},
+        {"smart": {"zone": "DOM", "qty": 100}, "expected": 59000, "desc": "100 m² DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-1 ATEE BAR-EN-107",
+      "note": "DOM uniquement"
+    },
+    "BAR-EN-109": {
+      "label": "Réduction des apports solaires par la toiture (DOM)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par m² de toiture protégée (peinture réflective ou pare-soleil) DOM uniquement.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "qty", "label": "Surface toiture protégée (m²)", "type": "number", "default": 100}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 400},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "qty": 100}, "expected": 40000, "desc": "100 m² toiture DOM"},
+        {"smart": {"zone": "DOM", "qty": 200}, "expected": 80000, "desc": "200 m² DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA9-1 ATEE BAR-EN-109",
+      "note": "DOM uniquement"
+    },
+    "BAR-TH-135": {
+      "label": "Chauffe-eau solaire collectif (DOM)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "Forfait par m² de capteurs solaires thermiques pour ECS collectif DOM uniquement.",
+      "inputs": [
+        {"id": "zone", "label": "Zone climatique", "type": "select", "options": ["DOM"], "default": "DOM"},
+        {"id": "qty", "label": "Surface capteurs (m²)", "type": "number", "default": 20}
+      ],
+      "official_table": {"H1": 0, "H2": 0, "H3": 0, "DOM": 5500},
+      "test_cases": [
+        {"smart": {"zone": "DOM", "qty": 20}, "expected": 110000, "desc": "20 m² CESC DOM"},
+        {"smart": {"zone": "DOM", "qty": 50}, "expected": 275000, "desc": "50 m² DOM"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA12-1 ATEE BAR-TH-135",
+      "note": "DOM uniquement"
+    }
+  }
+}

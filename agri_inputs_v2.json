@@ -1,0 +1,444 @@
+{
+  "_meta": {
+    "version": "V38.8e",
+    "date": "2026-05-11",
+    "source": "PDF ministère + ATEE + ADEME calculateur (AGRI)",
+    "total_entries": 25,
+    "note_globale": "Forfaits cumac issus du calculateur ADEME (z par zone H1/H2/H3/DOM). Pour formules complexes (PAC serres, PAC lait, VEV moteurs) reprise de l'existant V38 (TH-103, EQ-109)."
+  },
+  "fiches": {
+    "AGRI-EQ-101": {
+      "label": "Module intégration T° ordinateur climatique (serres)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait_zone (70 kWh/m² toutes zones)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface de serre équipée (m²)", "type": "number", "min": 100, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 70, "H2": 70, "H3": 70, "DOM": 70},
+      "test_cases": [
+        {"in": {"surface_m2": 1000, "zone": "H1"}, "out_cumac": 70000},
+        {"in": {"surface_m2": 5000, "zone": "H3"}, "out_cumac": 350000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA29-2 ATEE",
+      "note": "Forfait identique toutes zones (intérieur serre)."
+    },
+    "AGRI-EQ-102": {
+      "label": "Double écran thermique serres",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait_zone (240 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface équipée double écran (m²)", "type": "number", "min": 100, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 240, "H2": 240, "H3": 240, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 2000, "zone": "H1"}, "out_cumac": 480000},
+        {"in": {"surface_m2": 1500, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA32-2 ATEE",
+      "note": "Non éligible DOM (pas de chauffage actif)."
+    },
+    "AGRI-EQ-104": {
+      "label": "Écrans thermiques latéraux serres",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_paroi_m2 × forfait_zone (22 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface paroi latérale équipée (m²)", "type": "number", "min": 50, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 22, "H2": 22, "H3": 22, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 800, "zone": "H2"}, "out_cumac": 17600},
+        {"in": {"surface_m2": 800, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA34-1 ATEE",
+      "note": "Surface = parois latérales uniquement."
+    },
+    "AGRI-EQ-105": {
+      "label": "Stop & Start véhicules agricoles (tracteurs)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = nb_véhicules × forfait (18 400 toutes zones)",
+      "inputs": [
+        {"name": "nb_vehicules", "label": "Nombre de tracteurs équipés Stop&Start", "type": "number", "min": 1, "unit": "véhicule"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 18400, "H2": 18400, "H3": 18400, "DOM": 18400},
+      "test_cases": [
+        {"in": {"nb_vehicules": 1, "zone": "H1"}, "out_cumac": 18400},
+        {"in": {"nb_vehicules": 5, "zone": "H3"}, "out_cumac": 92000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA35-1 ATEE",
+      "note": "Forfait par véhicule équipé d'un système Stop&Start homologué."
+    },
+    "AGRI-EQ-106": {
+      "label": "Régulation ventilation silos céréales",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = volume_silo_m3 × forfait (10 toutes zones)",
+      "inputs": [
+        {"name": "volume_m3", "label": "Volume total silos régulés (m³)", "type": "number", "min": 50, "unit": "m³"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 10, "H2": 10, "H3": 10, "DOM": 10},
+      "test_cases": [
+        {"in": {"volume_m3": 2000, "zone": "H1"}, "out_cumac": 20000},
+        {"in": {"volume_m3": 5000, "zone": "DOM"}, "out_cumac": 50000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA36-1 ATEE",
+      "note": "Forfait par m³ utile de silo équipé d'un automate de ventilation thermo-hygrométrique."
+    },
+    "AGRI-EQ-107": {
+      "label": "Isolation parois de serre",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_isolée_m2 × forfait (92 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface paroi isolée (m²)", "type": "number", "min": 50, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 92, "H2": 92, "H3": 92, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 500, "zone": "H1"}, "out_cumac": 46000},
+        {"in": {"surface_m2": 500, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA37-1 ATEE",
+      "note": "R ≥ 1 m².K/W requis sur paroi nord."
+    },
+    "AGRI-EQ-108": {
+      "label": "Stockage eau serre bioclimatique",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = volume_stock_m3 × forfait_zone (2200/1800/1300/1100)",
+      "inputs": [
+        {"name": "volume_m3", "label": "Volume utile stockage eau (m³)", "type": "number", "min": 5, "unit": "m³"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 2200, "H2": 1800, "H3": 1300, "DOM": 1100},
+      "test_cases": [
+        {"in": {"volume_m3": 50, "zone": "H1"}, "out_cumac": 110000},
+        {"in": {"volume_m3": 100, "zone": "H3"}, "out_cumac": 130000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA38-1 ATEE",
+      "note": "Stockage tampon d'eau chaude basse T° en serre maraîchère."
+    },
+    "AGRI-EQ-110": {
+      "label": "Séchage solaire panneaux hybrides",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = nb_installations × forfait (15 600 toutes zones)",
+      "inputs": [
+        {"name": "nb_installations", "label": "Nombre d'installations de séchage solaire", "type": "number", "min": 1, "unit": "unité"},
+        {"name": "surface_panneaux_m2", "label": "Surface totale panneaux hybrides (m², indicatif)", "type": "number", "min": 10, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 15600, "H2": 15600, "H3": 15600, "DOM": 15600},
+      "test_cases": [
+        {"in": {"nb_installations": 1, "surface_panneaux_m2": 50, "zone": "H1"}, "out_cumac": 15600},
+        {"in": {"nb_installations": 3, "surface_panneaux_m2": 150, "zone": "H3"}, "out_cumac": 46800}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA40-1 ATEE",
+      "note": "Forfait par installation de séchage solaire à panneaux PVT (photovoltaïque/thermique)."
+    },
+    "AGRI-EQ-111": {
+      "label": "Simple écran thermique serres",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (240 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface équipée simple écran (m²)", "type": "number", "min": 100, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 240, "H2": 240, "H3": 240, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 1000, "zone": "H1"}, "out_cumac": 240000},
+        {"in": {"surface_m2": 1000, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA41-1 ATEE",
+      "note": "Identique forfait double écran (méthodologie ADEME)."
+    },
+    "AGRI-EQ-112": {
+      "label": "Double paroi gonflable serres",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_paroi_m2 × forfait (290 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface paroi gonflable double (m²)", "type": "number", "min": 50, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 290, "H2": 290, "H3": 290, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 600, "zone": "H1"}, "out_cumac": 174000},
+        {"in": {"surface_m2": 600, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA42-1 ATEE",
+      "note": "Système air pulsé entre 2 films plastiques."
+    },
+    "AGRI-SE-101": {
+      "label": "Contrôle réglage moteur tracteur",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = nb_moteurs_contrôlés × forfait (16 800 toutes zones)",
+      "inputs": [
+        {"name": "nb_moteurs", "label": "Nombre de moteurs tracteur contrôlés/réglés", "type": "number", "min": 1, "unit": "moteur"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 16800, "H2": 16800, "H3": 16800, "DOM": 16800},
+      "test_cases": [
+        {"in": {"nb_moteurs": 1, "zone": "H1"}, "out_cumac": 16800},
+        {"in": {"nb_moteurs": 4, "zone": "H3"}, "out_cumac": 67200}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA28-2 ATEE",
+      "note": "Forfait par moteur ayant subi un contrôle/réglage banc d'essai conforme."
+    },
+    "AGRI-TH-101": {
+      "label": "Stockage eau chaude Open Buffer (serres maraîchères)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (96 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface serre desservie (m²)", "type": "number", "min": 1000, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 96, "H2": 96, "H3": 96, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 5000, "zone": "H1"}, "out_cumac": 480000},
+        {"in": {"surface_m2": 5000, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA10-2 ATEE",
+      "note": "Cuve open buffer ouverte (serres horticoles maraîchères)."
+    },
+    "AGRI-TH-102": {
+      "label": "Stockage eau chaude (cuve isolée)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = volume_cuve_m3 × forfait_zone (4800/4000/2800/2400)",
+      "inputs": [
+        {"name": "volume_m3", "label": "Volume utile cuve isolée (m³)", "type": "number", "min": 5, "unit": "m³"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 4800, "H2": 4000, "H3": 2800, "DOM": 2400},
+      "test_cases": [
+        {"in": {"volume_m3": 30, "zone": "H1"}, "out_cumac": 144000},
+        {"in": {"volume_m3": 30, "zone": "H3"}, "out_cumac": 84000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA11-2 ATEE",
+      "note": "Cuve fermée isolée couplée chaudière biomasse / cogénération."
+    },
+    "AGRI-TH-103": {
+      "label": "Pré-refroidisseur de lait",
+      "model_type": "fixed_formula_lait",
+      "formula_summary": "kWh cumac = production_litres_an × 0,113 × durée_lots (15 ans plafonné)",
+      "inputs": [
+        {"name": "litres_lait_an", "label": "Production annuelle de lait (L/an)", "type": "number", "min": 10000, "unit": "L"},
+        {"name": "duree_lots", "label": "Durée d'amortissement (années, max 15)", "type": "number", "min": 1, "max": 15, "default": 15, "unit": "an"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 0.113, "H2": 0.113, "H3": 0.113, "DOM": 0.113, "duree_max": 15},
+      "test_cases": [
+        {"in": {"litres_lait_an": 500000, "duree_lots": 15, "zone": "H1"}, "out_cumac": 847500},
+        {"in": {"litres_lait_an": 200000, "duree_lots": 10, "zone": "H3"}, "out_cumac": 226000}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA13-3 ATEE (modèle fixed_formula_lait V38)",
+      "note": "Modèle déjà implémenté V38 pour AGRI-TH-105. Coefficient 0,113 kWh cumac/L identique."
+    },
+    "AGRI-TH-108": {
+      "label": "PAC eau/eau ou air/eau pour serres maraîchères/horticoles",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = puissance_kW × forfait_zone (5700/4700/3300/2900) × coef_type_serre",
+      "inputs": [
+        {"name": "puissance_kw", "label": "Puissance thermique PAC installée (kW)", "type": "number", "min": 10, "unit": "kW"},
+        {"name": "type_serre", "label": "Type de serre", "type": "select", "options": ["maraichere", "horticole"]},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {
+        "H1": 5700, "H2": 4700, "H3": 3300, "DOM": 2900,
+        "coef_maraichere": 1.0, "coef_horticole": 0.85
+      },
+      "test_cases": [
+        {"in": {"puissance_kw": 100, "type_serre": "maraichere", "zone": "H1"}, "out_cumac": 570000},
+        {"in": {"puissance_kw": 100, "type_serre": "horticole", "zone": "H3"}, "out_cumac": 280500}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA20-2 ATEE",
+      "note": "Forfait par kW puissance × coefficient type serre. COP minimum 3,5 (eau/eau) ou 3 (air/eau)."
+    },
+    "AGRI-TH-109": {
+      "label": "Récupération chaleur condensation serre",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (86 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface serre équipée récupération condensation (m²)", "type": "number", "min": 500, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 86, "H2": 86, "H3": 86, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 3000, "zone": "H1"}, "out_cumac": 258000},
+        {"in": {"surface_m2": 3000, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA21-1 ATEE",
+      "note": "Échangeur de récupération sur fumées chaudière serre."
+    },
+    "AGRI-TH-110": {
+      "label": "Chaudière HPE serres (>400 kW)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (150 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface serre chauffée (m²)", "type": "number", "min": 2000, "unit": "m²"},
+        {"name": "puissance_kw", "label": "Puissance chaudière HPE (kW)", "type": "number", "min": 400, "unit": "kW"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 150, "H2": 150, "H3": 150, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 5000, "puissance_kw": 600, "zone": "H1"}, "out_cumac": 750000},
+        {"in": {"surface_m2": 5000, "puissance_kw": 600, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-2 ATEE",
+      "note": "Chaudière Haute Performance Énergétique (rendement PCI ≥ 92%) > 400 kW."
+    },
+    "AGRI-TH-113": {
+      "label": "Échangeur récupération chaleur élevage volailles",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = nb_échangeurs × forfait_zone (5400/4500/3200/2700)",
+      "inputs": [
+        {"name": "nb_echangeurs", "label": "Nombre d'échangeurs installés", "type": "number", "min": 1, "unit": "unité"},
+        {"name": "surface_batiment_m2", "label": "Surface bâtiment élevage (m², indicatif)", "type": "number", "min": 200, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 5400, "H2": 4500, "H3": 3200, "DOM": 2700},
+      "test_cases": [
+        {"in": {"nb_echangeurs": 2, "surface_batiment_m2": 1200, "zone": "H1"}, "out_cumac": 10800},
+        {"in": {"nb_echangeurs": 2, "surface_batiment_m2": 1200, "zone": "DOM"}, "out_cumac": 5400}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA25-1 ATEE",
+      "note": "Forfait par échangeur air/air installé sur ventilation bâtiment volailles."
+    },
+    "AGRI-TH-117": {
+      "label": "Déshumidificateur thermodynamique fixe serres chauffées",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (710 toutes zones)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface serre équipée (m²)", "type": "number", "min": 500, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 710, "H2": 710, "H3": 710, "DOM": 710},
+      "test_cases": [
+        {"in": {"surface_m2": 2000, "zone": "H1"}, "out_cumac": 1420000},
+        {"in": {"surface_m2": 2000, "zone": "DOM"}, "out_cumac": 1420000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA48-1 ATEE",
+      "note": "Forfait identique toutes zones (déshumidification = bénéfice climatique uniforme)."
+    },
+    "AGRI-TH-118": {
+      "label": "Double tube chauffage serres maraîchères",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (370 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface serre maraîchère équipée double tube (m²)", "type": "number", "min": 500, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 370, "H2": 370, "H3": 370, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 4000, "zone": "H1"}, "out_cumac": 1480000},
+        {"in": {"surface_m2": 4000, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA49-1 ATEE",
+      "note": "Système chauffage double étage (haut/bas) en serres maraîchères chauffées."
+    },
+    "AGRI-TH-119": {
+      "label": "Déshumidification air extérieur serres maraîchères",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = surface_serre_m2 × forfait (440 H1/H2/H3, 0 DOM)",
+      "inputs": [
+        {"name": "surface_m2", "label": "Surface serre équipée (m²)", "type": "number", "min": 500, "unit": "m²"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 440, "H2": 440, "H3": 440, "DOM": 0},
+      "test_cases": [
+        {"in": {"surface_m2": 3000, "zone": "H1"}, "out_cumac": 1320000},
+        {"in": {"surface_m2": 3000, "zone": "DOM"}, "out_cumac": 0}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA50-1 ATEE",
+      "note": "Système échangeur air extérieur préchauffé pour déshumidifier serre maraîchère."
+    },
+    "AGRI-UT-101": {
+      "label": "Moto-variateur synchrone aimants/réluctance (agriculture)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = puissance_moteur_kW × forfait (4500 toutes zones)",
+      "inputs": [
+        {"name": "puissance_kw", "label": "Puissance nominale moteur synchrone (kW)", "type": "number", "min": 0.75, "max": 375, "unit": "kW"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 4500, "H2": 4500, "H3": 4500, "DOM": 4500},
+      "test_cases": [
+        {"in": {"puissance_kw": 11, "zone": "H1"}, "out_cumac": 49500},
+        {"in": {"puissance_kw": 75, "zone": "H3"}, "out_cumac": 337500}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-2 ATEE (analogue IND-UT-102)",
+      "note": "Moteur synchrone à aimants permanents ou réluctance (IE5). Forfait par kW utile."
+    },
+    "AGRI-UT-102": {
+      "label": "VEV moteur asynchrone (agriculture)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = puissance_moteur_kW × forfait (2300 toutes zones)",
+      "inputs": [
+        {"name": "puissance_kw", "label": "Puissance nominale moteur asynchrone (kW)", "type": "number", "min": 0.75, "max": 500, "unit": "kW"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 2300, "H2": 2300, "H3": 2300, "DOM": 2300},
+      "test_cases": [
+        {"in": {"puissance_kw": 22, "zone": "H1"}, "out_cumac": 50600},
+        {"in": {"puissance_kw": 110, "zone": "H3"}, "out_cumac": 253000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA16-2 ATEE (analogue IND-UT-114)",
+      "note": "Variateur électronique vitesse sur moteur asynchrone existant. Couple variable type pompe/ventilateur."
+    },
+    "AGRI-UT-103": {
+      "label": "Régulation basse pression flottante (groupe froid agri)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = puissance_compresseur_kW × forfait (830 toutes zones)",
+      "inputs": [
+        {"name": "puissance_kw", "label": "Puissance électrique compresseur(s) (kW)", "type": "number", "min": 5, "unit": "kW"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 830, "H2": 830, "H3": 830, "DOM": 830},
+      "test_cases": [
+        {"in": {"puissance_kw": 30, "zone": "H1"}, "out_cumac": 24900},
+        {"in": {"puissance_kw": 75, "zone": "DOM"}, "out_cumac": 62250}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA45-1 ATEE",
+      "note": "Régulation BP flottante sur groupe froid (laiterie, conservation fruits/légumes)."
+    },
+    "AGRI-UT-104": {
+      "label": "Régulation haute pression flottante (groupe froid agri)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWh cumac = puissance_compresseur_kW × forfait_zone (10600/10600/9700/9700)",
+      "inputs": [
+        {"name": "puissance_kw", "label": "Puissance électrique compresseur(s) (kW)", "type": "number", "min": 5, "unit": "kW"},
+        {"name": "zone", "label": "Zone climatique", "type": "select", "options": ["H1", "H2", "H3", "DOM"]}
+      ],
+      "official_table": {"H1": 10600, "H2": 10600, "H3": 9700, "DOM": 9700},
+      "test_cases": [
+        {"in": {"puissance_kw": 30, "zone": "H1"}, "out_cumac": 318000},
+        {"in": {"puissance_kw": 30, "zone": "H3"}, "out_cumac": 291000}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA46-1 ATEE",
+      "note": "Régulation HP flottante sur condenseur(s) groupe froid (gain saisonnier majeur)."
+    }
+  }
+}

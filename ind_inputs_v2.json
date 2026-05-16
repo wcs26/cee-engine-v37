@@ -1,0 +1,844 @@
+{
+  "_meta": {
+    "version": "V38.8d",
+    "date": "2026-05-11",
+    "source": "PDF ministère + ATEE — fiches IND P6 2025-2026",
+    "total_entries": 30,
+    "purpose": "Inputs requis par fiche IND pour calcul officiel exact (model_type). Réutilise les model_types existants : absolute_per_horaires_chaudiere (IND-UT-104), absolute_per_usage_moteur (IND-UT-102/114), absolute_per_zone, fixed_formula, forfait_legacy."
+  },
+  "fiches": {
+    "IND-BA-110": {
+      "label": "Déstratificateur ou brasseur d'air industriel (h≥5m)",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 4 000 × P_kW (forfait unique toutes zones, h plafond ≥ 5 m)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance chauffage zone équipée (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 4000,
+        "zones": ["H1", "H2", "H3", "DOM"],
+        "condition": "h sous plafond ≥ 5 m"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50}, "expected": 200000, "desc": "50 kW déstratification = 200k cumac"},
+        {"smart": {"P_kW": 200}, "expected": 800000, "desc": "200 kW = 800k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA29-1 ATEE",
+      "note": "Forfait par kW chauffage de la zone équipée. Hauteur plafond ≥ 5 m obligatoire."
+    },
+    "IND-EN-101": {
+      "label": "Isolation murs industriel (DOM-TOM uniquement)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = 270 × surface_m² (DOM uniquement, métropole = 0)",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface murs isolés (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique (DOM uniquement)",
+          "type": "select",
+          "options": ["DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 0, "H2": 0, "H3": 0, "DOM": 270
+      },
+      "test_cases": [
+        {"smart": {"surface_m2": 100, "zone": "DOM"}, "expected": 27000, "desc": "100 m² murs DOM = 27k cumac"},
+        {"smart": {"surface_m2": 500, "zone": "DOM"}, "expected": 135000, "desc": "500 m² = 135k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA13-1 ATEE",
+      "note": "Fiche réservée DOM-TOM. Métropole = 0 (couvert par BAT-EN-102/IND-UT-131)."
+    },
+    "IND-EN-102": {
+      "label": "Isolation combles/toitures industriel (DOM-TOM uniquement)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = 110 × surface_m² (DOM uniquement, métropole = 0)",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface combles/toitures isolées (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique (DOM uniquement)",
+          "type": "select",
+          "options": ["DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 0, "H2": 0, "H3": 0, "DOM": 110
+      },
+      "test_cases": [
+        {"smart": {"surface_m2": 200, "zone": "DOM"}, "expected": 22000, "desc": "200 m² toiture DOM = 22k cumac"},
+        {"smart": {"surface_m2": 1000, "zone": "DOM"}, "expected": 110000, "desc": "1000 m² = 110k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA13-2 ATEE",
+      "note": "Fiche réservée DOM-TOM."
+    },
+    "IND-EN-103": {
+      "label": "Isolation plancher industriel",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait_zone × surface_m² (H1=21, H2=17, H3=12, DOM=8)",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface plancher isolée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": ["H1", "H2", "H3", "DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 21, "H2": 17, "H3": 12, "DOM": 8
+      },
+      "test_cases": [
+        {"smart": {"surface_m2": 500, "zone": "H1"}, "expected": 10500, "desc": "500 m² H1 = 10.5k cumac"},
+        {"smart": {"surface_m2": 1000, "zone": "H2"}, "expected": 17000, "desc": "1000 m² H2 = 17k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA13-3 ATEE",
+      "note": "Tous bâtiments industriels."
+    },
+    "IND-UT-103": {
+      "label": "Récupération chaleur sur compresseur d'air industriel",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 6 400 × P_recup_kW (cap : ≤ P_compresseurs)",
+      "inputs": [
+        {
+          "id": "P_recup_kW",
+          "label": "Puissance thermique récupérée (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        },
+        {
+          "id": "P_compresseurs_kW",
+          "label": "Puissance électrique compresseurs (kW) — cap",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW_recup": 6400,
+        "cap_rule": "P_recup ≤ P_compresseurs"
+      },
+      "test_cases": [
+        {"smart": {"P_recup_kW": 30, "P_compresseurs_kW": 75}, "expected": 192000, "desc": "30 kW récup compresseur = 192k cumac"},
+        {"smart": {"P_recup_kW": 100, "P_compresseurs_kW": 200}, "expected": 640000, "desc": "100 kW récup = 640k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-3 ATEE",
+      "note": "Similaire BAT-TH-139. Cap : la puissance récupérée ne peut pas dépasser la puissance des compresseurs."
+    },
+    "IND-UT-105": {
+      "label": "Brûleur micro-modulant chaudière industrielle (P<20MW)",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 550 × P_kW (chaudière vapeur/eau surchauffée < 20 MW)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance utile chaudière (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 100,
+          "max": 20000
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 550,
+        "limite_puissance_kW": 20000
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 1000}, "expected": 550000, "desc": "1 MW brûleur micro-modulant = 550k cumac"},
+        {"smart": {"P_kW": 5000}, "expected": 2750000, "desc": "5 MW = 2.75M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-5 ATEE",
+      "note": "Forfait par kW utile chaudière. Plafond 20 MW."
+    },
+    "IND-UT-113": {
+      "label": "Récupérateur chaleur fumées chaudière",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait_zone × P_recup_kW (H1=12400, H2=10200, H3=7300, DOM=4900)",
+      "inputs": [
+        {
+          "id": "P_recup_kW",
+          "label": "Puissance thermique récupérée fumées (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": ["H1", "H2", "H3", "DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 12400, "H2": 10200, "H3": 7300, "DOM": 4900
+      },
+      "test_cases": [
+        {"smart": {"P_recup_kW": 50, "zone": "H1"}, "expected": 620000, "desc": "50 kW récup fumées H1 = 620k cumac"},
+        {"smart": {"P_recup_kW": 200, "zone": "H2"}, "expected": 2040000, "desc": "200 kW H2 = 2.04M cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-13 ATEE",
+      "note": "Différenciation zone (chauffage de complément). Similaire BAT-TH-139 mais zone-dépendant."
+    },
+    "IND-UT-116": {
+      "label": "Régulation haute pression flottante (industrie)",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 10 400 × P_kW (compresseurs froid industriel)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance compresseurs froid (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 10400,
+        "zones": ["H1", "H2", "H3", "DOM"]
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 100}, "expected": 1040000, "desc": "100 kW HP flottante = 1.04M cumac"},
+        {"smart": {"P_kW": 500}, "expected": 5200000, "desc": "500 kW = 5.2M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-16 ATEE",
+      "note": "Forfait unique par kW compresseur froid industriel (procédé)."
+    },
+    "IND-UT-120": {
+      "label": "Compresseur air basse pression",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 19 300 × P_kW (compresseur BP < 4 bar)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance électrique compresseur BP (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 19300,
+        "condition": "Pression de service < 4 bar"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50}, "expected": 965000, "desc": "50 kW compresseur BP = 965k cumac"},
+        {"smart": {"P_kW": 150}, "expected": 2895000, "desc": "150 kW = 2.9M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-20 ATEE",
+      "note": "Compresseur dédié basse pression (alternative aux compresseurs HP détendus)."
+    },
+    "IND-UT-122": {
+      "label": "Sécheur air comprimé adsorption (régénération calorifique)",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 2 300 × debit_kW_equiv (sécheur sans purge à chaud)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance équivalente sécheur (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 1
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 2300
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 20}, "expected": 46000, "desc": "20 kW sécheur adsorption = 46k cumac"},
+        {"smart": {"P_kW": 100}, "expected": 230000, "desc": "100 kW = 230k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-22 ATEE",
+      "note": "Sécheur adsorption avec régénération par chaleur (non par purge air comprimé)."
+    },
+    "IND-UT-124": {
+      "label": "Séquenceur centrale air comprimé",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 560 × P_total_kW (centrale ≥ 2 compresseurs)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance totale centrale air comprimé (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 560,
+        "condition": "Centrale ≥ 2 compresseurs"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 100}, "expected": 56000, "desc": "100 kW centrale = 56k cumac"},
+        {"smart": {"P_kW": 500}, "expected": 280000, "desc": "500 kW = 280k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-24 ATEE",
+      "note": "Régulation centrale gérant ≥ 2 compresseurs en cascade."
+    },
+    "IND-UT-125": {
+      "label": "Traitement eau chaudière vapeur",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 70 × P_kW chaudière vapeur",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance utile chaudière vapeur (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 100
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 70
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 1000}, "expected": 70000, "desc": "1 MW vapeur traitée = 70k cumac"},
+        {"smart": {"P_kW": 5000}, "expected": 350000, "desc": "5 MW = 350k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-25 ATEE",
+      "note": "Adoucisseur/déminéralisation pour chaudière vapeur. Faible coef."
+    },
+    "IND-UT-127": {
+      "label": "Système transmission performant",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 6 100 × P_moteur_kW (transmission haut rendement)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance moteur entraîné (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 0.75
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 6100
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 11}, "expected": 67100, "desc": "11 kW transmission = 67.1k cumac"},
+        {"smart": {"P_kW": 75}, "expected": 457500, "desc": "75 kW = 457.5k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-27 ATEE",
+      "note": "Réducteur engrenages, courroie crantée, accouplement direct vs poulies-courroies plates."
+    },
+    "IND-UT-129": {
+      "label": "Presse injection tout électrique/hybride",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 12 000 × P_kW (force de fermeture exprimée en kW équivalent)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance électrique installée presse (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 12000
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50}, "expected": 600000, "desc": "50 kW presse électrique = 600k cumac"},
+        {"smart": {"P_kW": 200}, "expected": 2400000, "desc": "200 kW = 2.4M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-29 ATEE",
+      "note": "Plasturgie. Remplace presse hydraulique par tout électrique ou hybride."
+    },
+    "IND-UT-130": {
+      "label": "Condenseur effluents gazeux chaudière",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 340 × P_kW chaudière (condensation fumées humides)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance utile chaudière (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 100
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 340
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 1000}, "expected": 340000, "desc": "1 MW condenseur = 340k cumac"},
+        {"smart": {"P_kW": 3000}, "expected": 1020000, "desc": "3 MW = 1.02M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-30 ATEE",
+      "note": "Condenseur fumées récupérant la chaleur latente vapeur d'eau. Différent de IND-UT-113."
+    },
+    "IND-UT-131": {
+      "label": "Isolation parois planes/cylindriques",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = 4 200 × surface_m² (calorifuge process > 60°C)",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface isolée (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 1
+        }
+      ],
+      "official_table": {
+        "H1": 4200, "H2": 4200, "H3": 4200, "DOM": 4200
+      },
+      "test_cases": [
+        {"smart": {"surface_m2": 100}, "expected": 420000, "desc": "100 m² calorifuge = 420k cumac"},
+        {"smart": {"surface_m2": 500}, "expected": 2100000, "desc": "500 m² = 2.1M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-31 ATEE",
+      "note": "Calorifugeage parois process (réservoir, tuyauterie) T° > 60°C. Forfait unique toutes zones."
+    },
+    "IND-UT-132": {
+      "label": "Moteur asynchrone IE4",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 2 200 × P_kW (moteur asynchrone IE4 / SuperPremium)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance moteur (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 0.75,
+          "max": 375
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 2200,
+        "classe": "IE4 IEC 60034-30-1"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 11}, "expected": 24200, "desc": "11 kW moteur IE4 = 24.2k cumac"},
+        {"smart": {"P_kW": 75}, "expected": 165000, "desc": "75 kW = 165k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-32 ATEE",
+      "note": "Moteur classe IE4 (Super-Premium). Plafond 375 kW selon norme IEC."
+    },
+    "IND-UT-133": {
+      "label": "Système pilotage moteur récupération",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 6 100 × P_kW (variateur 4 quadrants avec récupération freinage)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance moteur piloté (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 6100
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50}, "expected": 305000, "desc": "50 kW pilotage récup = 305k cumac"},
+        {"smart": {"P_kW": 200}, "expected": 1220000, "desc": "200 kW = 1.22M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-33 ATEE",
+      "note": "Variateur récupératif (renvoie l'énergie de freinage sur le réseau)."
+    },
+    "IND-UT-135": {
+      "label": "Freecooling eau refroidissement",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 9 400 × P_kW froid (échangeur free-cooling sur boucle eau)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance froid groupe (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 9400
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 100}, "expected": 940000, "desc": "100 kW free-cooling = 940k cumac"},
+        {"smart": {"P_kW": 500}, "expected": 4700000, "desc": "500 kW = 4.7M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-35 ATEE",
+      "note": "Free-cooling sur boucle eau de refroidissement (process / GTC)."
+    },
+    "IND-UT-137": {
+      "label": "PAC rehausse T° chaleur fatale",
+      "model_type": "forfait_legacy",
+      "formula_summary": "kWhc = 14 200 × P_thermique_kW (PAC haute température sur source fatale)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance thermique PAC (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        },
+        {
+          "id": "delta_T",
+          "label": "Élévation T° (°C) — info indicative",
+          "type": "number",
+          "unit": "°C",
+          "default": 30,
+          "min": 10,
+          "max": 80
+        },
+        {
+          "id": "heures_an",
+          "label": "Heures fonctionnement (h/an) — info indicative",
+          "type": "number",
+          "unit": "h",
+          "default": 6000,
+          "min": 1000
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 14200,
+        "condition": "PAC valorisant chaleur fatale ≥ 30°C, COP ≥ 3"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 100, "delta_T": 30, "heures_an": 6000}, "expected": 1420000, "desc": "100 kW PAC fatale = 1.42M cumac"},
+        {"smart": {"P_kW": 500, "delta_T": 40, "heures_an": 7000}, "expected": 7100000, "desc": "500 kW = 7.1M cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-37 ATEE (P6 2026)",
+      "note": "Nouveau forfait P6 2026. delta_T et heures_an pour information / cap éventuel selon arrêté final."
+    },
+    "IND-UT-138": {
+      "label": "Conversion chaleur fatale électricité/air",
+      "model_type": "forfait_legacy",
+      "formula_summary": "kWhc = 12 000 × P_kW (ORC ou turbine air chaud sur chaleur fatale)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance électrique/air produite (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        },
+        {
+          "id": "T_source",
+          "label": "T° source chaleur fatale (°C) — info",
+          "type": "number",
+          "unit": "°C",
+          "default": 200,
+          "min": 80
+        },
+        {
+          "id": "heures_an",
+          "label": "Heures fonctionnement (h/an)",
+          "type": "number",
+          "unit": "h",
+          "default": 7000,
+          "min": 1000
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 12000,
+        "condition": "ORC ou cycle Brayton sur chaleur fatale > 80°C"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50, "T_source": 200, "heures_an": 7000}, "expected": 600000, "desc": "50 kW ORC = 600k cumac"},
+        {"smart": {"P_kW": 500, "T_source": 300, "heures_an": 8000}, "expected": 6000000, "desc": "500 kW = 6M cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-38 ATEE (P6 2026)",
+      "note": "Nouveau forfait P6 2026. Conversion thermo-électrique (ORC) ou thermo-mécanique (air comprimé chaud)."
+    },
+    "IND-UT-139": {
+      "label": "Stockage chaleur fatale",
+      "model_type": "forfait_legacy",
+      "formula_summary": "kWhc = 14 200 × P_kW (stockage thermique inter-batch sur chaleur fatale)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance thermique stockée (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 10
+        },
+        {
+          "id": "capacite_kWh",
+          "label": "Capacité stockage (kWh) — info",
+          "type": "number",
+          "unit": "kWh",
+          "default": 1000,
+          "min": 100
+        },
+        {
+          "id": "heures_an",
+          "label": "Heures décharge utile (h/an)",
+          "type": "number",
+          "unit": "h",
+          "default": 4000,
+          "min": 500
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 14200,
+        "condition": "Stockage chaleur fatale ≥ 100 kWh, valorisé hors période production"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50, "capacite_kWh": 1000, "heures_an": 4000}, "expected": 710000, "desc": "50 kW stockage fatal = 710k cumac"},
+        {"smart": {"P_kW": 200, "capacite_kWh": 5000, "heures_an": 5000}, "expected": 2840000, "desc": "200 kW = 2.84M cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-39 ATEE (P6 2026)",
+      "note": "Nouveau forfait P6 2026. Stockage chaleur sensible/latente pour décalage temporel valorisation chaleur fatale."
+    },
+    "IND-UT-140": {
+      "label": "Mise en veille automatique machine air comprimé",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 30 × debit_L_min (machine arrêtée hors production)",
+      "inputs": [
+        {
+          "id": "debit_L_min",
+          "label": "Débit air consommé machine (L/min)",
+          "type": "number",
+          "unit": "L/min",
+          "min": 10
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_L_min": 30
+      },
+      "test_cases": [
+        {"smart": {"debit_L_min": 1000}, "expected": 30000, "desc": "1000 L/min mise veille = 30k cumac"},
+        {"smart": {"debit_L_min": 5000}, "expected": 150000, "desc": "5000 L/min = 150k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-40 ATEE",
+      "note": "Système coupant l'alimentation air comprimé d'une machine à l'arrêt. Forfait par L/min consommé en service."
+    },
+    "IND-UT-118": {
+      "label": "Brûleur récup chaleur four industriel",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 12 000 × P_kW four (brûleur autorégénératif/régénératif)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance utile four (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 100
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 12000,
+        "condition": "Four industriel T° > 600°C, brûleur régénératif/récupératif"
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 500}, "expected": 6000000, "desc": "500 kW four régénératif = 6M cumac"},
+        {"smart": {"P_kW": 2000}, "expected": 24000000, "desc": "2 MW = 24M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-18 ATEE",
+      "note": "Brûleur récupératif (préchauffage air combu par fumées) ou régénératif (lit céramique)."
+    },
+    "IND-BA-114": {
+      "label": "Conduits de lumière naturelle (industrie)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = 60 000 × surface_conduit_m² (réduction éclairage artificiel)",
+      "inputs": [
+        {
+          "id": "surface_m2",
+          "label": "Surface conduits lumière installés (m²)",
+          "type": "number",
+          "unit": "m²",
+          "min": 0.5
+        }
+      ],
+      "official_table": {
+        "H1": 60000, "H2": 60000, "H3": 60000, "DOM": 60000
+      },
+      "test_cases": [
+        {"smart": {"surface_m2": 5}, "expected": 300000, "desc": "5 m² conduits = 300k cumac"},
+        {"smart": {"surface_m2": 20}, "expected": 1200000, "desc": "20 m² = 1.2M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA29-14 ATEE",
+      "note": "Conduits de lumière (puits de lumière) en bâtiment industriel. Forfait élevé par m² ouverture utile."
+    },
+    "IND-BA-117": {
+      "label": "Chauffage décentralisé performant industrie (radiant)",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait_zone × P_kW (H1=1200, H2=980, H3=680, DOM=450)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance radiants installés (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": ["H1", "H2", "H3", "DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 1200, "H2": 980, "H3": 680, "DOM": 450
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 50, "zone": "H1"}, "expected": 60000, "desc": "50 kW radiants H1 = 60k cumac"},
+        {"smart": {"P_kW": 200, "zone": "H2"}, "expected": 196000, "desc": "200 kW H2 = 196k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA29-17 ATEE",
+      "note": "Tubes radiants gaz ou panneaux radiants électriques en remplacement chauffage central."
+    },
+    "IND-UT-106": {
+      "label": "Brûleur micro-modulant condensation",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait_zone × P_kW (H1=175, H2=150, H3=120, DOM=90)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance chaudière (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 50,
+          "max": 20000
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": ["H1", "H2", "H3", "DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 175, "H2": 150, "H3": 120, "DOM": 90
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 1000, "zone": "H1"}, "expected": 175000, "desc": "1 MW micro-modulant condensation H1 = 175k cumac"},
+        {"smart": {"P_kW": 5000, "zone": "H2"}, "expected": 750000, "desc": "5 MW H2 = 750k cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-6 ATEE",
+      "note": "Brûleur condensation modulant gain marginal vs IND-UT-105 — coef faible, zone-dépendant."
+    },
+    "IND-UT-108": {
+      "label": "Détection fuites réseau air comprimé",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 3 600 × P_compresseurs_kW (audit + colmatage fuites)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance électrique totale compresseurs (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 5
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 3600
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 100}, "expected": 360000, "desc": "100 kW compresseurs détection fuites = 360k cumac"},
+        {"smart": {"P_kW": 500}, "expected": 1800000, "desc": "500 kW = 1.8M cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-8 ATEE",
+      "note": "Campagne détection ultrasonore + colmatage. Forfait par kW installé compresseurs."
+    },
+    "IND-UT-109": {
+      "label": "Optimisation production froid industriel",
+      "model_type": "absolute_per_zone",
+      "formula_summary": "kWhc = forfait_zone × P_froid_kW (H1=4200, H2=3800, H3=3200, DOM=2600)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance froid installée (kW froid)",
+          "type": "number",
+          "unit": "kW froid",
+          "min": 10
+        },
+        {
+          "id": "zone",
+          "label": "Zone climatique",
+          "type": "select",
+          "options": ["H1", "H2", "H3", "DOM"]
+        }
+      ],
+      "official_table": {
+        "H1": 4200, "H2": 3800, "H3": 3200, "DOM": 2600
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 100, "zone": "H1"}, "expected": 420000, "desc": "100 kW froid H1 = 420k cumac"},
+        {"smart": {"P_kW": 500, "zone": "H2"}, "expected": 1900000, "desc": "500 kW H2 = 1.9M cumac"}
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA22-9 ATEE",
+      "note": "Optimisation centrale froid (régulation, condenseurs, dégivrage). Zone-dépendant."
+    },
+    "IND-UT-134": {
+      "label": "Mesurage indicateurs performance énergétique",
+      "model_type": "fixed_formula",
+      "formula_summary": "kWhc = 330 × P_kW site (compteurs sous-mesure énergie)",
+      "inputs": [
+        {
+          "id": "P_kW",
+          "label": "Puissance totale site mesurée (kW)",
+          "type": "number",
+          "unit": "kW",
+          "min": 50
+        }
+      ],
+      "official_table": {
+        "forfait_kWhc_par_kW": 330
+      },
+      "test_cases": [
+        {"smart": {"P_kW": 500}, "expected": 165000, "desc": "500 kW mesurage IPE = 165k cumac"},
+        {"smart": {"P_kW": 2000}, "expected": 660000, "desc": "2 MW = 660k cumac"}
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA22-34 ATEE",
+      "note": "Mise en place sous-comptage électrique/thermique + tableau de bord IPE (ISO 50001)."
+    }
+  }
+}

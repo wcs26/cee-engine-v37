@@ -1,0 +1,1316 @@
+{
+  "_meta": {
+    "version": "V38.11",
+    "date": "2026-05-13",
+    "source": "Référentiel ATEE 2026 + résumé audit précédent",
+    "total_entries": 42,
+    "note": "Fix 12 forfaits TRA ×1/1000 (confusion kWhc/MWhc V38.8a)"
+  },
+  "fiches": {
+    "TRA-EQ-101": {
+      "label": "Unité transport intermodal rail-route",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 2 650 000",
+      "inputs": [
+        {
+          "id": "nombre_uti",
+          "label": "Nombre d'UTI (Unité Transport Intermodal)",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 2650
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_uti": 1
+          },
+          "expected": 2650,
+          "desc": "1 UTI rail-route = 2.65M cumac"
+        },
+        {
+          "smart": {
+            "nombre_uti": 5
+          },
+          "expected": 13250,
+          "desc": "5 UTI = 13.25M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-1 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 2650000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-103": {
+      "label": "Télématique embarquée suivi conduite",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 2 650 000",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre d'unités équipées",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 2650
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 2650,
+          "desc": "1 télématique = 2.65M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-3 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 2650000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-104": {
+      "label": "Lubrifiant économiseur énergie VL",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de véhicules équipés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 VL lubrifiant = 1300 cumac"
+        },
+        {
+          "smart": {
+            "nombre_unites": 100
+          },
+          "expected": 130000,
+          "desc": "100 VL = 130k cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-4 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-106": {
+      "label": "Pneus basse résistance roulement (formule par km)",
+      "model_type": "fixed_formula_pneus",
+      "formula_summary": "kWhc = Σ(coef_classe × N_pneu_classe) × Y_km",
+      "inputs": [
+        {
+          "id": "type_vehicule",
+          "label": "Type de véhicule",
+          "type": "select",
+          "options": [
+            "VL",
+            "PL"
+          ],
+          "default": "VL"
+        },
+        {
+          "id": "nombre_pneus_A",
+          "label": "Nombre de pneus classe A (très basse résistance)",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "id": "nombre_pneus_B",
+          "label": "Nombre de pneus classe B",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "id": "nombre_pneus_C",
+          "label": "Nombre de pneus classe C",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "id": "km_an",
+          "label": "Kilométrage annuel (km/an)",
+          "type": "number",
+          "default": 30000
+        }
+      ],
+      "official_table": {
+        "VL": {
+          "A": 0.011,
+          "B": 0.008,
+          "C": 0.006
+        },
+        "PL": {
+          "A": 0.027,
+          "B": 0.02,
+          "C": 0.015
+        }
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "type_vehicule": "VL",
+            "nombre_pneus_A": 4,
+            "nombre_pneus_B": 0,
+            "nombre_pneus_C": 0,
+            "km_an": 30000
+          },
+          "expected": 1320,
+          "desc": "4 pneus VL classe A × 30k km = 1320 cumac"
+        },
+        {
+          "smart": {
+            "type_vehicule": "PL",
+            "nombre_pneus_A": 6,
+            "nombre_pneus_B": 0,
+            "nombre_pneus_C": 0,
+            "km_an": 100000
+          },
+          "expected": 16200,
+          "desc": "6 pneus PL A × 100k km = 16.2k cumac"
+        }
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA15-6 ATEE",
+      "note": "Formule par classe énergétique × kilométrage. Coefs PL ≈ 2.5× VL."
+    },
+    "TRA-EQ-107": {
+      "label": "Unité transport intermodal fluvial-route",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 2 650 000",
+      "inputs": [
+        {
+          "id": "nombre_uti",
+          "label": "Nombre d'UTI fluvial-route",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 2650
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_uti": 1
+          },
+          "expected": 2650,
+          "desc": "1 UTI fluvial = 2.65M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-7 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 2650000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-108": {
+      "label": "Wagon autoroute ferroviaire",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 170 000 000",
+      "inputs": [
+        {
+          "id": "nombre_wagons",
+          "label": "Nombre de wagons AF",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 170000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_wagons": 1
+          },
+          "expected": 170000,
+          "desc": "1 wagon AF = 170M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-8 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 170000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-109": {
+      "label": "Barge fluviale",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 170 000 000",
+      "inputs": [
+        {
+          "id": "nombre_barges",
+          "label": "Nombre de barges",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 170000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_barges": 1
+          },
+          "expected": 170000,
+          "desc": "1 barge = 170M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-9 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 170000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-110": {
+      "label": "Automoteur fluvial",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 230 000 000",
+      "inputs": [
+        {
+          "id": "nombre_automoteurs",
+          "label": "Nombre d'automoteurs",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 230000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_automoteurs": 1
+          },
+          "expected": 230000,
+          "desc": "1 automoteur = 230M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-10 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 230000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-111": {
+      "label": "Groupe frigorifique haute efficacité",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 35 000 000",
+      "inputs": [
+        {
+          "id": "nombre_groupes",
+          "label": "Nombre de groupes frigo",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 35000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_groupes": 1
+          },
+          "expected": 35000,
+          "desc": "1 groupe frigo = 35M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-11 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 35000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-113": {
+      "label": "Lubrifiant économiseur énergie transport",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de véhicules équipés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 véhicule transport = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-13 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-114": {
+      "label": "VL/VUL électrique personne morale",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Forfait z.H2 = 74 200 (multi-axis V39 à refacto)",
+      "inputs": [],
+      "official_table": {
+        "forfait_legacy": 74200
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "qty": 1
+          },
+          "expected": 74200,
+          "desc": "Forfait z.H2"
+        }
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA15-14 ATEE",
+      "note": "MULTI_AXIS_V39 — table catégorie × bénéficiaire × neuf/retrofit. Fallback z.H2 pour V38.8a."
+    },
+    "TRA-EQ-115": {
+      "label": "Véhicule transport marchandises optimisé",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de véhicules",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 véhicule optimisé = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-15 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-117": {
+      "label": "VL électrique particulier",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Forfait z.H2 = 49 100 (multi-axis V39 à refacto)",
+      "inputs": [],
+      "official_table": {
+        "forfait_legacy": 49100
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "qty": 1
+          },
+          "expected": 49100,
+          "desc": "Forfait z.H2"
+        }
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA15-17 ATEE",
+      "note": "MULTI_AXIS_V39 — table catégorie × neuf/retrofit. Fallback z.H2."
+    },
+    "TRA-EQ-119": {
+      "label": "Aide au démarrage poids lourd",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de PL équipés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 aide démarrage PL = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-19 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-120": {
+      "label": "Rétrofit électrique poids lourd",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Forfait z.H2 = 230 000 (multi-axis V39 à refacto)",
+      "inputs": [],
+      "official_table": {
+        "forfait_legacy": 230000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "qty": 1
+          },
+          "expected": 230000,
+          "desc": "Forfait z.H2"
+        }
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA15-20 ATEE",
+      "note": "MULTI_AXIS_V39 — table tonnage × bénéficiaire. Fallback z.H2."
+    },
+    "TRA-EQ-121": {
+      "label": "Aérodynamique autocar",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre d'autocars équipés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 aérodynamique autocar = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-21 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-122": {
+      "label": "Rétrofit électrique autocar",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 170 000 000",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre d'autocars rétrofités",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 170000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 170000,
+          "desc": "1 rétrofit autocar = 170M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-22 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 170000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-123": {
+      "label": "Simulateur de conduite",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de simulateurs",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 simulateur = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-23 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-124": {
+      "label": "Branchement électrique navires quai",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 8 200",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de branchements quai",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 8200
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 8200,
+          "desc": "1 branchement quai = 8200 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-24 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-125": {
+      "label": "Stop & Start véhicules ferroviaires",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 170 000 000",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de véhicules ferroviaires équipés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 170000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 170000,
+          "desc": "1 S&S ferroviaire = 170M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-25 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 170000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-126": {
+      "label": "Remotorisation électrique/hybride bateau",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 230 000 000",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de bateaux remotorisés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 230000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 230000,
+          "desc": "1 remotorisation bateau = 230M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-26 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 230000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-127": {
+      "label": "Bateau électrique/hybride eaux intérieures",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 170 000 000",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de bateaux électriques",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 170000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 170000,
+          "desc": "1 bateau électrique = 170M cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-27 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 170000000 confusion kWhc/MWhc)"
+    },
+    "TRA-EQ-128": {
+      "label": "Autocar/autobus électrique (collectivités)",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Forfait z.H2 = 1 602 800 (multi-axis V39 à refacto)",
+      "inputs": [],
+      "official_table": {
+        "forfait_legacy": 1602800
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "qty": 1
+          },
+          "expected": 1602800,
+          "desc": "Forfait z.H2"
+        }
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA15-28 ATEE",
+      "note": "MULTI_AXIS_V39 — table tonnage × bénéficiaire × neuf/retrofit. Fallback z.H2."
+    },
+    "TRA-EQ-129": {
+      "label": "Poids lourd électrique transport marchandises",
+      "model_type": "forfait_legacy",
+      "formula_summary": "Forfait z.H2 = 824 000 (multi-axis V39 à refacto)",
+      "inputs": [],
+      "official_table": {
+        "forfait_legacy": 824000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "qty": 1
+          },
+          "expected": 824000,
+          "desc": "Forfait z.H2"
+        }
+      ],
+      "difficulty": "V39",
+      "pdf_source": "vA15-29 ATEE",
+      "note": "MULTI_AXIS_V39 — table tonnage × bénéficiaire × neuf/retrofit. Fallback z.H2."
+    },
+    "TRA-EQ-130": {
+      "label": "Quadricycle électrique",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 72 900",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de quadricycles électriques",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 72900
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 72900,
+          "desc": "1 quadricycle élec = 72.9k cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-30 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-131": {
+      "label": "Vélos-cargos à assistance électrique",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 83 000",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de vélos-cargos AE",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 83000
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 83000,
+          "desc": "1 vélo-cargo AE = 83k cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-31 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-EQ-132": {
+      "label": "Mesure conso carburant navire pêche",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 8 200",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de navires équipés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 8200
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 8200,
+          "desc": "1 mesure conso pêche = 8200 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-32 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-SE-101": {
+      "label": "Formation chauffeur transport conduite économe",
+      "model_type": "absolute_per_categorie_permis",
+      "formula_summary": "kWhc = N_personnes × Forfait(catégorie permis)",
+      "inputs": [
+        {
+          "id": "nombre_personnes",
+          "label": "Nombre de personnes formées",
+          "type": "number",
+          "default": 1
+        },
+        {
+          "id": "categorie_permis",
+          "label": "Catégorie permis",
+          "type": "select",
+          "options": [
+            "N2N3",
+            "M2M3"
+          ],
+          "default": "N2N3"
+        }
+      ],
+      "official_table": {
+        "N2N3": 12400,
+        "M2M3": 9100
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_personnes": 1,
+            "categorie_permis": "N2N3"
+          },
+          "expected": 12400,
+          "desc": "1 chauffeur N2/N3 marchandises = 12.4M cumac"
+        },
+        {
+          "smart": {
+            "nombre_personnes": 1,
+            "categorie_permis": "M2M3"
+          },
+          "expected": 9100,
+          "desc": "1 chauffeur M2/M3 personnes = 9.1M cumac"
+        },
+        {
+          "smart": {
+            "nombre_personnes": 5,
+            "categorie_permis": "N2N3"
+          },
+          "expected": 62000,
+          "desc": "5 chauffeurs N2/N3 = 62M cumac"
+        }
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA15-101 ATEE",
+      "note": "V38.12 fix : N2N3 12 400 / M2M3 9 100 (était ×1000 confusion kWhc/MWhc V38.8a)"
+    },
+    "TRA-SE-102": {
+      "label": "Formation chauffeur VL économe",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_personnes",
+          "label": "Nombre de personnes formées",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_personnes": 1
+          },
+          "expected": 1300,
+          "desc": "1 formation VL = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-102 ATEE",
+      "note": "Forfait pur par personne"
+    },
+    "TRA-SE-103": {
+      "label": "Formation écoconduite PL",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_personnes",
+          "label": "Nombre de personnes formées",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_personnes": 1
+          },
+          "expected": 1300,
+          "desc": "1 formation écoconduite = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-103 ATEE",
+      "note": "Forfait pur par personne"
+    },
+    "TRA-SE-104": {
+      "label": "Station gonflage automatique pneumatiques (PL/VL)",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de stations de gonflage",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 station gonflage = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-104 ATEE",
+      "note": "Swap V37 — nouveau label (ex 'Formation X')"
+    },
+    "TRA-SE-105": {
+      "label": "Recreusage pneumatiques poids lourd",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre de pneus recreusés",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 recreusage PL = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-105 ATEE",
+      "note": "Swap V37 — nouveau label"
+    },
+    "TRA-SE-106": {
+      "label": "Mesure et optimisation conso carburant PL",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_vehicules",
+          "label": "Nombre de véhicules suivis",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_vehicules": 1
+          },
+          "expected": 1300,
+          "desc": "1 véhicule optimisation conso = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-106 ATEE",
+      "note": "Swap V37 — nouveau label"
+    },
+    "TRA-SE-107": {
+      "label": "Carénage sur unité de transport fluvial",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_unites",
+          "label": "Nombre d'unités carénées",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_unites": 1
+          },
+          "expected": 1300,
+          "desc": "1 carénage fluvial = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-107 ATEE",
+      "note": "Swap V37 — nouveau label"
+    },
+    "TRA-SE-108": {
+      "label": "Gestion externalisée pneumatiques poids lourd",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_vehicules",
+          "label": "Nombre de PL en gestion externalisée",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_vehicules": 1
+          },
+          "expected": 1300,
+          "desc": "1 PL gestion externalisée = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-108 ATEE",
+      "note": "Swap V37 — nouveau label"
+    },
+    "TRA-SE-109": {
+      "label": "Gestion externalisée pneumatiques véhicule léger",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_vehicules",
+          "label": "Nombre de VL en gestion externalisée",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_vehicules": 1
+          },
+          "expected": 1300,
+          "desc": "1 VL gestion externalisée = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-109 ATEE",
+      "note": "Swap V37 — nouveau label"
+    },
+    "TRA-SE-110": {
+      "label": "Gestion poste pneumatique marchandises",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_vehicules",
+          "label": "Nombre de véhicules marchandises",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_vehicules": 1
+          },
+          "expected": 1300,
+          "desc": "1 véh marchandises gestion pneu = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-110 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-SE-111": {
+      "label": "Gestion poste pneumatique personnes",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_vehicules",
+          "label": "Nombre de véhicules transport personnes",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_vehicules": 1
+          },
+          "expected": 1300,
+          "desc": "1 véh personnes gestion pneu = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-111 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-SE-112": {
+      "label": "Service autopartage en boucle (par abonnement)",
+      "model_type": "fixed_formula_autopartage",
+      "formula_summary": "kWhc = N_abonnements × 6 000 000 (cap : 1 abo/personne sur 5 ans)",
+      "inputs": [
+        {
+          "id": "nombre_abonnements",
+          "label": "Nombre d'abonnements annuels utilisés ≥1 fois",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 6000,
+        "cap_5ans": 1
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_abonnements": 1
+          },
+          "expected": 6000,
+          "desc": "1 abonnement autopartage = 6M cumac"
+        },
+        {
+          "smart": {
+            "nombre_abonnements": 10
+          },
+          "expected": 60000,
+          "desc": "10 abonnements = 60M cumac"
+        }
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA15-112 ATEE",
+      "note": "V38.11 fix : forfait corrigé ×1/1000 (était 6000000 confusion kWhc/MWhc)"
+    },
+    "TRA-SE-113": {
+      "label": "Suivi conso carburants cartes privatives",
+      "model_type": "fixed_formula_unit",
+      "formula_summary": "kWhc = N × 1 300",
+      "inputs": [
+        {
+          "id": "nombre_vehicules",
+          "label": "Nombre de véhicules suivis par carte privative",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "official_table": {
+        "forfait": 1300
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "nombre_vehicules": 1
+          },
+          "expected": 1300,
+          "desc": "1 véh carte privative = 1300 cumac"
+        }
+      ],
+      "difficulty": "facile",
+      "pdf_source": "vA15-113 ATEE",
+      "note": "Forfait pur"
+    },
+    "TRA-SE-116": {
+      "label": "Fret ferroviaire (contrat prestation t.km)",
+      "model_type": "absolute_per_classe_nst",
+      "formula_summary": "kWhc = T_km × Coef(NST)",
+      "inputs": [
+        {
+          "id": "tonnage_km",
+          "label": "Tonnage transporté (t.km)",
+          "type": "number",
+          "default": 1000000
+        },
+        {
+          "id": "classe_nst",
+          "label": "Classe NST de la marchandise",
+          "type": "select",
+          "options": [
+            "NST01",
+            "NST02",
+            "NST03",
+            "NST04",
+            "NST05",
+            "NST06",
+            "NST07",
+            "NST08",
+            "NST09"
+          ],
+          "default": "NST09"
+        }
+      ],
+      "official_table": {
+        "coefs": {
+          "NST01": 0.105,
+          "NST02": 0.105,
+          "NST03": 0.13,
+          "NST04": 0.13,
+          "NST05": 0.15,
+          "NST06": 0.16,
+          "NST07": 0.18,
+          "NST08": 0.19,
+          "NST09": 0.19
+        },
+        "labels": {
+          "NST01": "Charbon",
+          "NST02": "Minerai",
+          "NST03": "Produits métallurgiques",
+          "NST04": "Minerais bruts",
+          "NST05": "Produits chimiques",
+          "NST06": "Ciment / bois",
+          "NST07": "Produits agricoles",
+          "NST08": "Divers",
+          "NST09": "Produits industriels manufacturés"
+        }
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "tonnage_km": 1000000,
+            "classe_nst": "NST01"
+          },
+          "expected": 105000,
+          "desc": "1M t.km charbon NST01 = 105k cumac"
+        },
+        {
+          "smart": {
+            "tonnage_km": 1000000,
+            "classe_nst": "NST09"
+          },
+          "expected": 190000,
+          "desc": "1M t.km industriel NST09 = 190k cumac"
+        },
+        {
+          "smart": {
+            "tonnage_km": 5000000,
+            "classe_nst": "NST05"
+          },
+          "expected": 750000,
+          "desc": "5M t.km chimie = 750k cumac"
+        }
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA15-116 ATEE",
+      "note": "Table NST 9 classes — coef croissant selon densité énergétique relative"
+    },
+    "TRA-SE-117": {
+      "label": "Fret fluvial",
+      "model_type": "fixed_formula_fluvial",
+      "formula_summary": "kWhc = T_km × 2",
+      "inputs": [
+        {
+          "id": "tonnage_km",
+          "label": "Tonnage transporté fluvial (t.km)",
+          "type": "number",
+          "default": 1000000
+        }
+      ],
+      "official_table": {
+        "coef": 2
+      },
+      "test_cases": [
+        {
+          "smart": {
+            "tonnage_km": 1000000
+          },
+          "expected": 2000000,
+          "desc": "1M t.km fluvial = 2M cumac"
+        },
+        {
+          "smart": {
+            "tonnage_km": 500000
+          },
+          "expected": 1000000,
+          "desc": "500k t.km fluvial = 1M cumac"
+        }
+      ],
+      "difficulty": "moyen",
+      "pdf_source": "vA15-117 ATEE",
+      "note": "Coef plat 2 cumac/t.km — pas de classe marchandise"
+    }
+  }
+}

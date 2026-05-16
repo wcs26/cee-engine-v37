@@ -1,0 +1,933 @@
+{
+  "_meta": {
+    "version": "V38.5-TRA-AUDIT",
+    "date": "2026-05-10",
+    "purpose": "Audit complet 42 fiches TRA actives. Sources: oracle.html notes (versions PDF déjà tracées), PDFs ministère ecologie.gouv.fr, ATEE, calculateur ADEME. Période P6 2026-2030 (décret 2025-1048, arrêté 21/12/2025).",
+    "fiches_count": 42,
+    "scope": "model_type, formule officielle, inputs UX, cas test JUSTESSE, risque PNCEE, difficulté migration",
+    "sources_confirmees": [
+      "https://www.ecologie.gouv.fr/aide/certificats-economies-denergie",
+      "https://atee.fr/efficacite-energetique/club-c2e/operations-standardisees-cee",
+      "https://calculateur-cee.ademe.fr/",
+      "Notes oracle.html V38.4c (Jimmy + Claude) avec versions PDF tracées vA14-1, vA17-1, vA37-6, vA72-4, vA73-3, vA76-4, vA68-3, vA65-2"
+    ],
+    "rappel_confidence": "Certaines fiches NON tracées dans oracle.html (TRA-EQ-115/119/120/121/122/123/124/125/126/132 + TRA-SE-102 à 111) restent à valider PDF par PDF avant prod — flag difficulty='V39 — recherche PDF requise' ou 'moyen — vérification PDF'."
+  },
+
+  "fiches": {
+
+    "TRA-EQ-101": {
+      "label_corrige": "Unité transport intermodal rail-route",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_UTI × 2 650 000 (forfait par unité de transport intermodal rail-route)",
+      "inputs": [
+        {"id": "n_uti", "label": "Nombre d'unités de transport intermodal acquises", "type": "number", "min": 1, "default": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_uti": 2650000},
+      "test_cases": [
+        {"smart": {"n_uti": 1}, "expected": 2650000, "desc": "1 UTI rail-route = 2 650 000 kWhc"},
+        {"smart": {"n_uti": 5}, "expected": 13250000, "desc": "5 UTI = 13 250 000 kWhc"}
+      ],
+      "pdf_source": "vA37-6 (PDF officiel BOEME)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-101.pdf",
+      "risque": "OK — catalog z=2650 cohérent (display kWhc/1000)",
+      "difficulty": "facile",
+      "note": "Fiche forfait pure. Catalog z=2650 = 2 650 000 / 1000 (convention oracle.html en milliers de kWhc). Vérifier le facteur ×1000 lors du merge."
+    },
+
+    "TRA-EQ-103": {
+      "label_corrige": "Télématique embarquée pour le suivi de la conduite (transport routier)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit_with_category",
+      "formula_summary": "kWhc = N_véhicules × Forfait(catégorie). Cas standard PL marchandises = 2 650 000 kWhc/véhicule",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de véhicules équipés", "type": "number", "min": 1},
+        {"id": "categorie_vehicule", "label": "Catégorie véhicule", "type": "select", "options": ["PL_marchandises_N2_N3", "VUL_N1", "Autocar_M3"], "default": "PL_marchandises_N2_N3"}
+      ],
+      "official_table": {"by_category": {"PL_marchandises_N2_N3": 2650000, "VUL_N1": 800000, "Autocar_M3": 2650000}},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1, "categorie_vehicule": "PL_marchandises_N2_N3"}, "expected": 2650000, "desc": "1 PL avec télématique = 2 650 000 kWhc"}
+      ],
+      "pdf_source": "vA14-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-103.pdf",
+      "risque": "OK — table catégorie à confirmer pour VUL N1 (estimation conservatrice)",
+      "difficulty": "moyen",
+      "note": "fiches.json a déjà 'mode_calcul: table'. Catalog z=2650 = milliers kWhc. Affiner table VUL/Autocar via PDF ATEE."
+    },
+
+    "TRA-EQ-104": {
+      "label_corrige": "Lubrifiant économiseur d'énergie pour véhicules légers (M1/N1)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit_lubrifiant",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000 (forfait par véhicule équipé, durée vie 4 ans)",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de véhicules équipés en lubrifiant éco", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 VL avec lubrifiant éco = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "vA14-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-104.pdf",
+      "risque": "OK — forfait simple, conditions: lubrifiant ACEA A5/B5 ou C5",
+      "difficulty": "facile",
+      "note": "Conditions PDF: lubrifiant éco SAE 0W-20/0W-30/5W-30 ACEA A5/B5/C5. Engagement 4 ans. forfait_simple OK."
+    },
+
+    "TRA-EQ-106": {
+      "label_corrige": "Pneus à basse résistance au roulement (formule par km)",
+      "label_actuel_ok": true,
+      "model_type": "fixed_formula_pneus_per_km",
+      "formula_summary": "kWhc = Σ (coef_classe × N_pneu_classe) × Y_km (Σ sur classes A/B/C)",
+      "inputs": [
+        {"id": "n_pneu_classe_A", "label": "Nombre de pneus classe A (label énergétique)", "type": "number", "min": 0, "default": 0},
+        {"id": "n_pneu_classe_B", "label": "Nombre de pneus classe B", "type": "number", "min": 0, "default": 0},
+        {"id": "n_pneu_classe_C", "label": "Nombre de pneus classe C", "type": "number", "min": 0, "default": 0},
+        {"id": "y_km_an", "label": "Kilométrage annuel du véhicule (km/an)", "type": "number", "min": 5000, "default": 30000},
+        {"id": "categorie_vehicule", "label": "Catégorie véhicule", "type": "select", "options": ["VL_M1_N1", "PL_N2_N3", "Autocar_M2_M3"], "default": "VL_M1_N1"}
+      ],
+      "official_table": {
+        "coef_kwhc_per_pneu_per_km": {
+          "VL_M1_N1": {"A": 0.011, "B": 0.008, "C": 0.006},
+          "PL_N2_N3": {"A": 0.027, "B": 0.020, "C": 0.014},
+          "Autocar_M2_M3": {"A": 0.022, "B": 0.016, "C": 0.011}
+        },
+        "duree_vie_ans": 4,
+        "facteur_actualisation_inclus": true
+      },
+      "test_cases": [
+        {"smart": {"n_pneu_classe_A": 0, "n_pneu_classe_B": 0, "n_pneu_classe_C": 4, "y_km_an": 30000, "categorie_vehicule": "VL_M1_N1"}, "expected": 720, "desc": "4 pneus C VL × 30 000 km/an = (0.006 × 4) × 30 000 = 720 kWhc"},
+        {"smart": {"n_pneu_classe_A": 4, "n_pneu_classe_B": 0, "n_pneu_classe_C": 0, "y_km_an": 50000, "categorie_vehicule": "VL_M1_N1"}, "expected": 2200, "desc": "4 pneus A VL × 50 000 km/an = (0.011 × 4) × 50 000 = 2 200 kWhc"},
+        {"smart": {"n_pneu_classe_A": 6, "n_pneu_classe_B": 0, "n_pneu_classe_C": 0, "y_km_an": 100000, "categorie_vehicule": "PL_N2_N3"}, "expected": 16200, "desc": "6 pneus A PL × 100 000 km/an = (0.027 × 6) × 100 000 = 16 200 kWhc"}
+      ],
+      "pdf_source": "vA14-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-106.pdf",
+      "risque": "ANCIEN catalog 1300/pneu = SUR ×10 à ×1000 (FRAUDE PNCEE). Corrigé en V38.4c à z=60 (estimation 4 pneus C × 30k km).",
+      "difficulty": "moyen",
+      "note": "Refacto V39: smart Q UX en wizard (compter pneus + classe + km). Affiner coef PL/Autocar via PDF officiel — coefs ci-dessus = ratio approximatif × VL (×2.5 PL, ×2 autocar)."
+    },
+
+    "TRA-EQ-107": {
+      "label_corrige": "Unité transport intermodal fluvial-route",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_UTI × 2 650 000 (forfait fluvial-route, identique TRA-EQ-101 rail-route)",
+      "inputs": [
+        {"id": "n_uti", "label": "Nombre d'UTI fluvial-route acquises", "type": "number", "min": 1, "default": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_uti": 2650000},
+      "test_cases": [
+        {"smart": {"n_uti": 1}, "expected": 2650000, "desc": "1 UTI fluvial-route = 2 650 000 kWhc"}
+      ],
+      "pdf_source": "vA17-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-107.pdf",
+      "risque": "OK — symétrique avec TRA-EQ-101",
+      "difficulty": "facile",
+      "note": "Forfait pur, simple."
+    },
+
+    "TRA-EQ-108": {
+      "label_corrige": "Wagon d'autoroute ferroviaire",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_wagons × 170 000 000 (forfait par wagon ferroviaire neuf)",
+      "inputs": [
+        {"id": "n_wagons", "label": "Nombre de wagons d'autoroute ferroviaire acquis", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_wagon": 170000000},
+      "test_cases": [
+        {"smart": {"n_wagons": 1}, "expected": 170000000, "desc": "1 wagon AF = 170 000 000 kWhc"}
+      ],
+      "pdf_source": "vA37-6 (01/04/2020)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-108.pdf",
+      "risque": "OK — forfait massif (cohérent avec gros équipement long durée)",
+      "difficulty": "facile",
+      "note": "Catalog z=170000 = milliers kWhc. forfait_simple OK."
+    },
+
+    "TRA-EQ-109": {
+      "label_corrige": "Barge fluviale (transport marchandises)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_barges × 170 000 000",
+      "inputs": [
+        {"id": "n_barges", "label": "Nombre de barges fluviales acquises", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_barge": 170000000},
+      "test_cases": [
+        {"smart": {"n_barges": 1}, "expected": 170000000, "desc": "1 barge fluviale = 170 000 000 kWhc"}
+      ],
+      "pdf_source": "vA17-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-109.pdf",
+      "risque": "OK — forfait gros équipement",
+      "difficulty": "facile",
+      "note": "Forfait pur. Conditions PDF: convoi pousseur conforme."
+    },
+
+    "TRA-EQ-110": {
+      "label_corrige": "Automoteur fluvial (transport marchandises)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_automoteurs × 230 000 000",
+      "inputs": [
+        {"id": "n_automoteurs", "label": "Nombre d'automoteurs fluviaux acquis", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_automoteur": 230000000},
+      "test_cases": [
+        {"smart": {"n_automoteurs": 1}, "expected": 230000000, "desc": "1 automoteur fluvial = 230 000 000 kWhc"}
+      ],
+      "pdf_source": "vA19-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-110.pdf",
+      "risque": "OK — forfait massif équipement long",
+      "difficulty": "facile",
+      "note": "Forfait pur."
+    },
+
+    "TRA-EQ-111": {
+      "label_corrige": "Groupe frigorifique haute efficacité (transport sous température dirigée)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit_with_classe",
+      "formula_summary": "kWhc = N_groupes × Forfait(classe énergétique). Cas standard = 35 000 000 kWhc/groupe",
+      "inputs": [
+        {"id": "n_groupes", "label": "Nombre de groupes frigorifiques acquis", "type": "number", "min": 1},
+        {"id": "classe_energetique", "label": "Classe énergétique groupe (A++/A+/A)", "type": "select", "options": ["A++", "A+", "A"], "default": "A+"}
+      ],
+      "official_table": {"by_classe": {"A++": 35000000, "A+": 35000000, "A": 0}, "comment": "Seules classes A+ et A++ ouvrent droit"},
+      "test_cases": [
+        {"smart": {"n_groupes": 1, "classe_energetique": "A+"}, "expected": 35000000, "desc": "1 groupe frigo A+ = 35 000 000 kWhc"}
+      ],
+      "pdf_source": "vA24-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-111.pdf",
+      "risque": "OK — vérifier table classe énergétique (PDF ATEE — A++=35M, A+=variable)",
+      "difficulty": "moyen",
+      "note": "Tab classe à valider. Conditions: respect règlement F-Gas (fluide GWP<2500)."
+    },
+
+    "TRA-EQ-113": {
+      "label_corrige": "Lubrifiant économiseur d'énergie pour véhicules de transport (PL N2/N3)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit_lubrifiant",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000 (forfait par PL équipé)",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de PL équipés en lubrifiant éco", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 PL avec lubrifiant éco = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "vA14-1 (variante PL de TRA-EQ-104)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-113.pdf",
+      "risque": "OK — forfait identique à TRA-EQ-104 mais cible PL",
+      "difficulty": "facile",
+      "note": "À confirmer: peut-être valeur PDF différente (PL >> VL en consommation). Recherche PDF V39."
+    },
+
+    "TRA-EQ-114": {
+      "label_corrige": "Acquisition d'un véhicule électrique léger ou utilitaire neuf par personne morale",
+      "label_actuel_ok": true,
+      "model_type": "multi_axis_vehicule_electrique_PM",
+      "formula_summary": "kWhc = Forfait(catégorie M1/N1 × neuf/retrofit × parc <100/>=100 × année 2025-26/2027 × collec). Table 12 cas.",
+      "inputs": [
+        {"id": "categorie", "label": "Catégorie véhicule", "type": "select", "options": ["M1_VL", "N1_VUL"], "default": "M1_VL"},
+        {"id": "etat", "label": "Acquisition", "type": "select", "options": ["neuf", "retrofit"], "default": "neuf"},
+        {"id": "taille_parc", "label": "Taille de parc bénéficiaire", "type": "select", "options": ["<100", ">=100"], "default": "<100"},
+        {"id": "annee", "label": "Année engagement", "type": "select", "options": ["2025-2026", "2027", "collectivite"], "default": "2025-2026"}
+      ],
+      "official_table": {
+        "by_axis": {
+          "M1_VL_neuf_<100_2025-2026": 74200000,
+          "N1_VUL_neuf_<100_2025-2026": 156800000,
+          "M1_VL_retrofit": 39500000,
+          "N1_VUL_retrofit": 76400000,
+          "comment_collectivite": "Multiplicateur ×1.5 si bénéficiaire = collectivité publique (à confirmer PDF)"
+        }
+      },
+      "test_cases": [
+        {"smart": {"categorie": "M1_VL", "etat": "neuf", "taille_parc": "<100", "annee": "2025-2026"}, "expected": 74200000, "desc": "1 VL M1 neuf parc <100 = 74 200 000 kWhc"},
+        {"smart": {"categorie": "N1_VUL", "etat": "neuf", "taille_parc": "<100", "annee": "2025-2026"}, "expected": 156800000, "desc": "1 VUL N1 neuf = 156 800 000 kWhc"}
+      ],
+      "pdf_source": "vA76-4",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-114.pdf",
+      "risque": "OK — display VL standard est conservateur; table 12 cas à dérouler proprement",
+      "difficulty": "V39",
+      "note": "Refacto V39 obligatoire pour table 12 cas + bonification Coup de Pouce 2026. Catalog déjà flagué dans note V38.4c."
+    },
+
+    "TRA-EQ-115": {
+      "label_corrige": "Véhicule de transport de marchandises optimisé énergétiquement (PL/VUL)",
+      "label_actuel_ok": "À VÉRIFIER — label générique, PDF officiel doit préciser",
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000 (forfait par véhicule optimisé)",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de véhicules optimisés", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 véhicule optimisé = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "vA14-1 (à confirmer)",
+      "pdf_url": "INTROUVABLE — chercher TRA-EQ-115 vA14-1 sur ecologie.gouv.fr",
+      "risque": "MOYEN — label vague, peut être confondue avec TRA-EQ-129 (PL électrique) ou variante optimisation aéro/moteur",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Note oracle.html '[V26:ajouté]' sans précision. À auditer PDF avant V39."
+    },
+
+    "TRA-EQ-117": {
+      "label_corrige": "Acquisition d'un véhicule électrique léger ou utilitaire neuf par particulier",
+      "label_actuel_ok": true,
+      "model_type": "multi_axis_vehicule_electrique_particulier",
+      "formula_summary": "kWhc = Forfait(catégorie × état). M1 neuf=49M, N1 neuf=94.8M, M1 retrofit=39.5M, N1 retrofit=76.4M. Limite 5 véh/personne.",
+      "inputs": [
+        {"id": "categorie", "label": "Catégorie véhicule", "type": "select", "options": ["M1_VL", "N1_VUL"], "default": "M1_VL"},
+        {"id": "etat", "label": "Acquisition", "type": "select", "options": ["neuf", "retrofit"], "default": "neuf"}
+      ],
+      "official_table": {
+        "by_axis": {
+          "M1_VL_neuf": 49100000,
+          "N1_VUL_neuf": 94800000,
+          "M1_VL_retrofit": 39500000,
+          "N1_VUL_retrofit": 76400000
+        },
+        "limite_par_personne": 5
+      },
+      "test_cases": [
+        {"smart": {"categorie": "M1_VL", "etat": "neuf"}, "expected": 49100000, "desc": "1 M1 neuf particulier = 49 100 000 kWhc"},
+        {"smart": {"categorie": "N1_VUL", "etat": "retrofit"}, "expected": 76400000, "desc": "1 VUL retrofit = 76 400 000 kWhc"}
+      ],
+      "pdf_source": "vA72-4",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-117.pdf",
+      "risque": "OK — limite 5 véh/personne à enforcer dans engine",
+      "difficulty": "V39",
+      "note": "Refacto V39 pour table 4 cas + cap 5 véh/personne. Bonification Coup de Pouce 2026 à intégrer."
+    },
+
+    "TRA-EQ-119": {
+      "label_corrige": "Aide au démarrage poids lourd (système start-stop)",
+      "label_actuel_ok": "À VÉRIFIER",
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000 (forfait par PL équipé start-stop)",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de PL équipés start-stop", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 PL start-stop = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE — version PDF non tracée dans oracle.html",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — pas de version PDF tracée, valeur 1300 par défaut suspecte",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Note oracle.html '[V26:ajouté]' sans version. Vérifier abrogation potentielle (Stop&Start auto pas FOST en 2026)."
+    },
+
+    "TRA-EQ-120": {
+      "label_corrige": "Rétrofit électrique d'un poids lourd",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_PL × 230 000 000 (forfait par PL rétrofitté)",
+      "inputs": [
+        {"id": "n_pl", "label": "Nombre de PL rétrofittés électriques", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_pl": 230000000},
+      "test_cases": [
+        {"smart": {"n_pl": 1}, "expected": 230000000, "desc": "1 PL rétrofit élec = 230 000 000 kWhc"}
+      ],
+      "pdf_source": "À CONFIRMER — version probable vA73-3 (cohérent avec TRA-EQ-129)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-120.pdf",
+      "risque": "OK — cohérent avec PL électrique neuf",
+      "difficulty": "moyen",
+      "note": "À confirmer si table à plusieurs cas (par tonnage). Pour V39 fusionner avec TRA-EQ-129 multi-axis."
+    },
+
+    "TRA-EQ-121": {
+      "label_corrige": "Aérodynamique autocar (kit aérodynamique)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_autocars × 1 300 000",
+      "inputs": [
+        {"id": "n_autocars", "label": "Nombre d'autocars équipés kit aéro", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_autocar": 1300000},
+      "test_cases": [
+        {"smart": {"n_autocars": 1}, "expected": 1300000, "desc": "1 autocar aéro = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — valeur 1300 par défaut suspecte (catalogs PL aéro = 5000-15000 typique)",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Note '[V26:ajouté]' sans version PDF. Risque sous-évaluation potentielle."
+    },
+
+    "TRA-EQ-122": {
+      "label_corrige": "Rétrofit électrique d'un autocar/autobus",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_autocars × 170 000 000",
+      "inputs": [
+        {"id": "n_autocars", "label": "Nombre d'autocars rétrofittés électriques", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_autocar": 170000000},
+      "test_cases": [
+        {"smart": {"n_autocars": 1}, "expected": 170000000, "desc": "1 autocar rétrofit élec = 170 000 000 kWhc"}
+      ],
+      "pdf_source": "À CONFIRMER — probablement vA68-3",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-122.pdf",
+      "risque": "OK — cohérent avec table autocar électrique",
+      "difficulty": "moyen",
+      "note": "À fusionner V39 avec TRA-EQ-128 dans table multi-axis."
+    },
+
+    "TRA-EQ-123": {
+      "label_corrige": "Simulateur de conduite (formation initiale chauffeur PL/VL)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_simulateurs × 1 300 000",
+      "inputs": [
+        {"id": "n_simulateurs", "label": "Nombre de simulateurs installés", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_simulateur": 1300000},
+      "test_cases": [
+        {"smart": {"n_simulateurs": 1}, "expected": 1300000, "desc": "1 simulateur conduite = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — valeur par défaut 1300 suspecte (un simulateur c'est un investissement gros)",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Vérifier si formule réelle = par chauffeur formé sur simulateur (et non par simulateur)."
+    },
+
+    "TRA-EQ-124": {
+      "label_corrige": "Branchement électrique des navires à quai (cold ironing)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit_with_puissance",
+      "formula_summary": "kWhc = N_postes × 8 200 000 (forfait par poste de branchement quai installé)",
+      "inputs": [
+        {"id": "n_postes", "label": "Nombre de postes de branchement à quai installés", "type": "number", "min": 1},
+        {"id": "puissance_kva", "label": "Puissance électrique par poste (kVA)", "type": "number", "min": 100, "default": 800}
+      ],
+      "official_table": {"forfait_kwhc_per_poste": 8200000, "comment": "Possible variation par puissance — à confirmer PDF"},
+      "test_cases": [
+        {"smart": {"n_postes": 1, "puissance_kva": 800}, "expected": 8200000, "desc": "1 poste branchement quai 800 kVA = 8 200 000 kWhc"}
+      ],
+      "pdf_source": "À CONFIRMER",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-124.pdf",
+      "risque": "MOYEN — vérifier si formule par kVA installée plutôt que par poste",
+      "difficulty": "moyen",
+      "note": "Conditions PDF: navires éligibles = paquebots + porte-conteneurs ports français."
+    },
+
+    "TRA-EQ-125": {
+      "label_corrige": "Stop & Start véhicules ferroviaires (locomotive de manœuvre)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_locomotives × 170 000 000",
+      "inputs": [
+        {"id": "n_locomotives", "label": "Nombre de locomotives équipées Stop&Start", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_locomotive": 170000000},
+      "test_cases": [
+        {"smart": {"n_locomotives": 1}, "expected": 170000000, "desc": "1 loco Stop&Start = 170 000 000 kWhc"}
+      ],
+      "pdf_source": "vA40-2",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-125.pdf",
+      "risque": "OK — version PDF tracée",
+      "difficulty": "facile",
+      "note": "Forfait pur. Conditions: locomotive de manœuvre uniquement."
+    },
+
+    "TRA-EQ-126": {
+      "label_corrige": "Remotorisation électrique ou hybride d'un bateau (eaux intérieures)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_bateaux × 230 000 000",
+      "inputs": [
+        {"id": "n_bateaux", "label": "Nombre de bateaux remotorisés", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_bateau": 230000000},
+      "test_cases": [
+        {"smart": {"n_bateaux": 1}, "expected": 230000000, "desc": "1 bateau remotorisé élec/hybride = 230 000 000 kWhc"}
+      ],
+      "pdf_source": "À CONFIRMER (probablement vA54-1 cohérent avec TRA-EQ-127)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-126.pdf",
+      "risque": "OK",
+      "difficulty": "moyen",
+      "note": "À fusionner V39 avec TRA-EQ-127 (eaux intérieures)."
+    },
+
+    "TRA-EQ-127": {
+      "label_corrige": "Bateau électrique ou hybride neuf pour eaux intérieures",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_bateaux × 170 000 000",
+      "inputs": [
+        {"id": "n_bateaux", "label": "Nombre de bateaux électriques/hybrides acquis", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_bateau": 170000000},
+      "test_cases": [
+        {"smart": {"n_bateaux": 1}, "expected": 170000000, "desc": "1 bateau élec/hybride neuf = 170 000 000 kWhc"}
+      ],
+      "pdf_source": "vA54-1 (01/10/2023)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-127.pdf",
+      "risque": "OK",
+      "difficulty": "facile",
+      "note": "Forfait pur."
+    },
+
+    "TRA-EQ-128": {
+      "label_corrige": "Acquisition d'un autocar/autobus électrique (collectivités, Coup de Pouce)",
+      "label_actuel_ok": true,
+      "model_type": "multi_axis_autobus_electrique",
+      "formula_summary": "kWhc = Forfait(type × capacité × taille agglo). Table 9 cas: autocar standard=1.6Md, bus aggl<250K=2.35Md, grande capa=3.29Md.",
+      "inputs": [
+        {"id": "type_vehicule", "label": "Type véhicule", "type": "select", "options": ["autocar_M3", "autobus_M3"], "default": "autocar_M3"},
+        {"id": "capacite", "label": "Capacité", "type": "select", "options": ["standard", "grande_capacite", "retrofit"], "default": "standard"},
+        {"id": "taille_agglo", "label": "Taille agglomération", "type": "select", "options": ["<250K", ">=250K"], "default": "<250K"}
+      ],
+      "official_table": {
+        "by_axis": {
+          "autocar_standard": 1602800000,
+          "autobus_aggl_<250K_standard": 2350700000,
+          "autobus_grande_capa": 3291000000,
+          "retrofit_standard": "à confirmer PDF"
+        }
+      },
+      "test_cases": [
+        {"smart": {"type_vehicule": "autocar_M3", "capacite": "standard", "taille_agglo": "<250K"}, "expected": 1602800000, "desc": "1 autocar standard = 1 602 800 000 kWhc"},
+        {"smart": {"type_vehicule": "autobus_M3", "capacite": "standard", "taille_agglo": "<250K"}, "expected": 2350700000, "desc": "1 autobus aggl <250K = 2 350 700 000 kWhc"}
+      ],
+      "pdf_source": "vA68-3",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-128.pdf",
+      "risque": "BONIF — Coup de Pouce. Vérifier multiplicateur collectivité publique vs entreprise (×1 vs ×0.7 selon période)",
+      "difficulty": "V39",
+      "note": "Refacto V39 pour table 9 cas. Coup de Pouce P6 obligatoire."
+    },
+
+    "TRA-EQ-129": {
+      "label_corrige": "Acquisition d'un poids lourd électrique pour transport de marchandises (Coup de Pouce)",
+      "label_actuel_ok": true,
+      "model_type": "multi_axis_pl_electrique",
+      "formula_summary": "kWhc = Forfait(tonnage × type × taille agglo × neuf/retrofit). Table 16 cas: PL 12-19t=824M, tracteur ≥26t=1.92Md, BOM aggl<250K=1.57Md.",
+      "inputs": [
+        {"id": "tonnage", "label": "PTAC poids lourd", "type": "select", "options": ["3.5-12t", "12-19t", "19-26t", ">=26t_porteur", ">=26t_tracteur"], "default": "12-19t"},
+        {"id": "type_vehicule", "label": "Type véhicule", "type": "select", "options": ["PL_marchandises", "BOM_benne", "tracteur"], "default": "PL_marchandises"},
+        {"id": "taille_agglo", "label": "Taille agglomération (BOM uniquement)", "type": "select", "options": ["<250K", ">=250K", "n/a"], "default": "n/a"},
+        {"id": "etat", "label": "Acquisition", "type": "select", "options": ["neuf", "retrofit"], "default": "neuf"}
+      ],
+      "official_table": {
+        "by_axis": {
+          "PL_12-19t_neuf": 824000000,
+          "tracteur_>=26t_neuf": 1918500000,
+          "BOM_aggl_<250K_neuf": 1572900000,
+          "comment": "Table complète 16 cas dans PDF vA73-3"
+        }
+      },
+      "test_cases": [
+        {"smart": {"tonnage": "12-19t", "type_vehicule": "PL_marchandises", "taille_agglo": "n/a", "etat": "neuf"}, "expected": 824000000, "desc": "1 PL 12-19t neuf = 824 000 000 kWhc"},
+        {"smart": {"tonnage": ">=26t_tracteur", "type_vehicule": "tracteur", "taille_agglo": "n/a", "etat": "neuf"}, "expected": 1918500000, "desc": "1 tracteur ≥26t neuf = 1 918 500 000 kWhc"}
+      ],
+      "pdf_source": "vA73-3",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-129.pdf",
+      "risque": "BONIF — Coup de Pouce P6. Multiplicateur collec à confirmer.",
+      "difficulty": "V39",
+      "note": "Refacto V39 obligatoire pour table 16 cas. Bonification Coup de Pouce P6 active."
+    },
+
+    "TRA-EQ-130": {
+      "label_corrige": "Acquisition d'un quadricycle électrique (L6e/L7e)",
+      "label_actuel_ok": true,
+      "model_type": "multi_axis_quadricycle_electrique",
+      "formula_summary": "kWhc = Forfait(catégorie × bénéficiaire). L7e PM=72.9M, L7e particulier=36.4M, L6e=19M, L7e collectivité=86.1M.",
+      "inputs": [
+        {"id": "categorie", "label": "Catégorie véhicule (L6e ou L7e)", "type": "select", "options": ["L6e", "L7e"], "default": "L7e"},
+        {"id": "beneficiaire", "label": "Type bénéficiaire", "type": "select", "options": ["personne_morale", "particulier", "collectivite_publique"], "default": "personne_morale"}
+      ],
+      "official_table": {
+        "by_axis": {
+          "L7e_personne_morale": 72900000,
+          "L7e_particulier": 36400000,
+          "L6e_tous": 19000000,
+          "L7e_collectivite": 86100000
+        }
+      },
+      "test_cases": [
+        {"smart": {"categorie": "L7e", "beneficiaire": "personne_morale"}, "expected": 72900000, "desc": "1 L7e PM = 72 900 000 kWhc"},
+        {"smart": {"categorie": "L7e", "beneficiaire": "collectivite_publique"}, "expected": 86100000, "desc": "1 L7e collec = 86 100 000 kWhc"}
+      ],
+      "pdf_source": "vA73-3",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-130.pdf",
+      "risque": "OK — table 4 cas claire",
+      "difficulty": "V39",
+      "note": "Refacto V39 pour table 4 cas (déjà documentée note V38.4c)."
+    },
+
+    "TRA-EQ-131": {
+      "label_corrige": "Acquisition d'un vélo-cargo à assistance électrique",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit_with_cap",
+      "formula_summary": "kWhc = N_vélos × 83 000 000 (limite N <= effectif salarié déclaré, 15 si association)",
+      "inputs": [
+        {"id": "n_velos", "label": "Nombre de vélos-cargos AE acquis", "type": "number", "min": 1},
+        {"id": "effectif_salarie", "label": "Effectif salarié déclaré (cap N)", "type": "number", "min": 1, "default": 15},
+        {"id": "type_beneficiaire", "label": "Type bénéficiaire", "type": "select", "options": ["entreprise", "association"], "default": "entreprise"}
+      ],
+      "official_table": {"forfait_kwhc_per_velo": 83000000, "cap_N": "min(N, effectif) ou 15 si association"},
+      "test_cases": [
+        {"smart": {"n_velos": 5, "effectif_salarie": 20, "type_beneficiaire": "entreprise"}, "expected": 415000000, "desc": "5 vélos-cargos (cap 20) = 5 × 83M = 415 000 000 kWhc"},
+        {"smart": {"n_velos": 20, "effectif_salarie": 10, "type_beneficiaire": "entreprise"}, "expected": 830000000, "desc": "20 demandés mais cap 10 effectif = 10 × 83M = 830 000 000 kWhc"}
+      ],
+      "pdf_source": "vA73-2 (23/08/2025)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-EQ-131.pdf",
+      "risque": "OK — ANCIEN catalog 810 = SOUS ×102 délirant. Corrigé V38.4c à 83000.",
+      "difficulty": "moyen",
+      "note": "Engine doit enforcer le cap N. forfait_simple + cap suffit."
+    },
+
+    "TRA-EQ-132": {
+      "label_corrige": "Système de mesure de la consommation de carburant à bord d'un navire de pêche",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_unit",
+      "formula_summary": "kWhc = N_systèmes × 8 200 000",
+      "inputs": [
+        {"id": "n_systemes", "label": "Nombre de systèmes mesure conso installés sur navires pêche", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_systeme": 8200000},
+      "test_cases": [
+        {"smart": {"n_systemes": 1}, "expected": 8200000, "desc": "1 système mesure conso navire pêche = 8 200 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE — version PDF non tracée",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — version PDF non tracée. Forfait 8200 cohérent avec autres équipements pêche.",
+      "difficulty": "moyen",
+      "note": "Vérifier abrogation potentielle (secteur pêche en revue P6)."
+    },
+
+    "TRA-SE-101": {
+      "label_corrige": "Formation chauffeur transport routier de marchandises N2/N3 à la conduite économe",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_personne_with_categorie",
+      "formula_summary": "kWhc = N_personnes × Forfait(catégorie). Marchandises N2/N3=12.4M, Personnes M2/M3=9.1M. Hors FCO/FIMO obligatoires.",
+      "inputs": [
+        {"id": "n_personnes", "label": "Nombre de chauffeurs formés", "type": "number", "min": 1},
+        {"id": "categorie_vehicule", "label": "Catégorie véhicule conduit", "type": "select", "options": ["N2_N3_marchandises", "M2_M3_personnes"], "default": "N2_N3_marchandises"},
+        {"id": "hors_fco_fimo", "label": "Formation HORS FCO/FIMO obligatoires ?", "type": "boolean", "default": true}
+      ],
+      "official_table": {
+        "by_categorie": {"N2_N3_marchandises": 12400000, "M2_M3_personnes": 9100000},
+        "exclusion": "FCO et FIMO obligatoires NON éligibles"
+      },
+      "test_cases": [
+        {"smart": {"n_personnes": 1, "categorie_vehicule": "N2_N3_marchandises", "hors_fco_fimo": true}, "expected": 12400000, "desc": "1 chauffeur PL formé éco-conduite = 12 400 000 kWhc"},
+        {"smart": {"n_personnes": 10, "categorie_vehicule": "M2_M3_personnes", "hors_fco_fimo": true}, "expected": 91000000, "desc": "10 chauffeurs autocar M3 = 10 × 9.1M = 91 000 000 kWhc"}
+      ],
+      "pdf_source": "vA14-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-SE-101.pdf",
+      "risque": "OK — ANCIEN catalog 1300 = SOUS ×9.5. Corrigé V38.4c.",
+      "difficulty": "moyen",
+      "note": "Engine doit refuser si formation = FCO/FIMO (obligation légale). Refacto V39 pour table 2 cas."
+    },
+
+    "TRA-SE-102": {
+      "label_corrige": "Formation chauffeur véhicule léger (VL/VUL) à la conduite économe",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_personne",
+      "formula_summary": "kWhc = N_personnes × 1 300 000 (forfait par chauffeur VL formé)",
+      "inputs": [
+        {"id": "n_personnes", "label": "Nombre de chauffeurs VL formés", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_personne": 1300000},
+      "test_cases": [
+        {"smart": {"n_personnes": 1}, "expected": 1300000, "desc": "1 chauffeur VL formé = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE — version PDF non tracée",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — valeur 1300/personne suspecte (à valider PDF). Risque de SOUS-évaluation (VL formé typique = 5-10k kWhc).",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Doublon potentiel avec TRA-SE-105. À fusionner ou différencier en V39."
+    },
+
+    "TRA-SE-103": {
+      "label_corrige": "Formation à l'éco-conduite (générique tous véhicules)",
+      "label_actuel_ok": "À VÉRIFIER — label oracle.html générique 'Formation écoconduite' suspect",
+      "model_type": "absolute_per_personne",
+      "formula_summary": "kWhc = N_personnes × 1 300 000",
+      "inputs": [
+        {"id": "n_personnes", "label": "Nombre de personnes formées éco-conduite", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_personne": 1300000},
+      "test_cases": [
+        {"smart": {"n_personnes": 1}, "expected": 1300000, "desc": "1 personne formée éco-conduite = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE",
+      "pdf_url": "INTROUVABLE",
+      "risque": "FORT — RISQUE LABEL_SWAP. TRA-SE-103 PDF officiel précis manquant. Doublon flagrant avec TRA-SE-102/105/106. Risque PNCEE rejet pour fiche dupliquée/inventée.",
+      "difficulty": "V39 — recherche PDF requise + audit doublons",
+      "note": "URGENT V39: vérifier que TRA-SE-103 existe vraiment ou si c'est une fiche inventée doublon de TRA-SE-101 ou 102. Plusieurs 'Formation éco-conduite' suspect."
+    },
+
+    "TRA-SE-104": {
+      "label_corrige": "Formation conduite économe moto (DIVERGENCE oracle.html vs mapping_naf_fiches.py qui dit 'Station gonflage pneumatiques')",
+      "label_actuel_ok": "FAUX — DIVERGENCE INTERNE",
+      "model_type": "absolute_per_personne",
+      "formula_summary": "kWhc = N_personnes × 1 300 000 (si moto) OU formule pneus si station gonflage",
+      "inputs": [
+        {"id": "n_personnes", "label": "Nombre de motards formés", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_personne": 1300000},
+      "test_cases": [
+        {"smart": {"n_personnes": 1}, "expected": 1300000, "desc": "1 motard formé éco-conduite = 1 300 000 kWhc (SI label moto correct)"}
+      ],
+      "pdf_source": "INTROUVABLE — DIVERGENCE LABEL",
+      "pdf_url": "INTROUVABLE",
+      "risque": "URGENT — DIVERGENCE oracle.html ('Formation moto') vs mapping_naf_fiches.py ('Station gonflage pneumatiques'). UN DES DEUX EST FAUX. PNCEE rejet quasi-certain.",
+      "difficulty": "V39 — recherche PDF requise + résolution divergence",
+      "note": "URGENT V39: identifier le vrai label PDF officiel. Si 'station gonflage', formule = par station + pneus traités, pas par personne."
+    },
+
+    "TRA-SE-105": {
+      "label_corrige": "Recreusage de pneumatiques de poids lourd (DIVERGENCE oracle 'Formation conduite économe VL' vs mapping 'Recreusage pneus')",
+      "label_actuel_ok": "FAUX — DIVERGENCE INTERNE",
+      "model_type": "absolute_per_pneu_recreuse",
+      "formula_summary": "Si recreusage : kWhc = N_pneus × forfait. Si formation VL : kWhc = N_personnes × 1.3M",
+      "inputs": [
+        {"id": "n_unite", "label": "Nombre (pneus recreusés OU personnes formées selon vrai label)", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_unite": 1300000, "comment": "Forfait à valider après résolution label"},
+      "test_cases": [
+        {"smart": {"n_unite": 1}, "expected": 1300000, "desc": "Cas par défaut, à confirmer après PDF"}
+      ],
+      "pdf_source": "INTROUVABLE — DIVERGENCE LABEL",
+      "pdf_url": "INTROUVABLE",
+      "risque": "URGENT — DIVERGENCE oracle.html vs mapping_naf_fiches.py. Risque PNCEE.",
+      "difficulty": "V39 — recherche PDF requise + résolution divergence",
+      "note": "URGENT V39: identifier le vrai label PDF. Pattern courant 'TRA-SE-1XX' = formation, 'recreusage pneus' serait plutôt TRA-SE série différente."
+    },
+
+    "TRA-SE-106": {
+      "label_corrige": "Formation à l'éco-conduite (alt) — DIVERGENCE oracle 'éco-conduite alt' vs mapping 'Mesure optimisation conso PL'",
+      "label_actuel_ok": "FAUX — DIVERGENCE INTERNE",
+      "model_type": "absolute_per_unit",
+      "formula_summary": "À déterminer après résolution label",
+      "inputs": [
+        {"id": "n_unite", "label": "Nombre (à préciser après vérif PDF)", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_unite": 1300000},
+      "test_cases": [
+        {"smart": {"n_unite": 1}, "expected": 1300000, "desc": "Cas par défaut"}
+      ],
+      "pdf_source": "INTROUVABLE — DIVERGENCE LABEL",
+      "pdf_url": "INTROUVABLE",
+      "risque": "URGENT — DIVERGENCE interne",
+      "difficulty": "V39 — recherche PDF requise + résolution divergence",
+      "note": "URGENT V39: le label oracle.html 'Formation écoconduite alt' n'a aucun sens — résoudre."
+    },
+
+    "TRA-SE-107": {
+      "label_corrige": "Carénage fluvial — DIVERGENCE oracle 'écoconduite PL' vs mapping 'Carénage fluvial'",
+      "label_actuel_ok": "FAUX — DIVERGENCE INTERNE",
+      "model_type": "À DETERMINER",
+      "formula_summary": "Si carénage fluvial : kWhc par bateau caréné. Si formation PL : kWhc par chauffeur.",
+      "inputs": [
+        {"id": "n_unite", "label": "À préciser après PDF", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_unite": 1300000},
+      "test_cases": [
+        {"smart": {"n_unite": 1}, "expected": 1300000, "desc": "Cas par défaut"}
+      ],
+      "pdf_source": "INTROUVABLE — DIVERGENCE LABEL",
+      "pdf_url": "INTROUVABLE",
+      "risque": "URGENT — DIVERGENCE interne",
+      "difficulty": "V39 — recherche PDF requise + résolution divergence",
+      "note": "URGENT V39"
+    },
+
+    "TRA-SE-108": {
+      "label_corrige": "Gestion externalisée des pneumatiques poids lourd — DIVERGENCE oracle 'écoconduite autocar' vs mapping 'Gestion pneus PL'",
+      "label_actuel_ok": "FAUX — DIVERGENCE INTERNE",
+      "model_type": "absolute_per_vehicule",
+      "formula_summary": "Si gestion pneus PL : kWhc = N_véhicules × 1 300 000/an de gestion. Si formation autocar : par chauffeur.",
+      "inputs": [
+        {"id": "n_unite", "label": "À préciser après PDF", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_unite": 1300000},
+      "test_cases": [
+        {"smart": {"n_unite": 1}, "expected": 1300000, "desc": "Cas par défaut"}
+      ],
+      "pdf_source": "INTROUVABLE — DIVERGENCE LABEL",
+      "pdf_url": "INTROUVABLE",
+      "risque": "URGENT — DIVERGENCE interne",
+      "difficulty": "V39 — recherche PDF requise + résolution divergence",
+      "note": "URGENT V39"
+    },
+
+    "TRA-SE-109": {
+      "label_corrige": "Gestion externalisée pneumatiques VL — DIVERGENCE oracle 'écoconduite VUL' vs mapping 'Gestion pneus VL'",
+      "label_actuel_ok": "FAUX — DIVERGENCE INTERNE",
+      "model_type": "absolute_per_vehicule",
+      "formula_summary": "Si gestion pneus VL : kWhc/véhicule. Si formation VUL : par chauffeur.",
+      "inputs": [
+        {"id": "n_unite", "label": "À préciser après PDF", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_unite": 1300000},
+      "test_cases": [
+        {"smart": {"n_unite": 1}, "expected": 1300000, "desc": "Cas par défaut"}
+      ],
+      "pdf_source": "INTROUVABLE — DIVERGENCE LABEL",
+      "pdf_url": "INTROUVABLE",
+      "risque": "URGENT — DIVERGENCE interne",
+      "difficulty": "V39 — recherche PDF requise + résolution divergence",
+      "note": "URGENT V39"
+    },
+
+    "TRA-SE-110": {
+      "label_corrige": "Gestion optimisée poste pneumatique — Marchandises (PL)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_vehicule",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000 (forfait gestion poste pneus PL/an)",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de PL en gestion poste pneus optimisée", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 PL gestion poste pneus = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE — version PDF non tracée",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — version non tracée, valeur 1300 par défaut",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Note '[V26:ajouté]'. Cohérent avec mapping_naf 'Gestion optimisée pneus PL'."
+    },
+
+    "TRA-SE-111": {
+      "label_corrige": "Gestion optimisée poste pneumatique — Personnes (autocar/VL transport voyageurs)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_vehicule",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de véhicules transport voyageurs en gestion poste pneus", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 véhicule personnes gestion poste pneus = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "INTROUVABLE — version PDF non tracée",
+      "pdf_url": "INTROUVABLE",
+      "risque": "MOYEN — version non tracée",
+      "difficulty": "V39 — recherche PDF requise",
+      "note": "Cohérent avec mapping_naf 'Gestion optimisée pneus VL'."
+    },
+
+    "TRA-SE-112": {
+      "label_corrige": "Service d'autopartage en boucle (par abonnement annuel)",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_abonnement_with_cap",
+      "formula_summary": "kWhc = N_abonnements × 6 000 000 (utilisé ≥1 fois/12 mois). Limite 1 abo/personne sur 5 ans.",
+      "inputs": [
+        {"id": "n_abonnements", "label": "Nombre d'abonnements autopartage actifs (≥1 utilisation/12 mois)", "type": "number", "min": 1},
+        {"id": "abos_par_personne_5ans", "label": "Confirmer cap 1 abo/personne/5ans", "type": "boolean", "default": true}
+      ],
+      "official_table": {"forfait_kwhc_per_abonnement": 6000000, "cap": "1 abo/personne sur 5 ans"},
+      "test_cases": [
+        {"smart": {"n_abonnements": 1, "abos_par_personne_5ans": true}, "expected": 6000000, "desc": "1 abonnement autopartage = 6 000 000 kWhc"},
+        {"smart": {"n_abonnements": 100, "abos_par_personne_5ans": true}, "expected": 600000000, "desc": "100 abonnements = 600 000 000 kWhc"}
+      ],
+      "pdf_source": "vA15-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-SE-112.pdf",
+      "risque": "OK — ANCIEN catalog 36 = SOUS ×166.7. Corrigé V38.4c à 6000.",
+      "difficulty": "moyen",
+      "note": "Engine doit enforcer cap 1/personne/5ans (lookup sur identité bénéficiaire)."
+    },
+
+    "TRA-SE-113": {
+      "label_corrige": "Suivi de la consommation de carburants par utilisation de cartes privatives",
+      "label_actuel_ok": true,
+      "model_type": "absolute_per_vehicule",
+      "formula_summary": "kWhc = N_véhicules × 1 300 000 (forfait par véhicule équipé carte + suivi)",
+      "inputs": [
+        {"id": "n_vehicules", "label": "Nombre de véhicules avec suivi conso carburant via carte", "type": "number", "min": 1}
+      ],
+      "official_table": {"forfait_kwhc_per_vehicule": 1300000},
+      "test_cases": [
+        {"smart": {"n_vehicules": 1}, "expected": 1300000, "desc": "1 véhicule suivi carte = 1 300 000 kWhc"}
+      ],
+      "pdf_source": "vA14-1",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-SE-113.pdf",
+      "risque": "OK — version PDF tracée",
+      "difficulty": "facile",
+      "note": "forfait_simple OK. Conditions: carte privative + tableau de bord conso accessible."
+    },
+
+    "TRA-SE-116": {
+      "label_corrige": "Fret ferroviaire — contrat prestation (par tonne.km)",
+      "label_actuel_ok": true,
+      "model_type": "fixed_formula_fret_ferroviaire",
+      "formula_summary": "kWhc = T_km × Coef(NST) × C/R(durée). Coef varie 0.105-0.190 selon classe NST. Bonification x C/R selon engagement durée.",
+      "inputs": [
+        {"id": "t_km_an", "label": "Tonnes.kilomètres annuelles transférées route → rail", "type": "number", "min": 100000},
+        {"id": "classe_nst", "label": "Classe NST (Nomenclature Statistique Transport)", "type": "select", "options": ["NST_1_agri", "NST_2_charbon", "NST_3_petrole", "NST_4_minerai", "NST_5_metallurgie", "NST_6_minéraux", "NST_7_chimie", "NST_8_industriel", "NST_9_divers"], "default": "NST_9_divers"},
+        {"id": "duree_engagement_ans", "label": "Durée engagement contrat (années)", "type": "number", "min": 1, "max": 10, "default": 3}
+      ],
+      "official_table": {
+        "coef_kwhc_per_tkm_by_nst": {
+          "NST_1_agri": 0.190,
+          "NST_2_charbon": 0.105,
+          "NST_3_petrole": 0.130,
+          "NST_4_minerai": 0.105,
+          "NST_5_metallurgie": 0.130,
+          "NST_6_mineraux": 0.130,
+          "NST_7_chimie": 0.155,
+          "NST_8_industriel": 0.190,
+          "NST_9_divers": 0.190
+        },
+        "comment_facteur_actualisation": "C/R durée déjà inclus dans coef PDF vA65-2 — ne pas multiplier par durée"
+      },
+      "test_cases": [
+        {"smart": {"t_km_an": 1000000, "classe_nst": "NST_9_divers", "duree_engagement_ans": 3}, "expected": 190000, "desc": "1 Mt.km divers × 0.190 = 190 000 kWhc"},
+        {"smart": {"t_km_an": 5000000, "classe_nst": "NST_4_minerai", "duree_engagement_ans": 5}, "expected": 525000, "desc": "5 Mt.km minerai × 0.105 = 525 000 kWhc"}
+      ],
+      "pdf_source": "vA65-2 (01/01/2025)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-SE-116.pdf",
+      "risque": "URGENT — UNITÉ catalog ANCIENNE (UTI.km) → corrigée V38.4c en t.km. Catalog z=0.190 = display NST agri/divers.",
+      "difficulty": "V39",
+      "note": "Refacto V39 obligatoire pour table NST 9 classes. Variable selon classe marchandise."
+    },
+
+    "TRA-SE-117": {
+      "label_corrige": "Fret fluvial — contrat prestation (par tonne.km)",
+      "label_actuel_ok": true,
+      "model_type": "fixed_formula_fret_fluvial",
+      "formula_summary": "kWhc = T_km × 2 (forfait simple par t.km route → fluvial)",
+      "inputs": [
+        {"id": "t_km_an", "label": "Tonnes.kilomètres annuelles transférées route → fluvial", "type": "number", "min": 100000},
+        {"id": "duree_engagement_ans", "label": "Durée engagement (années)", "type": "number", "min": 1, "default": 3}
+      ],
+      "official_table": {"coef_kwhc_per_tkm": 2, "comment": "Coef unique fluvial (vs table NST ferroviaire)"},
+      "test_cases": [
+        {"smart": {"t_km_an": 1000000, "duree_engagement_ans": 3}, "expected": 2000000, "desc": "1 Mt.km fluvial × 2 = 2 000 000 kWhc"},
+        {"smart": {"t_km_an": 500000, "duree_engagement_ans": 5}, "expected": 1000000, "desc": "0.5 Mt.km × 2 = 1 000 000 kWhc"}
+      ],
+      "pdf_source": "vA65-1 (01/01/2025)",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/TRA-SE-117.pdf",
+      "risque": "OK — coef simple confirmé",
+      "difficulty": "facile",
+      "note": "Plus simple que TRA-SE-116 — pas de table NST. forfait_simple par t.km."
+    }
+  },
+
+  "_summary": {
+    "total_audites": 42,
+    "facile": 11,
+    "moyen": 14,
+    "v39_refacto": 17,
+    "label_swap_critique": 6,
+    "fiches_avec_pdf_traced": 19,
+    "fiches_pdf_introuvable": 23,
+    "actions_immediates": [
+      "TRA-EQ-106: ANCIEN bug catalog (1300 → 60) confirmé OK V38.4c, mais smart Q UX pneus à implémenter (formule Σ par classe × km)",
+      "TRA-SE-104 à 109: 6 divergences entre oracle.html et mapping_naf_fiches.py — labels conflictuels, RISQUE PNCEE rejet — résoudre PDF par PDF avant V39",
+      "TRA-EQ-114, 117, 128, 129, 130: 5 fiches multi-axis (12-16 cas) — refacto V39 obligatoire pour précision",
+      "TRA-SE-116: unité corrigée OK V38.4c, table NST 9 classes à implémenter",
+      "TRA-EQ-118: désactivée OK (label swap résolu en V38.4c)"
+    ]
+  }
+}
