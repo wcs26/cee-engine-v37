@@ -393,6 +393,23 @@ _PARAM_LABEL = {
     "classe":          ("Classe énergétique", "choix", ""),
     "mode":            ("Mode de fonctionnement", "choix", ""),
     "zone":            ("Zone d'application", "choix", ""),
+    # V39.3.1 — variables pour fiches activées avec formules ADEME
+    "secteur":         ("Secteur d'activité", "choix", ""),
+    "branche":         ("Branche d'activité", "choix", ""),
+    "dn":              ("Diamètre nominal canalisation (mm)", "nombre", "mm"),
+    "type_eau":        ("Type fluide (eau chaude / surchauffée / vapeur)", "choix", ""),
+    "delta_t":         ("Gain température consigne (°C)", "nombre", "°C"),
+    "q_kwh":           ("Énergie thermique annuelle Q (kWh/an)", "nombre", "kWh/an"),
+    "e_elec_kwh":      ("Énergie électrique absorbée (kWh/an)", "nombre", "kWh/an"),
+    "d_heures":        ("Durée annuelle fonctionnement (h)", "nombre", "h/an"),
+    "p_recup":         ("Puissance récupérée fluide caloporteur (kW)", "nombre", "kW"),
+    "p_conso":         ("Puissance électrique auxiliaires (kW)", "nombre", "kW"),
+    "capacite_kwh":    ("Capacité maximale stockage (kWh)", "nombre", "kWh"),
+    "nb_cycles":       ("Nombre annuel de cycles équivalents", "nombre", "cycles"),
+    "n_a":             ("Nombre pneus classe A", "nombre", "pneus"),
+    "n_b":             ("Nombre pneus classe B", "nombre", "pneus"),
+    "n_c":             ("Nombre pneus classe C", "nombre", "pneus"),
+    "y_km":            ("Kilométrage annuel moyen par véhicule", "nombre", "km/an"),
 }
 
 
@@ -491,7 +508,14 @@ def build_questions_for_fiche(fiche, connu):
                   impact=f"Tranches: {tr_descr}")
         return questions
 
-    # === Cas 6 : type complexe — table legacy (1 fiche) ===
+    # === Cas 6 : type complexe — mode formule (eval avec multi-variables) ===
+    if mode == "formule":
+        for v in variables:
+            label, qtype, unite = _PARAM_LABEL.get(v, (v.capitalize().replace('_',' '), "nombre", ""))
+            add_q(v, label, qtype, unite)
+        return questions
+
+    # === Cas 7 : type complexe — table legacy (1 fiche) ===
     if mode == "table":
         if variables:
             key_var = variables[0]
