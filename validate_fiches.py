@@ -70,11 +70,14 @@ def validate_fiche(fiche, strict=False):
     else:
         erreurs.append(f"cumac format inconnu: {type(cu)}")
 
-    # V39.0.7 garde anti-régression : complexe ACTIF sans table_cumac ET sans formule
-    # = compute_complexe() retourne 0 → revenu CEE faussement nul. Bug détecté V39.0.7
-    # où 30 fiches actives renvoyaient 0€ silencieusement.
-    if ftype == "complexe" and fiche.get("actif") and not fiche.get("table_cumac") and not fiche.get("formule"):
-        erreurs.append("complexe actif sans table_cumac ni formule (compute=0€)")
+    # V39.0.7 garde anti-régression : complexe ACTIF sans data calculable
+    # = compute_complexe() retourne 0 → revenu CEE faussement nul.
+    # V39.2.1 : ajout 'tranches' (mode formule_tranches) comme data valide.
+    if (ftype == "complexe" and fiche.get("actif")
+            and not fiche.get("table_cumac")
+            and not fiche.get("formule")
+            and not fiche.get("tranches")):
+        erreurs.append("complexe actif sans table_cumac/formule/tranches (compute=0€)")
 
     if not fiche.get("params"):
         erreurs.append("params manquants")

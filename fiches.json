@@ -685,15 +685,15 @@
       "Equipement/batiment existant > 2 ans",
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Thermique",
     "gisements": [
       "chauffage_batiment"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_2d",
     "variables": [
-      "puissance",
-      "surface"
+      "efficacite",
+      "type"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -771,6 +771,25 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "2d",
+        "test_compute": 800,
+        "test_params": {
+          "efficacite": "111% ≤ ηs < 126%",
+          "type": "Maraîchère"
+        }
+      }
+    },
+    "table_cumac": {
+      "111% ≤ ηs < 126%": {
+        "Maraîchère": 800,
+        "Horticole": 380
+      },
+      "126% ≤ ηs": {
+        "Maraîchère": 970,
+        "Horticole": 460
       }
     }
   },
@@ -1071,15 +1090,14 @@
     "conditions_texte": [
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "motorisation"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -1101,7 +1119,23 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 2100,
+        "test_params": {
+          "application": "Pompage d’irrigation"
+        }
       }
+    },
+    "table_cumac": {
+      "Pompage d’irrigation": 2100,
+      "Ventilation de bâtiments d’élevage": 18300,
+      "Ventilation en serre": 14900,
+      "Pompe à vide d’une salle de traite": 2100,
+      "Chaufferie d’une serre (pompe, ventilateur brûleur)": 6400,
+      "Autres applications": 4500
     }
   },
   {
@@ -1135,15 +1169,14 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "motorisation"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -1165,7 +1198,23 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 1600,
+        "test_params": {
+          "application": "Pompe d’irrigation"
+        }
       }
+    },
+    "table_cumac": {
+      "Pompe d’irrigation": 1600,
+      "Ventilateur de bâtiments d’élevage": 19600,
+      "Ventilation d’une serre": 11500,
+      "Pompe à vide d’une salle de traite": 2800,
+      "Chauffage d’une serre (pompe, ventilateur d’un brûleur)": 7700,
+      "Autres applications": 2300
     }
   },
   {
@@ -1233,15 +1282,16 @@
     "conditions_texte": [
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "froid",
       "regulation_gtb"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_2d",
     "variables": [
-      "puissance"
+      "zone",
+      "montant"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -1283,6 +1333,23 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "2d",
+        "test_compute": 10600,
+        "test_params": {
+          "zone": "H1 ou H2",
+          "montant": "10 600"
+        }
+      }
+    },
+    "table_cumac": {
+      "H1 ou H2": {
+        "10 600": 10600
+      },
+      "H3": {
+        "9 700": 9700
       }
     }
   },
@@ -3626,14 +3693,15 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Équipements",
     "gisements": [
       "froid"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_2d",
     "variables": [
-      "puissance"
+      "cle",
+      "montants"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -3670,6 +3738,26 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "2d",
+        "test_compute": 8500,
+        "test_params": {
+          "cle": "Option 0",
+          "montants": "8 500"
+        }
+      }
+    },
+    "table_cumac": {
+      "Option 0": {
+        "8 500": 8500
+      },
+      "Option 1 ou 1 bis": {
+        "10 300": 10300
+      },
+      "Option 2": {
+        "12 700": 12700
       }
     }
   },
@@ -4715,16 +4803,15 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Thermique",
     "gisements": [
       "motorisation"
     ],
     "note": "[V26:ajouté]",
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -4745,7 +4832,22 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 9600,
+        "test_params": {
+          "application": "Chauffage, pompage"
+        }
       }
+    },
+    "table_cumac": {
+      "Chauffage, pompage": 9600,
+      "Ventilation, renouvellement d’air": 11400,
+      "Réfrigération": 3900,
+      "Climatisation": 990,
+      "Autres applications": 990
     }
   },
   {
@@ -4955,16 +5057,15 @@
       "Equipement/batiment existant > 2 ans",
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Thermique",
     "gisements": [
       "regulation_gtb"
     ],
     "note": "[V26:ajouté]",
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "surface"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -4986,7 +5087,23 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 560,
+        "test_params": {
+          "application": "Bureaux"
+        }
       }
+    },
+    "table_cumac": {
+      "Bureaux": 560,
+      "Commerce": 180,
+      "Hôtellerie": 340,
+      "Enseignement": 460,
+      "Santé": 210,
+      "Autres secteurs": 180
     }
   },
   {
@@ -5598,15 +5715,15 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Thermique",
     "gisements": [
       "chauffage_batiment"
     ],
     "cofrac": true,
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -5624,7 +5741,19 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 167800,
+        "test_params": {
+          "application": "800 kW ≤ P ≤ 1 200 kW"
+        }
       }
+    },
+    "table_cumac": {
+      "800 kW ≤ P ≤ 1 200 kW": 167800,
+      "1 200 kW < P": 279600
     }
   },
   {
@@ -6052,15 +6181,14 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "motorisation"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -6081,7 +6209,22 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 12400,
+        "test_params": {
+          "application": "Pompage"
+        }
       }
+    },
+    "table_cumac": {
+      "Pompage": 12400,
+      "Ventilation": 12200,
+      "Compresseur d’air": 11900,
+      "Compresseur frigorifique": 7100,
+      "Autres applications": 5500
     }
   },
   {
@@ -6414,15 +6557,14 @@
     "conditions_texte": [
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "motorisation"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -6443,7 +6585,22 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 17800,
+        "test_params": {
+          "application": "Pompage"
+        }
       }
+    },
+    "table_cumac": {
+      "Pompage": 17800,
+      "Ventilation": 17600,
+      "Compresseur d’air": 9200,
+      "Compresseur frigorifique": 14500,
+      "Autre application": 11400
     }
   },
   {
@@ -6578,15 +6735,15 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "process_thermique"
     ],
     "note": "[V25:ajouté]",
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -6626,7 +6783,21 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 1600,
+        "test_params": {
+          "application": "600 ≤ T ≤ 750"
+        }
       }
+    },
+    "table_cumac": {
+      "600 ≤ T ≤ 750": 1600,
+      "750 < T ≤ 1000": 2500,
+      "1000 < T ≤ 1250": 4100,
+      "1250 < T": 5800
     }
   },
   {
@@ -6779,14 +6950,15 @@
     "conditions_texte": [
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "vapeur"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_2d",
     "variables": [
-      "puissance"
+      "mode",
+      "montant"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -6830,6 +7002,29 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "2d",
+        "test_compute": 70,
+        "test_params": {
+          "mode": "1x8h",
+          "montant": "70"
+        }
+      }
+    },
+    "table_cumac": {
+      "1x8h": {
+        "70": 70
+      },
+      "2x8h": {
+        "160": 160
+      },
+      "3x8h avec arrêt le week-end": {
+        "220": 220
+      },
+      "3x8h sans arrêt le week-end": {
+        "300": 300
       }
     }
   },
@@ -6968,7 +7163,7 @@
       "Equipement/batiment existant > 2 ans",
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "isolation_enveloppe",
@@ -6976,10 +7171,9 @@
     ],
     "zero_euro": true,
     "note": "vA37-2 01/04/2021",
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "surface",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -7011,7 +7205,22 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 300,
+        "test_params": {
+          "application": "- 80°C < T ≤ -10°C"
+        }
       }
+    },
+    "table_cumac": {
+      "- 80°C < T ≤ -10°C": 300,
+      "- 10°C < T ≤ 10°C": 180,
+      "40°C < T ≤ 100°C": 1050,
+      "100°C < T ≤ 300°C": 1900,
+      "T > 300°C": 1850
     }
   },
   {
@@ -7043,12 +7252,12 @@
     "conditions_texte": [
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "motorisation"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "formule_tranches",
     "variables": [
       "puissance"
     ],
@@ -7084,8 +7293,37 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "formula",
+        "test_compute": 19000.0,
+        "test_params": {
+          "puissance": 10
+        }
       }
-    }
+    },
+    "table_cumac": {},
+    "tranches": [
+      {
+        "min": 0.12,
+        "max": 0.75,
+        "a": 4900,
+        "b": 2600
+      },
+      {
+        "min": 0.75,
+        "max": 375.0,
+        "a": 700,
+        "b": 12000
+      },
+      {
+        "min": 375.0,
+        "max": 1000.0,
+        "a": 1600,
+        "b": 0
+      }
+    ]
   },
   {
     "ref": "IND-UT-133",
@@ -7118,15 +7356,14 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Utilités",
     "gisements": [
       "motorisation"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "formule_tranches",
     "variables": [
-      "puissance",
-      "quantite"
+      "puissance"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -7148,8 +7385,25 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "formula",
+        "test_compute": 250.0,
+        "test_params": {
+          "puissance": 10
+        }
       }
-    }
+    },
+    "table_cumac": {},
+    "tranches": [
+      {
+        "min": 0,
+        "max": Infinity,
+        "a": 25,
+        "b": 0
+      }
+    ]
   },
   {
     "ref": "IND-UT-134",
@@ -8847,15 +9101,14 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Équipements",
     "gisements": [
       "flotte_vehicules"
     ],
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "puissance",
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -8883,7 +9136,20 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 147,
+        "test_params": {
+          "application": "Bateau de réception destiné à un usage principalement privatif * et bateau de travail"
+        }
       }
+    },
+    "table_cumac": {
+      "Bateau de réception destiné à un usage principalement privatif * et bateau de travail": 147,
+      "Petit bateau à passagers": 103,
+      "Bateau restaurant, bateau promenades, automoteur, bateau de plaisance et péniche-hôtel": 71
     }
   },
   {
@@ -8916,15 +9182,15 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Équipements",
     "gisements": [
       "flotte_vehicules"
     ],
     "note": "vA54-1 01/10/2023",
-    "mode_calcul": "table",
+    "mode_calcul": "table_str",
     "variables": [
-      "quantite"
+      "application"
     ],
     "audit": {
       "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
@@ -8964,7 +9230,21 @@
           }
         ],
         "review_status": "pending_human_validation"
+      },
+      "reactivated_V39_2_1": {
+        "method": "apply_complex_extractions",
+        "extraction_type": "1d",
+        "test_compute": 121,
+        "test_params": {
+          "application": "Bateau de réception et bateau de travail"
+        }
       }
+    },
+    "table_cumac": {
+      "Bateau de réception et bateau de travail": 121,
+      "Petit bateau à passagers": 79,
+      "Bateau restaurant, bateau promenade, automoteur, bateau de croisière fluviale avec hébergement et péniche-hôtel": 43,
+      "Bateau de plaisance": 31
     }
   },
   {

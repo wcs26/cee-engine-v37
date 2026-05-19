@@ -336,14 +336,73 @@ def compute(fiche, params, zone, energie=None, activity_sector=None):
 
 
 def compute_complexe(fiche, params):
-    """Calcul pour fiches avec table multi-paramètres."""
-    table = fiche.get("table_cumac", {})
-    if not table:
-        return 0
+    """Calcul pour fiches complexes (multi-paramètres).
 
+    Modes supportés :
+      - 'table'           : clés numériques int (legacy, ex IND-UT-124 puissance)
+      - 'table_str'       : clés string lookup direct (V39.2.1, ex AGRI-UT-101 application)
+      - 'table_2d'        : nested dict {cle1: {cle2: cumac}} (V39.2.1, ex AGRI-TH-108)
+      - 'formule_tranches': liste de plages [{min,max,a,b}] avec cumac=a×P+b (V39.2.1)
+      - 'formule'         : eval expression (legacy)
+
+    Tous les modes peuvent multiplier par variables[-1] si numérique (ex quantite).
+    """
+    table = fiche.get("table_cumac", {})
     mode = fiche.get("mode_calcul", "table")
     variables = fiche.get("variables", [])
+    if not table and mode not in ("formule", "formule_tranches"):
+        return 0
 
+    # === Mode table_str : lookup direct par str ===
+    if mode == "table_str":
+        key_var = variables[0] if variables else None
+        mult_var = variables[1] if len(variables) > 1 else None
+        if not key_var:
+            return 0
+        key_val = params.get(key_var, "")
+        cumac_u = table.get(str(key_val), 0)
+        if not cumac_u:
+            # Fallback fuzzy : lookup case-insensitive
+            for k, v in table.items():
+                if str(key_val).lower() in str(k).lower() or str(k).lower() in str(key_val).lower():
+                    cumac_u = v
+                    break
+        mult = params.get(mult_var, 1) if mult_var else 1
+        return cumac_u * mult
+
+    # === Mode table_2d : nested dict ===
+    if mode == "table_2d":
+        if len(variables) < 2:
+            return 0
+        v1, v2 = variables[0], variables[1]
+        mult_var = variables[2] if len(variables) > 2 else None
+        key1 = params.get(v1, "")
+        key2 = params.get(v2, "")
+        inner = table.get(str(key1), {})
+        if not isinstance(inner, dict):
+            return 0
+        cumac_u = inner.get(str(key2), 0)
+        if not cumac_u:
+            # Fallback fuzzy sur key1
+            for k, sub in table.items():
+                if isinstance(sub, dict) and str(key1).lower() in str(k).lower():
+                    cumac_u = sub.get(str(key2), 0)
+                    break
+        mult = params.get(mult_var, 1) if mult_var else 1
+        return cumac_u * mult
+
+    # === Mode formule_tranches : liste plages avec a×P+b ===
+    if mode == "formule_tranches":
+        tranches = fiche.get("tranches", [])
+        var_name = variables[0] if variables else "puissance"
+        val = float(params.get(var_name, 0) or 0)
+        for tr in tranches:
+            mn, mx = tr.get("min", 0), tr.get("max", float("inf"))
+            if mn <= val <= mx:
+                return tr.get("a", 0) * val + tr.get("b", 0)
+        return 0
+
+    # === Mode table legacy (clés int) ===
     if mode == "table":
         key_var = variables[0] if variables else None
         mult_var = variables[1] if len(variables) > 1 else None
