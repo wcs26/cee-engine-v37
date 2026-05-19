@@ -441,7 +441,12 @@
     "gisements": [
       "eclairage_interieur",
       "regulation_gtb"
-    ]
+    ],
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "AGRI-SE-101",
@@ -836,7 +841,12 @@
     "categorie": "Thermique",
     "gisements": [
       "chauffage_batiment"
-    ]
+    ],
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "AGRI-TH-117",
@@ -1534,7 +1544,12 @@
     "categorie": "Équipements",
     "gisements": [
       "ecs"
-    ]
+    ],
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAR-EQ-115",
@@ -1769,7 +1784,12 @@
     "gisements": [
       "chauffage_batiment"
     ],
-    "note": "Remplacée par BAR-TH-171/172 [V25:marqueur historique]"
+    "note": "Remplacée par BAR-TH-171/172 [V25:marqueur historique]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAR-TH-112",
@@ -2279,7 +2299,12 @@
     "gisements": [
       "isolation_enveloppe"
     ],
-    "note": "ABROGÉE 01/08/2025 [V25:marqueur historique]"
+    "note": "ABROGÉE 01/08/2025 [V25:marqueur historique]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAR-TH-161",
@@ -2386,7 +2411,12 @@
       "isolation_enveloppe",
       "ecs"
     ],
-    "note": "vA75-1 P6 01/01/2026"
+    "note": "vA75-1 P6 01/01/2026",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAR-TH-165",
@@ -3124,7 +3154,12 @@
     "gisements": [
       "isolation_enveloppe"
     ],
-    "note": "vA64.4 01/01/2025 [V26:ajouté]"
+    "note": "vA64.4 01/01/2025 [V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAT-EN-106",
@@ -3734,7 +3769,12 @@
     "categorie": "Équipements",
     "gisements": [
       "ecs"
-    ]
+    ],
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAT-EQ-134",
@@ -3944,7 +3984,12 @@
       "ecs"
     ],
     "surface_ratio": 0.02,
-    "surface_ratio_note": "m² opération = surface_ratio × surface bâtiment (V37 FIX)"
+    "surface_ratio_note": "m² opération = surface_ratio × surface bâtiment (V37 FIX)",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAT-TH-102",
@@ -4044,7 +4089,12 @@
     "gisements": [],
     "actif": true,
     "categorie": "",
-    "sous_secteur": "TH"
+    "sous_secteur": "TH",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "BAT-TH-105",
@@ -5384,7 +5434,12 @@
     "categorie": "Enveloppe",
     "gisements": [
       "isolation_enveloppe"
-    ]
+    ],
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-101",
@@ -5418,7 +5473,12 @@
     "gisements": [
       "process_thermique"
     ],
-    "note": "vA64 [V26:ajouté]"
+    "note": "vA64 [V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-102",
@@ -5601,7 +5661,12 @@
     "gisements": [
       "chauffage_batiment"
     ],
-    "note": "vA64 [V26:ajouté]"
+    "note": "vA64 [V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-108",
@@ -5636,7 +5701,12 @@
       "air_comprime"
     ],
     "zero_euro": true,
-    "note": "vA73 [V26:ajouté]"
+    "note": "vA73 [V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-109",
@@ -5670,7 +5740,12 @@
     "gisements": [
       "froid"
     ],
-    "note": "vA64 [V26:ajouté]"
+    "note": "vA64 [V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-112",
@@ -5704,7 +5779,12 @@
     "gisements": [
       "process_thermique"
     ],
-    "note": "vA64 [V26:ajouté]"
+    "note": "vA64 [V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-113",
@@ -5883,7 +5963,12 @@
       "froid",
       "process_thermique"
     ],
-    "note": "ABROGÉE 01/08/2025 surfinancement [V25:marqueur]"
+    "note": "ABROGÉE 01/08/2025 surfinancement [V25:marqueur]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-118",
@@ -6434,7 +6519,12 @@
     "gisements": [
       "motorisation"
     ],
-    "note": "ABROGÉE 2025 technologie mature [V25:marqueur]"
+    "note": "ABROGÉE 2025 technologie mature [V25:marqueur]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "IND-UT-137",
@@ -6644,7 +6734,12 @@
     "gisements": [
       "reseau_chaleur"
     ],
-    "note": "vA78"
+    "note": "vA78",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "RES-CH-102",
@@ -6678,7 +6773,12 @@
     "gisements": [
       "reseau_chaleur"
     ],
-    "note": "vA65-1"
+    "note": "vA65-1",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "RES-CH-103",
@@ -6857,7 +6957,12 @@
     "gisements": [
       "reseau_chaleur"
     ],
-    "note": "vA73"
+    "note": "vA73",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "RES-CH-108",
@@ -6928,7 +7033,12 @@
     "gisements": [
       "reseau_chaleur"
     ],
-    "note": "vA65-2"
+    "note": "vA65-2",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "RES-EC-104",
@@ -8098,7 +8208,12 @@
     "gisements": [
       "flotte_vehicules"
     ],
-    "note": "[V26:ajouté]"
+    "note": "[V26:ajouté]",
+    "audit": {
+      "abrogation_a_confirmer": true,
+      "audit_date": "2026-05-19",
+      "note_audit": "Absente de l'index ADEME live (mais scraper limité, vérification manuelle requise — peut-être sur autre page ADEME ou arrêté Legifrance)"
+    }
   },
   {
     "ref": "TRA-SE-104",
@@ -8534,5 +8649,366 @@
       "flotte_vehicules"
     ],
     "note": "vA65-1 01/01/2025"
+  },
+  {
+    "ref": "BAR-EN-110",
+    "nom": "Isolation comble perdu maison individuelle",
+    "secteur": "BAR",
+    "sous_secteur": "EN",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par m2",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-EN-110%20vA35-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-SE-107",
+    "nom": "Service programmation/régulation chauffage",
+    "secteur": "BAR",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-SE-107%20vA37-1%20%C3%A0%20compter%20du%2031-12-2020_0.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-SE-109",
+    "nom": "Service rénovation accompagnée logement",
+    "secteur": "BAR",
+    "sous_secteur": "SE",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/Mod%C3%A8le_Tableau_de_recensement_des_engagements_BAR-SE-109.xlsx",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-102",
+    "nom": "Chaudière individuelle haute performance",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-102%20vA17-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-106",
+    "nom": "Chaudière collective haute performance",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "A_LOOKUP",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-107",
+    "nom": "Optimiseur chaudière collective",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "A_LOOKUP",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-110",
+    "nom": "Robinet thermostatique",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-110%20vA16-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-111",
+    "nom": "Régulation par sonde température extérieure",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-111%20vA17-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-116",
+    "nom": "Récupérateur chaleur eaux usées",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-116%20vA17-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-117",
+    "nom": "Régulation programmable centralisée",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-117%20vA14-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-122",
+    "nom": "Isolation tuyauterie distribution chauffage",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "longueur"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-122%20vA15-1.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-130",
+    "nom": "Pompe à chaleur eau chaude sanitaire",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-130%20vA58-3%20%C3%A0%20compter%20du%2001-04-2024_0.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-137",
+    "nom": "Raccordement réseau chaleur résidentiel",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "nb_logements"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-137%20vA79-4%20%C3%A0%20compter%20du%2001-01-2026_2.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-139",
+    "nom": "Pompe à chaleur hybride collective",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-139%20v%20A23-2%20apr%C3%A8s%2001-02-2017_0.pdf",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAR-TH-150",
+    "nom": "Rénovation globale logement collectif",
+    "secteur": "BAR",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "nb_logements"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "A_LOOKUP",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAT-TH-140",
+    "nom": "Pompe à chaleur eau chaude tertiaire",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "A_LOOKUP",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAT-TH-141",
+    "nom": "Système chauffage biomasse tertiaire",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "puissance"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "A_LOOKUP",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "BAT-TH-146",
+    "nom": "Régulation chauffage tertiaire",
+    "secteur": "BAT",
+    "sous_secteur": "TH",
+    "type": "unitaire",
+    "params": [
+      "quantite"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par unité",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAT-TH-121%20%C3%A0%20BAT-TH-146.zip",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
+  },
+  {
+    "ref": "IND-UT-121",
+    "nom": "Calorifugeage industriel réseau froid",
+    "secteur": "IND",
+    "sous_secteur": "UT",
+    "type": "surface",
+    "params": [
+      "surface"
+    ],
+    "cumac_unitaire": "A VERIFIER",
+    "unite": "kWhc par m2",
+    "actif": false,
+    "audit": {
+      "source": "scrape-ademe V39.0.9 placeholder",
+      "date_ajout": "2026-05-19",
+      "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/IND-UT-121%20%C3%A0%20IND-UT-140.zip",
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+    }
   }
 ]
