@@ -311,15 +311,35 @@ def generate_smart_questions(fiches, contexte):
             {"question": "Combien de compresseurs / moteurs électriques sur le site ?", "impact": "Variateurs de vitesse = IND-UT-102 (ROI rapide)"},
         ]
 
-    # Questions spécifiques par fiche (uniquement les fiches complexes qui NÉCESSITENT une réponse client)
+    # Questions spécifiques par fiche — V39.1.2 FIX: data-driven via fiche.params
+    # (au lieu de chercher des mots dans conditions_texte qui ratait 90% des cas)
+    PARAM_QUESTIONS = {
+        "puissance":       ("Puissance installée (kW) ?", "nombre", "kW"),
+        "puissance_froid": ("Puissance frigorifique (kW) ?", "nombre", "kW"),
+        "quantite":        ("Nombre d'unités ?", "nombre", "unités"),
+        "nb_logements":    ("Nombre de logements ?", "nombre", "logements"),
+        "longueur":        ("Longueur installée (m) ?", "nombre", "m"),
+        "debit":           ("Débit (m³/h) ?", "nombre", "m³/h"),
+        "rendement":       ("Rendement de l'installation (%) ?", "nombre", "%"),
+    }
     par_fiche = {}
     for f in fiches:
         if not isinstance(f, dict): continue
         ref = f.get("ref", "")
-        conditions = " ".join(f.get("conditions_texte", [])).lower()
+        if not ref or ref in par_fiche: continue
+        fparams = f.get("params") or []
+        if "surface" in connu and fparams == ["surface"]:
+            continue  # surface déjà connue, pas de question utile
         fiche_qs = []
-        if "puissance" in conditions and ref not in par_fiche:
-            fiche_qs.append({"question": f"Puissance installée pour {ref} (kW) ?", "type": "nombre", "unite": "kW"})
+        for p in fparams:
+            if p == "surface" and "surface" in connu:
+                continue
+            if p in PARAM_QUESTIONS:
+                q, t, u = PARAM_QUESTIONS[p]
+                fiche_qs.append({
+                    "question": f"[{ref} — {f.get('nom','')[:40]}] {q}",
+                    "type": t, "unite": u, "param": p,
+                })
         if fiche_qs:
             par_fiche[ref] = fiche_qs
 

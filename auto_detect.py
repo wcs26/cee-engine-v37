@@ -811,7 +811,12 @@ def moteur_expert_v2(entreprise, surface, energie, departement):
             cumac = 0  # besoin réponses client
         elif fiche.get("type") == "surface":
             cu = get_cumac(fiche, zone, energie)
-            cumac = surface * cu if cu else 0
+            # V39.1.2 FIX : surface_ratio (fenêtres/capteurs/lanterneaux où m² fiche ≠ m² bâtiment).
+            # AVANT : prime ×5 à ×50 trop élevée (BAT-EQ-129 ratio=0.05 → 2.8M kWhc au lieu de 140k).
+            # APRÈS : aligné sur compute() du moteur_cee_master qui applique déjà ce ratio.
+            ratio = fiche.get("surface_ratio")
+            effective_surface = surface * ratio if (ratio and 0 < ratio < 1) else surface
+            cumac = effective_surface * cu if cu else 0
         else:
             # Unitaire : estimer quantité
             usage_factor = apply_usage_factor(fe.get("sous_activite", ""), naf)
