@@ -1,0 +1,254 @@
+ref,secteur,sous_secteur,nom,type,params,actif,cumac_H1,cumac_H2,cumac_H3,cumac_DOM,unite,duree_vie,eur_max_unite_classique,eur_max_unite_precarite,audit_status,conditions_texte
+AGRI-EQ-101,AGRI,EQ,Module température ordinateur climatique,unitaire,quantite,OUI,6240,5200,3640,3120,kWhc par unité,15,54.79,102.34,,Moteur IE3 ou IE4 / Usage agricole
+AGRI-EQ-102,AGRI,EQ,Double écran thermique,surface,surface,OUI,22,18,13,11,kWhc par m²,15,0.19,0.36,,Variateur de vitesse neuf / Moteur existant
+AGRI-EQ-104,AGRI,EQ,Écrans thermiques latéraux,surface,surface,OUI,17,14,10,8,kWhc par m²,12,0.15,0.28,,Exploitation laitiere / Pre-refroidisseur neuf
+AGRI-EQ-105,AGRI,EQ,Stop & Start véhicules agricoles,unitaire,quantite,OUI,6100,6100,6100,6100,kWhc par unité,15,53.56,100.04,,Installation par professionnel
+AGRI-EQ-106,AGRI,EQ,Régulation ventilation silos,unitaire,quantite,OUI,2540,2540,2540,2540,kWhc par unité,13,22.3,41.66,,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+AGRI-EQ-107,AGRI,EQ,Isolation parois de serre,surface,surface,OUI,14,12,8,7,kWhc par m²,15,0.12,0.23,,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+AGRI-EQ-108,AGRI,EQ,Stockage eau serre bioclimatique,unitaire,quantite,OUI,2200,1800,1300,1100,kWhc par m³,10,19.32,36.08,,Ventilateur basse conso neuf / Batiment elevage
+AGRI-EQ-109,AGRI,EQ,Couverture performante de serre,surface,surface,OUI,18,15,11,9,kWhc par m²,15,0.16,0.3,,Echangeur air-air neuf / Batiment elevage
+AGRI-EQ-110,AGRI,EQ,Séchage solaire panneaux hybrides,unitaire,quantite,OUI,15600,15600,15600,15600,kWhc par unité,15,136.97,255.84,,Luminaire LED neuf / Batiment agricole existant > 2 ans
+AGRI-EQ-111,AGRI,EQ,Simple écran thermique,surface,surface,OUI,11,9,7,6,kWhc par m²,8,0.1,0.18,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-EQ-112,AGRI,EQ,Double paroi gonflable,surface,surface,OUI,13,11,8,7,kWhc par m²,8,0.11,0.21,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-EQ-113,AGRI,EQ,Régulation éclairage serre,unitaire,quantite,OUI,4800,4800,4800,4800,kWhc par unité,15,42.14,78.72,abrogation_à_confirmer,
+AGRI-SE-101,AGRI,SE,Contrôle réglage moteur tracteur,unitaire,quantite,OUI,6100,6100,6100,6100,kWhc par unité,15,53.56,100.04,,Installation par professionnel
+AGRI-TH-101,AGRI,TH,Stockage eau chaude Open Buffer,unitaire,quantite,OUI,24000,20000,14000,12000,kWhc par unité,15,210.72,393.6,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-102,AGRI,TH,Stockage eau chaude,unitaire,quantite,OUI,4800,4000,2800,2400,kWhc par m³,15,42.14,78.72,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-103,AGRI,TH,Pré-refroidisseur de lait,unitaire,quantite,OUI,5000,5000,5000,5000,kWhc par unité,14,43.9,82.0,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-104,AGRI,TH,Chauffage serre - chaudiere biomasse,surface,surface,OUI,170,140,110,,kWhc par m2 de serre,16,1.49,2.79,,Chaudiere biomasse neuve / Serre existante > 2 ans
+AGRI-TH-105,AGRI,TH,Récupération chaleur tank à lait,unitaire,quantite,OUI,8600,8600,8600,8600,kWhc par unité,17,75.51,141.04,,PAC neuve COP >= 3.4 / Serre existante > 2 ans
+AGRI-TH-108,AGRI,TH,Chauffage infrarouge élevage,complexe,puissance,NON,5700,4700,3300,2900,kWhc par kW,17,50.05,93.48,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-109,AGRI,TH,Récupérateur condensation serre,unitaire,puissance,OUI,4800,4000,2800,2400,kWhc par kW,11,42.14,78.72,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-110,AGRI,TH,Chaudière HPE serres,unitaire,puissance,OUI,3200,2700,1900,1600,kWhc par kW,22,28.1,52.48,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-113,AGRI,TH,Échangeur récupérateur chaleur élevage volailles,unitaire,quantite,OUI,5400,4500,3200,2700,kWhc par unité,15,47.41,88.56,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-114,AGRI,TH,Récupération chaleur fumées chaudière,unitaire,puissance,OUI,4000,3300,2300,2000,kWhc par kW,15,35.12,65.6,abrogation_à_confirmer,
+AGRI-TH-117,AGRI,TH,Déshumidificateur thermodynamique serres,complexe,puissance,NON,8200,6800,4800,4100,kWhc par kW,17,72.0,134.48,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-118,AGRI,TH,Double tube de chauffage serres,unitaire,quantite,OUI,3100,2600,1800,1500,kWhc par unité,15,27.22,50.84,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-TH-119,AGRI,TH,Déshumidification air extérieur,unitaire,quantite,OUI,4800,4000,2800,2400,kWhc par unité,17,42.14,78.72,,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-UT-101,AGRI,UT,Moto-variateur synchrone aimants,complexe,puissance,NON,4800,4800,4800,4800,kWhc par kW,20,42.14,78.72,V39.0.7_désactivée,Installation par professionnel
+AGRI-UT-102,AGRI,UT,VEV moteur asynchrone,complexe,puissance,NON,4800,4800,4800,4800,kWhc par kW,15,42.14,78.72,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+AGRI-UT-103,AGRI,UT,Régulation basse pression flottante,unitaire,puissance,OUI,7800,7800,7800,7800,kWhc par kW,14,68.48,127.92,,Installation par professionnel
+AGRI-UT-104,AGRI,UT,Régulation haute pression flottante,complexe,puissance,NON,9400,9400,9400,9400,kWhc par kW,14,82.53,154.16,V39.0.7_désactivée,Installation par professionnel
+BAR-EN-101,BAR,EN,Isolation combles/toitures,surface,surface,OUI,1700,1400,920,600,kWhc par m²,15,14.93,27.88,,
+BAR-EN-102,BAR,EN,Isolation murs,surface,surface,OUI,1600,1300,880,590,kWhc par m²,15,14.05,26.24,,
+BAR-EN-103,BAR,EN,Isolation plancher,surface,surface,OUI,1100,890,590,400,kWhc par m²,15,9.66,18.04,,
+BAR-EN-104,BAR,EN,Fenêtre/porte-fenêtre isolante,surface,surface,OUI,5500,4500,2900,1900,kWhc par m²,15,48.29,90.2,,
+BAR-EN-105,BAR,EN,Isolation toitures terrasses,surface,surface,OUI,1700,1400,920,600,kWhc par m²,15,14.93,27.88,,
+BAR-EN-106,BAR,EN,Isolation combles/toitures DOM,surface,surface,OUI,0,0,0,600,kWhc par m²,15,5.27,9.84,,
+BAR-EN-107,BAR,EN,Isolation murs DOM,surface,surface,OUI,0,0,0,590,kWhc par m²,15,5.18,9.68,,
+BAR-EN-108,BAR,EN,Isolation plancher DOM,surface,surface,OUI,0,0,0,400,kWhc par m²,15,3.51,6.56,,
+BAR-EN-109,BAR,EN,Fenêtre/porte-fenêtre DOM,surface,surface,OUI,0,0,0,1900,kWhc par m²,15,16.68,31.16,,
+BAR-EN-110,BAR,EN,Isolation comble perdu maison individuelle,surface,surface,NON,A VERIFIER,,,,kWhc par m2,,,,placeholder,
+BAR-EQ-110,BAR,EQ,Luminaire LED parties communes,unitaire,nb_logements,NON,1600,1600,1600,1600,kWhc par logement,15,14.05,26.24,,
+BAR-EQ-112,BAR,EQ,Systèmes hydro-économes résidentiel,unitaire,quantite,OUI,920,920,920,920,kWhc par point d'eau,15,8.08,15.09,abrogation_à_confirmer,
+BAR-EQ-115,BAR,EQ,Affichage consommations énergie,unitaire,nb_logements,OUI,1460,1190,860,570,kWhc par logement,15,12.82,23.94,,
+BAR-SE-104,BAR,SE,Réglage équilibrage chauffage,unitaire,nb_logements,OUI,1650,1350,970,650,kWhc par logement,15,14.49,27.06,,
+BAR-SE-105,BAR,SE,CPE Services résidentiel,unitaire,nb_logements,OUI,7200,5900,4200,2800,kWhc par logement,15,63.22,118.08,,
+BAR-SE-106,BAR,SE,Suivi consommations énergie,unitaire,nb_logements,OUI,810,660,470,320,kWhc par logement,15,7.11,13.28,,
+BAR-SE-107,BAR,SE,Service programmation/régulation chauffage,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,pending_review,
+BAR-SE-108,BAR,SE,Désembouage individuel,unitaire,quantite,OUI,11800,9700,6900,4600,kWhc par unité,15,103.6,193.52,,
+BAR-SE-109,BAR,SE,Service rénovation accompagnée logement,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-101,BAR,TH,Chauffe-eau solaire individuel,unitaire,quantite,OUI,18500,21000,24200,29000,kWhc par unité,15,254.62,475.6,,
+BAR-TH-102,BAR,TH,Chaudière individuelle haute performance,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-104,BAR,TH,PAC air/eau ou eau/eau (ancienne),unitaire,quantite,NON,68000,56000,37000,25000,kWhc par unité,15,597.04,1115.2,abrogation_à_confirmer,
+BAR-TH-106,BAR,TH,Chaudière collective haute performance,unitaire,puissance,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-107,BAR,TH,Optimiseur chaudière collective,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-110,BAR,TH,Robinet thermostatique,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,pending_review,
+BAR-TH-111,BAR,TH,Régulation par sonde température extérieure,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-112,BAR,TH,Appareil chauffage bois,unitaire,quantite,NON,54000,44000,29000,19000,kWhc par unité,15,474.12,885.6,,
+BAR-TH-113,BAR,TH,Chaudière biomasse individuelle,unitaire,quantite,OUI,89000,73000,49000,33000,kWhc par unité,15,781.42,1459.6,,
+BAR-TH-116,BAR,TH,Récupérateur chaleur eaux usées,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,pending_review,
+BAR-TH-117,BAR,TH,Régulation programmable centralisée,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,pending_review,
+BAR-TH-122,BAR,TH,Isolation tuyauterie distribution chauffage,unitaire,longueur,NON,A VERIFIER,,,,kWhc par unité,,,,pending_review,
+BAR-TH-123,BAR,TH,Optimiseur relance chauffage collectif,unitaire,nb_logements,OUI,1380,1130,810,540,kWhc par logement,15,12.12,22.63,,
+BAR-TH-124,BAR,TH,Chaudière condensation,unitaire,quantite,OUI,27700,22700,16300,10900,kWhc par unité,15,243.21,454.28,,
+BAR-TH-125,BAR,TH,VMC double flux,unitaire,quantite,OUI,10400,8400,6200,4100,kWhc par unité,15,91.31,170.56,,
+BAR-TH-127,BAR,TH,VMC simple flux hygroréglable,unitaire,quantite,OUI,9100,7400,5500,3600,kWhc par unité,15,79.9,149.24,,
+BAR-TH-129,BAR,TH,PAC air/air résidentiel,unitaire,quantite,OUI,13200,10800,7700,5100,kWhc par unité,15,115.9,216.48,,
+BAR-TH-130,BAR,TH,Pompe à chaleur eau chaude sanitaire,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-135,BAR,TH,Chauffe-eau solaire collectif DOM,surface,surface,OUI,0,0,0,5500,kWhc par m²,15,48.29,90.2,,
+BAR-TH-137,BAR,TH,Raccordement réseau chaleur résidentiel,unitaire,nb_logements,NON,A VERIFIER,,,,kWhc par unité,,,,pending_review,
+BAR-TH-139,BAR,TH,Pompe à chaleur hybride collective,unitaire,puissance,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-141,BAR,TH,Climatiseur performant DOM,unitaire,quantite,OUI,0,0,0,3800,kWhc par unité,15,33.36,62.32,,
+BAR-TH-143,BAR,TH,Système solaire combiné,surface,surface,OUI,78600,89300,102900,50000,kWhc par m²,15,903.46,1687.56,,
+BAR-TH-148,BAR,TH,Chauffe-eau thermodynamique,unitaire,quantite,OUI,14000,14000,14000,14000,kWhc par unité,15,122.92,229.6,,
+BAR-TH-150,BAR,TH,Rénovation globale logement collectif,unitaire,nb_logements,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAR-TH-155,BAR,TH,Ventilation hybride hygroréglable,unitaire,quantite,OUI,10400,8400,6200,4100,kWhc par unité,15,91.31,170.56,,
+BAR-TH-158,BAR,TH,Émetteur électrique régulation avancée,unitaire,quantite,OUI,3300,2700,1900,1300,kWhc par unité,15,28.97,54.12,,
+BAR-TH-159,BAR,TH,PAC hybride individuelle,unitaire,quantite,OUI,68000,56000,37000,25000,kWhc par unité,15,597.04,1115.2,,
+BAR-TH-160,BAR,TH,Isolation réseau chauffage/ECS,unitaire,longueur,NON,2100,1400,900,800,kWhc par ml,15,18.44,34.44,abrogation_à_confirmer,
+BAR-TH-161,BAR,TH,Isolation points singuliers,unitaire,quantite,OUI,2400,2000,1400,900,kWhc par unité,15,21.07,39.36,,
+BAR-TH-162,BAR,TH,Système PVT capteurs hybrides,surface,surface,OUI,2600,2100,1500,1000,kWhc par m²,15,22.83,42.64,,
+BAR-TH-164,BAR,TH,Rénovation globale maison individuelle,unitaire,nb_logements,OUI,140000,114000,82000,55000,kWhc par logement,15,1229.2,2296.0,abrogation_à_confirmer,
+BAR-TH-165,BAR,TH,Chaudière biomasse collective,unitaire,puissance,OUI,5400,4400,3200,2100,kWhc par kW,15,47.41,88.56,,
+BAR-TH-167,BAR,TH,Chauffe-bain individuel haut rendement,unitaire,quantite,OUI,8200,6700,4800,3200,kWhc par unité,15,72.0,134.48,,
+BAR-TH-168,BAR,TH,Dispositif solaire thermique,surface,surface,OUI,2800,2300,1600,1100,kWhc par m²,15,24.58,45.92,,
+BAR-TH-169,BAR,TH,PAC collective air/eau ECS,unitaire,puissance,OUI,12100,9900,7100,4700,kWhc par kW,15,106.24,198.44,,
+BAR-TH-170,BAR,TH,Récup chaleur serveurs informatiques,unitaire,puissance,OUI,18000,18000,18000,18000,kWhc par kW,15,158.04,295.2,,
+BAR-TH-171,BAR,TH,PAC air/eau résidentiel,unitaire,quantite,OUI,68000,56000,37000,25000,kWhc par unité,15,597.04,1115.2,,
+BAR-TH-172,BAR,TH,PAC eau/eau ou sol/eau résidentiel,unitaire,quantite,OUI,93000,77000,51000,34000,kWhc par unité,15,816.54,1525.2,,
+BAR-TH-173,BAR,TH,Régulation programmation pièce par pièce,unitaire,quantite,OUI,21600,17800,11800,7900,kWhc par unité,15,189.65,354.24,,
+BAR-TH-174,BAR,TH,Rénovation ampleur maison,unitaire,nb_logements,OUI,460000,376000,271000,180000,kWhc par logement,15,4038.8,7544.0,,
+BAR-TH-175,BAR,TH,Rénovation ampleur appartement,unitaire,nb_logements,OUI,350000,286000,206000,137000,kWhc par logement,15,3073.0,5740.0,,
+BAR-TH-176,BAR,TH,Régulation chauffe-eau électrique Joule,unitaire,quantite,OUI,3100,2500,1800,1200,kWhc par unité,15,27.22,50.84,,
+BAR-TH-177,BAR,TH,Rénovation globale bâtiment collectif,unitaire,nb_logements,OUI,2100,2100,2100,1400,kWhc par logement,15,18.44,34.44,,
+BAR-TH-178,BAR,TH,Système géothermique résidentiel,unitaire,quantite,OUI,72000,59000,42000,28000,kWhc par unité,15,632.16,1180.8,,
+BAR-TH-179,BAR,TH,PAC collective air/eau,unitaire,puissance,OUI,5400,4400,3200,2100,kWhc par kW,15,47.41,88.56,,
+BAR-TH-180,BAR,TH,PAC collective eau/eau,unitaire,puissance,OUI,6500,5300,3800,2500,kWhc par kW,15,57.07,106.6,,
+BAT-EN-101,BAT,EN,Isolation combles/toitures tertiaire,surface,surface,OUI,2600,2100,1400,870,kWhc par m²,15,22.83,42.64,,
+BAT-EN-102,BAT,EN,Isolation murs tertiaire,surface,surface,OUI,4800,3900,2600,1700,kWhc par m²,15,42.14,78.72,,
+BAT-EN-103,BAT,EN,Isolation plancher tertiaire,surface,surface,OUI,5200,4200,2800,1700,kWhc par m²,15,45.66,85.28,,
+BAT-EN-104,BAT,EN,Fenêtre/porte-fenêtre isolante tertiaire,surface,surface,OUI,6200,5050,3400,2270,kWhc par m²,15,54.44,101.68,,
+BAT-EN-105,BAT,EN,Isolation combles/toitures tertiaire DOM,surface,surface,OUI,0,0,0,870,kWhc par m²,15,7.64,14.27,abrogation_à_confirmer,
+BAT-EN-106,BAT,EN,Isolation murs tertiaire DOM,surface,surface,OUI,0,0,0,1130,kWhc par m²,30,9.92,18.53,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EN-107,BAT,EN,Isolation toitures-terrasses tertiaire,surface,surface,OUI,2600,2100,1400,870,kWhc par m²,15,22.83,42.64,,
+BAT-EN-108,BAT,EN,Isolation plancher tertiaire DOM,surface,surface,OUI,0,0,0,1700,kWhc par m²,30,14.93,27.88,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EN-109,BAT,EN,Fenêtre/porte-fenêtre tertiaire DOM,surface,surface,OUI,0,0,0,2270,kWhc par m²,30,19.93,37.23,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EN-110,BAT,EN,Fenêtre pariétodynamique,surface,surface,OUI,9200,7500,5400,3600,kWhc par m²,15,80.78,150.88,,
+BAT-EN-111,BAT,EN,Revêtements réflectifs toiture,surface,surface,OUI,0,0,0,1400,kWhc par m²,24,12.29,22.96,,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+BAT-EN-112,BAT,EN,Revêtements réflectifs toiture,surface,surface,OUI,160,170,270,,kWhc par m2,,2.37,4.43,,
+BAT-EN-113,BAT,EN,Façade rideau vitrage isolant,surface,surface,NON,5,4,3,,kWhc par m2,,0.04,0.08,,
+BAT-EQ-117,BAT,EQ,Installation frigo CO2 sub/transcritique,complexe,puissance,NON,19200,19200,19200,19200,kWhc par kW,15,168.58,314.88,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+BAT-EQ-123,BAT,EQ,Moto-variateur synchrone à aimants tertiaire,unitaire,puissance,OUI,4800,4800,4800,4800,kWhc par kW,15,42.14,78.72,,
+BAT-EQ-124,BAT,EQ,Fermeture meubles frigo T+,unitaire,quantite,OUI,9200,9200,9200,9200,kWhc par m linéaire,7,80.78,150.88,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EQ-125,BAT,EQ,Fermeture meubles frigo T-,unitaire,quantite,OUI,16800,16800,16800,16800,kWhc par m linéaire,7,147.5,275.52,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EQ-127,BAT,EQ,Luminaire LED éclairage général tertiaire,surface,surface,NON,22,22,22,22,kWhc par m²,15,0.19,0.36,,Luminaire neuf complet avec modules LED / Efficacite lumineuse >= 100 lm/W
+BAT-EQ-129,BAT,EQ,Lanterneaux éclairage zénithal,surface,surface,OUI,2800,2800,2800,2800,kWhc par m²,15,24.58,45.92,,
+BAT-EQ-130,BAT,EQ,Condensation frigo haute efficacité,complexe,puissance,NON,9400,9400,9400,9400,kWhc par kW,15,82.53,154.16,V39.0.7_désactivée,Installation par professionnel / Equipement neuf
+BAT-EQ-131,BAT,EQ,Conduits de lumière naturelle,complexe,surface,NON,COMPLEXE,,,,,20,,,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EQ-133,BAT,EQ,Systèmes hydro-économes tertiaire,unitaire,quantite,NON,1070,1070,1070,1070,kWhc par point d'eau,15,9.39,17.55,abrogation_à_confirmer,
+BAT-EQ-134,BAT,EQ,Meuble frigo performant intégré,unitaire,quantite,OUI,12400,12400,12400,12400,kWhc par m linéaire,10,108.87,203.36,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-EQ-135,BAT,EQ,ASI onduleur Data Center,unitaire,puissance,OUI,2100,2100,2100,2100,kWhc par kW,15,18.44,34.44,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-SE-103,BAT,SE,Réglage équilibrage chauffage tertiaire,unitaire,quantite,OUI,14200,11600,8300,5500,kWhc par unité,15,124.68,232.88,,
+BAT-SE-104,BAT,SE,CPE Services chauffage tertiaire,surface,surface,OUI,13,11,8,5,kWhc par m²,15,0.11,0.21,,
+BAT-SE-105,BAT,SE,Abaissement T° retour réseau chaleur,unitaire,nb_logements,OUI,7200,5900,4200,2800,kWhc par logement,15,63.22,118.08,,
+BAT-TH-101,BAT,TH,Chauffe-eau solaire collectif tertiaire,surface,surface,OUI,2600,2600,2600,2600,kWhc par m²,15,22.83,42.64,abrogation_à_confirmer,
+BAT-TH-102,BAT,TH,Chaudière collective HPE tertiaire,unitaire,puissance,NON,5400,4400,3200,2100,kWhc par kW,15,47.41,88.56,,
+BAT-TH-103,BAT,TH,Plancher chauffant basse température,surface,surface,OUI,5200,4200,3000,2000,kWhc par m²,15,45.66,85.28,,
+BAT-TH-104,BAT,TH,PAC air/eau tertiaire,surface,surface,OUI,41,34,26,,kWhc par m2 chauffe,17,0.36,0.67,abrogation_à_confirmer,COP >= 3.4 / Remplacement chaudiere existante
+BAT-TH-105,BAT,TH,Radiateur basse température,unitaire,quantite,OUI,470,380,270,180,kWhc par unité,15,4.13,7.71,,
+BAT-TH-108,BAT,TH,Régulation programmation intermittence,unitaire,quantite,OUI,6100,5000,3600,2400,kWhc par unité,15,53.56,100.04,,
+BAT-TH-109,BAT,TH,Optimiseur relance chauffage collectif,unitaire,nb_logements,OUI,2800,2300,1600,1100,kWhc par logement,15,24.58,45.92,,
+BAT-TH-110,BAT,TH,Récupérateur chaleur condensation,unitaire,puissance,OUI,8100,6600,4800,3200,kWhc par kW,15,71.12,132.84,,
+BAT-TH-111,BAT,TH,Chauffe-eau solaire collectif tertiaire,surface,surface,OUI,2600,2600,2600,2600,kWhc par m²,22,22.83,42.64,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-TH-112,BAT,TH,VEV moteur asynchrone tertiaire,complexe,puissance,NON,4800,4800,4800,4800,kWhc par kW,15,42.14,78.72,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-TH-115,BAT,TH,Climatiseur performant DOM,complexe,quantite,NON,0,0,0,3800,kWhc par unité,9,33.36,62.32,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+BAT-TH-116,BAT,TH,GTB gestion technique bâtiment,surface,surface,OUI,49,40,27,18,kWhc par m²,15,0.43,0.8,,
+BAT-TH-121,BAT,TH,Chauffe-eau solaire DOM tertiaire,surface,surface,OUI,0,0,0,5500,kWhc par m²,20,48.29,90.2,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-TH-122,BAT,TH,Programmateur intermittence clim DOM,complexe,quantite,NON,0,0,0,2400,kWhc par unité,12,21.07,39.36,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-TH-125,BAT,TH,VMC simple flux tertiaire,surface,surface,OUI,6,5,3,2,kWhc par m²,15,0.05,0.1,,
+BAT-TH-126,BAT,TH,VMC double flux tertiaire,surface,surface,OUI,10,8,6,4,kWhc par m²,15,0.09,0.16,,
+BAT-TH-127,BAT,TH,Chaudière condensation tertiaire,unitaire,quantite,OUI,27700,22700,16300,10900,kWhc par unité,15,243.21,454.28,,
+BAT-TH-134,BAT,TH,Régulation haute pression flottante froid,unitaire,puissance,OUI,5600,5600,5600,5600,kWhc par kW,15,49.17,91.84,,
+BAT-TH-135,BAT,TH,Régulation haute pression flottante froid DOM,complexe,puissance,NON,0,0,0,5600,kWhc par kW,10,49.17,91.84,V39.0.7_désactivée,Installation par professionnel
+BAT-TH-139,BAT,TH,Récupération chaleur groupe froid,unitaire,puissance,OUI,5600,5600,5600,5600,kWhc par kW,14,49.17,91.84,,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-TH-140,BAT,TH,Pompe à chaleur eau chaude tertiaire,unitaire,puissance,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAT-TH-141,BAT,TH,Système chauffage biomasse tertiaire,unitaire,puissance,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAT-TH-142,BAT,TH,Déstratification d'air,unitaire,quantite,OUI,38000,31000,22000,15000,kWhc par unité,15,333.64,623.2,,
+BAT-TH-143,BAT,TH,Ventilo-convecteurs haute performance,unitaire,puissance,OUI,1650,1350,970,650,kWhc par kW,15,14.49,27.06,,
+BAT-TH-145,BAT,TH,Régulation basse pression flottante froid,unitaire,puissance,OUI,5600,5600,5600,5600,kWhc par kW,15,49.17,91.84,,GTB classe A ou B (EN ISO 52120-1) / Couvre chauffage + climatisation
+BAT-TH-146,BAT,TH,Régulation chauffage tertiaire,unitaire,quantite,NON,A VERIFIER,,,,kWhc par unité,,,,placeholder,
+BAT-TH-153,BAT,TH,Confinement allées Data Center,complexe,puissance,NON,10400,10400,10400,10400,kWhc par kW,15,91.31,170.56,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+BAT-TH-154,BAT,TH,Récupération chaleur eaux grises,unitaire,puissance,OUI,22000,22000,22000,22000,kWhc par kW,15,193.16,360.8,,
+BAT-TH-156,BAT,TH,Freecooling climatisation,unitaire,puissance,OUI,9400,9400,9400,9400,kWhc par kW,15,82.53,154.16,,
+BAT-TH-157,BAT,TH,Chaudière biomasse collective tertiaire,complexe,puissance,NON,5400,4400,3200,2100,kWhc par kW,22,47.41,88.56,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+BAT-TH-158,BAT,TH,PAC réversible air/air tertiaire,surface,surface,OUI,860,760,620,400,kWhc par m²,15,7.55,14.1,,
+BAT-TH-159,BAT,TH,Raccordement réseau de froid,unitaire,puissance,OUI,3200,3200,3200,3200,kWhc par kW,15,28.1,52.48,,
+BAT-TH-161,BAT,TH,Maintien T° groupes électrogènes PAC,complexe,puissance,NON,8200,6700,4800,3200,kWhc par kW,11,72.0,134.48,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Remplacement equipement existant
+BAT-TH-162,BAT,TH,Système géothermique,surface,surface,OUI,3300,2700,1800,1200,kWhc par m²,15,28.97,54.12,,
+BAT-TH-163,BAT,TH,PAC air/eau tertiaire,surface,surface,OUI,2200,1800,1200,800,kWhc par m²,15,19.32,36.08,,
+BAT-TH-164,BAT,TH,PAC eau/eau ou eau glycolée/eau,surface,surface,OUI,2800,2300,1500,1000,kWhc par m²,15,24.58,45.92,,
+IND-BA-110,IND,BA,Déstratificateur air industriel,unitaire,quantite,OUI,38000,31000,22000,15000,kWhc par unité,15,333.64,623.2,,
+IND-BA-113,IND,BA,Lanterneaux éclairage zénithal industrie,surface,surface,NON,3,4,6,,kWhc par m2,,0.05,0.1,,
+IND-BA-114,IND,BA,Conduits de lumière naturelle,complexe,surface,NON,COMPLEXE,,,,,20,,,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-BA-116,IND,BA,Luminaires à modules LED,complexe,quantite,NON,COMPLEXE,,,,,,,,,Remplacement equipement existant / Installation par professionnel
+IND-BA-117,IND,BA,Chauffage décentralisé performant,surface,surface,OUI,2100,1700,1000,,kWhc par m2,,18.44,34.44,,
+IND-EN-101,IND,EN,Isolation combles/toitures industriel,surface,surface,OUI,22,18,13,9,kWhc par m²,30,0.19,0.36,,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-EN-102,IND,EN,Isolation murs industriel,surface,surface,OUI,36,29,21,14,kWhc par m²,30,0.32,0.59,,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-EN-103,IND,EN,Isolation plancher industriel,surface,surface,OUI,21,17,12,8,kWhc par m²,15,0.18,0.34,abrogation_à_confirmer,
+IND-UT-101,IND,UT,Management énergétique ISO 50001,unitaire,quantite,OUI,850000,850000,850000,850000,kWhc par site,15,7463.0,13940.0,abrogation_à_confirmer,
+IND-UT-102,IND,UT,VEV moteur asynchrone industriel,complexe,puissance,NON,4800,4800,4800,4800,kWhc par kW,15,42.14,78.72,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-103,IND,UT,Compresseur air performant industriel,unitaire,puissance,OUI,7800,7800,7800,7800,kWhc par kW,15,68.48,127.92,,
+IND-UT-104,IND,UT,Moteur haut rendement IE3/IE4,unitaire,puissance,OUI,2200,2200,2200,2200,kWhc par kW,10,19.32,36.08,,Installation par professionnel
+IND-UT-105,IND,UT,Brûleur micro-modulant,unitaire,puissance,OUI,18800,15400,11000,7400,kWhc par kW,15,165.06,308.32,,Installation par professionnel
+IND-UT-106,IND,UT,Brûleur micro-modulant condensation,unitaire,puissance,OUI,175,150,120,90,kWhc par kW,15,1.54,2.87,abrogation_à_confirmer,
+IND-UT-108,IND,UT,Détection fuites réseau air comprimé,unitaire,puissance,OUI,3600,3600,3600,3600,kWhc par kW,15,31.61,59.04,abrogation_à_confirmer,
+IND-UT-109,IND,UT,Optimisation production froid industriel,unitaire,puissance,OUI,4200,3800,3200,2600,kWhc par kW froid,15,36.88,68.88,abrogation_à_confirmer,
+IND-UT-112,IND,UT,Système mesurage indicateurs énergétiques,unitaire,quantite,OUI,320000,320000,320000,320000,kWhc par site,15,2809.6,5248.0,abrogation_à_confirmer,
+IND-UT-113,IND,UT,Récupérateur chaleur fumées chaudière,unitaire,puissance,OUI,12400,10200,7300,4900,kWhc par kW,15,108.87,203.36,,Moteur IE3 ou IE4 / Puissance 0.12 a 1000 kW
+IND-UT-114,IND,UT,Moto-variateur synchrone aimants,complexe,puissance,NON,6100,6100,6100,6100,kWhc par kW,20,53.56,100.04,V39.0.7_désactivée,Installation par professionnel
+IND-UT-115,IND,UT,Système de régulation sur un groupe de production de froid,unitaire,puissance,NON,A VERIFIER,,,,,14,,,,Installation par professionnel
+IND-UT-116,IND,UT,Régulation haute pression flottante,unitaire,puissance,OUI,16400,16400,16400,16400,kWhc par kW,15,143.99,268.96,,
+IND-UT-117,IND,UT,Récup chaleur groupe froid industriel,unitaire,puissance,NON,12400,10200,7300,4900,kWhc par kW,15,108.87,203.36,abrogation_à_confirmer,Puissance compresseur >= 10 kW / Recuperateur de chaleur neuf
+IND-UT-118,IND,UT,Brûleur récup chaleur four industriel,complexe,puissance,NON,12000,12000,12000,12000,kWhc par kW,15,105.36,196.8,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-120,IND,UT,Compresseur air basse pression,unitaire,puissance,OUI,7800,7800,7800,7800,kWhc par kW,15,68.48,127.92,,Installation par professionnel
+IND-UT-121,IND,UT,Calorifugeage industriel réseau froid,surface,surface,NON,A VERIFIER,,,,kWhc par m2,,,,placeholder,
+IND-UT-122,IND,UT,Sécheur air comprimé adsorption,unitaire,puissance,OUI,18200,18200,18200,18200,kWhc par kW,15,159.8,298.48,,Installation par professionnel
+IND-UT-124,IND,UT,Séquenceur centrale air comprimé,complexe,puissance,OUI,7800,7800,7800,7800,kWhc par kW,13,68.48,127.92,,Séquenceur avec optimisation énergie / Industrie uniquement
+IND-UT-125,IND,UT,Traitement eau chaudière vapeur,complexe,puissance,NON,18800,15400,11000,7400,kWhc par kW,10,165.06,308.32,V39.0.7_désactivée,Installation par professionnel
+IND-UT-127,IND,UT,Système transmission performant,unitaire,puissance,OUI,6100,6100,6100,6100,kWhc par kW,15,53.56,100.04,,
+IND-UT-129,IND,UT,Presse injection tout électrique/hybride,unitaire,puissance,OUI,12000,12000,12000,12000,kWhc par kW,15,105.36,196.8,,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-130,IND,UT,Condenseur effluents gazeux chaudière,unitaire,puissance,OUI,12400,10200,7300,4900,kWhc par kW,10,108.87,203.36,,Installation par professionnel
+IND-UT-131,IND,UT,Isolation parois planes/cylindriques,complexe,surface,NON,4200,4200,4200,4200,kWhc par m²,10,36.88,68.88,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-132,IND,UT,Moteur asynchrone IE4,complexe,puissance,NON,2200,2200,2200,2200,kWhc par kW,15,19.32,36.08,V39.0.7_désactivée,Installation par professionnel
+IND-UT-133,IND,UT,Système pilotage moteur récupération,complexe,puissance,NON,6100,6100,6100,6100,kWhc par kW,15,53.56,100.04,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-134,IND,UT,Mesurage indicateurs performance énergétique,unitaire,puissance,OUI,7800,7800,7800,7800,kWhc par kW,15,68.48,127.92,,Groupe froid neuf / EER >= valeur seuil selon puissance
+IND-UT-135,IND,UT,Freecooling eau refroidissement,unitaire,puissance,OUI,9400,9400,9400,9400,kWhc par kW,15,82.53,154.16,,
+IND-UT-136,IND,UT,Systèmes moto-régulés VSD,unitaire,puissance,NON,6100,6100,6100,6100,kWhc par kW,15,53.56,100.04,abrogation_à_confirmer,
+IND-UT-137,IND,UT,PAC rehausse T° chaleur fatale,complexe,puissance,NON,14200,14200,14200,14200,kWhc par kW,15,124.68,232.88,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-138,IND,UT,Conversion chaleur fatale électricité/air,complexe,puissance,NON,12000,12000,12000,12000,kWhc par kW,15,105.36,196.8,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-139,IND,UT,Stockage chaleur fatale,complexe,puissance,NON,14200,14200,14200,14200,kWhc par kW,20,124.68,232.88,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+IND-UT-140,IND,UT,Mise en veille machine air comprimé,unitaire,puissance,OUI,9400,9400,9400,9400,kWhc par kW,15,82.53,154.16,,Equipement/batiment existant > 2 ans / Installation par professionnel
+RES-CH-101,RES,CH,Raccordement réseau chaleur EnR&R,unitaire,nb_logements,OUI,38600,31600,23900,15000,kWhc par logement,15,338.91,633.04,abrogation_à_confirmer,
+RES-CH-102,RES,CH,Comptage individuel réseau chaleur,unitaire,nb_logements,OUI,4500,3700,2800,1800,kWhc par logement,15,39.51,73.8,abrogation_à_confirmer,
+RES-CH-103,RES,CH,Réhabilitation poste livraison chaleur tertiaire,unitaire,quantite,OUI,14200,11600,8300,5500,kWhc par unité,15,124.68,232.88,,
+RES-CH-104,RES,CH,Réhabilitation poste livraison chaleur résidentiel,unitaire,quantite,OUI,14200,11600,8300,5500,kWhc par unité,15,124.68,232.88,,
+RES-CH-105,RES,CH,Passage réseau basse température,unitaire,longueur,OUI,75,61,44,29,kWhc par m,30,0.66,1.23,,Equipement/batiment existant > 2 ans / Installation par professionnel
+RES-CH-106,RES,CH,Calorifugeage canalisations réseau,complexe,longueur,NON,22,18,13,9,kWhc par m,30,0.19,0.36,V39.0.7_désactivée,Equipement/batiment existant > 2 ans / Installation par professionnel
+RES-CH-107,RES,CH,Extension réseau de chaleur EnR,unitaire,longueur,OUI,8500,7000,5200,3500,kWhc par ml,15,74.63,139.4,abrogation_à_confirmer,
+RES-CH-108,RES,CH,Récupération chaleur fatale réseau,unitaire,quantite,OUI,360,360,360,360,kWhc par MWh,3,3.16,5.9,,Equipement/batiment existant > 2 ans / Installation par professionnel
+RES-EC-103,RES,EC,Réhabilitation réseau de chaleur,unitaire,longueur,OUI,3800,3100,2300,1500,kWhc par ml,15,33.36,62.32,abrogation_à_confirmer,
+RES-EC-104,RES,EC,Rénovation éclairage extérieur,unitaire,puissance,OUI,21000,21000,21000,21000,kWhc par kW,30,184.38,344.4,,Gain >= 55% sur consommation conventionnelle / Audit energetique prealable oblig
+TRA-EQ-101,TRA,EQ,Unité transport intermodal rail-route,unitaire,quantite,OUI,2650,2650,2650,2650,kWhc par unité,15,23.27,43.46,,Installation par professionnel
+TRA-EQ-103,TRA,EQ,Télématique embarquée suivi conduite,unitaire,quantite,OUI,2650,2650,2650,2650,kWhc par unité,6,23.27,43.46,,Pneu classe A ou B en resistance roulement
+TRA-EQ-104,TRA,EQ,Lubrifiant économiseur énergie VL,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,,Installation par professionnel
+TRA-EQ-106,TRA,EQ,Pneus basse résistance roulement,complexe,quantite,NON,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,V39.0.7_désactivée,Installation par professionnel
+TRA-EQ-107,TRA,EQ,Unité transport intermodal fluvial-route,unitaire,quantite,OUI,2650,2650,2650,2650,kWhc par unité,15,23.27,43.46,,Installation par professionnel
+TRA-EQ-108,TRA,EQ,Wagon autoroute ferroviaire,unitaire,quantite,OUI,170000,170000,170000,170000,kWhc par unité,15,1492.6,2788.0,,Installation par professionnel
+TRA-EQ-109,TRA,EQ,Barge fluviale,unitaire,quantite,OUI,170000,170000,170000,170000,kWhc par unité,15,1492.6,2788.0,,Installation par professionnel
+TRA-EQ-110,TRA,EQ,Automoteur fluvial,unitaire,quantite,OUI,230000,230000,230000,230000,kWhc par unité,15,2019.4,3772.0,,Installation par professionnel
+TRA-EQ-111,TRA,EQ,Groupe frigorifique haute efficacité,unitaire,quantite,OUI,35000,35000,35000,35000,kWhc par unité,15,307.3,574.0,,Installation par professionnel
+TRA-EQ-113,TRA,EQ,Lubrifiant économiseur énergie transport,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,,Installation par professionnel
+TRA-EQ-114,TRA,EQ,Véhicule léger électrique personne morale,unitaire,quantite,OUI,22000,22000,22000,22000,kWhc par unité,15,193.16,360.8,,Installation par professionnel
+TRA-EQ-115,TRA,EQ,Véhicule transport marchandises optimisé,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,,Installation par professionnel
+TRA-EQ-117,TRA,EQ,Véhicule léger électrique particulier,unitaire,quantite,OUI,6400,6400,6400,6400,kWhc par unité,15,56.19,104.96,,Installation par professionnel
+TRA-EQ-118,TRA,EQ,Aérodynamique poids lourd,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,,Installation par professionnel
+TRA-EQ-119,TRA,EQ,Aide au démarrage poids lourd,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,,Installation par professionnel
+TRA-EQ-120,TRA,EQ,Rétrofit électrique poids lourd,unitaire,quantite,OUI,230000,230000,230000,230000,kWhc par unité,15,2019.4,3772.0,,Installation par professionnel
+TRA-EQ-121,TRA,EQ,Aérodynamique autocar,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,15,11.41,21.32,,Installation par professionnel
+TRA-EQ-122,TRA,EQ,Rétrofit électrique autocar,unitaire,quantite,OUI,170000,170000,170000,170000,kWhc par unité,15,1492.6,2788.0,,Installation par professionnel
+TRA-EQ-123,TRA,EQ,Simulateur de conduite,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par unité,3,11.41,21.32,,Installation par professionnel / Equipement neuf
+TRA-EQ-124,TRA,EQ,Branchement électrique navires quai,unitaire,quantite,OUI,8200,8200,8200,8200,kWhc par unité,15,72.0,134.48,,Installation par professionnel
+TRA-EQ-125,TRA,EQ,Stop & Start véhicules ferroviaires,unitaire,quantite,OUI,170000,170000,170000,170000,kWhc par unité,15,1492.6,2788.0,,Installation par professionnel
+TRA-EQ-126,TRA,EQ,Remotorisation électrique/hybride bateau,complexe,quantite,NON,230000,230000,230000,230000,kWhc par unité,17,2019.4,3772.0,V39.0.7_désactivée,Remplacement equipement existant / Installation par professionnel
+TRA-EQ-127,TRA,EQ,Bateau électrique/hybride eaux intérieures,complexe,quantite,NON,170000,170000,170000,170000,kWhc par unité,40,1492.6,2788.0,V39.0.7_désactivée,Installation par professionnel / Equipement neuf
+TRA-EQ-128,TRA,EQ,Autocar/autobus électrique,unitaire,quantite,OUI,170000,170000,170000,170000,kWhc par unité,15,1492.6,2788.0,,Installation par professionnel
+TRA-EQ-129,TRA,EQ,Poids lourd électrique,unitaire,quantite,OUI,230000,230000,230000,230000,kWhc par unité,15,2019.4,3772.0,,Installation par professionnel
+TRA-EQ-130,TRA,EQ,Quadricycle électrique,unitaire,quantite,OUI,35000,35000,35000,35000,kWhc par unité,15,307.3,574.0,,Installation par professionnel
+TRA-EQ-131,TRA,EQ,Vélos-cargos électriques,unitaire,quantite,OUI,810,810,810,810,kWhc par unité,15,7.11,13.28,,Installation par professionnel
+TRA-EQ-132,TRA,EQ,Mesure conso carburant navire pêche,unitaire,quantite,OUI,8200,8200,8200,8200,kWhc par unité,4,72.0,134.48,,Installation par professionnel
+TRA-SE-101,TRA,SE,Formation chauffeur transport économe,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-102,TRA,SE,Formation chauffeur VL économe,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-103,TRA,SE,Formation écoconduite,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,abrogation_à_confirmer,
+TRA-SE-104,TRA,SE,Formation conduite économe moto,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-105,TRA,SE,Formation conduite économe VL,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-106,TRA,SE,Formation écoconduite alt,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-107,TRA,SE,Formation écoconduite poids lourd,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-108,TRA,SE,Formation écoconduite autocar,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-109,TRA,SE,Formation écoconduite VUL,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par personne,15,11.41,21.32,,Installation par professionnel
+TRA-SE-110,TRA,SE,Gestion poste pneumatique marchandises,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par véhicule,15,11.41,21.32,,Installation par professionnel
+TRA-SE-111,TRA,SE,Gestion poste pneumatique personnes,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par véhicule,15,11.41,21.32,,Installation par professionnel
+TRA-SE-112,TRA,SE,Service autopartage en boucle,unitaire,quantite,OUI,36,36,36,36,kWhc par unité,3,0.32,0.59,,Formation certifiee / Conducteur PL ou VUL
+TRA-SE-113,TRA,SE,Suivi conso carburants cartes privatives,unitaire,quantite,OUI,1300,1300,1300,1300,kWhc par véhicule,3,11.41,21.32,,Formation certifiee / Conducteur VP
+TRA-SE-116,TRA,SE,Fret ferroviaire,unitaire,quantite,OUI,8,8,8,8,kWhc par UTI.km,15,0.07,0.13,,Equipement/batiment existant > 2 ans / Installation par professionnel
+TRA-SE-117,TRA,SE,Fret fluvial,unitaire,quantite,OUI,2,2,2,2,kWhc par t.km,15,0.02,0.03,,Installation par professionnel
