@@ -11,10 +11,10 @@ import re
 
 FICHES_PATH = os.path.join(os.path.dirname(__file__), "fiches.json")
 
-SECTEURS_VALIDES = ["BAT", "IND", "RES", "AGR", "TRA"]
-TYPES_VALIDES = ["surface", "unitaire"]
+SECTEURS_VALIDES = ["BAT", "IND", "RES", "AGRI", "TRA", "BAR"]
+TYPES_VALIDES = ["surface", "unitaire", "complexe", "forfaitaire"]
 ZONES = ["H1", "H2", "H3"]
-REF_PATTERN = re.compile(r"^(BAT|IND|RES|AGR|TRA)-[A-Z]{2}-\d{2,3}$")
+REF_PATTERN = re.compile(r"^(BAT|IND|RES|AGRI|TRA|BAR)-[A-Z]{2,3}-\d{2,3}(?:-[A-Z0-9]+)?$")
 
 
 def load():
@@ -44,14 +44,20 @@ def validate_fiche(fiche, strict=False):
 
     # Cumac
     cu = fiche.get("cumac_unitaire")
-    if cu is None or cu in ("A REMPLIR", "A VERIFIER"):
+    if cu in ("A REMPLIR", "A VERIFIER") and fiche.get("actif") is False:
+        warnings.append(f"cumac_unitaire={cu!r} (fiche inactive, lookup ADEME requis)")
+        cu = None  # skip downstream cumac checks
+    elif cu is None or cu in ("A REMPLIR", "A VERIFIER"):
         erreurs.append("cumac_unitaire manquant")
+    elif cu == "COMPLEXE" and ftype == "complexe":
+        pass  # sentinel valide : cumac calculé via table/formule
     elif isinstance(cu, dict):
         has_zone = any(z in cu for z in ZONES)
+        has_dom = "DOM" in cu and isinstance(cu.get("DOM"), (int, float)) and cu["DOM"] > 0
         has_zone_energie = any("_" in k for k in cu)
-        if not has_zone and not has_zone_energie:
+        if not has_zone and not has_zone_energie and not has_dom:
             erreurs.append("cumac: aucune zone reconnue")
-        if has_zone:
+        if has_zone and not has_dom:
             for z in ZONES:
                 if z in cu and (not isinstance(cu[z], (int, float)) or cu[z] <= 0):
                     erreurs.append(f"cumac {z} invalide: {cu[z]}")

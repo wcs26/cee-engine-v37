@@ -590,7 +590,7 @@
   {
     "ref": "AGRI-TH-104",
     "nom": "Chauffage serre - chaudiere biomasse",
-    "secteur": "AGR",
+    "secteur": "AGRI",
     "type": "surface",
     "params": [
       "surface"
@@ -5731,14 +5731,15 @@
       "puissance"
     ],
     "duree_vie": 14,
-    "actif": true,
+    "actif": false,
     "conditions": {},
     "conditions_texte": [
       "Installation par professionnel"
     ],
     "cumac_unitaire": "A VERIFIER",
     "gisements": [],
-    "categorie": ""
+    "categorie": "",
+    "note": "INACTIVE 2026-05-18: cumac_unitaire=\"A VERIFIER\", lookup ADEME requis"
   },
   {
     "ref": "IND-UT-116",
