@@ -376,6 +376,142 @@ _THEME_QUESTIONS = {
 }
 
 
+# V39.3.0 — Questions précises par fiche selon vraies variables compute
+_PARAM_LABEL = {
+    "surface":         ("Surface (m²)", "nombre", "m²"),
+    "puissance":       ("Puissance installée (kW)", "nombre", "kW"),
+    "puissance_froid": ("Puissance frigorifique (kW)", "nombre", "kW"),
+    "quantite":        ("Nombre d'unités", "nombre", "unités"),
+    "nb_logements":    ("Nombre de logements", "nombre", "logements"),
+    "longueur":        ("Longueur installée (m)", "nombre", "m"),
+    "debit":           ("Débit (m³/h)", "nombre", "m³/h"),
+    "rendement":       ("Rendement (%)", "nombre", "%"),
+    "temperature":     ("Température (°C)", "nombre", "°C"),
+    "application":     ("Application", "choix", ""),
+    "type":            ("Type d'usage", "choix", ""),
+    "efficacite":      ("Classe efficacité (COP/ηs)", "choix", ""),
+    "classe":          ("Classe énergétique", "choix", ""),
+    "mode":            ("Mode de fonctionnement", "choix", ""),
+    "zone":            ("Zone d'application", "choix", ""),
+}
+
+
+def build_questions_for_fiche(fiche, connu):
+    """V39.3.0 — Génère les questions PRÉCISES pour calculer cumac d'1 fiche.
+
+    Lit fiche.params + fiche.mode_calcul + fiche.variables + fiche.table_cumac
+    et produit les questions exactement nécessaires au compute (numérique ou choix
+    parmi liste finie pour les fiches complexes table_str/table_2d).
+    """
+    questions = []
+    ref = fiche.get("ref", "")
+    nom_short = (fiche.get("nom") or "")[:40]
+    ftype = fiche.get("type", "")
+    mode = fiche.get("mode_calcul", "")
+    variables = fiche.get("variables", []) or []
+    params = fiche.get("params", []) or []
+    table = fiche.get("table_cumac", {})
+
+    def add_q(param_name, label, qtype, unite="", choices=None, impact=""):
+        questions.append({
+            "question": f"[{ref}] {label}",
+            "type": qtype,
+            "unite": unite,
+            "param": param_name,
+            "choices": choices,
+            "fiche_nom": nom_short,
+            "impact": impact or f"Calcul cumac {ref}",
+        })
+
+    # === Cas 1 : type surface simple (50 fiches) ===
+    if ftype == "surface" and not mode:
+        if "surface" not in connu:
+            ratio = fiche.get("surface_ratio")
+            if ratio and 0 < ratio < 1:
+                add_q("surface", f"Surface bâtiment (m²) — ratio {int(ratio*100)}% appliqué pour cette fiche", "nombre", "m²",
+                      impact=f"Ex: 1000m² × {int(ratio*100)}% = {int(1000*ratio)}m² éligibles")
+            else:
+                add_q("surface", "Surface concernée (m²)", "nombre", "m²")
+        return questions
+
+    # === Cas 2 : type unitaire simple (140 fiches) ===
+    if ftype == "unitaire" and not mode:
+        for p in params:
+            if p == "surface" and "surface" in connu:
+                continue
+            label, qtype, unite = _PARAM_LABEL.get(p, (p.capitalize(), "nombre", ""))
+            add_q(p, label, qtype, unite)
+        return questions
+
+    # === Cas 3 : type complexe — mode table_str (10 fiches) ===
+    # User doit choisir 1 application dans la liste + éventuellement quantité
+    if mode == "table_str":
+        if variables:
+            key_var = variables[0]
+            choices = list(table.keys()) if isinstance(table, dict) else []
+            add_q(key_var, f"Quelle application ? (choix exact pour valeur cumac)",
+                  "choix", "", choices=choices,
+                  impact=f"{len(choices)} options possibles — cumac varie de {min((v for v in table.values() if isinstance(v,(int,float))), default=0)} à {max((v for v in table.values() if isinstance(v,(int,float))), default=0)} kWhc/unité")
+            # Param mult (puissance/quantite)
+            for p in params:
+                if p != key_var:
+                    label, qtype, unite = _PARAM_LABEL.get(p, (p.capitalize(), "nombre", ""))
+                    add_q(p, label, qtype, unite)
+        return questions
+
+    # === Cas 4 : type complexe — mode table_2d (4 fiches) ===
+    if mode == "table_2d":
+        if len(variables) >= 2:
+            v1, v2 = variables[0], variables[1]
+            # Choix sur clé1
+            choices1 = list(table.keys()) if isinstance(table, dict) else []
+            label1, _, _ = _PARAM_LABEL.get(v1, (v1.capitalize(), "choix", ""))
+            add_q(v1, label1, "choix", "", choices=choices1)
+            # Choix sur clé2 (depuis 1ère valeur de table)
+            choices2 = []
+            if choices1 and isinstance(table.get(choices1[0]), dict):
+                choices2 = list(table[choices1[0]].keys())
+            label2, _, _ = _PARAM_LABEL.get(v2, (v2.capitalize(), "choix", ""))
+            add_q(v2, label2, "choix", "", choices=choices2)
+            # Mult var si présent (3ème variable)
+            if len(variables) > 2:
+                m = variables[2]
+                label3, qtype, unite = _PARAM_LABEL.get(m, (m.capitalize(), "nombre", ""))
+                add_q(m, label3, qtype, unite)
+        return questions
+
+    # === Cas 5 : type complexe — formule_tranches (4 fiches) ===
+    if mode == "formule_tranches":
+        if variables:
+            var = variables[0]
+            label, qtype, unite = _PARAM_LABEL.get(var, (var.capitalize(), "nombre", ""))
+            tranches = fiche.get("tranches", [])
+            tr_descr = " | ".join(f"{t.get('min',0)}-{t.get('max','∞')}: {t.get('a',0)}×{var}+{t.get('b',0)}" for t in tranches[:3])
+            add_q(var, f"{label} (formule par tranche)", qtype, unite,
+                  impact=f"Tranches: {tr_descr}")
+        return questions
+
+    # === Cas 6 : type complexe — table legacy (1 fiche) ===
+    if mode == "table":
+        if variables:
+            key_var = variables[0]
+            mult_var = variables[1] if len(variables) > 1 else None
+            label, qtype, unite = _PARAM_LABEL.get(key_var, (key_var.capitalize(), "nombre", ""))
+            add_q(key_var, f"{label} (lookup table)", qtype, unite)
+            if mult_var:
+                label_m, qt_m, u_m = _PARAM_LABEL.get(mult_var, (mult_var.capitalize(), "nombre", ""))
+                add_q(mult_var, label_m, qt_m, u_m)
+        return questions
+
+    # === Fallback : juste params (compatibilité) ===
+    for p in params:
+        if p == "surface" and "surface" in connu:
+            continue
+        label, qtype, unite = _PARAM_LABEL.get(p, (p.capitalize(), "nombre", ""))
+        add_q(p, label, qtype, unite)
+    return questions
+
+
 def build_par_theme(themes_detectes, fiches, connu):
     """V39.1.4 — Génère les questions par thème détecté.
     Filtre les questions devenues inutiles selon contexte connu.
@@ -447,26 +583,15 @@ def generate_smart_questions(fiches, contexte):
         "debit":           ("Débit (m³/h) ?", "nombre", "m³/h"),
         "rendement":       ("Rendement de l'installation (%) ?", "nombre", "%"),
     }
+    # V39.3.0 — questions précises selon vraies variables compute (params + mode_calcul + variables)
     par_fiche = {}
     for f in fiches:
         if not isinstance(f, dict): continue
         ref = f.get("ref", "")
         if not ref or ref in par_fiche: continue
-        fparams = f.get("params") or []
-        if "surface" in connu and fparams == ["surface"]:
-            continue  # surface déjà connue, pas de question utile
-        fiche_qs = []
-        for p in fparams:
-            if p == "surface" and "surface" in connu:
-                continue
-            if p in PARAM_QUESTIONS:
-                q, t, u = PARAM_QUESTIONS[p]
-                fiche_qs.append({
-                    "question": f"[{ref} — {f.get('nom','')[:40]}] {q}",
-                    "type": t, "unite": u, "param": p,
-                })
-        if fiche_qs:
-            par_fiche[ref] = fiche_qs
+        questions = build_questions_for_fiche(f, connu)
+        if questions:
+            par_fiche[ref] = questions
 
     # Closing — 1 seule fois, à la fin
     closing = [
