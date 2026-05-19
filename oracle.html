@@ -15906,9 +15906,15 @@ document.addEventListener('DOMContentLoaded', function() {
       <!-- AVANT L'APPEL : préparation -->
       <div class="v2-phase-label">⏱ AVANT L'APPEL · Préparation prospection (5 min)</div>
       <div class="v2-phase-row r0">
-        <div class="v2-step" data-page="20" onclick="V2.go(20)" style="background:linear-gradient(135deg,rgba(120,160,255,.18),rgba(60,90,180,.08));border-color:rgba(120,160,255,.50);"><div class="v2-step-num" style="background:#6E92FF;color:#fff;">⚙</div><div class="v2-step-label">Setup Dossier (opérateur · COFRAC · % commissions)</div></div>
+        <div class="v2-step" data-page="20" onclick="V2.go(20)" style="background:linear-gradient(135deg,rgba(120,160,255,.18),rgba(60,90,180,.08));border-color:rgba(120,160,255,.50);"><div class="v2-step-num" style="background:#6E92FF;color:#fff;">⚙</div><div class="v2-step-label">Setup Dossier (face cachée — config vendeur)</div></div>
         <div class="v2-step placeholder" data-page="11" onclick="V2.go(11)"><div class="v2-step-num">A1</div><div class="v2-step-label">Hunt prospects</div></div>
         <div class="v2-step placeholder" data-page="12" onclick="V2.go(12)"><div class="v2-step-num">A2</div><div class="v2-step-label">Cartes &amp; PLU</div></div>
+      </div>
+
+      <!-- V40.1 — DÉROULEMENT PROJET (1ère slide visible client en visio) -->
+      <div class="v2-phase-label" style="color:#C8FF6B;">🎬 SLIDE D'OUVERTURE · Présentation au client (visio)</div>
+      <div class="v2-phase-row r0">
+        <div class="v2-step" data-page="21" onclick="V2.go(21)" style="background:linear-gradient(135deg,rgba(200,255,107,.18),rgba(63,185,80,.08));border-color:rgba(200,255,107,.50);min-width:340px;"><div class="v2-step-num" style="background:#C8FF6B;color:#0a0a0b;">🎬</div><div class="v2-step-label" style="font-weight:700;">Déroulement projet CEE — audit/étude/gisements/gains</div></div>
       </div>
 
       <!-- 1ères 2 minutes d'appel : briser la glace + identifier -->
@@ -16214,6 +16220,17 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
+    <!-- ═══ P21 — DÉROULEMENT PROJET CEE (V40.1) — 1ère slide visible client en visio ═══ -->
+    <div class="v2-page" id="v2p21">
+      <h1 class="v2-page-title" style="background:linear-gradient(135deg,#C8FF6B,#3FB950);-webkit-background-clip:text;background-clip:text;color:transparent;">Voici comment nous allons procéder ensemble</h1>
+      <p class="v2-page-sub">Notre méthode CEE en 4 étapes — audit, pré-étude, analyse des gisements, calcul des gains. Tout est cadré par l'arrêté du 4 sept 2014 et le PNCEE.</p>
+      <div id="v2p21content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(20)">← Setup (face cachée)</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(1)">Démarrer l'audit avec ce client →</button>
+      </div>
+    </div>
+
     <!-- ═══ P20 — SETUP DOSSIER (V40) — opérateur, COFRAC, délégataire, commissions ═══ -->
     <div class="v2-page" id="v2p20">
       <h1 class="v2-page-title">⚙ Setup Dossier — paramètres business</h1>
@@ -16453,8 +16470,8 @@ window.V2 = {
 
   go(page) {
     console.log('[V2.go] navigation page', page);
-    // V37.4.15 — 17 onglets + V40 page 20 (Setup Dossier)
-    if ((page < 1 || page > 17) && page !== 20) { console.warn('[V2.go] page hors limites', page); return; }
+    // V37.4.15 — 17 onglets + V40 pages 20 (Setup) + 21 (Déroulement projet)
+    if ((page < 1 || page > 17) && page !== 20 && page !== 21) { console.warn('[V2.go] page hors limites', page); return; }
     try {
       document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
       var target = document.getElementById('v2p' + page);
@@ -16500,6 +16517,7 @@ window.V2 = {
       if (page === 18) this._renderPrecisionInputs();// V38.13 — R2 Précision Q dynamiques par fiche cochée
       if (page === 19) this._renderOperationsAvecRAC();// V38.13 — R2 Opérations avec RAC (couverture < 90%)
       if (page === 20) this._renderSetupDossier();   // V40 — Setup Dossier opérateur/COFRAC/délégataire/commissions
+      if (page === 21) this._renderDeroulement();    // V40.1 — Déroulement projet CEE (slide visible client)
       if (page === 0) { this._focusUpdateKPI(); } // V38.25 — page Focus Appel
       // V38.24 — Refresh sticky bar à chaque navigation
       this._refreshStickyBar();
@@ -18297,6 +18315,110 @@ window.V2 = {
         alert('✓ Profil enregistré · is_complete=' + d.is_complete);
       } else { alert('❌ Sauvegarde échouée'); }
     } catch (e) { alert('❌ ' + e.message); }
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // V40.1 — P21 DÉROULEMENT PROJET CEE (1ère slide visible client en visio)
+  // Pédagogique : 4 étapes audit/étude/gisements/gains + descente prix 2 temps
+  // ═══════════════════════════════════════════════════════════════════
+  _renderDeroulement() {
+    var c = document.getElementById('v2p21content'); if (!c) return;
+
+    // Récup nom client si déjà identifié + nom opérateur depuis profil
+    var profil = this.state.profil || {};
+    var clientNom = profil.nom_entreprise || profil.raison_sociale || '';
+    var dossier = this.state.dossierProfile || {};
+    var opNom = (dossier.operateur && dossier.operateur.raison_sociale) || '';
+    var cofracNom = (dossier.cofrac && dossier.cofrac.raison_sociale) || '';
+    var delegNom = (dossier.delegataire && dossier.delegataire.raison_sociale) || '';
+
+    var html = '';
+
+    // === Bandeau intro ===
+    if (clientNom || opNom) {
+      html += '<div class="v2-card" style="background:linear-gradient(135deg,rgba(200,255,107,.08),rgba(63,185,80,.04));border-color:rgba(200,255,107,.30);margin-bottom:18px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">';
+      if (opNom) html += '<div><div style="font-size:10px;color:rgba(245,245,247,.5);letter-spacing:1px;">OPÉRATEUR</div><div style="font-size:15px;font-weight:700;color:var(--accent-cyan);">' + opNom + '</div></div>';
+      html += '<div style="font-size:20px;color:rgba(200,255,107,.6);">→</div>';
+      if (clientNom) html += '<div><div style="font-size:10px;color:rgba(245,245,247,.5);letter-spacing:1px;">CLIENT</div><div style="font-size:15px;font-weight:700;">' + clientNom + '</div></div>';
+      html += '</div></div>';
+    }
+
+    // === Méthode en 4 étapes (timeline horizontale) ===
+    html += '<div class="v2-card"><div class="v2-card-title" style="font-size:15px;">🗺 Notre méthode CEE en 4 étapes</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px;">';
+
+    var etapes = [
+      {num:'1', titre:'AUDIT terrain', desc:'Visite du site, relevés équipements, énergies, surfaces. Nous documentons l\'existant avec les preuves photo + factures.', dur:'1 visite · 1-2 h', color:'#6E92FF'},
+      {num:'2', titre:'PRÉ-ÉTUDE', desc:'Analyse SIRET → code APE → 227 secteurs d\'activité. Identification automatique des fiches CEE éligibles à votre activité.', dur:'Sous 24 h', color:'#BC8CFF'},
+      {num:'3', titre:'ANALYSE DES GISEMENTS', desc:'Calcul du potentiel CEE par opération (toiture, chauffage, ECS, éclairage, ventilation, process...). Tri par rentabilité.', dur:'Rapport détaillé', color:'#C8FF6B'},
+      {num:'4', titre:'CALCUL DES GAINS', desc:'Pour chaque action : prime CEE + économie facture + reste à charge. ROI mois par mois sur 10-15 ans.', dur:'Devis chiffrés', color:'#FFB84D'},
+    ];
+    etapes.forEach(function(e){
+      html += '<div style="padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;position:relative;">';
+      html += '<div style="position:absolute;top:-10px;left:14px;width:28px;height:28px;border-radius:50%;background:' + e.color + ';color:#0a0a0b;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;">' + e.num + '</div>';
+      html += '<div style="font-size:13px;font-weight:700;margin-top:8px;margin-bottom:6px;color:' + e.color + ';">' + e.titre + '</div>';
+      html += '<div style="font-size:11.5px;color:rgba(245,245,247,.75);line-height:1.5;">' + e.desc + '</div>';
+      html += '<div style="font-size:10px;color:rgba(245,245,247,.45);margin-top:8px;font-family:JetBrains Mono,monospace;">⏱ ' + e.dur + '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+
+    // === Descente de prix en 2 temps ===
+    html += '<div class="v2-card" style="background:linear-gradient(135deg,rgba(200,255,107,.06),rgba(110,146,255,.04));border-color:rgba(200,255,107,.25);">';
+    html += '<div class="v2-card-title" style="font-size:15px;">💰 La "descente de prix" en 2 temps</div>';
+    html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:14px;line-height:1.6;">Le client paye toujours moins cher que le prix affiché. Voici comment :</div>';
+
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
+
+    // Étape 1 : constat travaux 0€
+    html += '<div style="padding:16px;background:rgba(63,185,80,.06);border:2px solid rgba(63,185,80,.35);border-radius:12px;">';
+    html += '<div style="font-size:11px;color:#3FB950;letter-spacing:1.5px;font-weight:800;margin-bottom:6px;">TEMPS 1 · CONSTAT</div>';
+    html += '<div style="font-size:18px;font-weight:800;margin-bottom:10px;">Les travaux à 0 €</div>';
+    html += '<div style="font-size:12px;color:rgba(245,245,247,.78);line-height:1.6;margin-bottom:10px;">Équipement par équipement, on identifie ce qui peut être financé à 100% par la prime CEE — donc 0€ de votre poche.</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.6);margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);">Exemples typiques :</div>';
+    html += '<ul style="margin:8px 0 0 0;padding-left:18px;font-size:11.5px;color:rgba(245,245,247,.75);line-height:1.8;">';
+    html += '<li>Isolation des combles → 100% pris en charge</li>';
+    html += '<li>VMC double flux → 0€ reste à charge</li>';
+    html += '<li>Régulation chauffage + sondes → 0€</li>';
+    html += '<li>LED éclairage tertiaire → 0€</li>';
+    html += '</ul></div>';
+
+    // Étape 2 : économies facture
+    html += '<div style="padding:16px;background:rgba(110,146,255,.06);border:2px solid rgba(110,146,255,.35);border-radius:12px;">';
+    html += '<div style="font-size:11px;color:#6E92FF;letter-spacing:1.5px;font-weight:800;margin-bottom:6px;">TEMPS 2 · AMÉLIORATION</div>';
+    html += '<div style="font-size:18px;font-weight:800;margin-bottom:10px;">Gain sur la facture énergétique</div>';
+    html += '<div style="font-size:12px;color:rgba(245,245,247,.78);line-height:1.6;margin-bottom:10px;">Pour les remplacements d\'équipements (chaudière → PAC avec RAC), on calcule la prime CEE + l\'économie sur la facture mois par mois.</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.6);margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);">Exemple chaudière fuel → PAC :</div>';
+    html += '<ul style="margin:8px 0 0 0;padding-left:18px;font-size:11.5px;color:rgba(245,245,247,.75);line-height:1.8;">';
+    html += '<li>Coût équipement : 18 000 € HT</li>';
+    html += '<li>Prime CEE versée : –12 000 €</li>';
+    html += '<li><b style="color:#C8FF6B;">Reste à charge : 6 000 €</b></li>';
+    html += '<li>Économie fuel/an : ~3 200 €</li>';
+    html += '<li><b style="color:#C8FF6B;">Amorti en ~22 mois</b></li>';
+    html += '</ul></div>';
+
+    html += '</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-top:12px;text-align:center;font-style:italic;">Les chiffres exacts seront calculés à l\'étape suivante en fonction de votre activité, surface, énergies actuelles.</div>';
+    html += '</div>';
+
+    // === Cadre légal & acteurs (rassurer le client) ===
+    html += '<div class="v2-card"><div class="v2-card-title" style="font-size:14px;">🛡 Cadre légal et acteurs du dispositif</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;font-size:11.5px;color:rgba(245,245,247,.72);line-height:1.55;">';
+    html += '<div><div style="font-weight:700;color:var(--accent-cyan);margin-bottom:4px;">📜 Cadre légal</div>Loi POPE 2005 + arrêté 4 sept 2014 + PNCEE (Pôle National CEE). Dispositif sécurisé par l\'État.</div>';
+    if (delegNom) html += '<div><div style="font-weight:700;color:var(--accent-cyan);margin-bottom:4px;">🏛 Délégataire (oblige)</div>' + delegNom + '<br><span style="font-size:10px;color:rgba(245,245,247,.45);">Verse la prime, dépose au PNCEE.</span></div>';
+    else html += '<div><div style="font-weight:700;color:var(--accent-cyan);margin-bottom:4px;">🏛 Délégataire (oblige)</div>Énergéticien certifié (TotalEnergies, Engie, EDF, Hellio…) qui verse la prime et dépose le dossier au PNCEE.</div>';
+    if (cofracNom) html += '<div><div style="font-weight:700;color:var(--accent-cyan);margin-bottom:4px;">🔬 Contrôle COFRAC</div>' + cofracNom + '<br><span style="font-size:10px;color:rgba(245,245,247,.45);">Organisme accrédité tiers indépendant.</span></div>';
+    else html += '<div><div style="font-weight:700;color:var(--accent-cyan);margin-bottom:4px;">🔬 Contrôle COFRAC</div>Vérification tiers indépendant accrédité (Apave, Bureau Veritas, SOCOTEC) sur 100% des dossiers.</div>';
+    html += '<div><div style="font-weight:700;color:var(--accent-cyan);margin-bottom:4px;">⏱ Délai de paiement</div>Prime versée 30 à 60 jours après réception du dossier complet par le délégataire.</div>';
+    html += '</div></div>';
+
+    // === Engagement de transparence ===
+    html += '<div style="margin-top:18px;padding:14px;background:rgba(255,255,255,.02);border-left:3px solid var(--accent-cyan);border-radius:6px;font-size:12px;color:rgba(245,245,247,.75);line-height:1.65;">';
+    html += '<b style="color:var(--accent-cyan);">Notre engagement :</b> aucun travail n\'est lancé tant que le devis n\'est pas signé ET la prime CEE confirmée par le délégataire. Vous savez à l\'avance, au centime près, ce que vous allez payer.';
+    html += '</div>';
+
+    c.innerHTML = html;
   },
 
   // ═══════════════════════════════════════════════════════════════════
