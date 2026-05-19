@@ -15844,9 +15844,73 @@ document.addEventListener('DOMContentLoaded', function() {
     .v2-field { grid-template-columns: 1fr; gap: 4px; }
     .v2-field-label { font-size: 11px; }
   }
+
+  /* ═══════════════════════════════════════════════════════════════
+     V41.0 — Toggle Mode Vendeur ↔ Mode Complet
+     Mode Complet (défaut) : tous les onglets + toutes les sections
+     Mode Vendeur          : 8 onglets logiques + sections épurées
+     L'intelligence backend tourne identique dans les 2 modes.
+     ═══════════════════════════════════════════════════════════════ */
+  .ui-mode-toggle {
+    position: fixed; top: 12px; right: 220px; z-index: 9998;
+    background: rgba(15,15,18,0.92);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    padding: 6px 10px 6px 14px;
+    font-size: 11px; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 10px;
+    cursor: pointer; user-select: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    transition: all .2s;
+  }
+  .ui-mode-toggle:hover { background: rgba(30,30,38,0.96); border-color: rgba(255,255,255,0.30); }
+  .ui-mode-toggle .label { color: rgba(245,245,247,0.6); font-weight: 600; letter-spacing: 0.5px; }
+  .ui-mode-toggle .pill {
+    padding: 4px 10px; border-radius: 999px; font-weight: 800; letter-spacing: 0.4px;
+    transition: all .2s;
+  }
+  body.ui-mode-full .ui-mode-toggle .pill { background: rgba(110,146,255,0.18); color: #6E92FF; }
+  body.ui-mode-vendor .ui-mode-toggle .pill { background: rgba(200,255,107,0.20); color: #C8FF6B; }
+  @media (max-width: 900px) { .ui-mode-toggle { right: 12px; top: 60px; } }
+
+  /* Mode Vendeur — stepper réduit à 8 nœuds logiques */
+  body.ui-mode-vendor #v2Stepper .v2-step { display: none !important; }
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="20"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="21"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="1"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="2"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="5"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="7"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="9"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="10"] { display: flex !important; }
+
+  /* Mode Vendeur — phase-label catégorielles cachées (flow continu) */
+  body.ui-mode-vendor .v2-phase-label { display: none !important; }
+  body.ui-mode-vendor .v2-phase-row { margin: 0 !important; padding: 4px 0 !important; }
+
+  /* Mode Vendeur — sections marquées BO uniquement (alertes COFRAC, ai-debug, benchmarks) */
+  body.ui-mode-vendor .bo-only { display: none !important; }
+
+  /* Bandeau Mode Vendeur (info subtile en haut) */
+  .ui-mode-banner {
+    display: none;
+    background: linear-gradient(90deg, rgba(200,255,107,0.10), rgba(63,185,80,0.04));
+    border-bottom: 1px solid rgba(200,255,107,0.25);
+    padding: 6px 16px; font-size: 11px; color: rgba(200,255,107,0.85);
+    text-align: center; letter-spacing: 0.3px;
+  }
+  body.ui-mode-vendor .ui-mode-banner { display: block; }
 </style>
 
 <button class="v2-toggle-fab" onclick="V2.toggle()">🚀 <span id="v2ToggleLabel">Mode Clair</span></button>
+
+<!-- V41.0 — Toggle Mode Vendeur ↔ Mode Complet (face cachée vs présentation client) -->
+<div class="ui-mode-toggle" id="uiModeToggle" onclick="V2.toggleUiMode()" title="Bascule entre vue Backoffice complète (vendeur en préparation) et vue Vendeur simplifiée (présentation client). Cmd/Ctrl + M">
+  <span class="label">VUE</span>
+  <span class="pill" id="uiModePill">COMPLET</span>
+</div>
+<div class="ui-mode-banner">👁 Mode Vendeur — vous voyez ce que le client verra · cliquez « VUE COMPLET » en haut à droite pour basculer en cockpit backoffice</div>
 
 <!-- V37.4.22 — JARVIS FAB orchestrateur Penta-IA (accessible toutes pages V2) -->
 <button id="v2JarvisFab" class="no-print" onclick="V2._jarvisOpen()" title="Jarvis — assistant orchestrateur Penta-IA"
@@ -16365,11 +16429,39 @@ window.V2 = {
     var fromStorage = false;
     try { fromStorage = localStorage.getItem('cee_v2') === '1'; } catch(e) {}
     if (fromUrl || fromStorage) this.activate();
+    // V41.0 — restaurer Mode Vendeur ↔ Mode Complet depuis localStorage (défaut: full)
+    var uiMode = 'full';
+    try { uiMode = localStorage.getItem('cee_ui_mode') || 'full'; } catch(e) {}
+    this.setUiMode(uiMode === 'vendor' ? 'vendor' : 'full');
+    // V41.0 — raccourci clavier Cmd/Ctrl + M pour basculer le mode
+    document.addEventListener('keydown', function(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key && e.key.toLowerCase() === 'm') {
+        e.preventDefault();
+        V2.toggleUiMode();
+      }
+    });
   },
 
   toggle() {
     if (this.state.active) this.deactivate();
     else this.activate();
+  },
+
+  // V41.0 — Mode Vendeur ↔ Mode Complet (purement visuel, backend identique)
+  setUiMode(mode) {
+    var m = (mode === 'vendor') ? 'vendor' : 'full';
+    document.body.classList.remove('ui-mode-vendor', 'ui-mode-full');
+    document.body.classList.add('ui-mode-' + m);
+    try { localStorage.setItem('cee_ui_mode', m); } catch(e) {}
+    var pill = document.getElementById('uiModePill');
+    if (pill) pill.textContent = (m === 'vendor') ? 'VENDEUR' : 'COMPLET';
+    this.state.uiMode = m;
+    console.log('[V41.0] Mode UI →', m);
+  },
+
+  toggleUiMode() {
+    var current = this.state.uiMode || 'full';
+    this.setUiMode(current === 'vendor' ? 'full' : 'vendor');
   },
 
   activate() {
