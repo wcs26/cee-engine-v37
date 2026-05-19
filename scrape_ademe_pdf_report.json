@@ -1,0 +1,1257 @@
+{
+  "date": "2026-05-19 08:33:09",
+  "cibles": [
+    "BAR-EN-110",
+    "BAR-SE-107",
+    "BAR-SE-109",
+    "BAR-TH-102",
+    "BAR-TH-106",
+    "BAR-TH-107",
+    "BAR-TH-110",
+    "BAR-TH-111",
+    "BAR-TH-116",
+    "BAR-TH-117",
+    "BAR-TH-122",
+    "BAR-TH-130",
+    "BAR-TH-137",
+    "BAR-TH-139",
+    "BAR-TH-150",
+    "BAT-TH-140",
+    "BAT-TH-141",
+    "BAT-TH-146",
+    "IND-UT-121",
+    "AGRI-TH-108",
+    "AGRI-TH-117",
+    "AGRI-UT-101",
+    "AGRI-UT-102",
+    "AGRI-UT-104",
+    "BAT-EQ-117",
+    "BAT-EQ-130",
+    "BAT-EQ-131",
+    "BAT-TH-112",
+    "BAT-TH-115",
+    "BAT-TH-122",
+    "BAT-TH-135",
+    "BAT-TH-153",
+    "BAT-TH-157",
+    "BAT-TH-161",
+    "IND-BA-114",
+    "IND-UT-102",
+    "IND-UT-114",
+    "IND-UT-118",
+    "IND-UT-125",
+    "IND-UT-131",
+    "IND-UT-132",
+    "IND-UT-133",
+    "IND-UT-137",
+    "IND-UT-138",
+    "IND-UT-139",
+    "RES-CH-106",
+    "TRA-EQ-106",
+    "TRA-EQ-126",
+    "TRA-EQ-127",
+    "IND-UT-115"
+  ],
+  "pdf_locaux": 42,
+  "parses_ok": 42,
+  "parses_ko": 0,
+  "sans_pdf": [
+    "BAR-SE-109",
+    "BAR-TH-106",
+    "BAR-TH-107",
+    "BAR-TH-150",
+    "BAT-TH-140",
+    "BAT-TH-141",
+    "BAT-TH-146",
+    "IND-UT-121"
+  ],
+  "avec_conflits": 1,
+  "results": [
+    {
+      "ref": "BAR-EN-110",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-EN-110",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": {
+          "H1": 7,
+          "H2": 6,
+          "H3": 4
+        },
+        "duree_vie": null,
+        "variables": [
+          "debit"
+        ],
+        "is_complex": true,
+        "is_expired": true,
+        "text_len": 4859
+      },
+      "local_actif": false,
+      "local_nom": "Isolation comble perdu maison individuelle",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "surface",
+      "conflicts": [],
+      "pdf_path": "BAR-EN-110.pdf"
+    },
+    {
+      "ref": "BAR-SE-107",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-SE-107",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": {
+          "H1": 13,
+          "H2": 10,
+          "H3": 8
+        },
+        "duree_vie": null,
+        "variables": [
+          "debit"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 3165
+      },
+      "local_actif": false,
+      "local_nom": "Service programmation/régulation chauffage",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-SE-107.pdf"
+    },
+    {
+      "ref": "BAR-TH-102",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-102",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "surface"
+        ],
+        "is_complex": false,
+        "is_expired": true,
+        "text_len": 3025
+      },
+      "local_actif": false,
+      "local_nom": "Chaudière individuelle haute performance",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-102.pdf"
+    },
+    {
+      "ref": "BAR-TH-110",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-110",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": {
+          "H1": 1700,
+          "H2": 1400,
+          "H3": 910
+        },
+        "duree_vie": null,
+        "variables": [],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 1279
+      },
+      "local_actif": false,
+      "local_nom": "Robinet thermostatique",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-110.pdf"
+    },
+    {
+      "ref": "BAR-TH-111",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-111",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": {
+          "H1": 2,
+          "H2": 1,
+          "H3": 1
+        },
+        "duree_vie": null,
+        "variables": [
+          "surface"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 1160
+      },
+      "local_actif": false,
+      "local_nom": "Régulation par sonde température extérieure",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-111.pdf"
+    },
+    {
+      "ref": "BAR-TH-116",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-116",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": {
+          "H1": 300,
+          "H2": 250,
+          "H3": 160
+        },
+        "duree_vie": null,
+        "variables": [
+          "surface"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 1619
+      },
+      "local_actif": false,
+      "local_nom": "Récupérateur chaleur eaux usées",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-116.pdf"
+    },
+    {
+      "ref": "BAR-TH-117",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-117",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": {
+          "H3": 930
+        },
+        "duree_vie": null,
+        "variables": [],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 1090
+      },
+      "local_actif": false,
+      "local_nom": "Régulation programmable centralisée",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-117.pdf"
+    },
+    {
+      "ref": "BAR-TH-122",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-122",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": {
+          "H1": 16,
+          "H2": 14,
+          "H3": 10
+        },
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 2581
+      },
+      "local_actif": false,
+      "local_nom": "Isolation tuyauterie distribution chauffage",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-122.pdf"
+    },
+    {
+      "ref": "BAR-TH-130",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-130",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "surface"
+        ],
+        "is_complex": false,
+        "is_expired": true,
+        "text_len": 4961
+      },
+      "local_actif": false,
+      "local_nom": "Pompe à chaleur eau chaude sanitaire",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-130.pdf"
+    },
+    {
+      "ref": "BAR-TH-137",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-137",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": {
+          "H1": 48,
+          "H2": 40,
+          "H3": 29
+        },
+        "duree_vie": null,
+        "variables": [
+          "surface",
+          "nb_logements"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 1960
+      },
+      "local_actif": false,
+      "local_nom": "Raccordement réseau chaleur résidentiel",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-137.pdf"
+    },
+    {
+      "ref": "BAR-TH-139",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAR-TH-139",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 2211
+      },
+      "local_actif": false,
+      "local_nom": "Pompe à chaleur hybride collective",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": null,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "BAR-TH-139.pdf"
+    },
+    {
+      "ref": "AGRI-TH-108",
+      "has_local": true,
+      "extracted": {
+        "ref": "AGRI-TH-108",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "surface"
+        ],
+        "is_complex": true,
+        "is_expired": true,
+        "text_len": 6725
+      },
+      "local_actif": false,
+      "local_nom": "Chauffage infrarouge élevage",
+      "local_cumac": {
+        "H1": 5700,
+        "H2": 4700,
+        "H3": 3300,
+        "DOM": 2900
+      },
+      "local_duree_vie": 17,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "AGRI-TH-108 v A35-2 à compter du 01-10-2020.pdf"
+    },
+    {
+      "ref": "AGRI-TH-117",
+      "has_local": true,
+      "extracted": {
+        "ref": "AGRI-TH-117",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "surface"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 8092
+      },
+      "local_actif": false,
+      "local_nom": "Déshumidificateur thermodynamique serres",
+      "local_cumac": {
+        "H1": 8200,
+        "H2": 6800,
+        "H3": 4800,
+        "DOM": 4100
+      },
+      "local_duree_vie": 17,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "AGRI-TH-117 vA73-3 à compter du 01-09-2025.pdf"
+    },
+    {
+      "ref": "AGRI-UT-101",
+      "has_local": true,
+      "extracted": {
+        "ref": "AGRI-UT-101",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4647
+      },
+      "local_actif": false,
+      "local_nom": "Moto-variateur synchrone aimants",
+      "local_cumac": {
+        "H1": 4800,
+        "H2": 4800,
+        "H3": 4800,
+        "DOM": 4800
+      },
+      "local_duree_vie": 20,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "AGRI-UT-101 v A24-2 après le 01-04-2017.pdf"
+    },
+    {
+      "ref": "AGRI-UT-102",
+      "has_local": true,
+      "extracted": {
+        "ref": "AGRI-UT-102",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4702
+      },
+      "local_actif": false,
+      "local_nom": "VEV moteur asynchrone",
+      "local_cumac": {
+        "H1": 4800,
+        "H2": 4800,
+        "H3": 4800,
+        "DOM": 4800
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "AGRI-UT-102 v A22-2.pdf"
+    },
+    {
+      "ref": "AGRI-UT-104",
+      "has_local": true,
+      "extracted": {
+        "ref": "AGRI-UT-104",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": {
+          "H2": 10,
+          "H3": 9
+        },
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4938
+      },
+      "local_actif": false,
+      "local_nom": "Régulation haute pression flottante",
+      "local_cumac": {
+        "H1": 9400,
+        "H2": 9400,
+        "H3": 9400,
+        "DOM": 9400
+      },
+      "local_duree_vie": 14,
+      "local_type": "complexe",
+      "conflicts": [
+        "cumac H2: 9400 vs 10",
+        "cumac H3: 9400 vs 9"
+      ],
+      "pdf_path": "AGRI-UT-104.pdf"
+    },
+    {
+      "ref": "BAT-EQ-117",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-EQ-117",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 12238
+      },
+      "local_actif": false,
+      "local_nom": "Installation frigo CO2 sub/transcritique",
+      "local_cumac": {
+        "H1": 19200,
+        "H2": 19200,
+        "H3": 19200,
+        "DOM": 19200
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-EQ-117 vA40-2 à compter du 01-04-2022_0.pdf"
+    },
+    {
+      "ref": "BAT-EQ-130",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-EQ-130",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 10259
+      },
+      "local_actif": false,
+      "local_nom": "Condensation frigo haute efficacité",
+      "local_cumac": {
+        "H1": 9400,
+        "H2": 9400,
+        "H3": 9400,
+        "DOM": 9400
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-EQ-130.pdf"
+    },
+    {
+      "ref": "BAT-EQ-131",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-EQ-131",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4676
+      },
+      "local_actif": false,
+      "local_nom": "Conduits de lumière naturelle",
+      "local_cumac": "COMPLEXE",
+      "local_duree_vie": 20,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-EQ-131.pdf"
+    },
+    {
+      "ref": "BAT-TH-112",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-112",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4548
+      },
+      "local_actif": false,
+      "local_nom": "VEV moteur asynchrone tertiaire",
+      "local_cumac": {
+        "H1": 4800,
+        "H2": 4800,
+        "H3": 4800,
+        "DOM": 4800
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-112 v A22-2.pdf"
+    },
+    {
+      "ref": "BAT-TH-115",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-115",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "surface"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4506
+      },
+      "local_actif": false,
+      "local_nom": "Climatiseur performant DOM",
+      "local_cumac": {
+        "H1": 0,
+        "H2": 0,
+        "H3": 0,
+        "DOM": 3800
+      },
+      "local_duree_vie": 9,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-115 v A15-2.pdf"
+    },
+    {
+      "ref": "BAT-TH-122",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-122",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "surface"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 3572
+      },
+      "local_actif": false,
+      "local_nom": "Programmateur intermittence clim DOM",
+      "local_cumac": {
+        "H1": 0,
+        "H2": 0,
+        "H3": 0,
+        "DOM": 2400
+      },
+      "local_duree_vie": 12,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-122.pdf"
+    },
+    {
+      "ref": "BAT-TH-135",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-135",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 5804
+      },
+      "local_actif": false,
+      "local_nom": "Régulation haute pression flottante froid DOM",
+      "local_cumac": {
+        "H1": 0,
+        "H2": 0,
+        "H3": 0,
+        "DOM": 5600
+      },
+      "local_duree_vie": 10,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-135.pdf"
+    },
+    {
+      "ref": "BAT-TH-153",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-153",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 7263
+      },
+      "local_actif": false,
+      "local_nom": "Confinement allées Data Center",
+      "local_cumac": {
+        "H1": 10400,
+        "H2": 10400,
+        "H3": 10400,
+        "DOM": 10400
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-153.pdf"
+    },
+    {
+      "ref": "BAT-TH-157",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-157",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "surface",
+          "rendement"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 12501
+      },
+      "local_actif": false,
+      "local_nom": "Chaudière biomasse collective tertiaire",
+      "local_cumac": {
+        "H1": 5400,
+        "H2": 4400,
+        "H3": 3200,
+        "DOM": 2100
+      },
+      "local_duree_vie": 22,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-157 vA50-2 à compter du 01-04-2023_0.pdf"
+    },
+    {
+      "ref": "BAT-TH-161",
+      "has_local": true,
+      "extracted": {
+        "ref": "BAT-TH-161",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": true,
+        "text_len": 10742
+      },
+      "local_actif": false,
+      "local_nom": "Maintien T° groupes électrogènes PAC",
+      "local_cumac": {
+        "H1": 8200,
+        "H2": 6700,
+        "H3": 4800,
+        "DOM": 3200
+      },
+      "local_duree_vie": 11,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "BAT-TH-161 vA62-1 à compter du 31-08-2024_0.pdf"
+    },
+    {
+      "ref": "IND-BA-114",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-BA-114",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4577
+      },
+      "local_actif": false,
+      "local_nom": "Conduits de lumière naturelle",
+      "local_cumac": "COMPLEXE",
+      "local_duree_vie": 20,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-BA-114.pdf"
+    },
+    {
+      "ref": "IND-UT-102",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-102",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4504
+      },
+      "local_actif": false,
+      "local_nom": "VEV moteur asynchrone industriel",
+      "local_cumac": {
+        "H1": 4800,
+        "H2": 4800,
+        "H3": 4800,
+        "DOM": 4800
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-102 v A19-2.pdf"
+    },
+    {
+      "ref": "IND-UT-114",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-114",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 4502
+      },
+      "local_actif": false,
+      "local_nom": "Moto-variateur synchrone aimants",
+      "local_cumac": {
+        "H1": 6100,
+        "H2": 6100,
+        "H3": 6100,
+        "DOM": 6100
+      },
+      "local_duree_vie": 20,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-114 v A24-2 après le 01-04-2017.pdf"
+    },
+    {
+      "ref": "IND-UT-118",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-118",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 5898
+      },
+      "local_actif": false,
+      "local_nom": "Brûleur récup chaleur four industriel",
+      "local_cumac": {
+        "H1": 12000,
+        "H2": 12000,
+        "H3": 12000,
+        "DOM": 12000
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-118.pdf"
+    },
+    {
+      "ref": "IND-UT-125",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-125",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 5250
+      },
+      "local_actif": false,
+      "local_nom": "Traitement eau chaudière vapeur",
+      "local_cumac": {
+        "H1": 18800,
+        "H2": 15400,
+        "H3": 11000,
+        "DOM": 7400
+      },
+      "local_duree_vie": 10,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-125.pdf"
+    },
+    {
+      "ref": "IND-UT-131",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-131",
+        "nom": "",
+        "type": "surface",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "surface"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 11810
+      },
+      "local_actif": false,
+      "local_nom": "Isolation parois planes/cylindriques",
+      "local_cumac": {
+        "H1": 4200,
+        "H2": 4200,
+        "H3": 4200,
+        "DOM": 4200
+      },
+      "local_duree_vie": 10,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-131 vA37-2 à compter du 01-04-2021.pdf"
+    },
+    {
+      "ref": "IND-UT-132",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-132",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "rendement"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 3102
+      },
+      "local_actif": false,
+      "local_nom": "Moteur asynchrone IE4",
+      "local_cumac": {
+        "H1": 2200,
+        "H2": 2200,
+        "H3": 2200,
+        "DOM": 2200
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-132.pdf"
+    },
+    {
+      "ref": "IND-UT-133",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-133",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "duree_fonctionnement"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 6481
+      },
+      "local_actif": false,
+      "local_nom": "Système pilotage moteur récupération",
+      "local_cumac": {
+        "H1": 6100,
+        "H2": 6100,
+        "H3": 6100,
+        "DOM": 6100
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-133.pdf"
+    },
+    {
+      "ref": "IND-UT-137",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-137",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "debit",
+          "duree_fonctionnement"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 20164
+      },
+      "local_actif": false,
+      "local_nom": "PAC rehausse T° chaleur fatale",
+      "local_cumac": {
+        "H1": 14200,
+        "H2": 14200,
+        "H3": 14200,
+        "DOM": 14200
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-137 vA65-2 à compter du 01-01-2025.pdf"
+    },
+    {
+      "ref": "IND-UT-138",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-138",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "rendement",
+          "duree_fonctionnement"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 15155
+      },
+      "local_actif": false,
+      "local_nom": "Conversion chaleur fatale électricité/air",
+      "local_cumac": {
+        "H1": 12000,
+        "H2": 12000,
+        "H3": 12000,
+        "DOM": 12000
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-138 vA62-1 à compter du 01-01-2025.pdf"
+    },
+    {
+      "ref": "IND-UT-139",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-139",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance",
+          "rendement"
+        ],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 12189
+      },
+      "local_actif": false,
+      "local_nom": "Stockage chaleur fatale",
+      "local_cumac": {
+        "H1": 14200,
+        "H2": 14200,
+        "H3": 14200,
+        "DOM": 14200
+      },
+      "local_duree_vie": 20,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "IND-UT-139 vA73-2 à compter du 01-11-2025.pdf"
+    },
+    {
+      "ref": "RES-CH-106",
+      "has_local": true,
+      "extracted": {
+        "ref": "RES-CH-106",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 17053
+      },
+      "local_actif": false,
+      "local_nom": "Calorifugeage canalisations réseau",
+      "local_cumac": {
+        "H1": 22,
+        "H2": 18,
+        "H3": 13,
+        "DOM": 9
+      },
+      "local_duree_vie": 30,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "RES-CH-106 vA60-4 à compter du 01-03-2024.pdf"
+    },
+    {
+      "ref": "TRA-EQ-106",
+      "has_local": true,
+      "extracted": {
+        "ref": "TRA-EQ-106",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [],
+        "is_complex": true,
+        "is_expired": false,
+        "text_len": 5112
+      },
+      "local_actif": false,
+      "local_nom": "Pneus basse résistance roulement",
+      "local_cumac": {
+        "H1": 1300,
+        "H2": 1300,
+        "H3": 1300,
+        "DOM": 1300
+      },
+      "local_duree_vie": 15,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "TRA-EQ-106 v A14-1.pdf"
+    },
+    {
+      "ref": "TRA-EQ-126",
+      "has_local": true,
+      "extracted": {
+        "ref": "TRA-EQ-126",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": true,
+        "text_len": 14017
+      },
+      "local_actif": false,
+      "local_nom": "Remotorisation électrique/hybride bateau",
+      "local_cumac": {
+        "H1": 230000,
+        "H2": 230000,
+        "H3": 230000,
+        "DOM": 230000
+      },
+      "local_duree_vie": 17,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "TRA-EQ-126.pdf"
+    },
+    {
+      "ref": "TRA-EQ-127",
+      "has_local": true,
+      "extracted": {
+        "ref": "TRA-EQ-127",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": true,
+        "is_expired": true,
+        "text_len": 16226
+      },
+      "local_actif": false,
+      "local_nom": "Bateau électrique/hybride eaux intérieures",
+      "local_cumac": {
+        "H1": 170000,
+        "H2": 170000,
+        "H3": 170000,
+        "DOM": 170000
+      },
+      "local_duree_vie": 40,
+      "local_type": "complexe",
+      "conflicts": [],
+      "pdf_path": "TRA-EQ-127 vA54-1 à compter du 01-10-2023.pdf"
+    },
+    {
+      "ref": "IND-UT-115",
+      "has_local": true,
+      "extracted": {
+        "ref": "IND-UT-115",
+        "nom": "",
+        "type": "unitaire",
+        "cumac_unitaire": null,
+        "duree_vie": null,
+        "variables": [
+          "puissance"
+        ],
+        "is_complex": false,
+        "is_expired": false,
+        "text_len": 2977
+      },
+      "local_actif": false,
+      "local_nom": "Système de régulation sur un groupe de production de froid",
+      "local_cumac": "A VERIFIER",
+      "local_duree_vie": 14,
+      "local_type": "unitaire",
+      "conflicts": [],
+      "pdf_path": "IND-UT-115.pdf"
+    }
+  ]
+}

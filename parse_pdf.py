@@ -62,8 +62,9 @@ def extract_text_ocr(path):
 
 
 def parse_ref(text):
-    """Extrait la référence ATEE (ex: BAT-EQ-127)."""
-    match = re.search(r"(BAT|IND|RES|AGR|TRA)-[A-Z]{2}-\d{2,3}", text)
+    """Extrait la référence ATEE (ex: BAT-EQ-127, BAR-TH-104, AGRI-TH-108)."""
+    # V39.1.0 fix : ajout BAR (résidentiel) et AGRI (4 lettres au lieu de AGR)
+    match = re.search(r"(BAR|BAT|IND|RES|AGRI|TRA)-[A-Z]{2,3}-\d{2,3}", text)
     return match.group(0) if match else None
 
 

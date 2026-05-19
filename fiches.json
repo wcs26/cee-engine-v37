@@ -1131,7 +1131,19 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H2": 10,
+          "H3": 9
+        },
+        "type_extracted": "unitaire",
+        "variables_extracted": [
+          "puissance"
+        ],
+        "is_complex": true
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
@@ -8685,7 +8697,20 @@
       "source": "scrape-ademe V39.0.9 placeholder",
       "date_ajout": "2026-05-19",
       "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-SE-107%20vA37-1%20%C3%A0%20compter%20du%2031-12-2020_0.pdf",
-      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H1": 13,
+          "H2": 10,
+          "H3": 8
+        },
+        "type_extracted": "unitaire",
+        "variables_extracted": [
+          "debit"
+        ],
+        "is_complex": false
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
@@ -8780,7 +8805,18 @@
       "source": "scrape-ademe V39.0.9 placeholder",
       "date_ajout": "2026-05-19",
       "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-110%20vA16-1.pdf",
-      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H1": 1700,
+          "H2": 1400,
+          "H3": 910
+        },
+        "type_extracted": "unitaire",
+        "variables_extracted": [],
+        "is_complex": false
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
@@ -8818,7 +8854,20 @@
       "source": "scrape-ademe V39.0.9 placeholder",
       "date_ajout": "2026-05-19",
       "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-116%20vA17-1.pdf",
-      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H1": 300,
+          "H2": 250,
+          "H3": 160
+        },
+        "type_extracted": "surface",
+        "variables_extracted": [
+          "surface"
+        ],
+        "is_complex": false
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
@@ -8837,7 +8886,16 @@
       "source": "scrape-ademe V39.0.9 placeholder",
       "date_ajout": "2026-05-19",
       "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-117%20vA14-1.pdf",
-      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H3": 930
+        },
+        "type_extracted": "unitaire",
+        "variables_extracted": [],
+        "is_complex": false
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
@@ -8856,7 +8914,20 @@
       "source": "scrape-ademe V39.0.9 placeholder",
       "date_ajout": "2026-05-19",
       "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-122%20vA15-1.pdf",
-      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H1": 16,
+          "H2": 14,
+          "H3": 10
+        },
+        "type_extracted": "unitaire",
+        "variables_extracted": [
+          "puissance"
+        ],
+        "is_complex": false
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
@@ -8894,7 +8965,21 @@
       "source": "scrape-ademe V39.0.9 placeholder",
       "date_ajout": "2026-05-19",
       "pdf_url": "https://www.ecologie.gouv.fr/sites/default/files/documents/BAR-TH-137%20vA79-4%20%C3%A0%20compter%20du%2001-01-2026_2.pdf",
-      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer"
+      "lookup_requis": "Télécharger PDF + extraire cumac/params/conditions avant activer",
+      "scrape_ademe_pdf_2026_05_19": {
+        "cumac_extracted": {
+          "H1": 48,
+          "H2": 40,
+          "H3": 29
+        },
+        "type_extracted": "surface",
+        "variables_extracted": [
+          "surface",
+          "nb_logements"
+        ],
+        "is_complex": false
+      },
+      "pdf_extraction_review_status": "pending_human_review"
     }
   },
   {
