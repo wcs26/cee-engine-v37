@@ -17357,10 +17357,39 @@ window.V2 = {
 
     // Section E — Questions backend regroupées par thème (dédup avec sections au-dessus)
     if (q.par_theme && Object.keys(q.par_theme).length) {
-      html += '<div class="v2-card"><div class="v2-card-title">🎯 Questions ciblées par fiche éligible</div>';
+      html += '<div class="v2-card"><div class="v2-card-title">🎯 Questions ciblées par thème</div>';
       Object.keys(q.par_theme).forEach(theme => {
         if (['toiture','murs','chauffage','ventilation','eclairage','process','isolation','eclairage_froid'].includes(theme)) return; // skip si dupliqué avec sections universelles
         q.par_theme[theme].forEach(qq => html += this._qHtml(qq));
+      });
+      html += '</div>';
+    }
+
+    // V39.3.2 — Section F : questions PRÉCISES PAR FICHE du pack (mode table_str / table_2d / formule_tranches)
+    // Pour chaque fiche éligible avec params techniques, render dropdown ou numérique selon mode compute
+    if (q.par_fiche && Object.keys(q.par_fiche).length) {
+      var pack = this.state.pack || [];
+      var packPrimes = {};
+      pack.forEach(p => { packPrimes[p.fiche] = p.prime || 0; });
+      // Trier par prime décroissante
+      var refsSorted = Object.keys(q.par_fiche).sort((a,b) => (packPrimes[b]||0) - (packPrimes[a]||0));
+      html += '<div class="v2-card"><div class="v2-card-title">📐 Questions précises par fiche (calcul exact)</div>';
+      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:12px;">Réponds aux questions ci-dessous pour calculer la prime EXACTE de chaque fiche du pack.</div>';
+      refsSorted.forEach(ref => {
+        var qs = q.par_fiche[ref];
+        if (!qs || !qs.length) return;
+        var nom = (qs[0] && qs[0].fiche_nom) ? qs[0].fiche_nom : '';
+        var prime = packPrimes[ref] || 0;
+        var primeLabel = prime > 0 ? ' — prime actuelle estimée : ' + prime.toLocaleString('fr-FR') + ' €' : '';
+        html += '<div style="margin-bottom:18px;padding:12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;">';
+        html += '<div style="font-size:13px;font-weight:600;color:var(--accent-cyan);margin-bottom:4px;">' + ref + (nom ? ' — ' + nom : '') + '</div>';
+        if (primeLabel) html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:8px;">' + primeLabel + '</div>';
+        qs.forEach(qq => {
+          // Préfixer l'id du param par ref pour ne pas mélanger entre fiches
+          var qqCopy = Object.assign({}, qq, { param: ref + '__' + (qq.param || qq.id || 'p') });
+          html += this._qHtml(qqCopy);
+        });
+        html += '</div>';
       });
       html += '</div>';
     }
@@ -18072,12 +18101,32 @@ window.V2 = {
   },
 
   _qHtml(qq) {
-    var id = qq.id || ('q_' + Math.random().toString(36).slice(2,8));
-    var val = this.state.answers[id] || '';
-    return '<div class="v2-question"><div class="v2-q-text">' + (qq.question || qq.label || '?') + '</div>'
-         + (qq.impact ? '<div class="v2-q-impact">' + qq.impact + '</div>' : '')
-         + '<input type="text" class="v2-input" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="Ta réponse" oninput="V2.state.answers[\'' + id + '\']=this.value">'
-         + '</div>';
+    // V39.3.2 — supporte 3 types : text (legacy), nombre (avec unité), choix (dropdown)
+    var id = qq.param || qq.id || ('q_' + Math.random().toString(36).slice(2,8));
+    var val = this.state.answers[id];
+    if (val === undefined || val === null) val = '';
+    var title = qq.question || qq.label || '?';
+    var impact = qq.impact ? '<div class="v2-q-impact">' + qq.impact + '</div>' : '';
+    var html = '<div class="v2-question"><div class="v2-q-text">' + title + '</div>' + impact;
+
+    if (qq.type === 'choix' && Array.isArray(qq.choices) && qq.choices.length) {
+      // Dropdown avec liste exacte des choix ADEME
+      html += '<select class="v2-select" onchange="V2.state.answers[\'' + id + '\']=this.value">';
+      html += '<option value="">— choisir —</option>';
+      qq.choices.forEach(function(c) {
+        var sel = (String(val) === String(c)) ? ' selected' : '';
+        var esc = String(c).replace(/"/g, '&quot;');
+        html += '<option value="' + esc + '"' + sel + '>' + c + '</option>';
+      });
+      html += '</select>';
+    } else if (qq.type === 'nombre') {
+      var unite = qq.unite ? '<span style="margin-left:6px;font-size:11px;color:rgba(245,245,247,.5);">' + qq.unite + '</span>' : '';
+      html += '<input type="number" class="v2-input mono" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="0" oninput="V2.state.answers[\'' + id + '\']=Number(this.value)||0" style="width:160px;">' + unite;
+    } else {
+      html += '<input type="text" class="v2-input" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="Ta réponse" oninput="V2.state.answers[\'' + id + '\']=this.value">';
+    }
+    html += '</div>';
+    return html;
   },
 
   // ═══════════════════════════════════════════════════════════════════
