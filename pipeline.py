@@ -235,6 +235,167 @@ def generate_full_questions(fiche):
     return generate_smart_questions([fiche], {}).get("par_fiche", {}).get(fiche.get("ref", ""), {})
 
 
+# V39.1.4 — Mots-clés par thème (recherche dans le nom de la fiche en lowercase)
+_THEME_KEYWORDS = {
+    "isolation":            ["isolation", "isolant", "calorifug", "parois", "rideau"],
+    "fenetres":             ["fenêtre", "fenetre", "porte-fenêtre", "vitrage", "pariétodynamique"],
+    "chauffage":            ["chaudière", "chaudiere", "biomasse", "émetteur", "emetteur", "chauffe-bain"],
+    "pac":                  ["pac ", "pompe à chaleur", "pompe a chaleur", "géothermique", "geothermique", "hybride"],
+    "ecs":                  ["chauffe-eau", "ecs", "thermodynamique"],
+    "solaire":              ["solaire", "pvt", "capteurs hybrides", "photovoltaïque"],
+    "ventilation":          ["vmc", "ventilation", "double flux"],
+    "climatisation":        ["clim", "climatiseur", "vrv", "multi-split"],
+    "eclairage":            ["éclairage", "eclairage", "led", "luminaire", "lanterneau"],
+    "froid":                ["frigo", "froid", "groupe de production", "fermeture meubles"],
+    "moteur":               ["moteur", "variateur", "vev", "moto-variateur"],
+    "air_comprime":         ["air comprimé", "air comprime", "compresseur", "séquenceur"],
+    "regulation":           ["régulation", "regulation", "optimiseur", "robinet thermostatique", "sonde", "programmable"],
+    "destratification":     ["destratifi", "déstratifi", "stratification"],
+    "renovation_globale":   ["rénovation globale", "renovation globale", "rénovation d'ampleur", "ampleur"],
+    "management_energetique": ["iso 50001", "management énergétique", "mesurage", "indicateurs énergétiques"],
+    "recuperation_chaleur": ["récupér", "recuper", "chaleur fatale", "récup chaleur", "fumées"],
+    "reseau_chaleur":       ["réseau de chaleur", "reseau de chaleur", "raccordement réseau", "raccordement reseau", "calorifug"],
+    "cpe":                  ["cpe ", "contrat performance"],
+    "monitoring":           ["affichage conso", "suivi conso", "monitoring"],
+    "process_industrie":    ["four ", "brûleur", "bruleur", "haute pression", "transmission performant"],
+    "transport":            ["pneus", "véhicule", "vehicule", "écoconduite", "ecoconduite", "automoteur", "fret", "navire", "bateau"],
+}
+
+# Sous-secteurs → thèmes implicites (fallback si le nom ne matche pas)
+_SS_IMPLICIT = {
+    "EN": {"isolation"},
+    "TH": {"chauffage"},
+    "CH": {"reseau_chaleur"},
+    "EC": {"reseau_chaleur"},
+    "BA": {"eclairage", "isolation"},
+}
+
+
+def classify_themes(fiches):
+    """V39.1.4 — Détecte les thèmes présents dans la liste de fiches éligibles.
+    Data-driven : utilise sous_secteur (data structurée) + mots-clés du nom.
+    Retourne un set de thèmes.
+    """
+    themes = set()
+    for f in fiches:
+        if not isinstance(f, dict):
+            continue
+        nom_lc = (f.get("nom") or "").lower()
+        ref = f.get("ref", "")
+        ss = f.get("sous_secteur") or (ref.split("-")[1] if "-" in ref else "")
+
+        # 1. Détection par mots-clés du nom (priorité)
+        matched_kw = False
+        for theme, keywords in _THEME_KEYWORDS.items():
+            if any(kw in nom_lc for kw in keywords):
+                themes.add(theme)
+                matched_kw = True
+
+        # 2. Fallback par sous_secteur si aucun mot-clé matché
+        if not matched_kw and ss in _SS_IMPLICIT:
+            themes |= _SS_IMPLICIT[ss]
+
+    return themes
+
+
+# V39.1.4 — Questions ciblées par thème
+_THEME_QUESTIONS = {
+    "isolation": [
+        ("Le bâtiment a-t-il déjà été isolé (murs/toiture/plancher) ?", "Si oui, complément possible mais cumac réduit (épaisseur add'l)"),
+        ("Y a-t-il un vide sanitaire accessible sous le bâtiment ?", "VS accessible = isolation plancher faisable (souvent 0€ reste à charge)"),
+    ],
+    "fenetres": [
+        ("Quel type de vitrage actuel (simple/double/triple) ?", "Simple/double ancien → remplacement éligible"),
+    ],
+    "chauffage": [
+        ("Quel âge a le système de chauffage actuel ?", "Chaudière >15 ans = remplacement éligible (coup de pouce possible)"),
+    ],
+    "pac": [
+        ("Y a-t-il déjà une PAC installée ? Si oui, quel modèle/année ?", "Remplacement PAC <15 ans non éligible (règle 2/3 durée de vie)"),
+    ],
+    "ecs": [
+        ("Quel est le mode de production ECS actuel (cumulus, chaudière, solaire) ?", "ECS électrique → chauffe-eau thermodynamique = gain massif"),
+    ],
+    "solaire": [
+        ("L'orientation et la pente de toiture permettent-elles un solaire (S/SE/SO, ≥20°) ?", "Mauvaise orientation = cumac réduit voire fiche non éligible"),
+        ("Le bâtiment est-il en zone classée monuments historiques ?", "Si oui, capteurs solaires généralement interdits"),
+    ],
+    "ventilation": [
+        ("Y a-t-il une VMC installée ? Simple flux ou double flux ?", "Pas de VMC ou SF → DF avec récupération chaleur = gain confort + cumac"),
+    ],
+    "climatisation": [
+        ("Quel mode de climatisation actuel (split, VRV, centrale) ?", "Clim ancienne = remplacement éligible si COP/SCOP < seuil"),
+    ],
+    "eclairage": [
+        ("L'éclairage est-il déjà en LED ou encore en néon/halogène/fluorescent ?", "Non-LED → LED tertiaire = ROI rapide, souvent 0€"),
+        ("Combien de points lumineux environ ?", "Volume = clé du calcul cumac"),
+    ],
+    "froid": [
+        ("Les meubles frigorifiques sont-ils ouverts ou fermés (avec portes) ?", "Ouverts → installation portes = économie 40-60% (fiche BAT-EQ-124/125)"),
+        ("Type de fluide frigorigène utilisé (HFC, CO2, NH3) ?", "Migration HFC → CO2 sub/trans-critique = éligible BAT-EQ-117"),
+    ],
+    "moteur": [
+        ("Combien de moteurs/compresseurs sur le site et quelle puissance moyenne ?", "Variateur de vitesse (VEV) sur moteur >7kW = ROI rapide"),
+        ("Les moteurs actuels sont-ils en classe IE3/IE4 ou plus anciens (IE1/IE2) ?", "Remplacement IE1/IE2 → IE4 = éligible IND-UT-132"),
+    ],
+    "air_comprime": [
+        ("Y a-t-il un réseau d'air comprimé ? Quelle puissance compresseurs ?", "Air comprimé = 10-30% facture industrie → multiples fiches"),
+        ("Détection de fuites déjà réalisée dans les 12 derniers mois ?", "Fuites représentent 20-30% conso air comprimé"),
+    ],
+    "regulation": [
+        ("Le système de chauffage a-t-il une régulation centralisée existante ?", "Pas de régulation = robinet thermostatique + sonde extérieure souvent gratuits"),
+    ],
+    "destratification": [
+        ("Le bâtiment a-t-il des plafonds hauts (>4m) ?", "Plafond haut = déstratificateur d'air souvent à 0€"),
+    ],
+    "renovation_globale": [
+        ("Combien de logements concernés et année de construction ?", "Rénovation globale = cumac très élevé (4000+ €/logement)"),
+        ("DPE actuel et DPE visé après travaux ?", "Saut ≥2 classes = bonification BAR-TH-174/175"),
+    ],
+    "management_energetique": [
+        ("L'entreprise a-t-elle déjà une démarche ISO 50001 ou un système de mesurage ?", "Pas de SME = ISO 50001 éligible (7000+ €/site, IND-UT-101)"),
+    ],
+    "recuperation_chaleur": [
+        ("Y a-t-il des sources de chaleur fatale identifiées (process, fumées, compresseurs) ?", "Chaleur fatale = gisement majeur pour récupération"),
+    ],
+    "reseau_chaleur": [
+        ("Le bâtiment est-il à proximité d'un réseau de chaleur urbain (≤200m) ?", "Raccordement éligible si réseau EnR&R (RES-CH-101)"),
+    ],
+    "cpe": [
+        ("L'entreprise est-elle ouverte à un Contrat de Performance Énergétique ?", "CPE = prestation pluri-annuelle, cumac élevé"),
+    ],
+    "monitoring": [
+        ("Suivi conso énergétique en place (compteurs, logiciel) ?", "Pas de monitoring = mise en place éligible"),
+    ],
+    "process_industrie": [
+        ("Type de process industriel principal (four, brûleur, chaudière) et puissance ?", "Process haute température = nombreuses fiches IND-UT"),
+    ],
+    "transport": [
+        ("Taille de flotte (poids lourds / véhicules légers) ?", "Flotte importante = formation écoconduite + suivi conso = cumac vol."),
+    ],
+}
+
+
+def build_par_theme(themes_detectes, fiches, connu):
+    """V39.1.4 — Génère les questions par thème détecté.
+    Filtre les questions devenues inutiles selon contexte connu.
+    """
+    par_theme = {}
+    for theme in themes_detectes:
+        questions = _THEME_QUESTIONS.get(theme, [])
+        if not questions:
+            continue
+        # Filtres : éviter de poser des questions sur des trucs déjà connus
+        if theme == "chauffage" and "energie" in connu:
+            # On sait déjà l'énergie, mais on peut quand même demander l'âge
+            pass
+        par_theme[theme] = [
+            {"question": q, "impact": impact}
+            for q, impact in questions
+        ]
+    return par_theme
+
+
 def generate_smart_questions(fiches, contexte):
     """Système de questions intelligent V37.
 
@@ -267,49 +428,13 @@ def generate_smart_questions(fiches, contexte):
     if "age" not in connu:
         globales.append({"id": "annee_construction", "question": "Quelle est l'année de construction approximative du bâtiment ?", "impact": "Bâtiment pré-1986 = potentiel isolation élevé", "obligatoire": False})
 
-    # Détection des thèmes présents dans les fiches éligibles
-    themes_detectes = set()
-    for f in fiches:
-        ref = f.get("ref", "") if isinstance(f, dict) else ""
-        conditions = " ".join(f.get("conditions_texte", [])).lower() if isinstance(f, dict) else ""
-        if any(k in ref for k in ["EN-101", "EN-102", "EN-103", "EN-104"]): themes_detectes.add("isolation")
-        if any(k in ref for k in ["TH-102", "TH-103", "TH-104", "TH-113", "TH-127"]): themes_detectes.add("chauffage")
-        if any(k in ref for k in ["TH-125", "TH-126"]): themes_detectes.add("ventilation")
-        if any(k in ref for k in ["EQ-111", "EQ-117", "EQ-125", "EQ-127"]): themes_detectes.add("eclairage_froid")
-        if any(k in ref for k in ["TH-142", "BA-110"]): themes_detectes.add("destratification")
-        if "compresseur" in conditions or "moteur" in conditions: themes_detectes.add("process")
+    # V39.1.4 — Détection thèmes DATA-DRIVEN (sous_secteur + mots-clés nom)
+    # Avant : hardcodé sur refs EN-101/TH-104/EQ-125... ratait 90% du catalogue.
+    # Après : classification déduite de la sémantique structurée + nom.
+    themes_detectes = classify_themes(fiches)
 
-    # Questions par thème (1 question clé par thème, jamais répétée)
-    par_theme = {}
-    if "isolation" in themes_detectes:
-        par_theme["isolation"] = [
-            {"question": "Le bâtiment a-t-il déjà été isolé (murs, toiture, plancher) ?", "impact": "Si déjà isolé → complément d'isolation possible mais cumac réduit"},
-            {"question": "Y a-t-il un vide sanitaire accessible sous le bâtiment ?", "impact": "VS accessible = BAT-EN-103 faisable (0€ fréquent)"},
-        ]
-    if "chauffage" in themes_detectes and "energie" not in connu:
-        par_theme["chauffage"] = [
-            {"question": "Quel âge a la chaudière/système de chauffage actuel ?", "impact": "Chaudière >15 ans = remplacement éligible CEE"},
-        ]
-    if "eclairage_froid" in themes_detectes:
-        par_theme["eclairage_froid"] = [
-            {"question": "L'éclairage est-il en LED ou encore en néon/fluorescent ?", "impact": "Néon → LED = BAT-EQ-111 (souvent 0€)"},
-        ]
-        if any("EQ-125" in (f.get("ref","") if isinstance(f,dict) else "") for f in fiches):
-            par_theme["eclairage_froid"].append(
-                {"question": "Les meubles frigos sont-ils ouverts ou fermés ?", "impact": "Ouverts → fermeture = BAT-EQ-125 (économie énergie majeure)"}
-            )
-    if "ventilation" in themes_detectes:
-        par_theme["ventilation"] = [
-            {"question": "Y a-t-il une VMC installée ? Simple flux ou double flux ?", "impact": "Pas de VMC ou SF → DF = BAT-TH-126 (récupération chaleur)"},
-        ]
-    if "destratification" in themes_detectes:
-        par_theme["destratification"] = [
-            {"question": "Le bâtiment a-t-il des plafonds hauts (>4m) ?", "impact": "Plafond haut = déstratificateur d'air souvent à 0€"},
-        ]
-    if "process" in themes_detectes:
-        par_theme["process"] = [
-            {"question": "Combien de compresseurs / moteurs électriques sur le site ?", "impact": "Variateurs de vitesse = IND-UT-102 (ROI rapide)"},
-        ]
+    # Questions par thème : 1-2 questions ciblées par thème détecté
+    par_theme = build_par_theme(themes_detectes, fiches, connu)
 
     # Questions spécifiques par fiche — V39.1.2 FIX: data-driven via fiche.params
     # (au lieu de chercher des mots dans conditions_texte qui ratait 90% des cas)
