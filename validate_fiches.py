@@ -12,7 +12,10 @@ import re
 FICHES_PATH = os.path.join(os.path.dirname(__file__), "fiches.json")
 
 SECTEURS_VALIDES = ["BAT", "IND", "RES", "AGRI", "TRA", "BAR"]
-TYPES_VALIDES = ["surface", "unitaire", "complexe", "forfaitaire"]
+# Types supportés par moteur_cee_master.compute() — pas de "forfaitaire"
+# (validator avait été élargi V39.0.5 par précaution, mais aucune fiche ne l'utilise
+# et compute() n'a pas de handler → retiré V39.0.7 pour rester aligné avec le moteur).
+TYPES_VALIDES = ["surface", "unitaire", "complexe"]
 ZONES = ["H1", "H2", "H3"]
 REF_PATTERN = re.compile(r"^(BAT|IND|RES|AGRI|TRA|BAR)-[A-Z]{2,3}-\d{2,3}(?:-[A-Z0-9]+)?$")
 
@@ -66,6 +69,12 @@ def validate_fiche(fiche, strict=False):
             erreurs.append(f"cumac invalide: {cu}")
     else:
         erreurs.append(f"cumac format inconnu: {type(cu)}")
+
+    # V39.0.7 garde anti-régression : complexe ACTIF sans table_cumac ET sans formule
+    # = compute_complexe() retourne 0 → revenu CEE faussement nul. Bug détecté V39.0.7
+    # où 30 fiches actives renvoyaient 0€ silencieusement.
+    if ftype == "complexe" and fiche.get("actif") and not fiche.get("table_cumac") and not fiche.get("formule"):
+        erreurs.append("complexe actif sans table_cumac ni formule (compute=0€)")
 
     if not fiche.get("params"):
         erreurs.append("params manquants")
