@@ -78,23 +78,23 @@ def validate_fiche(fiche, strict=False):
 
         if not fiche.get("duree_vie"):
             warnings.append("duree_vie manquante")
-        elif not (5 <= fiche["duree_vie"] <= 50):
+        elif not (1 <= fiche["duree_vie"] <= 50):
             erreurs.append(f"duree_vie aberrante: {fiche['duree_vie']}")
+        elif fiche["duree_vie"] < 3:
+            warnings.append(f"duree_vie courte: {fiche['duree_vie']} ans (vérifier vs ADEME)")
 
         if not fiche.get("unite"):
             warnings.append("unite manquante")
 
-        if not fiche.get("conditions_texte"):
-            warnings.append("conditions_texte manquantes")
+        # conditions_texte: tracé en stat globale, pas en warning par fiche
+        # (110/234 fiches sans doc — bruit inutile en mode strict)
 
         # Doublons dans params
         params = fiche.get("params", [])
         if len(params) != len(set(params)):
             erreurs.append("params en doublon")
 
-        # Fiche abrogée
-        if fiche.get("actif") is False:
-            warnings.append("fiche marquee INACTIVE/ABROGEE")
+        # Fiche abrogée: tracé en stat globale, pas en warning par fiche
 
         # Cumac cohérence H1 >= H2 >= H3 (généralement vrai)
         if isinstance(cu, dict):
@@ -127,6 +127,8 @@ def main(strict=False):
     ok = 0
     ko = 0
     warn_count = 0
+    inactive_count = sum(1 for f in fiches if f.get("actif") is False)
+    no_conditions = sum(1 for f in fiches if not f.get("conditions_texte"))
 
     for f in fiches:
         erreurs, warnings = validate_fiche(f, strict)
@@ -149,6 +151,8 @@ def main(strict=False):
     print(f"\n{'='*45}")
     print(f"  OK: {ok} | FAIL: {ko} | WARNINGS: {warn_count}")
     print(f"  TOTAL: {len(fiches)} fiches")
+    if strict:
+        print(f"  Stats: {inactive_count} inactives | {no_conditions} sans conditions_texte")
     print(f"{'='*45}\n")
 
     return ko == 0

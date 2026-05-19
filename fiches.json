@@ -3345,7 +3345,7 @@
   },
   {
     "ref": "BAT-EN-112",
-    "nom": "",
+    "nom": "Revêtements réflectifs toiture",
     "secteur": "BAT",
     "sous_secteur": "EN",
     "type": "surface",
@@ -3362,11 +3362,14 @@
     ],
     "unite": "kWhc par m2",
     "gisements": [],
-    "categorie": ""
+    "categorie": "",
+    "audit": {
+      "nom_source": "mapping_naf_fiches.py description (V39.0.6)"
+    }
   },
   {
     "ref": "BAT-EN-113",
-    "nom": "",
+    "nom": "Façade rideau vitrage isolant",
     "secteur": "BAT",
     "sous_secteur": "EN",
     "type": "surface",
@@ -3383,7 +3386,10 @@
     ],
     "unite": "kWhc par m2",
     "gisements": [],
-    "categorie": ""
+    "categorie": "",
+    "audit": {
+      "nom_source": "mapping_naf_fiches.py description (V39.0.6)"
+    }
   },
   {
     "ref": "BAT-EQ-117",
@@ -5128,7 +5134,7 @@
   },
   {
     "ref": "IND-BA-113",
-    "nom": "",
+    "nom": "Lanterneaux éclairage zénithal industrie",
     "secteur": "IND",
     "sous_secteur": "BA",
     "type": "surface",
@@ -5146,7 +5152,10 @@
     "unite": "kWhc par m2",
     "gisements": [],
     "categorie": "",
-    "note": "[V37: désactivée — placeholder sans nom/catégorie/gisements]"
+    "note": "[V37: désactivée — placeholder sans nom/catégorie/gisements]",
+    "audit": {
+      "nom_source": "mapping_naf_fiches.py description (V39.0.6)"
+    }
   },
   {
     "ref": "IND-BA-114",
@@ -5198,7 +5207,7 @@
   },
   {
     "ref": "IND-BA-117",
-    "nom": "",
+    "nom": "Chauffage décentralisé performant",
     "secteur": "IND",
     "sous_secteur": "BA",
     "type": "surface",
@@ -5215,7 +5224,10 @@
     ],
     "unite": "kWhc par m2",
     "gisements": [],
-    "categorie": ""
+    "categorie": "",
+    "audit": {
+      "nom_source": "mapping_naf_fiches.py description (V39.0.6)"
+    }
   },
   {
     "ref": "IND-EN-101",
