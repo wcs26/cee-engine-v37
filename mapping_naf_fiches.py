@@ -688,6 +688,85 @@ FICHE_NAF_MAP = {
     "TRA-SE-113": {"naf": ["49", "52", "53"], "description": "Suivi conso carburant", "sous_activite": "routier"},
     "TRA-SE-116": {"naf": ["49"], "description": "Fret ferroviaire", "sous_activite": "ferroviaire"},
     "TRA-SE-117": {"naf": ["50"], "description": "Fret fluvial", "sous_activite": "fluvial"},
+
+
+    # === AGRI (auto-ajout V39.1.3) ===
+    "AGRI-EQ-113": {"naf": ["01", "02", "03"], "description": "Régulation éclairage serre", "sous_activite": "equipement"},
+    "AGRI-TH-114": {"naf": ["01", "02", "03"], "description": "Récupération chaleur fumées chaudière", "sous_activite": "chauffage"},
+
+    # === BAR (auto-ajout V39.1.3) ===
+    "BAR-EN-101": {"naf": ["*"], "description": "Isolation combles/toitures", "sous_activite": "enveloppe"},
+    "BAR-EN-102": {"naf": ["*"], "description": "Isolation murs", "sous_activite": "enveloppe"},
+    "BAR-EN-103": {"naf": ["*"], "description": "Isolation plancher", "sous_activite": "enveloppe"},
+    "BAR-EN-104": {"naf": ["*"], "description": "Fenêtre/porte-fenêtre isolante", "sous_activite": "enveloppe"},
+    "BAR-EN-105": {"naf": ["*"], "description": "Isolation toitures terrasses", "sous_activite": "enveloppe"},
+    "BAR-EN-106": {"naf": ["*"], "description": "Isolation combles/toitures DOM", "sous_activite": "enveloppe"},
+    "BAR-EN-107": {"naf": ["*"], "description": "Isolation murs DOM", "sous_activite": "enveloppe"},
+    "BAR-EN-108": {"naf": ["*"], "description": "Isolation plancher DOM", "sous_activite": "enveloppe"},
+    "BAR-EN-109": {"naf": ["*"], "description": "Fenêtre/porte-fenêtre DOM", "sous_activite": "enveloppe"},
+    "BAR-EQ-112": {"naf": ["*"], "description": "Systèmes hydro-économes résidentiel", "sous_activite": "eau"},
+    "BAR-EQ-115": {"naf": ["*"], "description": "Affichage consommations énergie", "sous_activite": "equipement"},
+    "BAR-SE-104": {"naf": ["*"], "description": "Réglage équilibrage chauffage", "sous_activite": "regulation"},
+    "BAR-SE-105": {"naf": ["*"], "description": "CPE Services résidentiel", "sous_activite": "cpe"},
+    "BAR-SE-106": {"naf": ["*"], "description": "Suivi consommations énergie", "sous_activite": "monitoring"},
+    "BAR-SE-108": {"naf": ["*"], "description": "Désembouage individuel", "sous_activite": "maintenance"},
+    "BAR-TH-101": {"naf": ["*"], "description": "Chauffe-eau solaire individuel", "sous_activite": "solaire"},
+    "BAR-TH-113": {"naf": ["*"], "description": "Chaudière biomasse individuelle", "sous_activite": "chauffage"},
+    "BAR-TH-123": {"naf": ["*"], "description": "Optimiseur relance chauffage collectif", "sous_activite": "regulation"},
+    "BAR-TH-124": {"naf": ["*"], "description": "Chaudière condensation", "sous_activite": "chauffage"},
+    "BAR-TH-125": {"naf": ["*"], "description": "VMC double flux", "sous_activite": "ventilation"},
+    "BAR-TH-127": {"naf": ["*"], "description": "VMC simple flux hygroréglable", "sous_activite": "ventilation"},
+    "BAR-TH-129": {"naf": ["*"], "description": "PAC air/air résidentiel", "sous_activite": "pac"},
+    "BAR-TH-135": {"naf": ["*"], "description": "Chauffe-eau solaire collectif DOM", "sous_activite": "solaire"},
+    "BAR-TH-141": {"naf": ["*"], "description": "Climatiseur performant DOM", "sous_activite": "climatisation"},
+    "BAR-TH-143": {"naf": ["*"], "description": "Système solaire combiné", "sous_activite": "solaire"},
+    "BAR-TH-148": {"naf": ["*"], "description": "Chauffe-eau thermodynamique", "sous_activite": "ecs"},
+    "BAR-TH-155": {"naf": ["*"], "description": "Ventilation hybride hygroréglable", "sous_activite": "ventilation"},
+    "BAR-TH-158": {"naf": ["*"], "description": "Émetteur électrique régulation avancée", "sous_activite": "regulation"},
+    "BAR-TH-159": {"naf": ["*"], "description": "PAC hybride individuelle", "sous_activite": "pac"},
+    "BAR-TH-161": {"naf": ["*"], "description": "Isolation points singuliers", "sous_activite": "isolation_th"},
+    "BAR-TH-162": {"naf": ["*"], "description": "Système PVT capteurs hybrides", "sous_activite": "solaire"},
+    "BAR-TH-164": {"naf": ["*"], "description": "Rénovation globale maison individuelle", "sous_activite": "renovation_globale"},
+    "BAR-TH-165": {"naf": ["*"], "description": "Chaudière biomasse collective", "sous_activite": "chauffage"},
+    "BAR-TH-167": {"naf": ["*"], "description": "Chauffe-bain individuel haut rendement", "sous_activite": "chauffage"},
+    "BAR-TH-168": {"naf": ["*"], "description": "Dispositif solaire thermique", "sous_activite": "solaire"},
+    "BAR-TH-169": {"naf": ["*"], "description": "PAC collective air/eau ECS", "sous_activite": "pac"},
+    "BAR-TH-170": {"naf": ["*"], "description": "Récup chaleur serveurs informatiques", "sous_activite": "recuperation"},
+    "BAR-TH-171": {"naf": ["*"], "description": "PAC air/eau résidentiel", "sous_activite": "pac"},
+    "BAR-TH-172": {"naf": ["*"], "description": "PAC eau/eau ou sol/eau résidentiel", "sous_activite": "pac"},
+    "BAR-TH-173": {"naf": ["*"], "description": "Régulation programmation pièce par pièce", "sous_activite": "regulation"},
+    "BAR-TH-174": {"naf": ["*"], "description": "Rénovation ampleur maison", "sous_activite": "renovation_globale"},
+    "BAR-TH-175": {"naf": ["*"], "description": "Rénovation ampleur appartement", "sous_activite": "renovation_globale"},
+    "BAR-TH-176": {"naf": ["*"], "description": "Régulation chauffe-eau électrique Joule", "sous_activite": "regulation"},
+    "BAR-TH-177": {"naf": ["*"], "description": "Rénovation globale bâtiment collectif", "sous_activite": "renovation_globale"},
+    "BAR-TH-178": {"naf": ["*"], "description": "Système géothermique résidentiel", "sous_activite": "chauffage"},
+    "BAR-TH-179": {"naf": ["*"], "description": "PAC collective air/eau", "sous_activite": "pac"},
+    "BAR-TH-180": {"naf": ["*"], "description": "PAC collective eau/eau", "sous_activite": "pac"},
+
+    # === BAT (auto-ajout V39.1.3) ===
+    "BAT-EN-105": {"naf": ["*"], "description": "Isolation combles/toitures tertiaire DOM", "sous_activite": "enveloppe"},
+    "BAT-EN-110": {"naf": ["*"], "description": "Fenêtre pariétodynamique", "sous_activite": "enveloppe"},
+    "BAT-EQ-123": {"naf": ["*"], "description": "Moto-variateur synchrone à aimants tertiaire", "sous_activite": "moteur"},
+    "BAT-TH-101": {"naf": ["*"], "description": "Chauffe-eau solaire collectif tertiaire", "sous_activite": "solaire"},
+    "BAT-TH-121": {"naf": ["*"], "description": "Chauffe-eau solaire DOM tertiaire", "sous_activite": "solaire"},
+
+    # === IND (auto-ajout V39.1.3) ===
+    "IND-EN-103": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Isolation plancher industriel", "sous_activite": "enveloppe"},
+    "IND-UT-101": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Management énergétique ISO 50001", "sous_activite": "management_energetique"},
+    "IND-UT-106": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Brûleur micro-modulant condensation", "sous_activite": "chauffage"},
+    "IND-UT-108": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Détection fuites réseau air comprimé", "sous_activite": "air_comprime"},
+    "IND-UT-109": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Optimisation production froid industriel", "sous_activite": "froid"},
+    "IND-UT-112": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Système mesurage indicateurs énergétiques", "sous_activite": "management_energetique"},
+    "IND-UT-127": {"naf": ["10", "11", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33"], "description": "Système transmission performant", "sous_activite": "moteur"},
+
+    # === RES (auto-ajout V39.1.3) ===
+    "RES-CH-101": {"naf": ["*"], "description": "Raccordement réseau chaleur EnR&R", "sous_activite": "reseau_chaleur"},
+    "RES-CH-102": {"naf": ["*"], "description": "Comptage individuel réseau chaleur", "sous_activite": "reseau_chaleur"},
+    "RES-CH-107": {"naf": ["*"], "description": "Extension réseau de chaleur EnR", "sous_activite": "reseau_chaleur"},
+    "RES-EC-103": {"naf": ["*"], "description": "Réhabilitation réseau de chaleur", "sous_activite": "reseau_chaleur"},
+
+    # === TRA (auto-ajout V39.1.3) ===
+    "TRA-SE-103": {"naf": ["49", "50", "51", "52", "53"], "description": "Formation écoconduite", "sous_activite": "formation"},
 }
 
 
