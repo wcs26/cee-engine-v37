@@ -164,6 +164,30 @@ register_conformite_routes(app)  # V37 P5 — conformité Tessi-like (32 règles
 register_qualification_routes(app)  # V37 P5.1 — trame G1T 16 étapes (qualification téléphonique 4 min)
 register_gisement_routes(app)  # V37 P5.2 — gisement SIRAT (calibré 5 devis AHBFC : 6,24 MWhc/m² · 41,60€/m² · 8€/MWhc)
 register_documents_routes(app)  # V37 P5.3 — pack docs unifié (header client réutilisé : gisement+devis+convention+AH)
+
+# V40 — Slide 0 Setup Dossier (profil opérateur/COFRAC/délégataire/commissions)
+import dossier_profile
+
+@app.route("/dossier/profile", methods=["GET"])
+def dossier_get_profile():
+    """Retourne le profil opérateur courant (avec defaults si jamais set)."""
+    return jsonify(dossier_profile.load_profile())
+
+@app.route("/dossier/setup", methods=["POST"])
+def dossier_save_profile():
+    """Sauvegarde/update le profil opérateur. Body: JSON {operateur, maitre_oeuvre, ...}"""
+    data = request.json or {}
+    profile = dossier_profile.save_profile(data)
+    return jsonify({"saved": True, "is_complete": dossier_profile.is_complete(profile), "profile": profile})
+
+@app.route("/pack/commissions", methods=["POST"])
+def pack_commissions():
+    """Calcule la répartition commissions selon profil + prime totale.
+    Body: {prime_totale_eur: number}
+    """
+    data = request.json or {}
+    prime = float(data.get("prime_totale_eur", 0) or 0)
+    return jsonify(dossier_profile.compute_commissions(prime))
 register_couts_routes(app)      # V37 P5.4 — bibliothèque coûts réels chantier (matériaux + MO interne)
 register_dossiers_routes(app)   # V37 P5.5 — persistance dossiers (UUID + lien partageable + dashboard)
 register_monday_routes(app)     # V37 P5.6 — synchronisation bidirectionnelle Monday CRM

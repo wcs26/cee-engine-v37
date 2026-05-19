@@ -15906,6 +15906,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <!-- AVANT L'APPEL : préparation -->
       <div class="v2-phase-label">⏱ AVANT L'APPEL · Préparation prospection (5 min)</div>
       <div class="v2-phase-row r0">
+        <div class="v2-step" data-page="20" onclick="V2.go(20)" style="background:linear-gradient(135deg,rgba(120,160,255,.18),rgba(60,90,180,.08));border-color:rgba(120,160,255,.50);"><div class="v2-step-num" style="background:#6E92FF;color:#fff;">⚙</div><div class="v2-step-label">Setup Dossier (opérateur · COFRAC · % commissions)</div></div>
         <div class="v2-step placeholder" data-page="11" onclick="V2.go(11)"><div class="v2-step-num">A1</div><div class="v2-step-label">Hunt prospects</div></div>
         <div class="v2-step placeholder" data-page="12" onclick="V2.go(12)"><div class="v2-step-num">A2</div><div class="v2-step-label">Cartes &amp; PLU</div></div>
       </div>
@@ -16213,6 +16214,17 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
+    <!-- ═══ P20 — SETUP DOSSIER (V40) — opérateur, COFRAC, délégataire, commissions ═══ -->
+    <div class="v2-page" id="v2p20">
+      <h1 class="v2-page-title">⚙ Setup Dossier — paramètres business</h1>
+      <p class="v2-page-sub">Configure une fois : opérateur, maître d'œuvre, COFRAC, délégataire, prix rachat cumac, % commissions apporteur/vendeur. Réutilisé sur tous les prospects + auto-rempli dans les documents (convention, AH, mandat, devis).</p>
+      <div id="v2p20content"></div>
+      <div class="v2-nav">
+        <button class="v2-btn" onclick="V2.go(1)">← Aller vers Identifier prospect</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.saveDossierSetup()">💾 Enregistrer profil</button>
+      </div>
+    </div>
+
     <!-- ═══ P12 — CARTES & PLU (R0) — V37.4.16 ═══ -->
     <div class="v2-page" id="v2p12">
       <h1 class="v2-page-title">🗺 Cartes &amp; contexte territorial</h1>
@@ -16441,8 +16453,8 @@ window.V2 = {
 
   go(page) {
     console.log('[V2.go] navigation page', page);
-    // V37.4.15 — 17 onglets (10 implémentés + 7 placeholders R0-R4)
-    if (page < 1 || page > 17) { console.warn('[V2.go] page hors limites', page); return; }
+    // V37.4.15 — 17 onglets + V40 page 20 (Setup Dossier)
+    if ((page < 1 || page > 17) && page !== 20) { console.warn('[V2.go] page hors limites', page); return; }
     try {
       document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
       var target = document.getElementById('v2p' + page);
@@ -16487,6 +16499,7 @@ window.V2 = {
       if (page === 17) this._renderSuivi9Ans();     // V37.4.20 — R4 Suivi 9 ans : timeline + reminders + COFRAC
       if (page === 18) this._renderPrecisionInputs();// V38.13 — R2 Précision Q dynamiques par fiche cochée
       if (page === 19) this._renderOperationsAvecRAC();// V38.13 — R2 Opérations avec RAC (couverture < 90%)
+      if (page === 20) this._renderSetupDossier();   // V40 — Setup Dossier opérateur/COFRAC/délégataire/commissions
       if (page === 0) { this._focusUpdateKPI(); } // V38.25 — page Focus Appel
       // V38.24 — Refresh sticky bar à chaque navigation
       this._refreshStickyBar();
@@ -18127,6 +18140,163 @@ window.V2 = {
     }
     html += '</div>';
     return html;
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // V40 — P20 SETUP DOSSIER (paramètres business : opérateur, COFRAC,
+  // délégataire, prix cumac, % commissions, templates docs)
+  // ═══════════════════════════════════════════════════════════════════
+  async _renderSetupDossier() {
+    var c = document.getElementById('v2p20content'); if (!c) return;
+    c.innerHTML = '<div class="v2-loading">Chargement profil dossier…</div>';
+    try {
+      var r = await fetch('/dossier/profile');
+      var p = await r.json();
+      this.state.dossierProfile = p;
+    } catch (e) {
+      c.innerHTML = '<div class="v2-error">❌ Erreur chargement profil : ' + e.message + '</div>';
+      return;
+    }
+    var p = this.state.dossierProfile;
+    var html = '';
+    // Bandeau infos
+    html += '<div class="v2-success" style="margin-bottom:14px;">📋 Ce profil sera appliqué à TOUS les prospects et auto-rempli dans les documents (convention, AH, mandat, devis). Sauvegarde persistante.</div>';
+
+    // === Section 1 : Opérateur (entreprise qui réalise l'ouvrage) ===
+    html += '<div class="v2-card"><div class="v2-card-title">🏢 Opérateur (entreprise réalisant l\'ouvrage)</div>';
+    var op = p.operateur || {};
+    html += this._fieldHtml('Raison sociale *', 'op_raison', op.raison_sociale, 'WCS PRO', 'text');
+    html += this._fieldHtml('SIRET *', 'op_siret', op.siret, '14 chiffres', 'text');
+    html += this._fieldHtml('Qualification RGE / Qualibat', 'op_rge', op.rge_qualibat, 'Qualibat 5111 / RGE…', 'text');
+    html += this._fieldHtml('Adresse complète', 'op_adresse', op.adresse, '12 rue X, 75001 Paris', 'text');
+    html += this._fieldHtml('Téléphone', 'op_tel', op.tel, '06 12 34 56 78', 'text');
+    html += this._fieldHtml('Email', 'op_email', op.email, 'contact@wcspro.fr', 'text');
+    html += '</div>';
+
+    // === Section 2 : Maître d'œuvre ===
+    html += '<div class="v2-card"><div class="v2-card-title">👷 Maître d\'œuvre (architecte/BE — si distinct opérateur)</div>';
+    var mo = p.maitre_oeuvre || {};
+    html += this._fieldHtml('Raison sociale', 'mo_raison', mo.raison_sociale, 'Cabinet X', 'text');
+    html += this._fieldHtml('SIRET', 'mo_siret', mo.siret, '', 'text');
+    html += this._fieldHtml('Contact', 'mo_contact', mo.contact, 'Nom + tel/email', 'text');
+    html += '</div>';
+
+    // === Section 3 : COFRAC ===
+    html += '<div class="v2-card"><div class="v2-card-title">🔬 COFRAC (organisme accrédité de contrôle)</div>';
+    var cf = p.cofrac || {};
+    html += this._fieldHtml('Raison sociale', 'cf_raison', cf.raison_sociale, 'Apave / Bureau Veritas / SOCOTEC', 'text');
+    html += this._fieldHtml('SIRET', 'cf_siret', cf.siret, '', 'text');
+    html += this._fieldHtml('N° accréditation COFRAC', 'cf_acc', cf.accreditation, '1-XXXX', 'text');
+    html += '</div>';
+
+    // === Section 4 : Délégataire ===
+    html += '<div class="v2-card"><div class="v2-card-title">📜 Délégataire oblige CEE (qui dépose au PNCEE)</div>';
+    var dg = p.delegataire || {};
+    html += this._fieldHtml('Raison sociale *', 'dg_raison', dg.raison_sociale, 'TotalEnergies / EDF / Engie / Hellio / GEO PLC…', 'text');
+    html += this._fieldHtml('SIRET', 'dg_siret', dg.siret, '', 'text');
+    html += this._fieldHtml('Référence PNCEE', 'dg_pncee', dg.ref_pncee, 'PNCEE-XXXX', 'text');
+    html += '</div>';
+
+    // === Section 5 : Prix rachat cumac ===
+    html += '<div class="v2-card"><div class="v2-card-title">💰 Prix de rachat cumac (€ / MWhc)</div>';
+    var pr = p.pricing || {};
+    html += this._fieldHtml('Prix classique (€/MWhc)', 'pr_classique', pr.prix_cumac_eur_mwh_classique, '8.78', 'number');
+    html += this._fieldHtml('Prix précarité (€/MWhc)', 'pr_precarite', pr.prix_cumac_eur_mwh_precarite, '16.40', 'number');
+    html += '</div>';
+
+    // === Section 6 : Commissions ===
+    html += '<div class="v2-card"><div class="v2-card-title">📊 Commissions sur la prime CEE (%)</div>';
+    html += '<div style="font-size:11px;color:rgba(245,245,247,.5);margin-bottom:8px;">La somme apporteur + vendeur + marge ne doit pas dépasser 100% (sinon prime nette client négative).</div>';
+    html += this._fieldHtml('% Apporteur d\'affaires', 'pr_app', pr.pct_apporteur_affaires, '5', 'number');
+    html += this._fieldHtml('% Vendeur', 'pr_vd', pr.pct_vendeur, '8', 'number');
+    html += this._fieldHtml('% Marge opérateur', 'pr_mg', pr.pct_marge_operateur, '15', 'number');
+    html += '<div id="v2p20_pct_check" style="font-size:12px;margin-top:8px;"></div>';
+    html += '</div>';
+
+    // === Section 7 : Templates docs actifs ===
+    html += '<div class="v2-card"><div class="v2-card-title">📄 Templates documents générés (pack signature)</div>';
+    var ta = p.templates_actifs || {};
+    html += '<label style="display:block;margin:6px 0;"><input type="checkbox" id="tmpl_conv" ' + (ta.convention_partenariat ? 'checked' : '') + '> Convention partenariat (4 pages)</label>';
+    html += '<label style="display:block;margin:6px 0;"><input type="checkbox" id="tmpl_ah" ' + (ta.attestation_honneur ? 'checked' : '') + '> Attestation sur l\'honneur</label>';
+    html += '<label style="display:block;margin:6px 0;"><input type="checkbox" id="tmpl_mandat" ' + (ta.mandat_delegataire ? 'checked' : '') + '> Mandat délégataire</label>';
+    html += '<label style="display:block;margin:6px 0;"><input type="checkbox" id="tmpl_devis" ' + (ta.devis_prerempli ? 'checked' : '') + '> Devis pré-rempli</label>';
+    html += '</div>';
+
+    c.innerHTML = html;
+    this._updatePctCheck();
+    ['pr_app','pr_vd','pr_mg'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function(){ V2._updatePctCheck(); });
+    });
+  },
+
+  _fieldHtml(label, id, val, placeholder, type) {
+    type = type || 'text';
+    var v = (val === undefined || val === null) ? '' : String(val);
+    return '<div class="v2-field"><div class="v2-field-label">' + label + '</div>' +
+      '<input id="' + id + '" type="' + type + '" class="v2-input" value="' + v.replace(/"/g,'&quot;') + '" placeholder="' + placeholder + '"></div>';
+  },
+
+  _updatePctCheck() {
+    var a = parseFloat(document.getElementById('pr_app')?.value || 0);
+    var v = parseFloat(document.getElementById('pr_vd')?.value || 0);
+    var m = parseFloat(document.getElementById('pr_mg')?.value || 0);
+    var tot = a + v + m;
+    var el = document.getElementById('v2p20_pct_check');
+    if (!el) return;
+    if (tot >= 100) el.innerHTML = '<span style="color:#f85149;">⚠ Total ' + tot.toFixed(1) + '% — prime nette client négative !</span>';
+    else if (tot >= 90) el.innerHTML = '<span style="color:#ff9c2e;">⚠ Total ' + tot.toFixed(1) + '% — prime nette client : ' + (100-tot).toFixed(1) + '% seulement</span>';
+    else el.innerHTML = '<span style="color:#3fb950;">✓ Total ' + tot.toFixed(1) + '% — prime nette client : ' + (100-tot).toFixed(1) + '%</span>';
+  },
+
+  async saveDossierSetup() {
+    var profile = {
+      operateur: {
+        raison_sociale: document.getElementById('op_raison')?.value || '',
+        siret: document.getElementById('op_siret')?.value || '',
+        rge_qualibat: document.getElementById('op_rge')?.value || '',
+        adresse: document.getElementById('op_adresse')?.value || '',
+        tel: document.getElementById('op_tel')?.value || '',
+        email: document.getElementById('op_email')?.value || '',
+      },
+      maitre_oeuvre: {
+        raison_sociale: document.getElementById('mo_raison')?.value || '',
+        siret: document.getElementById('mo_siret')?.value || '',
+        contact: document.getElementById('mo_contact')?.value || '',
+      },
+      cofrac: {
+        raison_sociale: document.getElementById('cf_raison')?.value || '',
+        siret: document.getElementById('cf_siret')?.value || '',
+        accreditation: document.getElementById('cf_acc')?.value || '',
+      },
+      delegataire: {
+        raison_sociale: document.getElementById('dg_raison')?.value || '',
+        siret: document.getElementById('dg_siret')?.value || '',
+        ref_pncee: document.getElementById('dg_pncee')?.value || '',
+      },
+      pricing: {
+        prix_cumac_eur_mwh_classique: parseFloat(document.getElementById('pr_classique')?.value || 8.78),
+        prix_cumac_eur_mwh_precarite: parseFloat(document.getElementById('pr_precarite')?.value || 16.40),
+        pct_apporteur_affaires: parseFloat(document.getElementById('pr_app')?.value || 0),
+        pct_vendeur: parseFloat(document.getElementById('pr_vd')?.value || 0),
+        pct_marge_operateur: parseFloat(document.getElementById('pr_mg')?.value || 0),
+      },
+      templates_actifs: {
+        convention_partenariat: !!document.getElementById('tmpl_conv')?.checked,
+        attestation_honneur: !!document.getElementById('tmpl_ah')?.checked,
+        mandat_delegataire: !!document.getElementById('tmpl_mandat')?.checked,
+        devis_prerempli: !!document.getElementById('tmpl_devis')?.checked,
+      },
+    };
+    try {
+      var r = await fetch('/dossier/setup', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(profile)});
+      var d = await r.json();
+      if (d.saved) {
+        this.state.dossierProfile = d.profile;
+        localStorage.setItem('cee_dossier_profile', JSON.stringify(d.profile));
+        alert('✓ Profil enregistré · is_complete=' + d.is_complete);
+      } else { alert('❌ Sauvegarde échouée'); }
+    } catch (e) { alert('❌ ' + e.message); }
   },
 
   // ═══════════════════════════════════════════════════════════════════
