@@ -609,7 +609,8 @@
     ],
     "actif": true,
     "gisements": [],
-    "categorie": ""
+    "categorie": "",
+    "sous_secteur": "TH"
   },
   {
     "ref": "AGRI-TH-105",
@@ -4042,7 +4043,8 @@
     ],
     "gisements": [],
     "actif": true,
-    "categorie": ""
+    "categorie": "",
+    "sous_secteur": "TH"
   },
   {
     "ref": "BAT-TH-105",
