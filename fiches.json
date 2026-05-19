@@ -696,7 +696,82 @@
       "surface"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "AGRI-TH-108 v A35-2 à compter du 01-10-2020.pdf",
+        "tables_total": 5,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "Efficacité énergétique saisonnière (ηs)",
+                "cle1": "111% ≤ ηs < 126%",
+                "cle2_header": "Type de serre",
+                "cle2": "Maraîchère",
+                "cumac": 800.0
+              },
+              {
+                "cle1_header": "Efficacité énergétique saisonnière (ηs)",
+                "cle1": "111% ≤ ηs < 126%",
+                "cle2_header": "Type de serre",
+                "cle2": "Horticole",
+                "cumac": 380.0
+              },
+              {
+                "cle1_header": "Efficacité énergétique saisonnière (ηs)",
+                "cle1": "126% ≤ ηs",
+                "cle2_header": "Type de serre",
+                "cle2": "Maraîchère",
+                "cumac": 970.0
+              },
+              {
+                "cle1_header": "Efficacité énergétique saisonnière (ηs)",
+                "cle1": "126% ≤ ηs",
+                "cle2_header": "Type de serre",
+                "cle2": "Horticole",
+                "cumac": 460.0
+              }
+            ]
+          },
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "COP",
+                "cle1": "3,4 ≤ COP < 4",
+                "cle2_header": "Type de serre",
+                "cle2": "Maraîchère",
+                "cumac": 780.0
+              },
+              {
+                "cle1_header": "COP",
+                "cle1": "3,4 ≤ COP < 4",
+                "cle2_header": "Type de serre",
+                "cle2": "Horticole",
+                "cumac": 370.0
+              },
+              {
+                "cle1_header": "COP",
+                "cle1": "4 ≤ COP",
+                "cle2_header": "Type de serre",
+                "cle2": "Maraîchère",
+                "cumac": 1040.0
+              },
+              {
+                "cle1_header": "COP",
+                "cle1": "4 ≤ COP",
+                "cle2_header": "Type de serre",
+                "cle2": "Horticole",
+                "cumac": 490.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -1007,7 +1082,26 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "AGRI-UT-101 v A24-2 après le 01-04-2017.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Pompage d’irrigation": 2100.0,
+              "Ventilation de bâtiments d’élevage": 18300.0,
+              "Ventilation en serre": 14900.0,
+              "Pompe à vide d’une salle de traite": 2100.0,
+              "Chaufferie d’une serre (pompe, ventilateur brûleur)": 6400.0,
+              "Autres applications": 4500.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -1052,7 +1146,26 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "AGRI-UT-102 v A22-2.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Pompe d’irrigation": 1600.0,
+              "Ventilateur de bâtiments d’élevage": 19600.0,
+              "Ventilation d’une serre": 11500.0,
+              "Pompe à vide d’une salle de traite": 2800.0,
+              "Chauffage d’une serre (pompe, ventilateur d’un brûleur)": 7700.0,
+              "Autres applications": 2300.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -1143,7 +1256,34 @@
         ],
         "is_complex": true
       },
-      "pdf_extraction_review_status": "pending_human_review"
+      "pdf_extraction_review_status": "pending_human_review",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "AGRI-UT-104.pdf",
+        "tables_total": 3,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "Zone climatique",
+                "cle1": "H1 ou H2",
+                "cle2_header": "Montant en kWh cumac par kW",
+                "cle2": "10 600",
+                "cumac": 10600.0
+              },
+              {
+                "cle1_header": "Zone climatique",
+                "cle1": "H3",
+                "cle2_header": "Montant en kWh cumac par kW",
+                "cle2": "9 700",
+                "cumac": 9700.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -3496,7 +3636,41 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-EQ-117 vA40-2 à compter du 01-04-2022_0.pdf",
+        "tables_total": 8,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "",
+                "cle1": "Option 0",
+                "cle2_header": "Montants en kWh cumac / kW",
+                "cle2": "8 500",
+                "cumac": 8500.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Option 1 ou 1 bis",
+                "cle2_header": "Montants en kWh cumac / kW",
+                "cle2": "10 300",
+                "cumac": 10300.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Option 2",
+                "cle2_header": "Montants en kWh cumac / kW",
+                "cle2": "12 700",
+                "cumac": 12700.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -3720,7 +3894,235 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-EQ-130.pdf",
+        "tables_total": 7,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "8",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "500",
+                "cumac": 500.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "7",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "770",
+                "cumac": 770.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "6",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 100",
+                "cumac": 1100.0
+              }
+            ]
+          },
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "12",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "580",
+                "cumac": 580.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "11",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "790",
+                "cumac": 790.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "10",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 000",
+                "cumac": 1000.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "9",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 200",
+                "cumac": 1200.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "8",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 500",
+                "cumac": 1500.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "7",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 700",
+                "cumac": 1700.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "6",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 000",
+                "cumac": 2000.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "5",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 300",
+                "cumac": 2300.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "4",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 600",
+                "cumac": 2600.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "3",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 900",
+                "cumac": 2900.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "2",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "3 200",
+                "cumac": 3200.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "1",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "3 600",
+                "cumac": 3600.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "0",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "4 000",
+                "cumac": 4000.0
+              }
+            ]
+          },
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "22",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "580",
+                "cumac": 580.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "21",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "790",
+                "cumac": 790.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "20",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 000",
+                "cumac": 1000.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "19",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 200",
+                "cumac": 1200.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "18",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 500",
+                "cumac": 1500.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "17",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "1 700",
+                "cumac": 1700.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "16",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 000",
+                "cumac": 2000.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "15",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 300",
+                "cumac": 2300.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "14",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 600",
+                "cumac": 2600.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "13",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "2 900",
+                "cumac": 2900.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "12",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "3 200",
+                "cumac": 3200.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "11",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "3 600",
+                "cumac": 3600.0
+              },
+              {
+                "cle1_header": "D T en °C",
+                "cle1": "10",
+                "cle2_header": "Montant en kWh cumac par kW selon l’application",
+                "cle2": "4 000",
+                "cumac": 4000.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -4325,7 +4727,25 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-TH-112 v A22-2.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Chauffage, pompage": 9600.0,
+              "Ventilation, renouvellement d’air": 11400.0,
+              "Réfrigération": 3900.0,
+              "Climatisation": 990.0,
+              "Autres applications": 990.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -4372,7 +4792,62 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-TH-115 v A15-2.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "",
+                "cle1": "Bureaux",
+                "cle2_header": "Montant en kWh cumac",
+                "cle2": "1 100",
+                "cumac": 1100.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Enseignement",
+                "cle2_header": "Montant en kWh cumac",
+                "cle2": "900",
+                "cumac": 900.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Commerce",
+                "cle2_header": "Montant en kWh cumac",
+                "cle2": "1 800",
+                "cumac": 1800.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Hôtellerie - restauration",
+                "cle2_header": "Montant en kWh cumac",
+                "cle2": "1 300",
+                "cumac": 1300.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Santé",
+                "cle2_header": "Montant en kWh cumac",
+                "cle2": "2 000",
+                "cumac": 2000.0
+              },
+              {
+                "cle1_header": "",
+                "cle1": "Autres",
+                "cle2_header": "Montant en kWh cumac",
+                "cle2": "900",
+                "cumac": 900.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -4492,7 +4967,26 @@
       "surface"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-TH-122.pdf",
+        "tables_total": 3,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Bureaux": 560.0,
+              "Commerce": 180.0,
+              "Hôtellerie": 340.0,
+              "Enseignement": 460.0,
+              "Santé": 210.0,
+              "Autres secteurs": 180.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -4674,7 +5168,27 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-TH-135.pdf",
+        "tables_total": 3,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "Montant en kWh cumac par kW",
+                "cle1": "2 700",
+                "cle2_header": "",
+                "cle2": "2 500",
+                "cumac": 2700.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -5095,7 +5609,22 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "BAT-TH-161 vA62-1 à compter du 31-08-2024_0.pdf",
+        "tables_total": 2,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "800 kW ≤ P ≤ 1 200 kW": 167800.0,
+              "1 200 kW < P": 279600.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -5534,7 +6063,25 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-102 v A19-2.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Pompage": 12400.0,
+              "Ventilation": 12200.0,
+              "Compresseur d’air": 11900.0,
+              "Compresseur frigorifique": 7100.0,
+              "Autres applications": 5500.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -5878,7 +6425,25 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-114 v A24-2 après le 01-04-2017.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Pompage": 17800.0,
+              "Ventilation": 17600.0,
+              "Compresseur d’air": 9200.0,
+              "Compresseur frigorifique": 14500.0,
+              "Autre application": 11400.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -6024,7 +6589,44 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-118.pdf",
+        "tables_total": 9,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "600 ≤ T ≤ 750": 1600.0,
+              "750 < T ≤ 1000": 2500.0,
+              "1000 < T ≤ 1250": 4100.0,
+              "1250 < T": 5800.0
+            }
+          },
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "600 ≤ T ≤ 750": 2300.0,
+              "750 < T ≤ 1000": 3500.0,
+              "1000 < T ≤ 1250": 5600.0,
+              "1250 < T": 7800.0
+            }
+          },
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "1x8": 1000.0,
+              "2x8": 2300.0,
+              "3x8 avec arrêt le week-end": 3100.0,
+              "3x8 sans arrêt le week-end": 4300.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -6187,7 +6789,48 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-125.pdf",
+        "tables_total": 3,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "Mode de fonctionnement du site",
+                "cle1": "1x8h",
+                "cle2_header": "Montant en kWh cumac par kW selon la zone géographique d’installation de la chaudière",
+                "cle2": "70",
+                "cumac": 70.0
+              },
+              {
+                "cle1_header": "Mode de fonctionnement du site",
+                "cle1": "2x8h",
+                "cle2_header": "Montant en kWh cumac par kW selon la zone géographique d’installation de la chaudière",
+                "cle2": "160",
+                "cumac": 160.0
+              },
+              {
+                "cle1_header": "Mode de fonctionnement du site",
+                "cle1": "3x8h avec arrêt le week-end",
+                "cle2_header": "Montant en kWh cumac par kW selon la zone géographique d’installation de la chaudière",
+                "cle2": "220",
+                "cumac": 220.0
+              },
+              {
+                "cle1_header": "Mode de fonctionnement du site",
+                "cle1": "3x8h sans arrêt le week-end",
+                "cle2_header": "Montant en kWh cumac par kW selon la zone géographique d’installation de la chaudière",
+                "cle2": "300",
+                "cumac": 300.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -6339,7 +6982,36 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-131 vA37-2 à compter du 01-04-2021.pdf",
+        "tables_total": 7,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "- 80°C < T ≤ -10°C": 300.0,
+              "- 10°C < T ≤ 10°C": 180.0,
+              "40°C < T ≤ 100°C": 1050.0,
+              "100°C < T ≤ 300°C": 1900.0,
+              "T > 300°C": 1850.0
+            }
+          },
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "- 80°C < T ≤ - 10°C": 450.0,
+              "- 10°C < T ≤ 10°C": 400.0,
+              "40°C < T ≤ 100°C": 1300.0,
+              "100°C < T≤ 300°C": 2050.0,
+              "T > 300°C": 1850.0
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -6381,7 +7053,38 @@
       "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-132.pdf",
+        "tables_total": 2,
+        "extractions": [
+          {
+            "type": "formula",
+            "class": "formula",
+            "data": [
+              {
+                "raw": "4 900 x P + 2 600",
+                "a_coef": 4900,
+                "b_const": 2600,
+                "variable": "P"
+              },
+              {
+                "raw": "700 x P + 12 000",
+                "a_coef": 700,
+                "b_const": 12000,
+                "variable": "P"
+              },
+              {
+                "raw": "1 600 x P",
+                "a_coef": 1600,
+                "b_const": 0,
+                "variable": "P"
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -6426,7 +7129,26 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "IND-UT-133.pdf",
+        "tables_total": 3,
+        "extractions": [
+          {
+            "type": "formula",
+            "class": "formula",
+            "data": [
+              {
+                "raw": "H x F x 9,25 x P",
+                "a_coef": 25,
+                "b_const": 0,
+                "variable": "P"
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -6934,7 +7656,236 @@
       "surface"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "RES-CH-106 vA60-4 à compter du 01-03-2024.pdf",
+        "tables_total": 10,
+        "extractions": [
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "32",
+                "cle2_header": "",
+                "cle2": "3 300",
+                "cumac": 32.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "40",
+                "cle2_header": "",
+                "cle2": "3 800",
+                "cumac": 40.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "50",
+                "cle2_header": "",
+                "cle2": "4 500",
+                "cumac": 50.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "60",
+                "cle2_header": "",
+                "cle2": "5 000",
+                "cumac": 60.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "65",
+                "cle2_header": "",
+                "cle2": "5 300",
+                "cumac": 65.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "80",
+                "cle2_header": "",
+                "cle2": "6 000",
+                "cumac": 80.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "100",
+                "cle2_header": "",
+                "cle2": "6 800",
+                "cumac": 100.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "125",
+                "cle2_header": "",
+                "cle2": "7 600",
+                "cumac": 125.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "150",
+                "cle2_header": "",
+                "cle2": "8 400",
+                "cumac": 150.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "175",
+                "cle2_header": "",
+                "cle2": "9 100",
+                "cumac": 175.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "200",
+                "cle2_header": "",
+                "cle2": "9 800",
+                "cumac": 200.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "250",
+                "cle2_header": "",
+                "cle2": "11 100",
+                "cumac": 250.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "300",
+                "cle2_header": "",
+                "cle2": "12 300",
+                "cumac": 300.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "350",
+                "cle2_header": "",
+                "cle2": "13 400",
+                "cumac": 350.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "≥ 400",
+                "cle2_header": "",
+                "cle2": "14 600",
+                "cumac": 400.0
+              }
+            ]
+          },
+          {
+            "type": "2d",
+            "class": "lookup_2d_or_more",
+            "data": [
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "32",
+                "cle2_header": "",
+                "cle2": "3 800",
+                "cumac": 32.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "40",
+                "cle2_header": "",
+                "cle2": "4 400",
+                "cumac": 40.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "50",
+                "cle2_header": "",
+                "cle2": "4 900",
+                "cumac": 50.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "60",
+                "cle2_header": "",
+                "cle2": "5 400",
+                "cumac": 60.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "65",
+                "cle2_header": "",
+                "cle2": "5 700",
+                "cumac": 65.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "80",
+                "cle2_header": "",
+                "cle2": "6 500",
+                "cumac": 80.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "100",
+                "cle2_header": "",
+                "cle2": "7 500",
+                "cumac": 100.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "125",
+                "cle2_header": "",
+                "cle2": "8 300",
+                "cumac": 125.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "150",
+                "cle2_header": "",
+                "cle2": "9 100",
+                "cumac": 150.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "175",
+                "cle2_header": "",
+                "cle2": "10 100",
+                "cumac": 175.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "200",
+                "cle2_header": "",
+                "cle2": "11 000",
+                "cumac": 200.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "250",
+                "cle2_header": "",
+                "cle2": "12 900",
+                "cumac": 250.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "300",
+                "cle2_header": "",
+                "cle2": "14 300",
+                "cumac": 300.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "350",
+                "cle2_header": "",
+                "cle2": "16 200",
+                "cumac": 350.0
+              },
+              {
+                "cle1_header": "Montant unitaire en kWh cumac selon le diamètre nominal DN (en mm) du réseau",
+                "cle1": "≥ 400",
+                "cle2_header": "",
+                "cle2": "17 800",
+                "cumac": 400.0
+              }
+            ]
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -7236,7 +8187,23 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "TRA-EQ-106 v A14-1.pdf",
+        "tables_total": 4,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "A": 0.011,
+              "B": 0.008,
+              "C": 0.006
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -7891,7 +8858,32 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "TRA-EQ-126.pdf",
+        "tables_total": 11,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Bateau de réception destiné à un usage principalement privatif * et bateau de travail": 147.567,
+              "Petit bateau à passagers": 103.285,
+              "Bateau restaurant, bateau promenades, automoteur, bateau de plaisance et péniche-hôtel": 71.655
+            }
+          },
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Bateau de réception destiné à un usage principalement privatif * et bateau de travail": 54.024,
+              "Petit bateau à passagers": 40.809,
+              "Bateau restaurant, bateau promenades, automoteur, bateau de plaisance et péniche-hôtel": 29.212
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
@@ -7935,7 +8927,44 @@
       "quantite"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "parse_complex_v2_2026_05_19": {
+        "pdf": "TRA-EQ-127 vA54-1 à compter du 01-10-2023.pdf",
+        "tables_total": 12,
+        "extractions": [
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Bateau de réception et bateau de travail": 121.59,
+              "Petit bateau à passagers": 79.21,
+              "Bateau restaurant, bateau promenade, automoteur, bateau de croisière fluviale avec hébergement et péniche-hôtel": 43.85,
+              "Bateau de plaisance": 31.96
+            }
+          },
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Bateau de réception et bateau de travail": 113.26,
+              "Petit bateau à passagers": 70.88,
+              "Bateau restaurant, bateau promenade, automoteur, bateau de croisière fluviale avec hébergement et péniche-hôtel": 35.52,
+              "Bateau de plaisance": 23.63
+            }
+          },
+          {
+            "type": "1d",
+            "class": "lookup_1d",
+            "data": {
+              "Bateau de réception et bateau de travail": 59.66,
+              "Petit bateau à passagers": 38.69,
+              "Bateau restaurant, bateau promenade, automoteur, bateau de croisière fluviale avec hébergement et péniche-hôtel": 21.19,
+              "Bateau de plaisance": 15.3
+            }
+          }
+        ],
+        "review_status": "pending_human_validation"
+      }
     }
   },
   {
