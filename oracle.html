@@ -15892,6 +15892,85 @@ document.addEventListener('DOMContentLoaded', function() {
   /* Mode Vendeur — sections marquées BO uniquement (alertes COFRAC, ai-debug, benchmarks) */
   body.ui-mode-vendor .bo-only { display: none !important; }
 
+  /* ═══════════════════════════════════════════════════════════════
+     V41.1 — Cartes "opportunités" Mode Vendeur (ton Rothschild)
+     ═══════════════════════════════════════════════════════════════ */
+  .v2-card.opportunity-section {
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.012));
+    border: 1px solid rgba(200,255,107,0.20);
+    box-shadow: 0 6px 30px rgba(0,0,0,0.18);
+  }
+  .opportunity-intro {
+    font-size: 12.5px; color: rgba(245,245,247,0.68); line-height: 1.7;
+    margin-bottom: 18px; padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .opportunity-total-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: 14px; padding: 10px 14px;
+    background: rgba(200,255,107,0.06);
+    border: 1px solid rgba(200,255,107,0.18);
+    border-radius: 8px;
+  }
+  .opportunity-total-label {
+    font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+    color: rgba(245,245,247,0.6); font-weight: 600;
+  }
+  .opportunity-total-amount {
+    font-size: 18px; font-weight: 800; color: #C8FF6B;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .opportunity-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: all 0.25s ease;
+  }
+  .opportunity-card:hover {
+    border-color: rgba(200,255,107,0.30);
+    background: rgba(200,255,107,0.025);
+    transform: translateY(-1px);
+  }
+  .opportunity-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; gap: 12px;
+  }
+  .opportunity-category {
+    font-size: 10px; letter-spacing: 1.5px; font-weight: 700;
+    color: rgba(200,255,107,0.85); text-transform: uppercase;
+  }
+  .opportunity-amount {
+    font-size: 22px; font-weight: 800; color: #C8FF6B;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .opportunity-title {
+    font-size: 16px; font-weight: 700; color: rgba(245,245,247,0.96);
+    margin-bottom: 8px; letter-spacing: -0.1px; line-height: 1.35;
+  }
+  .opportunity-pitch {
+    font-size: 12px; color: rgba(245,245,247,0.62);
+    line-height: 1.6; font-style: italic;
+  }
+  .opportunity-divider {
+    height: 1px; background: rgba(255,255,255,0.07);
+    margin: 14px 0;
+  }
+  .opportunity-card .v2-question {
+    background: transparent !important; border: none !important;
+    padding: 0 !important; margin: 8px 0 4px !important;
+  }
+  .opportunity-card .v2-q-text {
+    font-size: 13px !important; font-weight: 600; color: rgba(245,245,247,0.92);
+    margin-bottom: 6px;
+  }
+  .opportunity-card .v2-q-impact {
+    font-size: 11px !important; color: rgba(245,245,247,0.5); font-style: italic;
+    margin-bottom: 8px;
+  }
+
   /* Bandeau Mode Vendeur (info subtile en haut) */
   .ui-mode-banner {
     display: none;
@@ -17488,33 +17567,78 @@ window.V2 = {
       html += '</div>';
     }
 
-    // V39.3.2 — Section F : questions PRÉCISES PAR FICHE du pack (mode table_str / table_2d / formule_tranches)
-    // Pour chaque fiche éligible avec params techniques, render dropdown ou numérique selon mode compute
+    // V39.3.2 + V41.1 — Section F : questions PRÉCISES PAR FICHE du pack
+    // Mode COMPLET (BO vendeur)  : affichage technique (ref ADEME + cumac), pour préparer l'audit.
+    // Mode VENDEUR (visio client) : cartes "opportunités" premium, ton banquier / négociateur.
     if (q.par_fiche && Object.keys(q.par_fiche).length) {
       var pack = this.state.pack || [];
       var packPrimes = {};
       pack.forEach(p => { packPrimes[p.fiche] = p.prime || 0; });
-      // Trier par prime décroissante
       var refsSorted = Object.keys(q.par_fiche).sort((a,b) => (packPrimes[b]||0) - (packPrimes[a]||0));
-      html += '<div class="v2-card"><div class="v2-card-title">📐 Questions précises par fiche (calcul exact)</div>';
-      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:12px;">Réponds aux questions ci-dessous pour calculer la prime EXACTE de chaque fiche du pack.</div>';
-      refsSorted.forEach(ref => {
-        var qs = q.par_fiche[ref];
-        if (!qs || !qs.length) return;
-        var nom = (qs[0] && qs[0].fiche_nom) ? qs[0].fiche_nom : '';
-        var prime = packPrimes[ref] || 0;
-        var primeLabel = prime > 0 ? ' — prime actuelle estimée : ' + prime.toLocaleString('fr-FR') + ' €' : '';
-        html += '<div style="margin-bottom:18px;padding:12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;">';
-        html += '<div style="font-size:13px;font-weight:600;color:var(--accent-cyan);margin-bottom:4px;">' + ref + (nom ? ' — ' + nom : '') + '</div>';
-        if (primeLabel) html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:8px;">' + primeLabel + '</div>';
-        qs.forEach(qq => {
-          // Préfixer l'id du param par ref pour ne pas mélanger entre fiches
-          var qqCopy = Object.assign({}, qq, { param: ref + '__' + (qq.param || qq.id || 'p') });
-          html += this._qHtml(qqCopy);
+      var isVendor = document.body.classList.contains('ui-mode-vendor');
+
+      if (isVendor) {
+        // === Mode VENDEUR — cartes "opportunités" Rothschild ===
+        var totalEstime = 0;
+        refsSorted.forEach(r => { totalEstime += (packPrimes[r] || 0); });
+
+        html += '<div class="v2-card opportunity-section">';
+        html += '<div class="v2-card-title" style="font-size:15px;letter-spacing:-0.2px;">💎 Vos opportunités identifiées — affinons les montants</div>';
+        html += '<div class="opportunity-intro">';
+        html += 'Voici ' + refsSorted.length + ' opportunité' + (refsSorted.length > 1 ? 's' : '') + ' de financement CEE adossée' + (refsSorted.length > 1 ? 's' : '') + ' à votre activité. ';
+        html += 'Une information complémentaire par opportunité nous suffit pour confirmer le montant exact qui vous sera versé.';
+        if (totalEstime > 0) {
+          html += '<div class="opportunity-total-row"><span class="opportunity-total-label">Estimation cumulée à ce stade</span><span class="opportunity-total-amount">' + totalEstime.toLocaleString('fr-FR') + ' €</span></div>';
+        }
+        html += '</div>';
+
+        refsSorted.forEach(ref => {
+          var qs = q.par_fiche[ref];
+          if (!qs || !qs.length) return;
+          var first = qs[0] || {};
+          var category = first.card_category || 'Opportunité identifiée';
+          var nomCommercial = first.card_fiche_nom || first.fiche_nom || ref;
+          var pitch = first.card_pitch || '';
+          var prime = packPrimes[ref] || 0;
+
+          html += '<div class="opportunity-card">';
+          html += '<div class="opportunity-header">';
+          html += '<div class="opportunity-category">' + category + '</div>';
+          if (prime > 0) html += '<div class="opportunity-amount">' + prime.toLocaleString('fr-FR') + ' €</div>';
+          html += '</div>';
+          html += '<div class="opportunity-title">' + nomCommercial + '</div>';
+          if (pitch) html += '<div class="opportunity-pitch">' + pitch + '</div>';
+          html += '<div class="opportunity-divider"></div>';
+          qs.forEach(qq => {
+            var qqCopy = Object.assign({}, qq, { param: ref + '__' + (qq.param || qq.id || 'p') });
+            // V41.1 — en Mode Vendeur, utilise la version sans préfixe [REF] technique
+            if (qqCopy.question_clean) qqCopy.question = qqCopy.question_clean;
+            html += this._qHtml(qqCopy);
+          });
+          html += '</div>';
         });
         html += '</div>';
-      });
-      html += '</div>';
+      } else {
+        // === Mode COMPLET — affichage technique (vendeur en prépa BO) ===
+        html += '<div class="v2-card"><div class="v2-card-title">📐 Questions précises par fiche (calcul exact)</div>';
+        html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:12px;">Réponds aux questions ci-dessous pour calculer la prime EXACTE de chaque fiche du pack.</div>';
+        refsSorted.forEach(ref => {
+          var qs = q.par_fiche[ref];
+          if (!qs || !qs.length) return;
+          var nom = (qs[0] && qs[0].fiche_nom) ? qs[0].fiche_nom : '';
+          var prime = packPrimes[ref] || 0;
+          var primeLabel = prime > 0 ? ' — prime actuelle estimée : ' + prime.toLocaleString('fr-FR') + ' €' : '';
+          html += '<div style="margin-bottom:18px;padding:12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;">';
+          html += '<div style="font-size:13px;font-weight:600;color:var(--accent-cyan);margin-bottom:4px;">' + ref + (nom ? ' — ' + nom : '') + '</div>';
+          if (primeLabel) html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:8px;">' + primeLabel + '</div>';
+          qs.forEach(qq => {
+            var qqCopy = Object.assign({}, qq, { param: ref + '__' + (qq.param || qq.id || 'p') });
+            html += this._qHtml(qqCopy);
+          });
+          html += '</div>';
+        });
+        html += '</div>';
+      }
     }
 
     document.getElementById('v2p2content').innerHTML = html;

@@ -4,6 +4,7 @@ INPUT → détection → QUESTIONS → enrichissement → recalcul → closing
 """
 
 import json
+import re
 import sys
 import os
 
@@ -430,7 +431,47 @@ def _smart_surface_label(fiche):
     return ("Surface concernée (m²)", "")
 
 
+_CARD_CATEGORY_MAP = {
+    "BAR": "Opportunité résidentielle",
+    "BAT": "Opportunité tertiaire",
+    "IND": "Opportunité industrielle",
+    "AGRI": "Opportunité agricole",
+    "TRA": "Opportunité transport",
+    "RES": "Opportunité réseaux de chaleur",
+}
+
+_REF_PREFIX_RE = re.compile(r"^\[[A-Z]+-[A-Z]+-\d+(?:-[A-Z0-9]+)?\]\s*")
+
+
 def build_questions_for_fiche(fiche, connu):
+    """V39.3.0 + V41.1 — Génère les questions précises POUR CALCULER le cumac d'1 fiche
+    et les enrichit avec les métadonnées de présentation Mode Vendeur (card_category,
+    card_pitch, question_clean) pour un rendu commercial premium côté UI.
+
+    Tonalité Mode Vendeur : banquier négociateur — chaque question est posée comme
+    une donnée qui débloque l'opportunité, pas comme un formulaire technique.
+    """
+    questions = _build_questions_for_fiche_raw(fiche, connu)
+    if not questions:
+        return questions
+    # V41.1 — métadonnées card pour rendu premium (Mode Vendeur)
+    secteur = fiche.get("secteur", "")
+    nom_complet = fiche.get("nom") or ""
+    n = len(questions)
+    questions[0]["card_category"] = _CARD_CATEGORY_MAP.get(secteur, "Opportunité identifiée")
+    questions[0]["card_fiche_nom"] = nom_complet
+    questions[0]["card_pitch"] = (
+        "Pour confirmer le montant exact, une information nous suffit."
+        if n == 1
+        else f"Pour confirmer le montant exact, {n} informations nous sont nécessaires."
+    )
+    # Version "propre" sans le préfixe [REF] technique — utilisée en Mode Vendeur
+    for q in questions:
+        q["question_clean"] = _REF_PREFIX_RE.sub("", q.get("question", ""))
+    return questions
+
+
+def _build_questions_for_fiche_raw(fiche, connu):
     """V39.3.0 — Génère les questions PRÉCISES pour calculer cumac d'1 fiche.
 
     Lit fiche.params + fiche.mode_calcul + fiche.variables + fiche.table_cumac
