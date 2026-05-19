@@ -413,12 +413,32 @@ _PARAM_LABEL = {
 }
 
 
+def _smart_surface_label(fiche):
+    """V39.3.3 — Détecte la surface contextuelle de la fiche pour label précis.
+    Ex: AGRI-TH-117 'Déshumidificateur serres' → 'Surface des serres (m²)'
+    """
+    nom = (fiche.get("nom") or "").lower()
+    if "serre" in nom: return ("Surface des serres équipées (m²)", "≠ surface bâtiment global")
+    if "fenêtre" in nom or "fenetre" in nom or "vitrage" in nom:
+        return ("Surface vitrée installée (m²)", "≠ surface bâtiment — vitrage uniquement")
+    if "toiture" in nom or "toiture-terrasse" in nom: return ("Surface toiture concernée (m²)", "")
+    if "plancher" in nom: return ("Surface plancher concerné (m²)", "")
+    if "murs" in nom: return ("Surface murs isolés (m²)", "")
+    if "lanterneau" in nom or "conduits de lumière" in nom or "conduit de lumière" in nom:
+        return ("Surface tubes lanterneaux/conduits (m²)", "S = somme sections tubes installés")
+    if "capteurs" in nom or "solaire" in nom: return ("Surface capteurs (m²)", "Surface utile capteurs")
+    return ("Surface concernée (m²)", "")
+
+
 def build_questions_for_fiche(fiche, connu):
     """V39.3.0 — Génère les questions PRÉCISES pour calculer cumac d'1 fiche.
 
     Lit fiche.params + fiche.mode_calcul + fiche.variables + fiche.table_cumac
     et produit les questions exactement nécessaires au compute (numérique ou choix
     parmi liste finie pour les fiches complexes table_str/table_2d).
+
+    V39.3.3 : surface CONTEXTUELLE — toujours re-demande la surface spécifique
+    à la fiche (serres / vitrée / toiture / ...) même si surface bâtiment connue.
     """
     questions = []
     ref = fiche.get("ref", "")
@@ -441,20 +461,25 @@ def build_questions_for_fiche(fiche, connu):
         })
 
     # === Cas 1 : type surface simple (50 fiches) ===
+    # V39.3.3 : TOUJOURS re-demander surface contextuelle (≠ surface bâtiment global)
     if ftype == "surface" and not mode:
-        if "surface" not in connu:
-            ratio = fiche.get("surface_ratio")
-            if ratio and 0 < ratio < 1:
-                add_q("surface", f"Surface bâtiment (m²) — ratio {int(ratio*100)}% appliqué pour cette fiche", "nombre", "m²",
-                      impact=f"Ex: 1000m² × {int(ratio*100)}% = {int(1000*ratio)}m² éligibles")
-            else:
-                add_q("surface", "Surface concernée (m²)", "nombre", "m²")
+        ratio = fiche.get("surface_ratio")
+        smart_label, smart_impact = _smart_surface_label(fiche)
+        if ratio and 0 < ratio < 1:
+            add_q("surface", f"{smart_label} — ratio {int(ratio*100)}% appliqué",
+                  "nombre", "m²",
+                  impact=f"{smart_impact or ''} | Ex: 1000m² × {int(ratio*100)}% = {int(1000*ratio)}m² éligibles".strip(" |"))
+        else:
+            add_q("surface", smart_label, "nombre", "m²", impact=smart_impact)
         return questions
 
     # === Cas 2 : type unitaire simple (140 fiches) ===
     if ftype == "unitaire" and not mode:
         for p in params:
-            if p == "surface" and "surface" in connu:
+            if p == "surface":
+                # V39.3.3 : surface spécifique fiche, jamais skip
+                smart_label, smart_impact = _smart_surface_label(fiche)
+                add_q("surface", smart_label, "nombre", "m²", impact=smart_impact)
                 continue
             label, qtype, unite = _PARAM_LABEL.get(p, (p.capitalize(), "nombre", ""))
             add_q(p, label, qtype, unite)
@@ -501,18 +526,28 @@ def build_questions_for_fiche(fiche, connu):
     if mode == "formule_tranches":
         if variables:
             var = variables[0]
-            label, qtype, unite = _PARAM_LABEL.get(var, (var.capitalize(), "nombre", ""))
+            if var == "surface":
+                label, smart_impact = _smart_surface_label(fiche)
+                qtype, unite = "nombre", "m²"
+            else:
+                label, qtype, unite = _PARAM_LABEL.get(var, (var.capitalize(), "nombre", ""))
+                smart_impact = ""
             tranches = fiche.get("tranches", [])
             tr_descr = " | ".join(f"{t.get('min',0)}-{t.get('max','∞')}: {t.get('a',0)}×{var}+{t.get('b',0)}" for t in tranches[:3])
-            add_q(var, f"{label} (formule par tranche)", qtype, unite,
-                  impact=f"Tranches: {tr_descr}")
+            impact_str = f"{smart_impact + ' · ' if smart_impact else ''}Formule: {tr_descr}"
+            add_q(var, label, qtype, unite, impact=impact_str)
         return questions
 
     # === Cas 6 : type complexe — mode formule (eval avec multi-variables) ===
     if mode == "formule":
         for v in variables:
-            label, qtype, unite = _PARAM_LABEL.get(v, (v.capitalize().replace('_',' '), "nombre", ""))
-            add_q(v, label, qtype, unite)
+            if v == "surface":
+                label, smart_impact = _smart_surface_label(fiche)
+                qtype, unite = "nombre", "m²"
+                add_q(v, label, qtype, unite, impact=smart_impact)
+            else:
+                label, qtype, unite = _PARAM_LABEL.get(v, (v.capitalize().replace('_',' '), "nombre", ""))
+                add_q(v, label, qtype, unite)
         return questions
 
     # === Cas 7 : type complexe — table legacy (1 fiche) ===
