@@ -947,15 +947,15 @@
     "nom": "Déshumidificateur thermodynamique serres",
     "secteur": "AGRI",
     "sous_secteur": "TH",
-    "type": "complexe",
+    "type": "surface",
     "params": [
-      "puissance"
+      "surface"
     ],
     "cumac_unitaire": {
-      "H1": 8200,
-      "H2": 6800,
-      "H3": 4800,
-      "DOM": 4100
+      "H1": 710,
+      "H2": 710,
+      "H3": 710,
+      "DOM": 710
     },
     "unite": "kWhc par kW",
     "unite_oracle": "kW",
@@ -972,22 +972,33 @@
       "Equipement/batiment existant > 2 ans",
       "Installation par professionnel"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Thermique",
     "gisements": [
       "chauffage_batiment"
     ],
     "zero_euro": true,
     "note": "vA73-3 01/09/2025",
-    "mode_calcul": "table",
+    "mode_calcul": "formule_tranches",
     "variables": [
-      "puissance",
-      "surface",
-      "quantite"
+      "surface"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
-    }
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "reactivated_V39_2_2_manual": {
+        "method": "formula_710xS_extracted_from_PDF_section5",
+        "note": "Formule ADEME: 710 × Surface serre équipée (m²)"
+      }
+    },
+    "table_cumac": {},
+    "tranches": [
+      {
+        "min": 0,
+        "max": Infinity,
+        "a": 710,
+        "b": 0
+      }
+    ]
   },
   {
     "ref": "AGRI-TH-118",
@@ -5599,21 +5610,42 @@
       "Installation par professionnel",
       "Equipement neuf"
     ],
-    "actif": false,
+    "actif": true,
     "categorie": "Thermique",
     "gisements": [
       "chauffage_batiment"
     ],
     "cofrac": true,
-    "mode_calcul": "table",
+    "mode_calcul": "formule_tranches",
     "variables": [
-      "puissance",
-      "surface",
-      "quantite"
+      "puissance"
     ],
     "audit": {
-      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME."
-    }
+      "deactivated_V39_0_7": "type=complexe sans table_cumac ni formule → compute() retournait 0€. Réactiver après lookup table_cumac ADEME.",
+      "reactivated_V39_2_2_manual": {
+        "method": "tranches_parsed_from_pdf",
+        "note": "Formule réelle: Q × coef. Q = chaleur produite annuellement. Approximation P.",
+        "test_compute": 480.0,
+        "test_params": {
+          "puissance": 100
+        }
+      }
+    },
+    "table_cumac": {},
+    "tranches": [
+      {
+        "min": 0,
+        "max": 500,
+        "a": 4.8,
+        "b": 0
+      },
+      {
+        "min": 500,
+        "max": Infinity,
+        "a": 3.4,
+        "b": 0
+      }
+    ]
   },
   {
     "ref": "BAT-TH-158",
