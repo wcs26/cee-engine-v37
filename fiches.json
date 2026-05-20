@@ -5801,7 +5801,22 @@
       "chauffage_batiment",
       "froid"
     ],
-    "note": "vA62.3 01/01/2025"
+    "note": "vA62.3 01/01/2025",
+    "sect_factors": {
+      "bureaux": 1.2,
+      "enseignement": 0.8,
+      "commerces": 0.9,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.1,
+      "sport": 0.7,
+      "autres": 0.7
+    },
+    "audit": {
+      "v41_4_sect_factors": {
+        "source": "BAT-TH-158 vA62.3 ADEME 01/01/2025",
+        "note": "Facteur correctif sectoriel ajouté V41.4 (manquait depuis création)"
+      }
+    }
   },
   {
     "ref": "BAT-TH-159",

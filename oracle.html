@@ -10663,20 +10663,55 @@
     }
 
     // Tableau détaillé — V29: utilise gc.details (déjà calculé par getGlobalCalc)
+    // V41.5 — agrégation défensive : si plusieurs entrées partagent la même ref
+    // (multi-site, double-append, etc.), on les fusionne pour ne JAMAIS afficher
+    // 4× la même ligne. Affichage "× N sites" si N ≥ 2.
     const detailTable = document.getElementById('detailTable');
     detailTable.innerHTML = '';
-    gc.details.forEach(({ fiche, qty, calc }) => {
+    const _aggByRef = new Map();
+    gc.details.forEach(d => {
+      const r = d.fiche.ref;
+      if (!_aggByRef.has(r)) {
+        _aggByRef.set(r, {fiche: d.fiche, qty: d.qty, calc: Object.assign({}, d.calc), nbSites: 1});
+      } else {
+        const a = _aggByRef.get(r);
+        a.qty += d.qty;
+        a.calc.kwhcTotal += d.calc.kwhcTotal;
+        a.calc.primeBrute += d.calc.primeBrute;
+        a.calc.primeNette += d.calc.primeNette;
+        a.calc.commission = (a.calc.commission || 0) + (d.calc.commission || 0);
+        a.calc.costHT += d.calc.costHT;
+        a.calc.costTTC += d.calc.costTTC;
+        a.calc.rac = Math.max(0, a.calc.costTTC - a.calc.primeNette);
+        a.calc.coverage = a.calc.costTTC > 0 ? (a.calc.primeNette / a.calc.costTTC * 100) : 0;
+        a.nbSites += 1;
+      }
+    });
+    Array.from(_aggByRef.values()).forEach(({ fiche, qty, calc, nbSites }) => {
       const ct = calc.coutMarche;
       const srcIcon = calc.hasCoutMarche ? '📊' : '~';
       const row = document.createElement('tr');
+      // V41.3 — cohérence prime : afficher primeNette (= prime versée au client)
+      // pour matcher le calcul de coverage qui utilise déjà primeNette.
+      // Tooltip détaillé : brute → commission → nette (transparence pitch).
+      var tauxComm = 100 - (STATE.tauxPriseEnCharge ?? 90);
+      var primeTitle = 'Prime brute: ' + formatCurrency(calc.primeBrute)
+        + ' · Commission opérateur: ' + tauxComm + '% (' + formatCurrency(calc.commission) + ')'
+        + ' · Prime nette client: ' + formatCurrency(calc.primeNette);
+      // V41.5 — badge × N sites si agrégation détectée
+      var sitesBadge = (nbSites && nbSites >= 2)
+        ? ' <span style="font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(110,146,255,.15);color:#6E92FF;font-weight:600;" title="' + nbSites + ' sites agrégés">× ' + nbSites + ' sites</span>'
+        : '';
+      // V41.5 — recalculer covLevel pour les lignes agrégées (color peut être stale)
+      var covColorAgg = calc.coverage >= 100 ? '#238636' : calc.coverage >= 70 ? '#d29922' : '#f85149';
       row.innerHTML = `
-        <td><a href="${ATEE_URLS[fiche.sector] || '#'}" target="_blank" rel="noopener" style="color:var(--accent-cyan);text-decoration:none;" title="Fiche ATEE officielle">${fiche.ref} ↗</a></td>
+        <td><a href="${ATEE_URLS[fiche.sector] || '#'}" target="_blank" rel="noopener" style="color:var(--accent-cyan);text-decoration:none;" title="Fiche ATEE officielle">${fiche.ref} ↗</a>${sitesBadge}</td>
         <td>${fiche.label} ${ct ? '<span style="font-size:10px;color:var(--accent-cyan);">' + ct.moy + '€/' + ct.u + '</span>' : ''}</td>
         <td style="text-align:right;">${qty} ${fiche.unit}</td>
-        <td style="text-align:right;color:var(--accent-orange);">${formatCurrency(calc.primeBrute)}</td>
+        <td style="text-align:right;color:var(--accent-orange);font-weight:600;" title="${primeTitle}">${formatCurrency(calc.primeNette)}</td>
         <td style="text-align:right;">${srcIcon} ${formatCurrency(calc.costTTC)}</td>
         <td style="text-align:right;">
-          <span style="color:${calc.covLevel.color};font-weight:600;">${calc.coverage.toFixed(0)}%</span>
+          <span style="color:${covColorAgg};font-weight:600;" title="Couverture = prime nette client / coût TTC">${calc.coverage.toFixed(0)}%</span>
         </td>`;
       detailTable.appendChild(row);
     });
@@ -11514,7 +11549,8 @@
     doc.text(verdictTxt,105,y,{align:'center'});y+=12;
 
     // Tableau opérations
-    var tableData=gc.details.map(function(d){return[d.fiche.ref,d.fiche.label.substring(0,35),d.qty+' '+d.fiche.unit,formatCurrency(d.calc.primeBrute),formatCurrency(d.calc.costTTC),d.calc.coverage.toFixed(0)+'%',d.calc.rac<=0?'0 EUR':formatCurrency(d.calc.rac)];});
+    // V41.3 — export PDF utilise primeNette (cohérent avec coverage)
+    var tableData=gc.details.map(function(d){return[d.fiche.ref,d.fiche.label.substring(0,35),d.qty+' '+d.fiche.unit,formatCurrency(d.calc.primeNette),formatCurrency(d.calc.costTTC),d.calc.coverage.toFixed(0)+'%',d.calc.rac<=0?'0 EUR':formatCurrency(d.calc.rac)];});
     doc.autoTable({startY:y,head:[['Ref','Operation','Qte','Prime','Cout TTC','Couv.','RAC']],body:tableData,theme:'striped',headStyles:{fillColor:[59,130,246]},styles:{fontSize:8},columnStyles:{1:{cellWidth:50}}});
     footer();
 
@@ -11525,7 +11561,7 @@
       var g=(GESTE_EXP&&GESTE_EXP[d.fiche.cat])||(GESTE_EXP&&GESTE_EXP['Autre'])||{avant:'',apres:'',ico:'',economies:'15-30%',dureeVie:'15-20 ans'};
       doc.setFontSize(11);doc.setTextColor(59,130,246);doc.text(d.fiche.ref+' — '+d.fiche.label,14,y);y+=6;
       doc.setFontSize(8);doc.setTextColor(80,80,80);
-      doc.text('Qte: '+d.qty+' '+d.fiche.unit+' | kWhc: '+formatNumber(d.calc.kwhcTotal)+' | Prime: '+formatCurrency(d.calc.primeBrute)+' | Cout: '+formatCurrency(d.calc.costTTC)+' | Couverture: '+d.calc.coverage.toFixed(0)+'%',14,y);y+=5;
+      doc.text('Qte: '+d.qty+' '+d.fiche.unit+' | kWhc: '+formatNumber(d.calc.kwhcTotal)+' | Prime nette: '+formatCurrency(d.calc.primeNette)+' | Cout: '+formatCurrency(d.calc.costTTC)+' | Couverture: '+d.calc.coverage.toFixed(0)+'%',14,y);y+=5;
       doc.text('Avant: '+g.avant.substring(0,100),14,y);y+=4;
       doc.text('Apres: '+g.apres.substring(0,100),14,y);y+=4;
       doc.text('Economies: '+g.economies+' | Duree de vie: '+g.dureeVie+' | RAC: '+(d.calc.rac<=0?'0 EUR':formatCurrency(d.calc.rac)),14,y);y+=8;
@@ -14467,7 +14503,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var opsRows = '';
     gc.details.forEach(function(det) {
-      opsRows += '<tr><td style="padding:6px;border:1px solid #ccc;">' + det.fiche.ref + '</td><td style="padding:6px;border:1px solid #ccc;">' + det.fiche.label + '</td><td style="padding:6px;border:1px solid #ccc;text-align:center;">' + det.qty + ' ' + det.fiche.unit + '</td><td style="padding:6px;border:1px solid #ccc;text-align:right;">' + formatCurrency(det.calc.primeBrute) + '</td><td style="padding:6px;border:1px solid #ccc;text-align:right;">' + formatCurrency(det.calc.costTTC) + '</td></tr>';
+      opsRows += '<tr><td style="padding:6px;border:1px solid #ccc;">' + det.fiche.ref + '</td><td style="padding:6px;border:1px solid #ccc;">' + det.fiche.label + '</td><td style="padding:6px;border:1px solid #ccc;text-align:center;">' + det.qty + ' ' + det.fiche.unit + '</td><td style="padding:6px;border:1px solid #ccc;text-align:right;" title="Prime nette client (après commission)">' + formatCurrency(det.calc.primeNette) + '</td><td style="padding:6px;border:1px solid #ccc;text-align:right;">' + formatCurrency(det.calc.costTTC) + '</td></tr>';
     });
     var totalRow = '<tr style="font-weight:700;background:#f0f0f0;"><td colspan="3" style="padding:6px;border:1px solid #ccc;">TOTAL</td><td style="padding:6px;border:1px solid #ccc;text-align:right;">' + formatCurrency(gc.totalPrimeBrute) + '</td><td style="padding:6px;border:1px solid #ccc;text-align:right;">' + formatCurrency(gc.totalCostTTC) + '</td></tr>';
 
