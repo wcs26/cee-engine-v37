@@ -3524,8 +3524,11 @@
     "BAT-TH-138":{min:4500,max:8000,moy:6250,u:"installation"}, // VMC DF HR
     "BAT-TH-139":{min:6000,max:11000,moy:8500,u:"installation"}, // VMC DF THR
     // V37.4.13 — BAT-TH-155 supprimée : libellé code "Rooftop" INVENTÉ (BAT-TH-155 = "Isolation points singuliers d'un réseau", abrogée 01/08/2025 71e arrêté)
-    "BAT-TH-157":{min:100,max:180,moy:140,u:"point"},  // LED tertiaire
-    "BAT-TH-158":{min:80,max:150,moy:115,u:"point"},   // LED surface comm
+    // V41.2 FIX : BAT-TH-157 et BAT-TH-158 étaient mal étiquetées "LED" (héritage commit ancien).
+    // BAT-TH-157 = Chaudière biomasse tertiaire (€/kW thermique installé)
+    // BAT-TH-158 = PAC réversible air/air tertiaire (€/m² surface traitée par la PAC)
+    "BAT-TH-157":{min:600,max:1100,moy:800,u:"kW"},    // Chaudière biomasse tertiaire
+    "BAT-TH-158":{min:100,max:180,moy:140,u:"m²"},     // PAC réversible air/air tertiaire (m² traités)
     "BAT-TH-162":{min:2400,max:4000,moy:3200,u:"kW"},  // Géo verticale
     "BAT-TH-163":{min:1800,max:3200,moy:2500,u:"kW"},  // Géo horizontale
     "BAT-TH-164":{min:2200,max:3600,moy:2900,u:"kW"},  // Géo nappe
