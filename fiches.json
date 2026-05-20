@@ -4721,7 +4721,31 @@
     "gisements": [
       "chauffage_batiment",
       "regulation_gtb"
-    ]
+    ],
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-109",
@@ -4828,7 +4852,31 @@
     ],
     "note": "[V26:ajouté]",
     "surface_ratio": 0.02,
-    "surface_ratio_note": "m² opération = surface_ratio × surface bâtiment (V37 FIX)"
+    "surface_ratio_note": "m² opération = surface_ratio × surface bâtiment (V37 FIX)",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-112",
@@ -5091,7 +5139,31 @@
       "regulation_gtb"
     ],
     "cofrac": true,
-    "note": "vA62.6 01/01/2025"
+    "note": "vA62.6 01/01/2025",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-121",
@@ -5244,7 +5316,31 @@
     "gisements": [
       "ventilation"
     ],
-    "note": "vA32-2 01/04/2020"
+    "note": "vA32-2 01/04/2020",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-126",
@@ -5280,7 +5376,31 @@
     ],
     "note": "vA32-2 01/04/2020",
     "surface_ratio": 1.0,
-    "surface_ratio_note": "V37 audit fix — surface opération"
+    "surface_ratio_note": "V37 audit fix — surface opération",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-127",
@@ -5314,7 +5434,31 @@
     "gisements": [
       "chauffage_batiment"
     ],
-    "note": "vA79-5 01/01/2026"
+    "note": "vA79-5 01/01/2026",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-134",
@@ -5349,7 +5493,31 @@
       "froid",
       "regulation_gtb"
     ],
-    "zero_euro": true
+    "zero_euro": true,
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-135",
@@ -5421,12 +5589,34 @@
           "application": "Climatisation hors datacenter",
           "puissance": 50
         }
+      },
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
       }
     },
     "table_cumac": {
       "Climatisation hors datacenter": 2700,
       "Climatisation datacenter": 2500,
       "Réfrigération": 4700
+    },
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
     }
   },
   {
@@ -5468,7 +5658,31 @@
     ],
     "zero_euro": true,
     "cofrac": true,
-    "note": "vA35-3 01/10/2020"
+    "note": "vA35-3 01/10/2020",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-142",
@@ -5504,7 +5718,31 @@
     ],
     "zero_euro": true,
     "cofrac": true,
-    "note": "vA71-4 01/08/2025"
+    "note": "vA71-4 01/08/2025",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-143",
@@ -5537,7 +5775,31 @@
     "categorie": "Thermique",
     "gisements": [
       "chauffage_batiment"
-    ]
+    ],
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-145",
@@ -5576,7 +5838,31 @@
       "froid",
       "regulation_gtb"
     ],
-    "zero_euro": true
+    "zero_euro": true,
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-153",
@@ -5630,9 +5916,31 @@
           "delta_t": 2,
           "puissance": 100
         }
+      },
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
       }
     },
-    "formule": "1500 * delta_t * puissance"
+    "formule": "1500 * delta_t * puissance",
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    }
   },
   {
     "ref": "BAT-TH-154",
@@ -5665,7 +5973,31 @@
     "categorie": "Thermique",
     "gisements": [
       "ecs"
-    ]
+    ],
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-156",
@@ -5698,7 +6030,31 @@
     "categorie": "Thermique",
     "gisements": [
       "froid"
-    ]
+    ],
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-157",
@@ -5750,6 +6106,19 @@
         "test_params": {
           "puissance": 100
         }
+      },
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
       }
     },
     "table_cumac": {},
@@ -5766,7 +6135,16 @@
         "a": 3.4,
         "b": 0
       }
-    ]
+    ],
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
+    }
   },
   {
     "ref": "BAT-TH-158",
@@ -5917,11 +6295,33 @@
         "test_params": {
           "application": "800 kW ≤ P ≤ 1 200 kW"
         }
+      },
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 0.6,
+          "enseignement": 0.6,
+          "commerces": 0.6,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.2,
+          "sport": 0.6,
+          "autres": 0.6
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
       }
     },
     "table_cumac": {
       "800 kW ≤ P ≤ 1 200 kW": 167800,
       "1 200 kW < P": 279600
+    },
+    "sect_factors": {
+      "bureaux": 0.6,
+      "enseignement": 0.6,
+      "commerces": 0.6,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.2,
+      "sport": 0.6,
+      "autres": 0.6
     }
   },
   {
@@ -5958,7 +6358,31 @@
       "ecs"
     ],
     "p6_bonus": 5,
-    "note": "vA75-1 P6 01/01/2026"
+    "note": "vA75-1 P6 01/01/2026",
+    "sect_factors": {
+      "bureaux": 1.2,
+      "enseignement": 0.8,
+      "commerces": 0.9,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.1,
+      "sport": 0.7,
+      "autres": 0.7
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 1.2,
+          "enseignement": 0.8,
+          "commerces": 0.9,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.1,
+          "sport": 0.7,
+          "autres": 0.7
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-163",
@@ -5994,7 +6418,31 @@
       "ecs"
     ],
     "p6_bonus": 3,
-    "note": "vA75-1 P6 01/01/2026 remplace TH-113"
+    "note": "vA75-1 P6 01/01/2026 remplace TH-113",
+    "sect_factors": {
+      "bureaux": 1.2,
+      "enseignement": 0.8,
+      "commerces": 0.9,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.1,
+      "sport": 0.7,
+      "autres": 0.7
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 1.2,
+          "enseignement": 0.8,
+          "commerces": 0.9,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.1,
+          "sport": 0.7,
+          "autres": 0.7
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "BAT-TH-164",
@@ -6030,7 +6478,31 @@
       "ecs"
     ],
     "p6_bonus": 4,
-    "note": "vA75-1 P6 01/01/2026"
+    "note": "vA75-1 P6 01/01/2026",
+    "sect_factors": {
+      "bureaux": 1.2,
+      "enseignement": 0.8,
+      "commerces": 0.9,
+      "hotellerie_restauration": 0.7,
+      "sante": 1.1,
+      "sport": 0.7,
+      "autres": 0.7
+    },
+    "audit": {
+      "v41_6_sect_factors_imported": {
+        "source": "V1 catalog FICHES_CATALOGUE (oracle.html)",
+        "factors": {
+          "bureaux": 1.2,
+          "enseignement": 0.8,
+          "commerces": 0.9,
+          "hotellerie_restauration": 0.7,
+          "sante": 1.1,
+          "sport": 0.7,
+          "autres": 0.7
+        },
+        "note": "Auto-importé V41.6 — alignement backend/V1 catalog"
+      }
+    }
   },
   {
     "ref": "IND-BA-110",

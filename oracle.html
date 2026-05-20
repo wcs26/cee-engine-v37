@@ -3490,18 +3490,24 @@
     "BAT-EN-105":{min:25,max:50,moy:37,u:"m²"},       // Toitures terrasses
     "BAT-EN-106":{min:90,max:160,moy:125,u:"m²"},     // ITE murs tertiaire
     "BAT-EN-107":{min:100,max:180,moy:140,u:"m²"},    // ITI murs tertiaire
-    "BAT-EN-108":{min:450,max:750,moy:600,u:"m²"},    // Fenêtres alu
+    // V41.6 FIX : BAT-EN-108 était étiquetée "Fenêtres alu" 600€/m² alors que c'est
+    // l'isolation plancher tertiaire DOM (unit m²). Coût réel ~30-55 €/m² (+~30% vs métropole).
+    "BAT-EN-108":{min:30,max:55,moy:42,u:"m²"},        // Isolation plancher tertiaire DOM
     "BAT-EN-109":{min:280,max:450,moy:365,u:"m²"},    // Vitrage seul
     "BAT-EN-110":{min:800,max:1400,moy:1100,u:"m²"},  // Pariétodynamique
     "BAT-EN-111":{min:15,max:30,moy:22,u:"m²"},       // Réflectifs toiture DOM
     // === TERTIAIRE THERMIQUE ===
     "BAT-TH-102":{min:100,max:180,moy:140,u:"kW"},    // Chaudière condensation
-    "BAT-TH-103":{min:85,max:145,moy:115,u:"kW"},     // Chaudière BT
+    // V41.6 FIX : BAT-TH-103 = Plancher chauffant BT (unit "m²"), pas Chaudière BT (kW).
+    "BAT-TH-103":{min:80,max:150,moy:110,u:"m²"},     // Plancher chauffant basse température
     "BAT-TH-104":{min:12,max:22,moy:17,u:"m",abroge:"2025-08-01",note:"71e arrêté CEE — label code 'Calorifuge' ERRONÉ : BAT-TH-104 = robinet thermostatique. Le calorifuge = BAT-TH-146 (aussi abrogée 1/8/2025)."},
-    "BAT-TH-105":{min:300,max:550,moy:425,u:"kW"},    // Chaudière biomasse
+    // V41.6 FIX : BAT-TH-105 = Radiateur BT (unit "unité"), pas Chaudière biomasse (kW).
+    "BAT-TH-105":{min:150,max:400,moy:250,u:"unité"}, // Radiateur basse température
     "BAT-TH-106":{min:250,max:450,moy:350,u:"kW"},    // Chaudière biomasse >200kW
-    "BAT-TH-108":{min:700,max:1200,moy:950,u:"kW"},   // PAC air/air
-    "BAT-TH-109":{min:600,max:1050,moy:825,u:"kW"},   // PAC air/air gainable
+    // V41.6 FIX : BAT-TH-108 = Régulation programmation (unit "unité"=installation), pas PAC.
+    "BAT-TH-108":{min:200,max:1500,moy:600,u:"unité"}, // Régulation programmation intermittence
+    // V41.6 FIX : BAT-TH-109 = Optimiseur relance (unit "logement"), pas PAC gainable (kW).
+    "BAT-TH-109":{min:50,max:200,moy:120,u:"logement"}, // Optimiseur relance chauffage collectif
     "BAT-TH-110":{min:550,max:900,moy:725,u:"kW"},    // Récupérateur chaleur
     "BAT-TH-111":{min:1000,max:1800,moy:1400,u:"m²"}, // CES collectif
     "BAT-TH-112":{min:120,max:220,moy:170,u:"kW"},    // VEV moteur
@@ -3553,7 +3559,8 @@
     "IND-UT-110":{min:160,max:280,moy:220,u:"kW"},     // Moteur IE3/IE4
     "IND-UT-111":{min:250,max:420,moy:335,u:"kW"},     // VEV industriel
     "IND-UT-112":{min:8000,max:25000,moy:16500,u:"site"}, // Mesurage indic
-    "IND-UT-114":{min:340,max:580,moy:460,u:"kW"},     // Chaudière bio ind
+    // V41.6 FIX : commentaire erroné — c'est le Moto-variateur synchrone industriel (coût ok).
+    "IND-UT-114":{min:340,max:580,moy:460,u:"kW"},     // Moto-variateur synchrone industriel
     "IND-UT-117":{min:70,max:130,moy:100,u:"kW"},      // Récup chaleur eaux
     "IND-UT-118":{min:200,max:380,moy:290,u:"kW"},     // Brûleur récup
     "IND-UT-134":{min:120,max:220,moy:170,u:"kW"},     // Mesurage perf
