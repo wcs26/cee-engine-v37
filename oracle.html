@@ -15818,7 +15818,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   .v2-btn-primary:hover { background: #C8FF6B; border-color: #C8FF6B; box-shadow: 0 8px 24px -8px rgba(200,255,107,.4); }
 
-  /* Toggle V1↔V2 flottant */
+  /* Toggle V1↔V2 flottant — V42.0 : masqué par défaut, visible via ?debug=1 ou Ctrl+Shift+L */
   .v2-toggle-fab {
     position: fixed; bottom: 24px; right: 24px;
     background: rgba(200,255,107,.12); color: #C8FF6B;
@@ -15828,8 +15828,10 @@ document.addEventListener('DOMContentLoaded', function() {
     cursor: pointer; z-index: 9999;
     box-shadow: 0 8px 32px -8px rgba(0,0,0,.4), 0 0 24px rgba(200,255,107,.18);
     transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    display: none; /* V42.0 — caché par défaut, V2 est l'outil unique */
   }
   .v2-toggle-fab:hover { transform: translateY(-2px) scale(1.03); }
+  body.show-legacy-toggle .v2-toggle-fab { display: block; }
 
   /* Status / loading */
   .v2-loading { color: rgba(245,245,247,.5); font-size: 13px; padding: 20px; text-align: center; }
@@ -16550,19 +16552,32 @@ window.V2 = {
 
   init() {
     var qs = new URLSearchParams(location.search);
-    var fromUrl = qs.get('v') === '2';
+    // V42.0 — V2 est désormais le DEFAULT (outil unifié, plus de coexistence V1/V2).
+    // L'ancienne V1 wizard 5 étapes reste accessible uniquement via ?legacy=1
+    // pour debug/comparaison. Le toggle 🚀 Mode Clair est masqué par défaut
+    // (visible via ?debug=1 ou raccourci Ctrl+Shift+L).
+    var legacyMode = qs.get('legacy') === '1';
     var fromStorage = false;
     try { fromStorage = localStorage.getItem('cee_v2') === '1'; } catch(e) {}
-    if (fromUrl || fromStorage) this.activate();
+    // Activate V2 par défaut sauf si ?legacy=1 explicitement demandé
+    if (!legacyMode) this.activate();
+    else if (fromStorage) this.activate(); // compat ancien storage
     // V41.0 — restaurer Mode Vendeur ↔ Mode Complet depuis localStorage (défaut: full)
     var uiMode = 'full';
     try { uiMode = localStorage.getItem('cee_ui_mode') || 'full'; } catch(e) {}
     this.setUiMode(uiMode === 'vendor' ? 'vendor' : 'full');
-    // V41.0 — raccourci clavier Cmd/Ctrl + M pour basculer le mode
+    // V41.0 — raccourci Cmd/Ctrl + M : bascule Mode Vendeur ↔ Complet
+    // V42.0 — raccourci Ctrl+Shift+L : révèle le toggle V1 legacy (debug only)
+    if (qs.get('debug') === '1') document.body.classList.add('show-legacy-toggle');
     document.addEventListener('keydown', function(e) {
       if ((e.metaKey || e.ctrlKey) && e.key && e.key.toLowerCase() === 'm') {
         e.preventDefault();
         V2.toggleUiMode();
+      }
+      if (e.ctrlKey && e.shiftKey && e.key && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        document.body.classList.toggle('show-legacy-toggle');
+        console.log('[V42.0] Toggle V1 legacy fab visibility :', document.body.classList.contains('show-legacy-toggle'));
       }
     });
   },
