@@ -16019,6 +16019,22 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-bottom: 8px;
   }
 
+  /* V42.6.1 — Badges sources officielles (P1 Identifier — rassurance pro) */
+  .v2-badge-source {
+    display: inline-flex; align-items: center;
+    padding: 5px 11px; border-radius: 99px;
+    font-size: 11px; color: rgba(245,245,247,.78);
+    background: rgba(110,146,255,.07);
+    border: 1px solid rgba(110,146,255,.22);
+    font-weight: 500; letter-spacing: 0.2px;
+    transition: all .2s;
+  }
+  .v2-badge-source:hover {
+    background: rgba(110,146,255,.13);
+    border-color: rgba(110,146,255,.35);
+    color: rgba(245,245,247,.95);
+  }
+
   /* V42.4 — Indicateur de progression Mode Vendeur (8 étapes) */
   .v2-vendor-progress {
     display: none;
@@ -16319,8 +16335,20 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="v2-page" id="v2p1">
       <!-- V37.4.20 — Onboarding ludique V2 (slot rempli au render par _renderOnboarding) -->
       <div id="v2_onboarding_slot"></div>
-      <h1 class="v2-page-title">Qui est cette entreprise ?</h1>
-      <p class="v2-page-sub">Un SIRET. On enrichit en parallèle Sirene, Cadastre IGN, RNB, BDNB, DPE et la zone climatique. Tu valides en 30 secondes.</p>
+      <h1 class="v2-page-title">Identifions votre entreprise</h1>
+      <p class="v2-page-sub">Un seul numéro SIRET suffit. En quelques secondes, nous croisons les sources publiques officielles de l'État pour pré-qualifier votre dossier CEE avec rigueur.</p>
+
+      <!-- V42.6.1 — Carte de légitimité : sources officielles croisées (rassurance pro client) -->
+      <div class="v2-card" style="margin-bottom: 14px; padding: 14px 18px;">
+        <div style="font-size:11px;color:rgba(245,245,247,.55);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;font-weight:600;">Sources officielles croisées en temps réel</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="v2-badge-source">🏛 Sirene INSEE</span>
+          <span class="v2-badge-source">🗺 Cadastre IGN</span>
+          <span class="v2-badge-source">📍 BDNB Bâtiments</span>
+          <span class="v2-badge-source">📊 DPE ADEME</span>
+          <span class="v2-badge-source">🌡 Zone climatique H1/H2/H3</span>
+        </div>
+      </div>
 
       <div class="v2-card">
         <div class="v2-card-title">📋 Identification</div>
