@@ -16330,25 +16330,26 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
-    <!-- ═══ P5 — PRIMES 0€ (couverture ≥ 90 %, projet auto-financé) ═══ -->
+    <!-- ═══ P5 — PRIMES 0€ + (V42.3 Mode Vendeur) Pack final unifié 0€ + recommandées ═══ -->
     <div class="v2-page" id="v2p5">
-      <h1 class="v2-page-title">🎁 Primes à 0&nbsp;€ reste à charge</h1>
-      <p class="v2-page-sub">Fiches CEE dont la prime couvre 90&nbsp;% à 100&nbsp;% (voire au-delà) du coût travaux estimé. Projet auto-financé — argument commercial maximum.</p>
+      <h1 class="v2-page-title">🎁 Votre pack CEE — toutes les opportunités</h1>
+      <p class="v2-page-sub">Fiches CEE éligibles à votre site, classées par couverture. Les <strong style="color:#C8FF6B;">opérations à 0&nbsp;€</strong> (financement intégral) en premier, puis les opportunités complémentaires (couverture 50-90&nbsp;%) en mode Vendeur. En mode Complet : P6 reste accessible séparément.</p>
       <div id="v2p5content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(4)">← Retour Analyse</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(6)">Étape 6 — Recommandées →</button>
+        <button class="v2-btn bo-only" onclick="V2.go(6)">P6 Recommandées (BO) →</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(7)">Étape suivante — Économies →</button>
       </div>
     </div>
 
-    <!-- ═══ P6 — PRIMES RECOMMANDÉES / OBLIGATOIRES (utiles + BACS/DDADUE) ═══ -->
+    <!-- ═══ P6 — PRIMES RECOMMANDÉES (Mode Complet uniquement, redondante avec P5 Vendeur) ═══ -->
     <div class="v2-page" id="v2p6">
       <h1 class="v2-page-title">📋 Primes recommandées &amp; obligations réglementaires</h1>
-      <p class="v2-page-sub">Autres fiches éligibles (couverture &lt; 90&nbsp;%) qui restent rentables, plus les obligations applicables : décret BACS, OPERAT, audit DDADUE.</p>
+      <p class="v2-page-sub">Vue détaillée des fiches éligibles à couverture partielle (&lt; 90&nbsp;%) + obligations applicables : décret BACS, OPERAT, audit DDADUE. Cette vue est intégrée à P5 en Mode Vendeur — accédez-y séparément en Mode Complet pour l'analyse approfondie.</p>
       <div id="v2p6content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(5)">← Retour Primes 0€</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(7)">Étape 7 — Économies →</button>
+        <button class="v2-btn" onclick="V2.go(5)">← Retour Pack</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(7)">Étape suivante — Économies →</button>
       </div>
     </div>
 
@@ -18993,6 +18994,52 @@ window.V2 = {
         html += '</div></div>';
       });
     }
+
+    // V42.3 — Mode Vendeur : pack unifié = 0€ + recommandées (50-90% couv) ensemble
+    // P6 reste accessible en Mode Complet pour la vue isolée des recommandées seules.
+    var isVendor = document.body.classList.contains('ui-mode-vendor');
+    if (isVendor && typeof window.getFullCalc === 'function' && typeof FICHES !== 'undefined') {
+      var zoneV = (this.state.profil && this.state.profil.zone) || 'H2';
+      var eTypeV = (this.state.answers && this.state.answers.energie) || '';
+      var fichesReco = [];
+      this.state.pack.forEach(function(packItem) {
+        var refV = packItem.fiche || packItem.ref;
+        var fvV = FICHES.find(function(f) { return f.ref === refV; });
+        if (!fvV) return;
+        try {
+          var calcV = window.getFullCalc(fvV, 1, zoneV, eTypeV);
+          if (calcV.coverage >= 50 && calcV.coverage < 90 && !fvV.zeroEuro) {
+            fichesReco.push({ref: refV, fiche: fvV, calc: calcV});
+          }
+        } catch (_e) {}
+      });
+      fichesReco.sort(function(a,b){ return (b.calc.primeNette||0) - (a.calc.primeNette||0); });
+      if (fichesReco.length > 0) {
+        html += '<div class="v2-card" style="margin-top:20px;background:linear-gradient(180deg,rgba(110,146,255,.08),rgba(110,146,255,.02));border-color:rgba(110,146,255,.25);">';
+        html += '<div class="v2-card-title" style="color:#6E92FF;">📋 Opportunités complémentaires — financement partiel ' + fichesReco.length + '</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:14px;line-height:1.6;">Ces opérations ont une prime CEE qui couvre 50% à 90% du coût travaux. Reste à charge modéré, rentables sur 2-5 ans grâce aux économies de facture.</div>';
+        fichesReco.forEach(function(item) {
+          var refR = item.ref, fR = item.fiche, calcR = item.calc;
+          var racR = Math.max(0, calcR.costTTC - calcR.primeNette);
+          html += '<div class="v2-fiche" onclick="V2.toggleFiche(\'' + refR + '\')" style="border-left:3px solid #6E92FF;">';
+          html += '<div class="v2-fiche-check"></div>';
+          html += V2._pieSVG(calcR.coverage, '#6E92FF');
+          html += '<div style="flex:1;">';
+          html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;">';
+          html += '<span class="v2-fiche-ref">' + refR + '</span>';
+          html += '<span style="padding:2px 8px;background:rgba(110,146,255,.15);color:#6E92FF;border:1px solid rgba(110,146,255,.35);border-radius:4px;font-size:10px;font-weight:700;font-family:JetBrains Mono,monospace;">COUV ' + Math.round(calcR.coverage) + '&nbsp;%</span>';
+          html += '<span style="font-size:14px;font-weight:500;flex:1;">' + (fR.label || fR.ref) + '</span>';
+          html += '<span class="v2-fiche-prime" title="Prime nette client">' + Math.round(calcR.primeNette).toLocaleString('fr-FR') + ' €</span>';
+          html += '</div>';
+          html += '<div style="font-size:11px;color:rgba(245,245,247,.55);font-family:JetBrains Mono,monospace;">';
+          html += 'Coût TTC ' + Math.round(calcR.costTTC).toLocaleString('fr-FR') + ' € · Reste à charge ' + Math.round(racR).toLocaleString('fr-FR') + ' €';
+          html += ' · ' + Math.round(calcR.kwhcTotal/1000).toLocaleString('fr-FR') + ' MWhc';
+          html += '</div></div></div>';
+        });
+        html += '</div>';
+      }
+    }
+
     c.innerHTML = html;
     this._updateTotal();
   },
