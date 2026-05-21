@@ -16451,8 +16451,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- ═══ P9 — DOCUMENTS ═══ -->
     <div class="v2-page" id="v2p9">
-      <h1 class="v2-page-title">Documents pré-remplis</h1>
-      <p class="v2-page-sub">4 documents générés automatiquement depuis ton dossier : rapport gisement, devis, convention, attestation honneur.</p>
+      <h1 class="v2-page-title">Vos documents prêts à signature</h1>
+      <p class="v2-page-sub">Quatre documents générés automatiquement à partir de votre dossier : rapport de gisement, devis CEE, convention de partenariat, attestation sur l'honneur. Pré-remplis avec rigueur, conformes au PNCEE.</p>
       <div id="v2p9content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(8)">← Retour Conformité</button>
@@ -18289,8 +18289,8 @@ window.V2 = {
     var c = document.getElementById('v2p9content'); if (!c) return;
     var p = this.state.profil; if (!p) { c.innerHTML = '<div class="v2-error">Identifie d\'abord en P1.</div>'; return; }
     var html = '';
-    html += '<div class="v2-card"><div class="v2-card-title">📋 4 documents pré-remplis (à signer client)</div>';
-    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:18px;">Pré-remplissage automatique depuis SIRET + adresse + opérations sélectionnées en P5. Reste à signer en encre bleue, recto seul, tampon à côté de la signature (12 erreurs PNCEE G1T respectées).</p>';
+    html += '<div class="v2-card"><div class="v2-card-title">📋 Quatre documents à signer</div>';
+    html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:18px;">Pré-remplissage automatique depuis votre SIRET, votre adresse et les opérations retenues. À signer en encre bleue, sur le recto uniquement, avec votre tampon à côté de la signature — règles PNCEE respectées.</p>';
     html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">';
     var docs = [
       {type:'gisement', emoji:'📊', titre:'Rapport gisement', sub:'Synthèse opérations CEE éligibles + estimation prime'},
@@ -18311,18 +18311,19 @@ window.V2 = {
     html += '<div class="v2-card"><div class="v2-card-title">📤 Export & partage rapport</div>';
     html += '<p style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:14px;">Sors le rapport au format adapté au client (impression A4 propre, fichier Excel pour DAF, mail récap pour décideur).</p>';
     html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">';
+    // V42.6.4 — séparation user-facing vs BO (les 3 exports "V1" ont du jargon visible)
     var exports = [
-      {fn:'_printA4',     emoji:'🖨',  titre:'Imprimer A4',         sub:'Mise en page propre, fond blanc, sans menus'},
-      {fn:'_exportCSV_v2', emoji:'📊', titre:'Export CSV',           sub:'Tableur (séparateur ;) avec BOM UTF-8'},
-      {fn:'_exportXLS_v2', emoji:'📈', titre:'Export Excel',         sub:'.xls compatible Excel 2016+ (avis sécurité)'},
-      {fn:'_emailMailto', emoji:'📧', titre:'Envoyer par email',    sub:'mailto: avec sujet + résumé KPI pré-remplis'},
-      // V38.18 — Wire-up exports V1 dans V2
-      {fn:'_callV1ExportPDF', emoji:'📄', titre:'PDF complet (V1)', sub:'Rapport CEE PDF officiel V1 (jsPDF, audit trail PNCEE)'},
-      {fn:'_callV1ExportCSV', emoji:'📑', titre:'CSV V1 enrichi',    sub:'Export V1 avec tous KPI + slider PEC + commission + TVA'},
-      {fn:'_callV1Mandat',    emoji:'✍',  titre:'Convention mandat', sub:'PDF mandat de cession CEE pré-rempli SIRET'},
+      {fn:'_printA4',     emoji:'🖨',  titre:'Imprimer en A4',       sub:'Mise en page propre, fond blanc, sans menus', bo:false},
+      {fn:'_exportCSV_v2', emoji:'📊', titre:'Exporter en CSV',      sub:'Tableur (séparateur ;) avec BOM UTF-8', bo:false},
+      {fn:'_exportXLS_v2', emoji:'📈', titre:'Exporter en Excel',    sub:'.xls compatible Excel 2016+', bo:false},
+      {fn:'_emailMailto', emoji:'📧', titre:'Envoyer par email',    sub:'Sujet + résumé KPI pré-remplis', bo:false},
+      // V38.18 — Wire-up exports V1 (BO uniquement : jargon V1/jsPDF/audit trail)
+      {fn:'_callV1ExportPDF', emoji:'📄', titre:'PDF complet (V1 — BO)', sub:'Rapport CEE PDF officiel V1 (jsPDF, audit trail PNCEE)', bo:true},
+      {fn:'_callV1ExportCSV', emoji:'📑', titre:'CSV V1 enrichi (BO)',    sub:'Export V1 avec tous KPI + slider PEC + commission + TVA', bo:true},
+      {fn:'_callV1Mandat',    emoji:'✍',  titre:'Convention mandat (BO)', sub:'PDF mandat de cession CEE pré-rempli SIRET', bo:true},
     ];
     exports.forEach(e => {
-      html += '<button class="v2-btn no-print" style="height:auto;flex-direction:column;align-items:flex-start;padding:16px;text-align:left;gap:4px;" onclick="V2.' + e.fn + '()">';
+      html += '<button class="v2-btn no-print' + (e.bo ? ' bo-only' : '') + '" style="height:auto;flex-direction:column;align-items:flex-start;padding:16px;text-align:left;gap:4px;" onclick="V2.' + e.fn + '()">';
       html += '<span style="font-size:22px;">' + e.emoji + '</span>';
       html += '<span style="font-weight:600;font-size:14px;">' + e.titre + '</span>';
       html += '<span style="font-size:11px;color:rgba(245,245,247,.55);font-weight:400;line-height:1.4;">' + e.sub + '</span>';
