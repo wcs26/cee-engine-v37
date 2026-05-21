@@ -16427,10 +16427,10 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
-    <!-- ═══ P7 — ÉCONOMIES (KPI + projections, calculs V1) ═══ -->
+    <!-- ═══ P7 — ÉCONOMIES (KPI + projections cumac × prime + facture × N ans) ═══ -->
     <div class="v2-page" id="v2p7">
-      <h1 class="v2-page-title">Valeur financière générée</h1>
-      <p class="v2-page-sub">KPI prime, économie annuelle, projections 5/10/15 ans. Calculs identiques au moteur V1.</p>
+      <h1 class="v2-page-title">Vos économies — projection chiffrée</h1>
+      <p class="v2-page-sub">La prime CEE versée à la signature, puis les économies sur votre facture énergétique année après année. Tout est calculé à partir des données ADEME officielles applicables à votre situation.</p>
       <div id="v2p7content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(6)">← Retour Recommandées</button>
@@ -21016,17 +21016,17 @@ window.V2 = {
     });
     if (factureAnnuelle > 0) ecoAn = Math.min(ecoAn, factureAnnuelle*0.80);
     var rac = gc.totalRac;
-    // Projections V1 : gain N ans = primes + ecoAn × N - rac
-    var gain5 = gc.totalPrimeBrute - rac + (ecoAn * 5);
-    var gain10 = gc.totalPrimeBrute - rac + (ecoAn * 10);
-    var gain15 = gc.totalPrimeBrute - rac + (ecoAn * 15);
+    // V42.6.2 — Projections : utiliser primeNette (cohérence V41.3 : c'est la valeur RÉELLEMENT versée au client)
+    var gain5 = gc.totalPrimeNette - rac + (ecoAn * 5);
+    var gain10 = gc.totalPrimeNette - rac + (ecoAn * 10);
+    var gain15 = gc.totalPrimeNette - rac + (ecoAn * 15);
     var roiMois = (rac > 0 && ecoAn > 0) ? Math.round(rac / (ecoAn / 12)) : 0;
 
     var html = '';
-    // KPI principaux (vrais nombres V1)
+    // KPI principaux — V42.6.2 : primeNette en valeur principale (cohérence V41.3)
     html += '<div class="v2-kpi-grid">';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime brute (V1)</div></div>';
-    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (gc.totalKwhc/1000).toFixed(0) + ' k</div><div class="v2-kpi-label">kWh cumac</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" title="Prime CEE versée nette client (après commission opérateur)">' + Math.round(gc.totalPrimeNette).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime CEE versée</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (gc.totalKwhc/1000).toFixed(0) + ' k</div><div class="v2-kpi-label">MWh cumac volume</div></div>';
     html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(gc.totalCostTTC).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Coût travaux TTC</div></div>';
     html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:' + gc.globalCovLevel.color + ';">' + gc.totalCoverage.toFixed(0) + '%</div><div class="v2-kpi-label">Couverture · ' + gc.globalCovLevel.label.replace(/[🚀✓◐◔✗]\s*/g,'') + '</div></div>';
     html += '</div>';
@@ -21049,7 +21049,7 @@ window.V2 = {
     html += '<div class="v2-card"><div class="v2-card-title">📈 Projection financière 5 / 10 / 15 ans</div>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
     html += '<tbody>';
-    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Prime brute</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</td></tr>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Prime CEE versée client</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;" title="Prime nette versée après commission opérateur">' + Math.round(gc.totalPrimeNette).toLocaleString('fr-FR') + ' €</td></tr>';
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Coût travaux TTC</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(gc.totalCostTTC).toLocaleString('fr-FR') + ' €</td></tr>';
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Reste à charge</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;' + (rac<=0?'color:#C8FF6B;':'') + '">' + (rac<=0 ? '0 € (financé)' : Math.round(rac).toLocaleString('fr-FR') + ' €') + '</td></tr>';
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);"><td style="padding:10px 8px;color:rgba(245,245,247,.7);">Économie annuelle estimée</td><td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + (ecoAn>0 ? '+' + Math.round(ecoAn).toLocaleString('fr-FR') + ' €/an' : '— renseigner facture') + '</td></tr>';
@@ -21070,18 +21070,19 @@ window.V2 = {
       html += '<td style="padding:10px 8px;font-family:JetBrains Mono,monospace;color:#58a6ff;font-weight:600;">' + d.fiche.ref + '</td>';
       html += '<td style="padding:10px 8px;">' + (d.fiche.label || '').slice(0, 50) + '</td>';
       html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + d.qty + ' ' + (d.fiche.unit || '') + '</td>';
-      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(d.calc.primeBrute).toLocaleString('fr-FR') + ' €</td>';
+      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;" title="Prime nette versée client (cohérence V41.3)">' + Math.round(d.calc.primeNette).toLocaleString('fr-FR') + ' €</td>';
       html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;">' + Math.round(d.calc.costTTC).toLocaleString('fr-FR') + ' €</td>';
-      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:600;color:' + covColor + ';">' + cov.toFixed(0) + '%</td>';
+      html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:600;color:' + covColor + ';" title="Couverture = prime nette / coût TTC">' + cov.toFixed(0) + '%</td>';
       html += '</tr>';
     });
     html += '</tbody></table></div>';
 
     // V38.19 — Détail commercial avec slider PEC réel
+    // V42.6.2 — masqué en Mode Vendeur (.bo-only) : c'est de l'info interne BO, le client voit déjà la prime nette dans les KPI
     var taux = (typeof STATE !== 'undefined' && STATE.tauxPriseEnCharge != null) ? STATE.tauxPriseEnCharge : 90;
     var commPct = 100 - taux;
     var commColor = commPct === 0 ? '#C8FF6B' : commPct < 0 ? '#ff7b72' : '#FFC92E';
-    html += '<div class="v2-card"><div class="v2-card-title">💼 Détail commercial — Slider Part client (modifiable ⚙ Précision Q)</div>';
+    html += '<div class="v2-card bo-only"><div class="v2-card-title">💼 Détail commercial (BO) — Slider Part client (modifiable ⚙ Précision Q)</div>';
     html += '<div class="v2-field"><div class="v2-field-label">Prime brute marché (obligé)</div><div class="v2-field-value mono" style="color:#C8FF6B;">' + Math.round(gc.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
     html += '<div class="v2-field"><div class="v2-field-label">Part client (slider)</div><div class="v2-field-value mono" style="color:#58a6ff;">' + taux + ' %</div></div>';
     html += '<div class="v2-field"><div class="v2-field-label">Commission Jimmy</div><div class="v2-field-value mono" style="color:' + commColor + ';">' + commPct + ' %' + (commPct < 0 ? ' (BONUS NÉGO)' : '') + '</div></div>';
