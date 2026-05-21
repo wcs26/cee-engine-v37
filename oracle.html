@@ -16019,6 +16019,45 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-bottom: 8px;
   }
 
+  /* V42.4 — Indicateur de progression Mode Vendeur (8 étapes) */
+  .v2-vendor-progress {
+    display: none;
+    margin: 8px auto 16px;
+    padding: 12px 18px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(200,255,107,0.18);
+    border-radius: 10px;
+    max-width: 1200px;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+  }
+  body.ui-mode-vendor .v2-vendor-progress { display: flex; }
+  .v2-vendor-progress-step {
+    color: rgba(200,255,107,0.95);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .v2-vendor-progress-label {
+    color: rgba(245,245,247,0.88);
+    font-weight: 600;
+    flex: 1;
+  }
+  .v2-vendor-progress-bar {
+    flex: 0 0 240px;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .v2-vendor-progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #C8FF6B, #3FB950);
+    transition: width 0.35s cubic-bezier(.34,1.56,.64,1);
+  }
+
   /* Bandeau Mode Vendeur (info subtile en haut) */
   .ui-mode-banner {
     display: none;
@@ -16155,6 +16194,13 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="v2-phase-row r4">
         <div class="v2-step placeholder" data-page="17" onclick="V2.go(17)"><div class="v2-step-num">17</div><div class="v2-step-label">📅 Suivi 9 ans + COFRAC</div></div>
       </div>
+    </div>
+
+    <!-- V42.4 — Indicateur de progression Mode Vendeur (8 étapes du flow visio client) -->
+    <div class="v2-vendor-progress" id="v2VendorProgress">
+      <span class="v2-vendor-progress-step" id="v2VendorProgressStep">Étape 1/8</span>
+      <span class="v2-vendor-progress-label" id="v2VendorProgressLabel">Setup Dossier</span>
+      <div class="v2-vendor-progress-bar"><div class="v2-vendor-progress-bar-fill" id="v2VendorProgressFill" style="width:12.5%;"></div></div>
     </div>
 
     <!-- V38.24 CHANTIER 2 — STICKY BAR GLOBALE V2 (toujours visible : KPI live) -->
@@ -16589,6 +16635,31 @@ window.V2 = {
     else this.activate();
   },
 
+  // V42.4 — Indicateur de progression Mode Vendeur (8 étapes du flow visio)
+  _updateVendorProgress(page) {
+    var VENDOR_FLOW = [
+      {page: 20, label: 'Setup Dossier (préparation interne)'},
+      {page: 21, label: 'Déroulement projet CEE'},
+      {page: 1,  label: 'Identifier le prospect'},
+      {page: 2,  label: 'Affiner les questions précises'},
+      {page: 5,  label: 'Pack final — vos opportunités'},
+      {page: 7,  label: 'Économies sur facture énergétique'},
+      {page: 9,  label: 'Documents pour signature'},
+      {page: 10, label: 'Rapport final + projection'},
+    ];
+    var idx = VENDOR_FLOW.findIndex(function(s){ return s.page === page; });
+    var progEl = document.getElementById('v2VendorProgress');
+    if (!progEl) return;
+    if (idx === -1) { progEl.style.display = 'none'; return; }
+    progEl.style.display = ''; // CSS prend le relais selon body.ui-mode-vendor
+    var stepEl = document.getElementById('v2VendorProgressStep');
+    var labelEl = document.getElementById('v2VendorProgressLabel');
+    var fillEl = document.getElementById('v2VendorProgressFill');
+    if (stepEl) stepEl.textContent = 'Étape ' + (idx+1) + '/' + VENDOR_FLOW.length;
+    if (labelEl) labelEl.textContent = VENDOR_FLOW[idx].label;
+    if (fillEl) fillEl.style.width = Math.round((idx+1)/VENDOR_FLOW.length*100) + '%';
+  },
+
   // V41.0 — Mode Vendeur ↔ Mode Complet (purement visuel, backend identique)
   setUiMode(mode) {
     var m = (mode === 'vendor') ? 'vendor' : 'full';
@@ -16718,6 +16789,8 @@ window.V2 = {
       });
       this.state.currentPage = page;
       window.scrollTo({top: 0, behavior: 'smooth'});
+      // V42.4 — mise à jour de l'indicateur de progression Mode Vendeur (8 étapes)
+      this._updateVendorProgress(page);
       // V37.4.5a — Headlines ludiques proactives (réutilise V1 si dispo)
       try { if (typeof window.updateInsightHeadline === 'function') window.updateInsightHeadline(); } catch (_e) {}
       // V37.4.20 — Onboarding ludique sur P1 (premier visit uniquement, dismissable)
