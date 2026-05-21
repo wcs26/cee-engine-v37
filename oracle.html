@@ -16462,8 +16462,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- ═══ P10 — RAPPORT (PDF + partage final) ═══ -->
     <div class="v2-page" id="v2p10">
-      <h1 class="v2-page-title">Rapport final</h1>
-      <p class="v2-page-sub">PDF 5 pages (calculs V1) + lien partageable au client (token signé HMAC, expire 30j).</p>
+      <h1 class="v2-page-title">Synthèse de votre projet CEE</h1>
+      <p class="v2-page-sub">Récapitulatif complet de votre opportunité de rénovation énergétique : montant exact de la prime versée, économies projetées, documents prêts à signature. Téléchargeable en PDF ou partageable via un lien sécurisé.</p>
       <div id="v2p10content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(9)">← Retour Documents</button>
@@ -18431,8 +18431,9 @@ window.V2 = {
     var html = '';
 
     // V37.4.6 — Bandeau veille réglementaire P6 (2026-2030)
-    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(88,166,255,.06),rgba(88,166,255,.015));border-color:rgba(88,166,255,.3);">';
-    html += '<div class="v2-card-title">📜 Référentiel réglementaire applicable au rapport</div>';
+    // V42.6.3 — .bo-only : technique vendeur en prépa, pas pour le client en visio
+    html += '<div class="v2-card bo-only" style="background:linear-gradient(180deg,rgba(88,166,255,.06),rgba(88,166,255,.015));border-color:rgba(88,166,255,.3);">';
+    html += '<div class="v2-card-title">📜 Référentiel réglementaire applicable au rapport (BO)</div>';
     html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;font-size:12px;line-height:1.6;color:rgba(245,245,247,.7);">';
     html += '<div><strong style="color:#58a6ff;">Période CEE</strong><br>P6 — 1er janv 2026 → 31 déc 2030<br>Volume : 1 050 TWhc/an (+27 %)</div>';
     html += '<div><strong style="color:#58a6ff;">Décret cadre</strong><br>n° 2025-1048 du 11/10/2025<br>Arrêté du 21/12/2025</div>';
@@ -18448,8 +18449,9 @@ window.V2 = {
     html += '<div><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Bénéficiaire</div>';
     html += '<div style="font-size:18px;font-weight:600;margin:4px 0 2px;">' + (p.raisonSociale || '?') + '</div>';
     html += '<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:rgba(245,245,247,.6);">SIRET ' + (p.siret || '?') + ' · NAF ' + (p.ape || '?') + '</div></div>';
-    html += '<div style="text-align:right;"><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Prime totale CEE</div>';
-    html += '<div style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:38px;color:#C8FF6B;letter-spacing:-.04em;line-height:1;margin-top:4px;">' + Math.round(k.prime_totale || 0).toLocaleString('fr-FR') + ' €</div>';
+    html += '<div style="text-align:right;"><div style="font-size:11px;color:rgba(245,245,247,.55);text-transform:uppercase;letter-spacing:.05em;">Prime CEE versée</div>';
+    // V42.6.3 — Affiche prime nette client (cohérence V41.3 dans tout le flow)
+    html += '<div style="font-family:Fraunces,Georgia,serif;font-variation-settings:\'opsz\' 144;font-weight:380;font-size:38px;color:#C8FF6B;letter-spacing:-.04em;line-height:1;margin-top:4px;" title="Prime nette client (après commission opérateur)">' + Math.round(k.prime_nette || k.prime_totale || 0).toLocaleString('fr-FR') + ' €</div>';
     html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-top:4px;">' + (k.nb_selected || 0) + ' fiche' + ((k.nb_selected||0) > 1 ? 's' : '') + ' retenue' + ((k.nb_selected||0) > 1 ? 's' : '') + '</div></div>';
     html += '</div></div>';
 
@@ -18458,8 +18460,9 @@ window.V2 = {
     try { if (typeof window.getGlobalCalc === 'function') { this._syncToV1State(); gcLive = window.getGlobalCalc(); } } catch(_e) {}
     if (gcLive && gcLive.totalPrimeBrute > 0) {
       var taux = (typeof STATE !== 'undefined' && STATE.tauxPriseEnCharge != null) ? STATE.tauxPriseEnCharge : 90;
-      html += '<div class="v2-card" style="background:linear-gradient(135deg,rgba(255,201,46,.08),rgba(200,255,107,.04));border-color:rgba(255,201,46,.30);">';
-      html += '<div class="v2-card-title" style="color:#FFC92E;">💰 Chiffres LIVE (slider PEC ' + taux + '%, MPR inclus, audit trail)</div>';
+      // V42.6.3 — .bo-only : jargon technique (slider PEC, commission Jimmy, audit trail) pour le vendeur en prépa, pas pour le client
+      html += '<div class="v2-card bo-only" style="background:linear-gradient(135deg,rgba(255,201,46,.08),rgba(200,255,107,.04));border-color:rgba(255,201,46,.30);">';
+      html += '<div class="v2-card-title" style="color:#FFC92E;">💰 Chiffres LIVE (BO) — slider PEC ' + taux + '%, MPR inclus, audit trail</div>';
       html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;font-size:12px;">';
       html += '<div><div style="color:rgba(245,245,247,.55);font-size:10px;text-transform:uppercase;">Volume CEE</div><div style="font-family:Fraunces,Georgia,serif;font-size:22px;color:#58a6ff;">' + Math.round(gcLive.totalKwhc/1000).toLocaleString('fr-FR') + ' MWhc</div></div>';
       html += '<div><div style="color:rgba(245,245,247,.55);font-size:10px;text-transform:uppercase;">Prime brute marché</div><div style="font-family:Fraunces,Georgia,serif;font-size:22px;color:#C8FF6B;">' + Math.round(gcLive.totalPrimeBrute).toLocaleString('fr-FR') + ' €</div></div>';
@@ -18481,7 +18484,7 @@ window.V2 = {
       html += '</div>';
     }
     // Sommaire 5 pages PDF
-    html += '<div class="v2-card"><div class="v2-card-title">📄 PDF 5 pages (calculs V1 — autoTable)</div>';
+    html += '<div class="v2-card"><div class="v2-card-title">📄 Le rapport PDF en 5 pages</div>';
     var pages = [
       {n:'1', t:'Bilan général', s:'Identité + KPI prime/cumac/coût + verdict ROI + tableau opérations'},
       {n:'2', t:'Détail par opération', s:'Pour chaque fiche : ref, label, qty, prime, coût, couverture'},
@@ -18503,8 +18506,9 @@ window.V2 = {
     html += '<div id="v2p6shareLink" style="margin-top:14px;"></div>';
     html += '</div>';
     // V37.4.20 — Pont vers R4 Suivi 9 ans
-    html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(125,217,131,.06),rgba(125,217,131,.015));border-color:rgba(125,217,131,.25);">';
-    html += '<div class="v2-card-title" style="color:#7dd983;">📅 Et après la signature ?</div>';
+    // V42.6.3 — .bo-only : orientation interne vendeur, le client n'a pas besoin de naviguer vers le BO Suivi 9 ans
+    html += '<div class="v2-card bo-only" style="background:linear-gradient(180deg,rgba(125,217,131,.06),rgba(125,217,131,.015));border-color:rgba(125,217,131,.25);">';
+    html += '<div class="v2-card-title" style="color:#7dd983;">📅 Et après la signature ? (navigation BO)</div>';
     html += '<div style="font-size:13px;color:rgba(245,245,247,.7);margin-bottom:12px;line-height:1.55;">Une fois le client signé, le dossier passe en suivi 9 ans (conservation AH, alertes COFRAC, OPERAT annuel, audit DDADUE quadriennal). Toutes les obligations réglementaires sont consultables en P17.</div>';
     html += '<button class="v2-btn v2-btn-primary" onclick="V2.go(17)" style="background:linear-gradient(135deg,#7dd983,#39d353);color:#0a0a0b;border:none;">→ Suivi 9 ans P17</button>';
     html += '</div>';
