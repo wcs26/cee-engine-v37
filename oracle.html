@@ -16019,6 +16019,11 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-bottom: 8px;
   }
 
+  /* V42.7 — En Mode Vendeur, la sticky bar passe en 5 colonnes (Prime brute masquée) */
+  body.ui-mode-vendor #v2StickyBar > div {
+    grid-template-columns: repeat(5, 1fr) !important;
+  }
+
   /* V42.6.1 — Badges sources officielles (P1 Identifier — rassurance pro) */
   .v2-badge-source {
     display: inline-flex; align-items: center;
@@ -16222,11 +16227,12 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- V38.24 CHANTIER 2 — STICKY BAR GLOBALE V2 (toujours visible : KPI live) -->
     <div id="v2StickyBar" style="position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(13,17,23,.98),rgba(13,17,23,.92));backdrop-filter:blur(8px);border-bottom:1px solid rgba(88,166,255,.25);padding:8px 16px;display:none;">
       <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;font-size:11px;align-items:center;">
-        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Fiches</div><div id="v2sb_nb" style="font-weight:700;font-size:14px;">0</div></div>
-        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Volume MWhc</div><div id="v2sb_kwhc" style="font-weight:700;font-size:14px;color:#58a6ff;">0</div></div>
-        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Prime brute</div><div id="v2sb_pb" style="font-weight:700;font-size:14px;color:#C8FF6B;">0 €</div></div>
-        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Prime nette client</div><div id="v2sb_pn" style="font-weight:700;font-size:14px;color:#7dd983;">0 €</div></div>
-        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">RAC</div><div id="v2sb_rac" style="font-weight:700;font-size:14px;">0 €</div></div>
+        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Fiches retenues</div><div id="v2sb_nb" style="font-weight:700;font-size:14px;">0</div></div>
+        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Volume CEE</div><div id="v2sb_kwhc" style="font-weight:700;font-size:14px;color:#58a6ff;">0</div></div>
+        <!-- V42.7 — Prime brute = jargon technique, masquée en Mode Vendeur (bo-only) -->
+        <div class="bo-only"><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Prime brute (BO)</div><div id="v2sb_pb" style="font-weight:700;font-size:14px;color:#C8FF6B;">0 €</div></div>
+        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Prime versée client</div><div id="v2sb_pn" style="font-weight:700;font-size:14px;color:#7dd983;">0 €</div></div>
+        <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Reste à charge</div><div id="v2sb_rac" style="font-weight:700;font-size:14px;">0 €</div></div>
         <div><div style="color:rgba(245,245,247,.5);text-transform:uppercase;font-size:9px;">Couverture</div><div id="v2sb_cov" style="font-weight:700;font-size:14px;">0 %</div></div>
       </div>
     </div>
