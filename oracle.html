@@ -15922,12 +15922,13 @@ document.addEventListener('DOMContentLoaded', function() {
   body.ui-mode-vendor .ui-mode-toggle .pill { background: rgba(200,255,107,0.20); color: #C8FF6B; }
   @media (max-width: 900px) { .ui-mode-toggle { right: 12px; top: 60px; } }
 
-  /* Mode Vendeur — stepper réduit à 8 nœuds logiques */
+  /* Mode Vendeur — stepper réduit à 9 nœuds logiques (V42.8 : +P18 questions intelligentes) */
   body.ui-mode-vendor #v2Stepper .v2-step { display: none !important; }
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="20"],
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="21"],
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="1"],
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="2"],
+  body.ui-mode-vendor #v2Stepper .v2-step[data-page="18"],
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="5"],
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="7"],
   body.ui-mode-vendor #v2Stepper .v2-step[data-page="9"],
@@ -16379,12 +16380,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- ═══ P2 — ÉNERGIE (extrait de l'ancien P2 V37.4.2b) ═══ -->
     <div class="v2-page" id="v2p2">
-      <h1 class="v2-page-title">Profil énergétique</h1>
-      <p class="v2-page-sub">3 informations qui déterminent ton éligibilité Coup de Pouce P6 et le montant de la prime.</p>
+      <h1 class="v2-page-title">Premières questions générales</h1>
+      <p class="v2-page-sub">Quelques informations clés sur votre profil énergétique : énergie principale, facture annuelle, surface. Ce sont les déterminants du montant de votre prime.</p>
       <div id="v2p2content"></div>
       <div class="v2-nav">
         <button class="v2-btn" onclick="V2.go(1)">← Retour Identifier</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(3)">Étape 3 — Bâtiment →</button>
+        <button class="v2-btn bo-only" onclick="V2.go(3)">P3 Bâtiment (BO) →</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(18)">Précisons les informations techniques →</button>
       </div>
     </div>
 
@@ -16583,12 +16585,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- V38.13 — Page 18 : Précision Inputs (questions dynamiques par fiche cochée) -->
     <div class="v2-page" id="v2p18">
-      <h1 class="v2-page-title">⚙ Précision : questions par fiche</h1>
-      <p class="v2-page-sub">Pour chaque fiche du pack, renseigne les inputs critiques (hauteur, P_kW, classe...) → calcul officiel exact PDF ATEE au lieu de fallback estimation.</p>
+      <h1 class="v2-page-title">Précisons les informations techniques</h1>
+      <p class="v2-page-sub">Ces quelques précisions permettent de calculer votre prime CEE au centime près selon les formules officielles ADEME. Hauteur sous plafond, puissance chauffage, type d'équipements — chaque donnée renseignée affine le montant exact qui vous sera versé.</p>
       <div id="v2p18content"></div>
       <div class="v2-nav">
-        <button class="v2-btn" onclick="V2.go(4)">← Retour Analyse</button>
-        <button class="v2-btn v2-btn-primary" onclick="V2.go(5)">→ Primes 0€</button>
+        <button class="v2-btn" onclick="V2.go(2)">← Retour Questions générales</button>
+        <button class="v2-btn v2-btn-primary" onclick="V2.go(5)">Voir le pack final →</button>
       </div>
     </div>
 
@@ -16669,13 +16671,15 @@ window.V2 = {
     else this.activate();
   },
 
-  // V42.4 — Indicateur de progression Mode Vendeur (8 étapes du flow visio)
+  // V42.4 — Indicateur de progression Mode Vendeur (9 étapes du flow visio)
+  // V42.8 — Ajout P18 Questions intelligentes entre P2 (Affiner) et P5 (Pack)
   _updateVendorProgress(page) {
     var VENDOR_FLOW = [
       {page: 20, label: 'Setup Dossier (préparation interne)'},
       {page: 21, label: 'Déroulement projet CEE'},
       {page: 1,  label: 'Identifier le prospect'},
-      {page: 2,  label: 'Affiner les questions précises'},
+      {page: 2,  label: 'Premières questions générales'},
+      {page: 18, label: 'Questions techniques précises (hauteur, puissance, équipements…)'},
       {page: 5,  label: 'Pack final — vos opportunités'},
       {page: 7,  label: 'Économies sur facture énergétique'},
       {page: 9,  label: 'Documents pour signature'},
