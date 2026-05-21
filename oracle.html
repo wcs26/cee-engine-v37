@@ -16814,7 +16814,8 @@ window.V2 = {
   go(page) {
     console.log('[V2.go] navigation page', page);
     // V37.4.15 — 17 onglets + V40 pages 20 (Setup) + 21 (Déroulement projet)
-    if ((page < 1 || page > 17) && page !== 20 && page !== 21) { console.warn('[V2.go] page hors limites', page); return; }
+    // V42.8.1 — Pages valides : 1-19 (V38.13 P18 Précision + P19 Opérations RAC) + 20-21 (V40 Setup + Déroulement)
+    if ((page < 1 || page > 19) && page !== 20 && page !== 21) { console.warn('[V2.go] page hors limites', page); return; }
     try {
       document.querySelectorAll('#v2container .v2-page').forEach(el => el.classList.remove('active'));
       var target = document.getElementById('v2p' + page);
