@@ -16040,13 +16040,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="ui-mode-banner">👁 Mode Vendeur — vous voyez ce que le client verra · cliquez « VUE COMPLET » en haut à droite pour basculer en cockpit backoffice</div>
 
 <!-- V37.4.22 — JARVIS FAB orchestrateur Penta-IA (accessible toutes pages V2) -->
-<button id="v2JarvisFab" class="no-print" onclick="V2._jarvisOpen()" title="Jarvis — assistant orchestrateur Penta-IA"
+<!-- V42.2 — bo-only : masqué en Mode Vendeur (présentation client) -->
+<button id="v2JarvisFab" class="no-print bo-only" onclick="V2._jarvisOpen()" title="Jarvis — assistant orchestrateur Penta-IA (BO uniquement)"
   style="display:none;position:fixed;bottom:24px;right:24px;z-index:200;width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(135deg,#bc8cff,#58a6ff);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(188,140,255,.4),0 0 0 2px rgba(188,140,255,.2);transition:transform .2s ease, box-shadow .2s ease;">
   🤖
 </button>
 
 <!-- V37.4.22 — JARVIS modal/panel -->
-<div id="v2JarvisPanel" class="no-print" style="display:none;position:fixed;bottom:90px;right:24px;z-index:201;width:min(420px,calc(100vw - 48px));max-height:min(640px,calc(100vh - 120px));background:rgba(15,15,18,.98);backdrop-filter:blur(20px);border:1px solid rgba(188,140,255,.3);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;">
+<div id="v2JarvisPanel" class="no-print bo-only" style="display:none;position:fixed;bottom:90px;right:24px;z-index:201;width:min(420px,calc(100vw - 48px));max-height:min(640px,calc(100vh - 120px));background:rgba(15,15,18,.98);backdrop-filter:blur(20px);border:1px solid rgba(188,140,255,.3);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;">
   <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px;">
     <span style="font-size:20px;">🤖</span>
     <div style="flex:1;">
