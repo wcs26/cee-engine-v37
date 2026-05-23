@@ -20513,7 +20513,44 @@ window.V2 = {
       {key:'sport_loisirs', label:'🏊 Sport / loisirs (piscine, gymnase, salle de sport)'},
       {key:'autres', label:'❓ Autre / non listé'},
     ];
-    var currentMicro = current.micro_activity || actSec || 'autres';
+    // V42.9 — Auto-mapping NAF → micro_activity (sinon currentMicro reste sur 'autres' = 0 question ciblée)
+    var nafCode = (this.state.profil && (this.state.profil.naf || this.state.profil.ape)) || (typeof STATE !== 'undefined' && STATE.diagnostic && (STATE.diagnostic.naf || STATE.diagnostic.ape)) || '';
+    var nafPrefix2 = String(nafCode).slice(0, 2);
+    var nafPrefix5 = String(nafCode).replace(/[^0-9.]/g, '').slice(0, 5);
+    function _autoMicroFromNAF(p2, p5) {
+      // Agriculture
+      if (p2 === '01') {
+        // Cultures (céréales 01.1, fruits/serres 01.13/19/2, viticulture 01.21)
+        if (/^01\.(1|2|3)/.test(p5) || /^01\.6/.test(p5)) return 'agri_culture';
+        // Élevage (lait 01.41, viande 01.42, porc 01.46, volaille 01.47)
+        if (/^01\.4/.test(p5) || /^01\.5/.test(p5)) return 'agri_elevage';
+        return 'agri_culture'; // défaut agri
+      }
+      // Agroalimentaire (10.xx + 11.xx boulangerie/brasserie/conserverie)
+      if (p2 === '10' || p2 === '11') return 'agroalimentaire';
+      // Industrie (13-33)
+      if (p2 >= '13' && p2 <= '33') return 'industrie';
+      // Commerce (45-47)
+      if (p2 === '45' || p2 === '46' || p2 === '47') return 'commerce';
+      // Transport/logistique (49-53)
+      if (p2 >= '49' && p2 <= '53') return 'logistique';
+      // Hébergement / restauration (55-56)
+      if (p2 === '55') return 'hotellerie';
+      if (p2 === '56') return 'restauration';
+      // Info/communication (58-63) → bureaux
+      if (p2 >= '58' && p2 <= '63') return 'bureaux';
+      // Finance/immobilier/services pro (64-75) → bureaux
+      if (p2 >= '64' && p2 <= '75') return 'bureaux';
+      // Enseignement (85)
+      if (p2 === '85') return 'enseignement';
+      // Santé (86-88)
+      if (p2 >= '86' && p2 <= '88') return 'sante';
+      // Arts/sport/loisirs (90-93)
+      if (p2 >= '90' && p2 <= '93') return 'sport_loisirs';
+      return null;
+    }
+    var autoMicro = nafCode ? _autoMicroFromNAF(nafPrefix2, nafPrefix5) : null;
+    var currentMicro = current.micro_activity || autoMicro || (actSec === 'AGRI' ? 'agri_culture' : null) || actSec || 'autres';
     html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(125,217,131,.12),rgba(125,217,131,.02));border-color:rgba(125,217,131,.40);">';
     html += '<div class="v2-card-title" style="color:#7dd983;">🎯 Sous-activité du client (génère questions ciblées)</div>';
     html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:10px;">Précise la vraie activité au-delà du NAF général. Débloque ~10 questions spécifiques (couverts/jour, chambres, kW air comprimé, tank lait, hauteur entrepôt...).</div>';
