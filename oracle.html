@@ -16104,6 +16104,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <button class="v2-toggle-fab" onclick="V2.toggle()">🚀 <span id="v2ToggleLabel">Mode Clair</span></button>
 
 <!-- V41.0 — Toggle Mode Vendeur ↔ Mode Complet (face cachée vs présentation client) -->
+<!-- V45.3 — Bouton "Nouveau client" pour clear session proprement -->
+<button id="v2NewClientBtn" onclick="if(confirm('Nouvel audit ? La session en cours sera effacée.')) { try{localStorage.removeItem('cee_session_v45');}catch(e){} location.reload(); }" title="Démarrer un nouveau client (efface la session en cours)" style="position:fixed;top:12px;right:330px;z-index:9998;background:rgba(15,15,18,0.92);border:1px solid rgba(255,255,255,0.18);border-radius:999px;padding:6px 14px;color:rgba(245,245,247,0.85);font-size:11px;font-weight:600;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 4px 24px rgba(0,0,0,0.5);">↻ Nouveau client</button>
+
 <div class="ui-mode-toggle" id="uiModeToggle" onclick="V2.toggleUiMode()" title="Bascule entre vue Backoffice complète (vendeur en préparation) et vue Vendeur simplifiée (présentation client). Cmd/Ctrl + M">
   <span class="label">VUE</span>
   <span class="pill" id="uiModePill">COMPLET</span>
@@ -16794,6 +16797,53 @@ window.V2 = {
     var uiMode = 'full';
     try { uiMode = localStorage.getItem('cee_ui_mode') || 'full'; } catch(e) {}
     this.setUiMode(uiMode === 'vendor' ? 'vendor' : 'full');
+
+    // V45.2 — Auto-restore session sauvegardée si <24h (évite perte sur reload)
+    try {
+      var saved = localStorage.getItem('cee_session_v45');
+      if (saved) {
+        var s = JSON.parse(saved);
+        var age = Date.now() - (s._ts || 0);
+        if (age < 24 * 3600 * 1000 && s.profil) {
+          // Restore profil + answers + selected (Map → array)
+          this.state.profil = s.profil;
+          this.state.answers = s.answers || {};
+          this.state.pack = s.pack || [];
+          if (s.selected && Array.isArray(s.selected)) {
+            this.state.selected = new Set(s.selected);
+          }
+          this.state.questions = s.questions || null;
+          if (s.proAnswers && typeof STATE !== 'undefined') {
+            STATE._proAnswers = s.proAnswers;
+            STATE._proAnswersSource = s.proAnswersSource || {};
+          }
+          console.log('[V45.2] Session restaurée depuis localStorage (âge ' + Math.round(age/3600/1000) + 'h)');
+          if (typeof showToast === 'function') {
+            setTimeout(function() {
+              showToast('💾 Session précédente restaurée (SIRET ' + (s.profil.siret || '?') + ')', 4000);
+            }, 800);
+          }
+        }
+      }
+    } catch(e) { console.warn('[V45.2] Restore session échec :', e); }
+
+    // V45.2 — Auto-save session toutes les 5 sec (debounce)
+    setInterval(function() {
+      try {
+        if (!V2.state.profil) return;
+        var snap = {
+          _ts: Date.now(),
+          profil: V2.state.profil,
+          answers: V2.state.answers,
+          pack: V2.state.pack,
+          selected: V2.state.selected ? Array.from(V2.state.selected) : [],
+          questions: V2.state.questions,
+          proAnswers: (typeof STATE !== 'undefined' && STATE._proAnswers) || {},
+          proAnswersSource: (typeof STATE !== 'undefined' && STATE._proAnswersSource) || {},
+        };
+        localStorage.setItem('cee_session_v45', JSON.stringify(snap));
+      } catch(e) {}
+    }, 5000);
     // V41.0 — raccourci Cmd/Ctrl + M : bascule Mode Vendeur ↔ Complet
     // V42.0 — raccourci Ctrl+Shift+L : révèle le toggle V1 legacy (debug only)
     if (qs.get('debug') === '1') document.body.classList.add('show-legacy-toggle');
