@@ -19427,6 +19427,119 @@ window.V2 = {
       html += '</div>';
     }
 
+    // V44.0 — Classement éligibilité complet par rentabilité (marge prime/coût)
+    // Pour chaque fiche du pack : prime brute, prime nette, coût réel, % couverture, marge € et %
+    // Trié par % couverture décroissant (plus grosse prise en charge en premier)
+    // Marge ≥ 50% (prime ≥ 1.5 × coût) = highlight vert, "auto-financée bénéficiaire"
+    if (this.state.pack && this.state.pack.length && typeof window.getFullCalc === 'function' && typeof FICHES !== 'undefined') {
+      var zoneR = (this.state.profil && this.state.profil.zone) || 'H2';
+      var eTypeR = (this.state.answers && this.state.answers.energie) || '';
+      var ranking = [];
+      this.state.pack.forEach(function(pkg) {
+        var ref = pkg.fiche || pkg.ref;
+        var fv = FICHES.find(function(x){return x.ref===ref;});
+        if (!fv) return;
+        try {
+          var calc = window.getFullCalc(fv, 1, zoneR, eTypeR);
+          var coverage = calc.coverage || 0;
+          var primeNette = calc.primeNette || 0;
+          var primeBrute = calc.primeBrute || 0;
+          var costTTC = calc.costTTC || 0;
+          var margeEur = primeNette - costTTC;
+          var margePct = costTTC > 0 ? (margeEur / costTTC * 100) : 0;
+          ranking.push({
+            ref: ref, label: fv.label || ref,
+            poste: window.posteOf ? window.posteOf(ref, fv.label||ref) : {icon:'📦',label:'-'},
+            coverage: coverage, primeNette: primeNette, primeBrute: primeBrute,
+            costTTC: costTTC, margeEur: margeEur, margePct: margePct,
+            cumac: calc.kwhcTotal || 0,
+          });
+        } catch(_e) {}
+      });
+      // Tri par couverture décroissante (plus grosse prise en charge en premier)
+      ranking.sort(function(a,b){ return b.coverage - a.coverage; });
+
+      if (ranking.length > 0) {
+        var nbMargeOK = ranking.filter(function(r){return r.margeEur >= 0;}).length; // RAC = 0
+        var nbAutoFinance = ranking.filter(function(r){return r.coverage >= 100;}).length;
+        var nbRentable50 = ranking.filter(function(r){return r.coverage >= 150;}).length; // prime ≥ 1.5×coût = marge ≥ 50% du coût
+        var totalPrimeR = ranking.reduce(function(s,r){return s + r.primeNette;}, 0);
+        var totalCoutR = ranking.reduce(function(s,r){return s + r.costTTC;}, 0);
+        var totalMargeR = totalPrimeR - totalCoutR;
+
+        html += '<div class="v2-card" style="margin-top:24px;background:linear-gradient(180deg,rgba(200,255,107,.08),rgba(200,255,107,.015));border-color:rgba(200,255,107,.35);">';
+        html += '<div class="v2-card-title" style="color:#C8FF6B;font-size:15px;">💎 Classement éligibilité complet — par rentabilité (marge prime / coût réel)</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:14px;line-height:1.6;">Toutes les ' + ranking.length + ' opportunités CEE éligibles à votre site, triées de la plus grosse prise en charge à la plus petite. Marge = prime nette versée − coût travaux TTC.</div>';
+
+        // Synthèse compteurs
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px;">';
+        html += '<div style="padding:10px;background:rgba(200,255,107,.06);border:1px solid rgba(200,255,107,.22);border-radius:8px;text-align:center;"><div style="font-size:20px;font-weight:800;color:#C8FF6B;font-family:JetBrains Mono,monospace;">' + nbAutoFinance + '</div><div style="font-size:10px;color:rgba(245,245,247,.65);text-transform:uppercase;letter-spacing:.5px;">Auto-financées (≥100%)</div></div>';
+        html += '<div style="padding:10px;background:rgba(125,217,131,.06);border:1px solid rgba(125,217,131,.22);border-radius:8px;text-align:center;"><div style="font-size:20px;font-weight:800;color:#7dd983;font-family:JetBrains Mono,monospace;">' + nbRentable50 + '</div><div style="font-size:10px;color:rgba(245,245,247,.65);text-transform:uppercase;letter-spacing:.5px;">Marge ≥ 50% (≥150%)</div></div>';
+        html += '<div style="padding:10px;background:rgba(110,146,255,.06);border:1px solid rgba(110,146,255,.22);border-radius:8px;text-align:center;"><div style="font-size:20px;font-weight:800;color:#6E92FF;font-family:JetBrains Mono,monospace;">' + ranking.length + '</div><div style="font-size:10px;color:rgba(245,245,247,.65);text-transform:uppercase;letter-spacing:.5px;">Total opportunités</div></div>';
+        if (totalMargeR > 0) {
+          html += '<div style="padding:10px;background:rgba(200,255,107,.10);border:1px solid rgba(200,255,107,.40);border-radius:8px;text-align:center;"><div style="font-size:20px;font-weight:800;color:#C8FF6B;font-family:JetBrains Mono,monospace;">+' + Math.round(totalMargeR).toLocaleString('fr-FR') + ' €</div><div style="font-size:10px;color:rgba(245,245,247,.65);text-transform:uppercase;letter-spacing:.5px;">Marge cumulée pack</div></div>';
+        }
+        html += '</div>';
+
+        // Tableau classement
+        html += '<div style="overflow-x:auto;border:1px solid rgba(255,255,255,.05);border-radius:8px;">';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:12px;min-width:740px;">';
+        html += '<thead><tr style="background:rgba(255,255,255,.025);color:rgba(245,245,247,.55);text-transform:uppercase;font-size:10px;letter-spacing:.5px;">';
+        html += '<th style="padding:9px 8px;text-align:left;">#</th>';
+        html += '<th style="padding:9px 8px;text-align:left;">Fiche · Poste</th>';
+        html += '<th style="padding:9px 8px;text-align:right;">Coût travaux</th>';
+        html += '<th style="padding:9px 8px;text-align:right;">Prime versée</th>';
+        html += '<th style="padding:9px 8px;text-align:right;">Couverture</th>';
+        html += '<th style="padding:9px 8px;text-align:right;">Marge €</th>';
+        html += '<th style="padding:9px 8px;text-align:right;">Marge %</th>';
+        html += '</tr></thead><tbody>';
+
+        ranking.forEach(function(r, i) {
+          var rang = i + 1;
+          var covColor = r.coverage >= 150 ? '#7dd983' : r.coverage >= 100 ? '#C8FF6B' : r.coverage >= 70 ? '#FFC92E' : '#ff9c2e';
+          var margeColor = r.margeEur > 0 ? '#C8FF6B' : '#ff9c2e';
+          var rowBg = r.coverage >= 150 ? 'rgba(125,217,131,.05)' : r.coverage >= 100 ? 'rgba(200,255,107,.04)' : 'transparent';
+          var labelShort = r.label.length > 50 ? r.label.slice(0,50) + '…' : r.label;
+          html += '<tr style="border-top:1px solid rgba(255,255,255,.04);background:' + rowBg + ';">';
+          html += '<td style="padding:9px 8px;font-family:JetBrains Mono,monospace;color:rgba(245,245,247,.4);font-weight:700;">' + rang + '</td>';
+          html += '<td style="padding:9px 8px;">';
+          html += '<div style="font-family:JetBrains Mono,monospace;font-weight:700;color:#58a6ff;font-size:11.5px;">' + r.ref + '</div>';
+          html += '<div style="font-size:11.5px;color:rgba(245,245,247,.85);margin-top:2px;">' + labelShort + '</div>';
+          html += '<div style="font-size:10px;color:rgba(245,245,247,.5);margin-top:2px;">' + r.poste.icon + ' ' + r.poste.label + '</div>';
+          html += '</td>';
+          html += '<td style="padding:9px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:rgba(245,245,247,.75);">' + Math.round(r.costTTC).toLocaleString('fr-FR') + ' €</td>';
+          html += '<td style="padding:9px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;font-weight:600;">' + Math.round(r.primeNette).toLocaleString('fr-FR') + ' €</td>';
+          html += '<td style="padding:9px 8px;text-align:right;font-family:JetBrains Mono,monospace;font-weight:700;color:' + covColor + ';">' + Math.round(r.coverage) + '%</td>';
+          html += '<td style="padding:9px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:' + margeColor + ';font-weight:600;">' + (r.margeEur >= 0 ? '+' : '') + Math.round(r.margeEur).toLocaleString('fr-FR') + ' €</td>';
+          html += '<td style="padding:9px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:' + margeColor + ';font-weight:700;">' + (r.margePct >= 0 ? '+' : '') + Math.round(r.margePct) + '%</td>';
+          html += '</tr>';
+        });
+        // Ligne totaux
+        html += '<tr style="background:rgba(200,255,107,.08);border-top:2px solid rgba(200,255,107,.30);font-weight:700;">';
+        html += '<td colspan="2" style="padding:10px 8px;color:rgba(245,245,247,.9);font-size:11px;text-transform:uppercase;letter-spacing:.5px;">TOTAL (' + ranking.length + ' fiches)</td>';
+        html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:rgba(245,245,247,.85);">' + Math.round(totalCoutR).toLocaleString('fr-FR') + ' €</td>';
+        html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:#C8FF6B;">' + Math.round(totalPrimeR).toLocaleString('fr-FR') + ' €</td>';
+        var covTotal = totalCoutR > 0 ? Math.round(totalPrimeR / totalCoutR * 100) : 0;
+        var covTotalColor = covTotal >= 150 ? '#7dd983' : covTotal >= 100 ? '#C8FF6B' : covTotal >= 70 ? '#FFC92E' : '#ff9c2e';
+        html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:' + covTotalColor + ';">' + covTotal + '%</td>';
+        var margeTotalColor = totalMargeR > 0 ? '#C8FF6B' : '#ff9c2e';
+        html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:' + margeTotalColor + ';">' + (totalMargeR >= 0 ? '+' : '') + Math.round(totalMargeR).toLocaleString('fr-FR') + ' €</td>';
+        var margeTotalPct = totalCoutR > 0 ? Math.round((totalMargeR / totalCoutR) * 100) : 0;
+        html += '<td style="padding:10px 8px;text-align:right;font-family:JetBrains Mono,monospace;color:' + margeTotalColor + ';">' + (margeTotalPct >= 0 ? '+' : '') + margeTotalPct + '%</td>';
+        html += '</tr>';
+        html += '</tbody></table></div>';
+
+        // Légende
+        html += '<div style="margin-top:12px;font-size:11px;color:rgba(245,245,247,.55);display:flex;gap:18px;flex-wrap:wrap;">';
+        html += '<span><span style="display:inline-block;width:10px;height:10px;background:#7dd983;border-radius:2px;margin-right:5px;vertical-align:middle;"></span>Couv ≥ 150% (marge ≥ 50%) — opération bénéficiaire</span>';
+        html += '<span><span style="display:inline-block;width:10px;height:10px;background:#C8FF6B;border-radius:2px;margin-right:5px;vertical-align:middle;"></span>100-149% — auto-financée (0€ RAC)</span>';
+        html += '<span><span style="display:inline-block;width:10px;height:10px;background:#FFC92E;border-radius:2px;margin-right:5px;vertical-align:middle;"></span>70-99% — RAC modéré</span>';
+        html += '<span><span style="display:inline-block;width:10px;height:10px;background:#ff9c2e;border-radius:2px;margin-right:5px;vertical-align:middle;"></span>&lt; 70% — RAC élevé</span>';
+        html += '</div>';
+        html += '</div>';
+      }
+    }
+
     c.innerHTML = html;
     this._updateTotal();
   },
