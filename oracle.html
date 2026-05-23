@@ -16739,6 +16739,32 @@ window.V2 = {
 
   init() {
     var qs = new URLSearchParams(location.search);
+
+    // V44.1 — Charger barème coûts officiel (CAPEB / Batiprix / fournisseur) si fichier présent
+    // Écrase COUT_TRAVAUX par fiche, badge source affiché sur le classement V44.0
+    fetch('/bareme/couts').then(function(r){return r.json();}).then(function(b) {
+      if (b && b.loaded > 0 && b.bareme && typeof COUT_TRAVAUX !== 'undefined') {
+        var overrides = 0;
+        Object.keys(b.bareme).forEach(function(ref) {
+          var entry = b.bareme[ref];
+          if (entry.moy > 0) {
+            COUT_TRAVAUX[ref] = {
+              min: entry.min, max: entry.max, moy: entry.moy, u: entry.u,
+              _source: entry.source || 'CSV', _override: true
+            };
+            overrides++;
+          }
+        });
+        window.__BAREME_SOURCE = b.source || 'CSV';
+        window.__BAREME_LOADED = overrides;
+        console.log('[V44.1] Barème ' + (b.source || 'CSV') + ' chargé : ' + overrides + ' fiches override');
+      } else {
+        window.__BAREME_SOURCE = 'table_interne_marche';
+        window.__BAREME_LOADED = 0;
+        console.log('[V44.1] Aucun barème officiel — utilisation table interne marché');
+      }
+    }).catch(function(){ window.__BAREME_SOURCE = 'table_interne_marche'; window.__BAREME_LOADED = 0; });
+
     // V42.0 — V2 est désormais le DEFAULT (outil unifié, plus de coexistence V1/V2).
     // L'ancienne V1 wizard 5 étapes reste accessible uniquement via ?legacy=1
     // pour debug/comparaison. Le toggle 🚀 Mode Clair est masqué par défaut
@@ -19467,8 +19493,21 @@ window.V2 = {
         var totalCoutR = ranking.reduce(function(s,r){return s + r.costTTC;}, 0);
         var totalMargeR = totalPrimeR - totalCoutR;
 
+        // V44.1 — Badge source coûts (transparence honnête sur fiabilité %)
+        var baremeSrc = window.__BAREME_SOURCE || 'table_interne_marche';
+        var baremeNb = window.__BAREME_LOADED || 0;
+        var srcBadge = '', srcNote = '';
+        if (baremeSrc === 'table_interne_marche') {
+          srcBadge = '<span style="display:inline-block;padding:3px 8px;background:rgba(255,201,46,.18);color:#FFC92E;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.5px;margin-left:8px;">📊 ESTIMATION MARCHÉ</span>';
+          srcNote = 'Coûts travaux = fourchettes marché 2026 indicatives (±20-30% vs réalité chantier). Pour précision absolue : dépose un barème officiel CAPEB/Batiprix dans <code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px;font-size:11px;">data/capeb_bareme.csv</code> (format CSV : ref_CEE,cout_min,cout_max,cout_moy,unite,source).';
+        } else {
+          srcBadge = '<span style="display:inline-block;padding:3px 8px;background:rgba(125,217,131,.18);color:#7dd983;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.5px;margin-left:8px;">🏛 ' + baremeSrc.toUpperCase() + '</span>';
+          srcNote = '✓ Barème <strong>' + baremeSrc + '</strong> chargé : ' + baremeNb + ' fiches référencées officiellement. Les % de couverture et marges sont précis au plus juste.';
+        }
+
         html += '<div class="v2-card" style="margin-top:24px;background:linear-gradient(180deg,rgba(200,255,107,.08),rgba(200,255,107,.015));border-color:rgba(200,255,107,.35);">';
-        html += '<div class="v2-card-title" style="color:#C8FF6B;font-size:15px;">💎 Classement éligibilité complet — par rentabilité (marge prime / coût réel)</div>';
+        html += '<div class="v2-card-title" style="color:#C8FF6B;font-size:15px;">💎 Classement éligibilité complet — par rentabilité (marge prime / coût réel)' + srcBadge + '</div>';
+        html += '<div style="font-size:11.5px;color:rgba(245,245,247,.6);margin-bottom:10px;line-height:1.55;padding:8px 12px;background:rgba(255,255,255,.025);border-left:3px solid ' + (baremeSrc==='table_interne_marche'?'#FFC92E':'#7dd983') + ';border-radius:4px;">' + srcNote + '</div>';
         html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:14px;line-height:1.6;">Toutes les ' + ranking.length + ' opportunités CEE éligibles à votre site, triées de la plus grosse prise en charge à la plus petite. Marge = prime nette versée − coût travaux TTC.</div>';
 
         // Synthèse compteurs

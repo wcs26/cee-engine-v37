@@ -188,6 +188,55 @@ def pack_commissions():
     data = request.json or {}
     prime = float(data.get("prime_totale_eur", 0) or 0)
     return jsonify(dossier_profile.compute_commissions(prime))
+
+
+# V44.1 — Barème coûts travaux (CAPEB / Batiprix / fournisseur opérateur)
+@app.route("/bareme/couts", methods=["GET"])
+def bareme_couts():
+    """Retourne le barème coûts travaux chargé (data/bareme_couts.csv ou capeb_bareme.csv).
+    Format CSV : ref_CEE,cout_min,cout_max,cout_moy,unite,source
+    Si pas de fichier → empty + source='table_interne_marche'
+    """
+    import os, csv
+    base = os.path.dirname(os.path.abspath(__file__))
+    paths = [
+        os.path.join(base, "data", "capeb_bareme.csv"),
+        os.path.join(base, "data", "bareme_couts.csv"),
+        os.path.join(base, "data", "bareme.csv"),
+    ]
+    bareme = {}
+    source_global = None
+    fichier_charge = None
+    for path in paths:
+        if os.path.exists(path):
+            fichier_charge = path
+            try:
+                with open(path, encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        ref = (row.get("ref_CEE") or row.get("ref") or "").strip().upper()
+                        if not ref:
+                            continue
+                        try:
+                            bareme[ref] = {
+                                "min": float(row.get("cout_min", 0) or 0),
+                                "max": float(row.get("cout_max", 0) or 0),
+                                "moy": float(row.get("cout_moy", 0) or 0),
+                                "u": (row.get("unite") or "").strip(),
+                                "source": (row.get("source") or "CSV").strip(),
+                            }
+                            source_global = bareme[ref]["source"]
+                        except (ValueError, TypeError):
+                            continue
+                break
+            except Exception as e:
+                return jsonify({"error": str(e), "fichier": path}), 500
+    return jsonify({
+        "loaded": len(bareme),
+        "source": source_global or "table_interne_marche",
+        "fichier": fichier_charge,
+        "bareme": bareme,
+    })
 register_couts_routes(app)      # V37 P5.4 — bibliothèque coûts réels chantier (matériaux + MO interne)
 register_dossiers_routes(app)   # V37 P5.5 — persistance dossiers (UUID + lien partageable + dashboard)
 register_monday_routes(app)     # V37 P5.6 — synchronisation bidirectionnelle Monday CRM
