@@ -1,0 +1,127 @@
+{
+  "toiture": {
+    "icon": "🏠",
+    "label": "Toiture & combles",
+    "count": 9
+  },
+  "murs": {
+    "icon": "🧱",
+    "label": "Murs (ITE/ITI)",
+    "count": 6
+  },
+  "plancher": {
+    "icon": "⬛",
+    "label": "Plancher bas",
+    "count": 6
+  },
+  "fenetres": {
+    "icon": "🪟",
+    "label": "Fenêtres & vitrage",
+    "count": 8
+  },
+  "chauffage_pac": {
+    "icon": "🌡",
+    "label": "Pompe à chaleur",
+    "count": 11
+  },
+  "chauffage_chaud": {
+    "icon": "🔥",
+    "label": "Chaudière",
+    "count": 13
+  },
+  "chauffage_emet": {
+    "icon": "♨",
+    "label": "Émetteurs chauffage",
+    "count": 2
+  },
+  "regulation": {
+    "icon": "🎛",
+    "label": "Régulation & GTB",
+    "count": 24
+  },
+  "destrat": {
+    "icon": "💨",
+    "label": "Déstratification",
+    "count": 2
+  },
+  "ventilation": {
+    "icon": "🌀",
+    "label": "Ventilation",
+    "count": 6
+  },
+  "eclairage": {
+    "icon": "💡",
+    "label": "Éclairage LED",
+    "count": 2
+  },
+  "ecs": {
+    "icon": "💧",
+    "label": "Eau chaude sanitaire",
+    "count": 10
+  },
+  "froid_clim": {
+    "icon": "❄",
+    "label": "Climatisation / Froid",
+    "count": 6
+  },
+  "froid_negatif": {
+    "icon": "📦",
+    "label": "Froid négatif",
+    "count": 0
+  },
+  "process_indus": {
+    "icon": "⚙",
+    "label": "Process industriel",
+    "count": 18
+  },
+  "isolation_tuyau": {
+    "icon": "🔗",
+    "label": "Calorifugeage tuyaux",
+    "count": 1
+  },
+  "solaire_pv": {
+    "icon": "☀",
+    "label": "Solaire PV/PVT",
+    "count": 1
+  },
+  "transport": {
+    "icon": "🚛",
+    "label": "Transport / Flotte",
+    "count": 8
+  },
+  "agri_serre": {
+    "icon": "🌾",
+    "label": "Serres agricoles",
+    "count": 12
+  },
+  "agri_elevage": {
+    "icon": "🐄",
+    "label": "Élevage",
+    "count": 4
+  },
+  "audit_iso": {
+    "icon": "📊",
+    "label": "Audit / ISO 50001",
+    "count": 1
+  },
+  "cpe_renov": {
+    "icon": "📋",
+    "label": "CPE / Rénovation globale",
+    "count": 4
+  },
+  "storage_eau": {
+    "icon": "📦",
+    "label": "Stockage eau",
+    "count": 0
+  },
+  "reseau_chaleur": {
+    "icon": "🌡",
+    "label": "Réseau de chaleur",
+    "count": 4
+  },
+  "autres": {
+    "icon": "📦",
+    "label": "Autres",
+    "count": 64
+  }
+}

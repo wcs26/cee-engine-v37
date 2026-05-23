@@ -16608,6 +16608,79 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
+// V43.3 — Classification poste métier (anticipation par poste)
+// 222 fiches → 23 postes métier, mapping inliné pour performance UI
+window.POSTE_LABELS = {
+  toiture:        {icon:'🏠', label:'Toiture & combles'},
+  murs:           {icon:'🧱', label:'Murs (ITE/ITI)'},
+  plancher:       {icon:'⬛', label:'Plancher bas'},
+  fenetres:       {icon:'🪟', label:'Fenêtres & vitrage'},
+  chauffage_pac:  {icon:'🌡', label:'Pompe à chaleur'},
+  chauffage_chaud:{icon:'🔥', label:'Chaudière'},
+  chauffage_emet: {icon:'♨', label:'Émetteurs chauffage'},
+  regulation:     {icon:'🎛', label:'Régulation & GTB'},
+  destrat:        {icon:'💨', label:'Déstratification'},
+  ventilation:    {icon:'🌀', label:'Ventilation'},
+  eclairage:      {icon:'💡', label:'Éclairage LED'},
+  ecs:            {icon:'💧', label:'Eau chaude sanitaire'},
+  froid_clim:     {icon:'❄', label:'Climatisation / Froid'},
+  froid_negatif:  {icon:'🧊', label:'Froid commercial'},
+  chaleur_fatale: {icon:'♻', label:'Récup chaleur fatale'},
+  process_indus:  {icon:'⚙', label:'Process industriel'},
+  bruleur:        {icon:'🔥', label:'Brûleur'},
+  isolation_tuyau:{icon:'🔗', label:'Calorifugeage'},
+  solaire_pv:     {icon:'☀', label:'Solaire PV/PVT'},
+  transport:      {icon:'🚛', label:'Transport / Flotte'},
+  agri_serre:     {icon:'🌾', label:'Serres agricoles'},
+  agri_elevage:   {icon:'🐄', label:'Élevage'},
+  audit_iso:      {icon:'📊', label:'Audit / ISO 50001'},
+  cpe_renov:      {icon:'📋', label:'CPE / Rénovation globale'},
+  reseau_chaleur: {icon:'🌡', label:'Réseau de chaleur'},
+  autres:         {icon:'📦', label:'Autres opérations'},
+};
+window.classifyPoste = function(ref, nom) {
+  var n = (nom || '').toLowerCase();
+  var r = (ref || '').toUpperCase();
+  // Ordre = priorité (premier match gagne)
+  var rules = [
+    ['agri_elevage',   ['élevage','tank lait','tank à lait','porcin','volaille','bovin','animaux','pré-refroidisseur','lait','fumier','lisier']],
+    ['agri_serre',     ['serre','écran thermique','maraîchère','horticole','cultures','double paroi gonflable','pulvérisation','irrigation']],
+    ['toiture',        ['toiture','comble','isolation toiture','rampants','revêtements réflectifs']],
+    ['murs',           ['mur',' ite ',' iti ','parois opaques','paroi opaque','isolation paroi']],
+    ['plancher',       ['plancher','sol bas','isolation sol']],
+    ['fenetres',       ['fenêtre','fenetre','porte-fenêtre','vitrage','menuiserie','lanterneau','conduits de lumière','pariétodynamique','puits de lumière']],
+    ['audit_iso',      ['iso 50001','audit énergétique','sme ','system management énergie']],
+    ['cpe_renov',      ['cpe','contrat performance','rénovation globale','renovation globale','rénovation amplitude','rénovation ampleur','renovation ampleur']],
+    ['destrat',        ['destrat','déstrat']],
+    ['chauffage_pac',  ['pompe à chaleur','pompe a chaleur','pac air','pac eau','pac hybride','pac réversible','pac collective','géothermique','thermodynamique']],
+    ['chauffage_chaud',['chaudière','chaudiere','biomasse','optimiseur relance','mini-cogénération','micro-cogénération','chauffe-bain']],
+    ['chaleur_fatale', ['récup chaleur','récupération chaleur','chaleur fatale','récup chaleur tank','récup chaleur eaux grises','récupération chaleur eaux','récupération chaleur tank','récupération chaleur serveurs','récupération chaleur groupe froid']],
+    ['chauffage_emet', ['radiateur','plancher chauffant','ventilo-conv','aérotherme','aerotherme','tube de chauffage','double tube']],
+    ['bruleur',        ['brûleur','bruleur','micro-modulant']],
+    ['regulation',     ['régulation','regulation','gtb','gtc','programmation','programmateur','optimiseur','sonde','robinet thermostatique','mesurage','comptage','sous-comptage','compteur','pilotage','module température','affichage consommations','suivi consommations','équilibrage','désembouage','réglage','contrôle','abaissement t° retour','maintien t°']],
+    ['ventilation',    ['vmc','ventilation','extraction','cta ','double flux','simple flux','récupérateur ventil','déshumidification air','pulseur']],
+    ['eclairage',      ['éclairage','eclairage',' led ','led ','luminaire','lampe','tube fluo']],
+    ['ecs',            ['eau chaude','ecs','chauffe-eau','ces ','solaire combiné','cesi ','cet ','hydro-économe','mitigeur','douche','dispositif solaire thermique']],
+    ['froid_negatif',  ['chambre froide','congélation','froid négatif','meubles frigo','asi onduleur','meuble frigo','onduleur data']],
+    ['froid_clim',     ['climatisation','climatiseur','clim ','rooftop','freecooling','condensation frigo','frigorif','condenseur','haute pression flottante','basse pression flottante','confinement allées','data center','optimisation production froid']],
+    ['process_indus',  ['process','four','séchoir','sechoir','autoclave','compresseur air','air comprimé','pompe à vide','pompe a vide','moteur','moto-variateur','vev','variateur','variation vitesse','séchage','sécheur','isolation point','isolation thermique réseau','transmission performant','presse injection','chauffage décentralisé performant']],
+    ['isolation_tuyau',['calorifuge','tuyau','canalisation','point singulier','piquage']],
+    ['solaire_pv',     ['photovoltaïque',' pv ','pvt','capteur solaire','panneau hybride','séchage solaire']],
+    ['transport',      ['véhicule','pneu','borne','flotte','recharge','wagons','optimisation transport','éco-conduite']],
+    ['reseau_chaleur', ['réseau de chaleur','sous-station','raccordement réseau','poste livraison chaleur','passage réseau basse']],
+  ];
+  for (var i=0; i<rules.length; i++) {
+    var key = rules[i][0], kws = rules[i][1];
+    for (var j=0; j<kws.length; j++) { if (n.indexOf(kws[j]) !== -1) return key; }
+  }
+  return 'autres';
+};
+window.posteOf = function(ref, nom) {
+  var k = window.classifyPoste(ref, nom);
+  var meta = window.POSTE_LABELS[k] || window.POSTE_LABELS.autres;
+  return { key: k, icon: meta.icon, label: meta.label };
+};
+
 // V37.4.0 — Module V2 self-contained (state + navigation + 6 renders)
 window.V2 = {
   state: {
@@ -19035,6 +19108,58 @@ window.V2 = {
     fichesZero.sort((a,b) => (b.calc.primeBrute||0) - (a.calc.primeBrute||0));
 
     var html = '';
+
+    // V43.3 — Récap par poste métier en TOP P5 (vue panoramique anticipée)
+    // Pour chaque poste, agrège les fiches du pack + prime totale.
+    // Donne immédiatement au client la vision "voici les leviers identifiés".
+    if (this.state.pack && this.state.pack.length && typeof window.getFullCalc === 'function' && typeof FICHES !== 'undefined' && typeof window.posteOf === 'function') {
+      var zoneRP = (this.state.profil && this.state.profil.zone) || 'H2';
+      var eTypeRP = (this.state.answers && this.state.answers.energie) || '';
+      var posteAgg = {}; // {posteKey: {icon, label, count, prime, refs}}
+      this.state.pack.forEach(function(pkg) {
+        var ref = pkg.fiche || pkg.ref;
+        var fv = FICHES.find(function(x){return x.ref===ref;});
+        if (!fv) return;
+        var nom = (fv.label || fv.ref);
+        var p = window.posteOf(ref, nom);
+        if (!posteAgg[p.key]) posteAgg[p.key] = {icon:p.icon, label:p.label, count:0, prime:0, refs:[]};
+        posteAgg[p.key].count++;
+        posteAgg[p.key].refs.push(ref);
+        try {
+          var calcRP = window.getFullCalc(fv, 1, zoneRP, eTypeRP);
+          posteAgg[p.key].prime += (calcRP.primeNette || 0);
+        } catch(_e) {}
+      });
+      var posteEntries = Object.keys(posteAgg).map(function(k){return Object.assign({key:k}, posteAgg[k]);});
+      posteEntries.sort(function(a,b){return b.prime - a.prime;});
+      var totalPrimeAllPostes = posteEntries.reduce(function(s,p){return s + p.prime;}, 0);
+
+      if (posteEntries.length > 0) {
+        html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(110,146,255,.08),rgba(110,146,255,.02));border-color:rgba(110,146,255,.30);">';
+        html += '<div class="v2-card-title" style="color:#6E92FF;font-size:14px;">🗺 ' + posteEntries.length + ' postes de rénovation identifiés — vue panoramique</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:12px;line-height:1.55;">Toutes les opportunités CEE classées par poste de travaux. Cliquez sur un poste pour zoomer en bas de page.</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">';
+        posteEntries.forEach(function(pe) {
+          var pct = totalPrimeAllPostes > 0 ? Math.round(pe.prime / totalPrimeAllPostes * 100) : 0;
+          html += '<div style="padding:12px;background:rgba(110,146,255,.06);border:1px solid rgba(110,146,255,.20);border-radius:8px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background=\'rgba(110,146,255,.12)\';this.style.transform=\'translateY(-1px)\';" onmouseout="this.style.background=\'rgba(110,146,255,.06)\';this.style.transform=\'translateY(0)\';">';
+          html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
+          html += '<span style="font-size:18px;">' + pe.icon + '</span>';
+          html += '<span style="font-size:12px;font-weight:700;color:rgba(245,245,247,.9);">' + pe.label + '</span>';
+          html += '</div>';
+          html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:4px;">' + pe.count + ' fiche' + (pe.count>1?'s':'') + ' éligible' + (pe.count>1?'s':'') + '</div>';
+          if (pe.prime > 0) html += '<div style="font-family:JetBrains Mono,monospace;font-size:14px;font-weight:700;color:#C8FF6B;">' + Math.round(pe.prime).toLocaleString('fr-FR') + ' €<span style="font-size:10px;color:rgba(245,245,247,.5);font-weight:400;margin-left:4px;">(' + pct + '%)</span></div>';
+          html += '</div>';
+        });
+        html += '</div>';
+        if (totalPrimeAllPostes > 0) {
+          html += '<div style="margin-top:14px;padding:10px 14px;background:rgba(200,255,107,.08);border:1px solid rgba(200,255,107,.25);border-radius:8px;display:flex;justify-content:space-between;align-items:center;">';
+          html += '<span style="font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(245,245,247,.6);font-weight:600;">Prime CEE totale agrégée tous postes</span>';
+          html += '<span style="font-family:JetBrains Mono,monospace;font-size:18px;font-weight:800;color:#C8FF6B;">' + Math.round(totalPrimeAllPostes).toLocaleString('fr-FR') + ' €</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
 
     // V43.2 — Bandeau CO2 + économie facture en HAUT de P5 (wow factor visio client)
     var gcGlobal = null;

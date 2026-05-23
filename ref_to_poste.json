@@ -1,0 +1,890 @@
+{
+  "AGRI-EQ-101": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "AGRI-EQ-102": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-EQ-104": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "AGRI-EQ-105": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "AGRI-EQ-106": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "AGRI-EQ-107": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-EQ-108": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-EQ-109": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-EQ-110": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "AGRI-EQ-111": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-EQ-112": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-EQ-113": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-SE-101": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "AGRI-TH-101": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "AGRI-TH-102": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "AGRI-TH-103": {
+    "poste": "agri_elevage",
+    "icon": "🐄"
+  },
+  "AGRI-TH-104": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-TH-105": {
+    "poste": "agri_elevage",
+    "icon": "🐄"
+  },
+  "AGRI-TH-108": {
+    "poste": "agri_elevage",
+    "icon": "🐄"
+  },
+  "AGRI-TH-109": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-TH-110": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-TH-113": {
+    "poste": "agri_elevage",
+    "icon": "🐄"
+  },
+  "AGRI-TH-114": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "AGRI-TH-117": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-TH-118": {
+    "poste": "agri_serre",
+    "icon": "🌾"
+  },
+  "AGRI-TH-119": {
+    "poste": "ventilation",
+    "icon": "🌀"
+  },
+  "AGRI-UT-101": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "AGRI-UT-102": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "AGRI-UT-103": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "AGRI-UT-104": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-EN-101": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAR-EN-102": {
+    "poste": "murs",
+    "icon": "🧱"
+  },
+  "BAR-EN-103": {
+    "poste": "plancher",
+    "icon": "⬛"
+  },
+  "BAR-EN-104": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAR-EN-105": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAR-EN-106": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAR-EN-107": {
+    "poste": "murs",
+    "icon": "🧱"
+  },
+  "BAR-EN-108": {
+    "poste": "plancher",
+    "icon": "⬛"
+  },
+  "BAR-EN-109": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAR-EQ-112": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAR-EQ-115": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-SE-104": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-SE-105": {
+    "poste": "cpe_renov",
+    "icon": "📋"
+  },
+  "BAR-SE-106": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-SE-108": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-TH-101": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAR-TH-113": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAR-TH-123": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAR-TH-124": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAR-TH-125": {
+    "poste": "ventilation",
+    "icon": "🌀"
+  },
+  "BAR-TH-127": {
+    "poste": "ventilation",
+    "icon": "🌀"
+  },
+  "BAR-TH-129": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAR-TH-135": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAR-TH-141": {
+    "poste": "froid_clim",
+    "icon": "❄"
+  },
+  "BAR-TH-143": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAR-TH-148": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAR-TH-155": {
+    "poste": "ventilation",
+    "icon": "🌀"
+  },
+  "BAR-TH-158": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-TH-159": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAR-TH-161": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "BAR-TH-162": {
+    "poste": "solaire_pv",
+    "icon": "☀"
+  },
+  "BAR-TH-164": {
+    "poste": "cpe_renov",
+    "icon": "📋"
+  },
+  "BAR-TH-165": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAR-TH-167": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAR-TH-168": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAR-TH-169": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAR-TH-170": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAR-TH-171": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAR-TH-172": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAR-TH-173": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-TH-174": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAR-TH-175": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAR-TH-176": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAR-TH-177": {
+    "poste": "cpe_renov",
+    "icon": "📋"
+  },
+  "BAR-TH-178": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAR-TH-179": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAR-TH-180": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-EN-101": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAT-EN-102": {
+    "poste": "murs",
+    "icon": "🧱"
+  },
+  "BAT-EN-103": {
+    "poste": "plancher",
+    "icon": "⬛"
+  },
+  "BAT-EN-104": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAT-EN-105": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAT-EN-106": {
+    "poste": "murs",
+    "icon": "🧱"
+  },
+  "BAT-EN-107": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAT-EN-108": {
+    "poste": "plancher",
+    "icon": "⬛"
+  },
+  "BAT-EN-109": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAT-EN-110": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAT-EN-111": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAT-EN-112": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "BAT-EQ-117": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-EQ-123": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "BAT-EQ-124": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-EQ-125": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-EQ-129": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAT-EQ-130": {
+    "poste": "froid_clim",
+    "icon": "❄"
+  },
+  "BAT-EQ-131": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "BAT-EQ-134": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-EQ-135": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-SE-103": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-SE-104": {
+    "poste": "cpe_renov",
+    "icon": "📋"
+  },
+  "BAT-SE-105": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-TH-101": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAT-TH-103": {
+    "poste": "plancher",
+    "icon": "⬛"
+  },
+  "BAT-TH-104": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAT-TH-105": {
+    "poste": "chauffage_emet",
+    "icon": "♨"
+  },
+  "BAT-TH-108": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-TH-109": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAT-TH-110": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAT-TH-111": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAT-TH-112": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "BAT-TH-115": {
+    "poste": "froid_clim",
+    "icon": "❄"
+  },
+  "BAT-TH-116": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-TH-121": {
+    "poste": "ecs",
+    "icon": "💧"
+  },
+  "BAT-TH-122": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-TH-125": {
+    "poste": "ventilation",
+    "icon": "🌀"
+  },
+  "BAT-TH-126": {
+    "poste": "ventilation",
+    "icon": "🌀"
+  },
+  "BAT-TH-127": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAT-TH-134": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-TH-135": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-TH-139": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-TH-142": {
+    "poste": "destrat",
+    "icon": "💨"
+  },
+  "BAT-TH-143": {
+    "poste": "chauffage_emet",
+    "icon": "♨"
+  },
+  "BAT-TH-145": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "BAT-TH-153": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-TH-154": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAT-TH-156": {
+    "poste": "froid_clim",
+    "icon": "❄"
+  },
+  "BAT-TH-157": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "BAT-TH-158": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAT-TH-159": {
+    "poste": "reseau_chaleur",
+    "icon": "🌡"
+  },
+  "BAT-TH-161": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "BAT-TH-162": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAT-TH-163": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "BAT-TH-164": {
+    "poste": "chauffage_pac",
+    "icon": "🌡"
+  },
+  "IND-BA-110": {
+    "poste": "destrat",
+    "icon": "💨"
+  },
+  "IND-BA-114": {
+    "poste": "fenetres",
+    "icon": "🪟"
+  },
+  "IND-BA-116": {
+    "poste": "eclairage",
+    "icon": "💡"
+  },
+  "IND-BA-117": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-EN-101": {
+    "poste": "toiture",
+    "icon": "🏠"
+  },
+  "IND-EN-102": {
+    "poste": "murs",
+    "icon": "🧱"
+  },
+  "IND-EN-103": {
+    "poste": "plancher",
+    "icon": "⬛"
+  },
+  "IND-UT-101": {
+    "poste": "audit_iso",
+    "icon": "📊"
+  },
+  "IND-UT-102": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-103": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-104": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-105": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-106": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-108": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-109": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-112": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "IND-UT-113": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "IND-UT-114": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-116": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "IND-UT-118": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-120": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-122": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-124": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-125": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "IND-UT-127": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-129": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-130": {
+    "poste": "chauffage_chaud",
+    "icon": "🔥"
+  },
+  "IND-UT-131": {
+    "poste": "murs",
+    "icon": "🧱"
+  },
+  "IND-UT-132": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "IND-UT-133": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "IND-UT-134": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "IND-UT-135": {
+    "poste": "froid_clim",
+    "icon": "❄"
+  },
+  "IND-UT-137": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-138": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-139": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "IND-UT-140": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "RES-CH-101": {
+    "poste": "reseau_chaleur",
+    "icon": "🌡"
+  },
+  "RES-CH-102": {
+    "poste": "regulation",
+    "icon": "🎛"
+  },
+  "RES-CH-103": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "RES-CH-104": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "RES-CH-105": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "RES-CH-106": {
+    "poste": "isolation_tuyau",
+    "icon": "🔗"
+  },
+  "RES-CH-107": {
+    "poste": "reseau_chaleur",
+    "icon": "🌡"
+  },
+  "RES-CH-108": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "RES-EC-103": {
+    "poste": "reseau_chaleur",
+    "icon": "🌡"
+  },
+  "RES-EC-104": {
+    "poste": "eclairage",
+    "icon": "💡"
+  },
+  "TRA-EQ-101": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-103": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-104": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-106": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-EQ-107": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-108": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-109": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-110": {
+    "poste": "process_indus",
+    "icon": "⚙"
+  },
+  "TRA-EQ-111": {
+    "poste": "froid_clim",
+    "icon": "❄"
+  },
+  "TRA-EQ-113": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-114": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-EQ-115": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-EQ-117": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-EQ-118": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-119": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-120": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-121": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-122": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-123": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-124": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-125": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-EQ-126": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-127": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-128": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-129": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-130": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-131": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-EQ-132": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-101": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-102": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-103": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-104": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-105": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-106": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-107": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-108": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-109": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-110": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-SE-111": {
+    "poste": "transport",
+    "icon": "🚛"
+  },
+  "TRA-SE-112": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-113": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-116": {
+    "poste": "autres",
+    "icon": "📦"
+  },
+  "TRA-SE-117": {
+    "poste": "autres",
+    "icon": "📦"
+  }
+}
