@@ -1,0 +1,223 @@
+ref_CEE,cout_min,cout_max,cout_moy,unite,source,nom_fiche
+AGRI-EQ-101,2500.0,4500.0,3500.0,unité,table_interne_marche,Module température ordinateur climatique
+AGRI-EQ-102,80.0,150.0,115.0,m²,table_interne_marche,Double écran thermique
+AGRI-EQ-104,3500.0,6500.0,5000.0,bâtiment,table_interne_marche,Écrans thermiques latéraux
+AGRI-EQ-105,4500.0,8000.0,6250.0,unité,table_interne_marche,Stop & Start véhicules agricoles
+AGRI-EQ-106,5500.0,9500.0,7500.0,unité,table_interne_marche,Régulation ventilation silos
+AGRI-EQ-107,2800.0,4500.0,3650.0,installation,table_interne_marche,Isolation parois de serre
+AGRI-EQ-108,35.0,55.0,45.0,m²,table_interne_marche,Stockage eau serre bioclimatique
+AGRI-EQ-109,25.0,40.0,32.0,m²,table_interne_marche,Couverture performante de serre
+AGRI-EQ-110,3500.0,5500.0,4500.0,unité,table_interne_marche,Séchage solaire panneaux hybrides
+AGRI-EQ-111,18.0,30.0,24.0,m²,table_interne_marche,Simple écran thermique
+AGRI-EQ-112,28.0,45.0,36.0,m²,table_interne_marche,Double paroi gonflable
+AGRI-EQ-113,150.0,280.0,215.0,point,table_interne_marche,Régulation éclairage serre
+AGRI-SE-101,200.0,400.0,300.0,unité,table_interne_marche,Contrôle réglage moteur tracteur
+AGRI-TH-101,450.0,750.0,600.0,kW,table_interne_marche,Stockage eau chaude Open Buffer
+AGRI-TH-102,280.0,480.0,380.0,kW,table_interne_marche,Stockage eau chaude
+AGRI-TH-103,350.0,600.0,475.0,kW,table_interne_marche,Pré-refroidisseur de lait
+AGRI-TH-104,450.0,750.0,600.0,kW,table_interne_marche,Chauffage serre - chaudiere biomasse
+AGRI-TH-105,1200.0,2000.0,1600.0,kW,table_interne_marche,Récupération chaleur tank à lait
+AGRI-TH-108,50.0,90.0,70.0,m²,table_interne_marche,Chauffage infrarouge élevage
+AGRI-TH-109,600.0,1000.0,800.0,kW,table_interne_marche,Récupérateur condensation serre
+AGRI-TH-110,3500.0,6000.0,4750.0,installation,table_interne_marche,Chaudière HPE serres
+AGRI-TH-113,800.0,1400.0,1100.0,kW,table_interne_marche,Échangeur récupérateur chaleur élevage volailles
+AGRI-TH-114,200.0,350.0,275.0,kW,table_interne_marche,Récupération chaleur fumées chaudière
+AGRI-TH-117,120.0,220.0,170.0,kW,table_interne_marche,Déshumidificateur thermodynamique serres
+AGRI-TH-118,90.0,170.0,130.0,kW,table_interne_marche,Double tube de chauffage serres
+AGRI-TH-119,2000.0,3500.0,2750.0,unité,table_interne_marche,Déshumidification air extérieur
+AGRI-UT-101,400.0,700.0,550.0,kW,table_interne_marche,Moto-variateur synchrone aimants
+AGRI-UT-102,500.0,900.0,700.0,kW,table_interne_marche,VEV moteur asynchrone
+AGRI-UT-103,350.0,600.0,475.0,kW,table_interne_marche,Régulation basse pression flottante
+AGRI-UT-104,150.0,280.0,215.0,kW,table_interne_marche,Régulation haute pression flottante
+BAR-EN-101,14.0,28.0,20.0,m²,table_interne_marche,Isolation combles/toitures
+BAR-EN-102,80.0,120.0,95.0,m²,table_interne_marche,Isolation murs
+BAR-EN-103,16.0,30.0,22.0,m²,table_interne_marche,Isolation plancher
+BAR-EN-104,400.0,700.0,550.0,m²,table_interne_marche,Fenêtre/porte-fenêtre isolante
+BAR-EN-105,30.0,55.0,42.0,m²,table_interne_marche,Isolation toitures terrasses
+BAR-EN-106,20.0,40.0,30.0,m²,table_interne_marche,Isolation combles/toitures DOM
+BAR-EN-107,80.0,140.0,110.0,m²,table_interne_marche,Isolation murs DOM
+BAR-EN-108,200.0,400.0,300.0,m²,table_interne_marche,Isolation plancher DOM
+BAR-EN-109,15.0,30.0,22.0,m²,table_interne_marche,Fenêtre/porte-fenêtre DOM
+BAR-EQ-112,150.0,280.0,215.0,unité,table_interne_marche,Systèmes hydro-économes résidentiel
+BAR-EQ-115,200.0,400.0,300.0,unité,table_interne_marche,Affichage consommations énergie
+BAR-SE-104,8.0,15.0,12.0,ml,table_interne_marche,Réglage équilibrage chauffage
+BAR-SE-105,5000.0,15000.0,10000.0,logement,table_interne_marche,CPE Services résidentiel
+BAR-SE-106,3000.0,6000.0,4500.0,logement,table_interne_marche,Suivi consommations énergie
+BAR-SE-108,800.0,1500.0,1150.0,logement,table_interne_marche,Désembouage individuel
+BAR-TH-101,80.0,150.0,115.0,ml,table_interne_marche,Chauffe-eau solaire individuel
+BAR-TH-113,8000.0,14000.0,11000.0,unité,table_interne_marche,Chaudière biomasse individuelle
+BAR-TH-123,150.0,300.0,225.0,unité,table_interne_marche,Optimiseur relance chauffage collectif
+BAR-TH-124,4000.0,7000.0,5500.0,unité,table_interne_marche,Chaudière condensation
+BAR-TH-125,5000.0,9000.0,7000.0,unité,table_interne_marche,VMC double flux
+BAR-TH-127,3500.0,6500.0,5000.0,unité,table_interne_marche,VMC simple flux hygroréglable
+BAR-TH-129,3000.0,5000.0,4000.0,unité,table_interne_marche,PAC air/air résidentiel
+BAR-TH-135,4000.0,7000.0,5500.0,m²,table_interne_marche,Chauffe-eau solaire collectif DOM
+BAR-TH-141,2500.0,4500.0,3500.0,m²,table_interne_marche,Climatiseur performant DOM
+BAR-TH-143,3500.0,6000.0,4750.0,unité,table_interne_marche,Système solaire combiné
+BAR-TH-148,2000.0,3500.0,2800.0,unité,table_interne_marche,Chauffe-eau thermodynamique
+BAR-TH-155,4000.0,7000.0,5500.0,unité,table_interne_marche,Ventilation hybride hygroréglable
+BAR-TH-158,1500.0,2800.0,2150.0,unité,table_interne_marche,Émetteur électrique régulation avancée
+BAR-TH-159,8000.0,14000.0,11000.0,unité,table_interne_marche,PAC hybride individuelle
+BAR-TH-161,15.0,30.0,22.0,ml,table_interne_marche,Isolation points singuliers
+BAR-TH-162,6000.0,10000.0,8000.0,m²,table_interne_marche,Système PVT capteurs hybrides
+BAR-TH-164,30000.0,55000.0,40000.0,logement,table_interne_marche,Rénovation globale maison individuelle
+BAR-TH-165,20000.0,35000.0,27500.0,unité,table_interne_marche,Chaudière biomasse collective
+BAR-TH-167,600.0,1200.0,900.0,unité,table_interne_marche,Chauffe-bain individuel haut rendement
+BAR-TH-168,2500.0,4500.0,3500.0,unité,table_interne_marche,Dispositif solaire thermique
+BAR-TH-169,1500.0,3000.0,2250.0,m²,table_interne_marche,PAC collective air/eau ECS
+BAR-TH-170,3000.0,5500.0,4250.0,unité,table_interne_marche,Récup chaleur serveurs informatiques
+BAR-TH-171,10000.0,16000.0,12000.0,unité,table_interne_marche,PAC air/eau résidentiel
+BAR-TH-172,14000.0,22000.0,17000.0,unité,table_interne_marche,PAC eau/eau ou sol/eau résidentiel
+BAR-TH-173,200.0,400.0,300.0,m²,table_interne_marche,Régulation programmation pièce par pièce
+BAR-TH-174,800.0,1500.0,1150.0,unité,table_interne_marche,Rénovation ampleur maison
+BAR-TH-175,3000.0,5500.0,4250.0,m²,table_interne_marche,Rénovation ampleur appartement
+BAR-TH-176,2000.0,3500.0,2750.0,m²,table_interne_marche,Régulation chauffe-eau électrique Joule
+BAR-TH-177,1500.0,2800.0,2150.0,m²,table_interne_marche,Rénovation globale bâtiment collectif
+BAR-TH-178,25000.0,45000.0,35000.0,logement,table_interne_marche,Système géothermique résidentiel
+BAR-TH-179,12000.0,20000.0,16000.0,unité,table_interne_marche,PAC collective air/eau
+BAR-TH-180,16000.0,28000.0,22000.0,unité,table_interne_marche,PAC collective eau/eau
+BAT-EN-101,15.0,30.0,22.0,m²,table_interne_marche,Isolation combles/toitures tertiaire
+BAT-EN-102,65.0,110.0,85.0,m²,table_interne_marche,Isolation murs tertiaire
+BAT-EN-103,18.0,35.0,25.0,m²,table_interne_marche,Isolation plancher tertiaire
+BAT-EN-104,600.0,900.0,750.0,m²,table_interne_marche,Fenêtre/porte-fenêtre isolante tertiaire
+BAT-EN-105,25.0,50.0,37.0,m²,table_interne_marche,Isolation combles/toitures tertiaire DOM
+BAT-EN-106,90.0,160.0,125.0,m²,table_interne_marche,Isolation murs tertiaire DOM
+BAT-EN-107,100.0,180.0,140.0,m²,table_interne_marche,Isolation toitures-terrasses tertiaire
+BAT-EN-108,30.0,55.0,42.0,m²,table_interne_marche,Isolation plancher tertiaire DOM
+BAT-EN-109,280.0,450.0,365.0,m²,table_interne_marche,Fenêtre/porte-fenêtre tertiaire DOM
+BAT-EN-110,800.0,1400.0,1100.0,m²,table_interne_marche,Fenêtre pariétodynamique
+BAT-EN-111,15.0,30.0,22.0,m²,table_interne_marche,Revêtements réflectifs toiture
+BAT-EN-112,25.0,50.0,37.0,m²,table_interne_marche,Revêtements réflectifs toiture
+BAT-EQ-117,500.0,900.0,700.0,kW froid,table_interne_marche,Installation frigo CO2 sub/transcritique
+BAT-EQ-123,300.0,550.0,425.0,kW,table_interne_marche,Moto-variateur synchrone à aimants tertiaire
+BAT-EQ-124,300.0,550.0,425.0,m linéaire,table_interne_marche,Fermeture meubles frigo T+
+BAT-EQ-125,120.0,220.0,170.0,point,table_interne_marche,Fermeture meubles frigo T-
+BAT-EQ-129,400.0,700.0,550.0,m²,table_interne_marche,Lanterneaux éclairage zénithal
+BAT-EQ-130,200.0,380.0,290.0,point,table_interne_marche,Condensation frigo haute efficacité
+BAT-EQ-131,350.0,600.0,475.0,m²,table_interne_marche,Conduits de lumière naturelle
+BAT-EQ-134,400.0,700.0,550.0,m²,table_interne_marche,Meuble frigo performant intégré
+BAT-EQ-135,350.0,600.0,475.0,m²,table_interne_marche,ASI onduleur Data Center
+BAT-SE-103,300.0,900.0,600.0,unité,table_interne_marche,Réglage équilibrage chauffage tertiaire
+BAT-SE-104,400.0,1200.0,800.0,m²,table_interne_marche,CPE Services chauffage tertiaire
+BAT-SE-105,500.0,1500.0,1000.0,logement,table_interne_marche,Abaissement T° retour réseau chaleur
+BAT-TH-101,100.0,180.0,140.0,kW,table_interne_marche,Chauffe-eau solaire collectif tertiaire
+BAT-TH-103,80.0,150.0,110.0,m²,table_interne_marche,Plancher chauffant basse température
+BAT-TH-104,12.0,22.0,17.0,m,table_interne_marche,PAC air/eau tertiaire
+BAT-TH-105,150.0,400.0,250.0,unité,table_interne_marche,Radiateur basse température
+BAT-TH-108,200.0,1500.0,600.0,unité,table_interne_marche,Régulation programmation intermittence
+BAT-TH-109,50.0,200.0,120.0,logement,table_interne_marche,Optimiseur relance chauffage collectif
+BAT-TH-110,550.0,900.0,725.0,kW,table_interne_marche,Récupérateur chaleur condensation
+BAT-TH-111,1000.0,1800.0,1400.0,m²,table_interne_marche,Chauffe-eau solaire collectif tertiaire
+BAT-TH-112,120.0,220.0,170.0,kW,table_interne_marche,VEV moteur asynchrone tertiaire
+BAT-TH-115,1400.0,2400.0,1900.0,kW,table_interne_marche,Climatiseur performant DOM
+BAT-TH-116,25.0,50.0,37.0,m²,table_interne_marche,GTB gestion technique bâtiment
+BAT-TH-121,130.0,250.0,190.0,kW,table_interne_marche,Chauffe-eau solaire DOM tertiaire
+BAT-TH-122,3000.0,5500.0,4250.0,unité,table_interne_marche,Programmateur intermittence clim DOM
+BAT-TH-125,2500.0,4200.0,3350.0,installation,table_interne_marche,VMC simple flux tertiaire
+BAT-TH-126,800.0,1400.0,1100.0,m²,table_interne_marche,VMC double flux tertiaire
+BAT-TH-127,600.0,1100.0,850.0,m²,table_interne_marche,Chaudière condensation tertiaire
+BAT-TH-134,500.0,900.0,700.0,kW,table_interne_marche,Régulation haute pression flottante froid
+BAT-TH-135,600.0,1000.0,800.0,kW,table_interne_marche,Régulation haute pression flottante froid DOM
+BAT-TH-139,6000.0,11000.0,8500.0,installation,table_interne_marche,Récupération chaleur groupe froid
+BAT-TH-142,2000.0,3500.0,2750.0,unité,table_interne_marche,Déstratification d'air
+BAT-TH-143,1500.0,2800.0,2150.0,installation,table_interne_marche,Ventilo-convecteurs haute performance
+BAT-TH-145,120.0,220.0,170.0,kW,table_interne_marche,Régulation basse pression flottante froid
+BAT-TH-153,800.0,1400.0,1100.0,kW,table_interne_marche,Confinement allées Data Center
+BAT-TH-154,1800.0,3200.0,2500.0,kW,table_interne_marche,Récupération chaleur eaux grises
+BAT-TH-156,180.0,320.0,250.0,kW,table_interne_marche,Freecooling climatisation
+BAT-TH-157,600.0,1100.0,800.0,kW,table_interne_marche,Chaudière biomasse collective tertiaire
+BAT-TH-158,100.0,180.0,140.0,m²,table_interne_marche,PAC réversible air/air tertiaire
+BAT-TH-159,600.0,1000.0,800.0,kW,table_interne_marche,Raccordement réseau de froid
+BAT-TH-161,700.0,1200.0,950.0,kW,table_interne_marche,Maintien T° groupes électrogènes PAC
+BAT-TH-162,2400.0,4000.0,3200.0,kW,table_interne_marche,Système géothermique
+BAT-TH-163,1800.0,3200.0,2500.0,kW,table_interne_marche,PAC air/eau tertiaire
+BAT-TH-164,2200.0,3600.0,2900.0,kW,table_interne_marche,PAC eau/eau ou eau glycolée/eau
+IND-BA-110,150.0,280.0,215.0,point,table_interne_marche,Déstratificateur air industriel
+IND-BA-114,400.0,700.0,550.0,installation,table_interne_marche,Conduits de lumière naturelle
+IND-BA-116,150.0,280.0,215.0,luminaire,table_interne_marche,Luminaires à modules LED
+IND-BA-117,800.0,1500.0,1150.0,installation,table_interne_marche,Chauffage décentralisé performant
+IND-EN-101,30.0,55.0,42.0,m²,table_interne_marche,Isolation combles/toitures industriel
+IND-EN-102,80.0,140.0,110.0,m²,table_interne_marche,Isolation murs industriel
+IND-EN-103,40.0,70.0,55.0,m²,table_interne_marche,Isolation plancher industriel
+IND-UT-101,15000.0,45000.0,30000.0,site,table_interne_marche,Management énergétique ISO 50001
+IND-UT-102,500.0,850.0,675.0,kW,table_interne_marche,VEV moteur asynchrone industriel
+IND-UT-103,400.0,700.0,550.0,kW,table_interne_marche,Compresseur air performant industriel
+IND-UT-104,300.0,550.0,425.0,kW,table_interne_marche,Moteur haut rendement IE3/IE4
+IND-UT-105,450.0,800.0,625.0,kW,table_interne_marche,Brûleur micro-modulant
+IND-UT-106,180.0,320.0,250.0,kW,table_interne_marche,Brûleur micro-modulant condensation
+IND-UT-108,80.0,150.0,115.0,kW,table_interne_marche,Détection fuites réseau air comprimé
+IND-UT-109,400.0,700.0,550.0,kW froid,table_interne_marche,Optimisation production froid industriel
+IND-UT-112,8000.0,25000.0,16500.0,site,table_interne_marche,Système mesurage indicateurs énergétiques
+IND-UT-113,600.0,1000.0,800.0,kW,table_interne_marche,Récupérateur chaleur fumées chaudière
+IND-UT-114,340.0,580.0,460.0,kW,table_interne_marche,Moto-variateur synchrone aimants
+IND-UT-116,200.0,380.0,290.0,kW,table_interne_marche,Régulation haute pression flottante
+IND-UT-118,200.0,380.0,290.0,kW,table_interne_marche,Brûleur récup chaleur four industriel
+IND-UT-120,500.0,900.0,700.0,kW,table_interne_marche,Compresseur air basse pression
+IND-UT-122,350.0,600.0,475.0,kW,table_interne_marche,Sécheur air comprimé adsorption
+IND-UT-124,250.0,450.0,350.0,kW,table_interne_marche,Séquenceur centrale air comprimé
+IND-UT-125,1500.0,2800.0,2150.0,installation,table_interne_marche,Traitement eau chaudière vapeur
+IND-UT-127,400.0,700.0,550.0,kW,table_interne_marche,Système transmission performant
+IND-UT-129,350.0,600.0,475.0,kW,table_interne_marche,Presse injection tout électrique/hybride
+IND-UT-130,700.0,1200.0,950.0,kW,table_interne_marche,Condenseur effluents gazeux chaudière
+IND-UT-131,500.0,900.0,700.0,kW,table_interne_marche,Isolation parois planes/cylindriques
+IND-UT-132,250.0,450.0,350.0,kW,table_interne_marche,Moteur asynchrone IE4
+IND-UT-133,300.0,520.0,410.0,kW,table_interne_marche,Système pilotage moteur récupération
+IND-UT-134,120.0,220.0,170.0,kW,table_interne_marche,Mesurage indicateurs performance énergétique
+IND-UT-135,400.0,700.0,550.0,kW,table_interne_marche,Freecooling eau refroidissement
+IND-UT-137,600.0,1000.0,800.0,kW,table_interne_marche,PAC rehausse T° chaleur fatale
+IND-UT-138,350.0,600.0,475.0,kW,table_interne_marche,Conversion chaleur fatale électricité/air
+IND-UT-139,450.0,800.0,625.0,kW,table_interne_marche,Stockage chaleur fatale
+IND-UT-140,300.0,520.0,410.0,kW,table_interne_marche,Mise en veille machine air comprimé
+RES-CH-101,800.0,2500.0,1650.0,logement,table_interne_marche,Raccordement réseau chaleur EnR&R
+RES-CH-102,150.0,300.0,225.0,logement,table_interne_marche,Comptage individuel réseau chaleur
+RES-CH-103,150.0,280.0,215.0,ml,table_interne_marche,Réhabilitation poste livraison chaleur tertiaire
+RES-CH-104,200.0,350.0,275.0,ml,table_interne_marche,Réhabilitation poste livraison chaleur résidentiel
+RES-CH-105,80.0,150.0,115.0,m²,table_interne_marche,Passage réseau basse température
+RES-CH-106,120.0,220.0,170.0,m,table_interne_marche,Calorifugeage canalisations réseau
+RES-CH-107,800.0,2000.0,1400.0,ml,table_interne_marche,Extension réseau de chaleur EnR
+RES-CH-108,180.0,320.0,250.0,ml,table_interne_marche,Récupération chaleur fatale réseau
+RES-EC-103,200.0,500.0,350.0,ml,table_interne_marche,Réhabilitation réseau de chaleur
+RES-EC-104,60.0,120.0,90.0,point,table_interne_marche,Rénovation éclairage extérieur
+TRA-EQ-101,1000.0,1800.0,1400.0,unité,table_interne_marche,Unité transport intermodal rail-route
+TRA-EQ-103,2000.0,3500.0,2750.0,unité,table_interne_marche,Télématique embarquée suivi conduite
+TRA-EQ-104,1500.0,2800.0,2150.0,unité,table_interne_marche,Lubrifiant économiseur énergie VL
+TRA-EQ-106,500.0,900.0,700.0,unité,table_interne_marche,Pneus basse résistance roulement
+TRA-EQ-107,3000.0,5500.0,4250.0,unité,table_interne_marche,Unité transport intermodal fluvial-route
+TRA-EQ-108,3500.0,6500.0,5000.0,unité,table_interne_marche,Wagon autoroute ferroviaire
+TRA-EQ-109,2500.0,4500.0,3500.0,unité,table_interne_marche,Barge fluviale
+TRA-EQ-110,4000.0,7000.0,5500.0,unité,table_interne_marche,Automoteur fluvial
+TRA-EQ-111,1500.0,2800.0,2150.0,unité,table_interne_marche,Groupe frigorifique haute efficacité
+TRA-EQ-113,50.0,120.0,85.0,unité,table_interne_marche,Lubrifiant économiseur énergie transport
+TRA-EQ-114,800.0,1400.0,1100.0,unité,table_interne_marche,Véhicule léger électrique personne morale
+TRA-EQ-115,600.0,1100.0,850.0,unité,table_interne_marche,Véhicule transport marchandises optimisé
+TRA-EQ-117,350.0,600.0,475.0,unité,table_interne_marche,Véhicule léger électrique particulier
+TRA-EQ-118,800.0,1500.0,1150.0,unité,table_interne_marche,Aérodynamique poids lourd
+TRA-EQ-119,5000.0,9000.0,7000.0,unité,table_interne_marche,Aide au démarrage poids lourd
+TRA-EQ-120,3000.0,5500.0,4250.0,unité,table_interne_marche,Rétrofit électrique poids lourd
+TRA-EQ-121,2500.0,4500.0,3500.0,unité,table_interne_marche,Aérodynamique autocar
+TRA-EQ-122,1200.0,2200.0,1700.0,unité,table_interne_marche,Rétrofit électrique autocar
+TRA-EQ-123,4000.0,7000.0,5500.0,unité,table_interne_marche,Simulateur de conduite
+TRA-EQ-124,2000.0,3500.0,2750.0,unité,table_interne_marche,Branchement électrique navires quai
+TRA-EQ-125,25000.0,60000.0,42500.0,unité,table_interne_marche,Stop & Start véhicules ferroviaires
+TRA-EQ-126,8000.0,14000.0,11000.0,unité,table_interne_marche,Remotorisation électrique/hybride bateau
+TRA-EQ-127,35000.0,55000.0,45000.0,unité,table_interne_marche,Bateau électrique/hybride eaux intérieures
+TRA-EQ-128,40000.0,70000.0,55000.0,unité,table_interne_marche,Autocar/autobus électrique
+TRA-EQ-129,28000.0,48000.0,38000.0,unité,table_interne_marche,Poids lourd électrique
+TRA-EQ-130,8000.0,15000.0,11500.0,unité,table_interne_marche,Quadricycle électrique
+TRA-EQ-131,3000.0,6000.0,4500.0,unité,table_interne_marche,Vélos-cargos électriques
+TRA-EQ-132,6000.0,10000.0,8000.0,unité,table_interne_marche,Mesure conso carburant navire pêche
+TRA-SE-101,250.0,450.0,350.0,personne,table_interne_marche,Formation chauffeur transport économe
+TRA-SE-102,200.0,380.0,290.0,personne,table_interne_marche,Formation chauffeur VL économe
+TRA-SE-103,200.0,380.0,290.0,personne,table_interne_marche,Formation écoconduite
+TRA-SE-104,250.0,450.0,350.0,personne,table_interne_marche,Formation conduite économe moto
+TRA-SE-105,200.0,380.0,290.0,personne,table_interne_marche,Formation conduite économe VL
+TRA-SE-106,180.0,320.0,250.0,personne,table_interne_marche,Formation écoconduite alt
+TRA-SE-107,300.0,550.0,425.0,personne,table_interne_marche,Formation écoconduite poids lourd
+TRA-SE-108,3000.0,5500.0,4250.0,site,table_interne_marche,Formation écoconduite autocar
+TRA-SE-109,2000.0,3500.0,2750.0,site,table_interne_marche,Formation écoconduite VUL
+TRA-SE-110,1500.0,2800.0,2150.0,site,table_interne_marche,Gestion poste pneumatique marchandises
+TRA-SE-111,5000.0,9000.0,7000.0,site,table_interne_marche,Gestion poste pneumatique personnes
+TRA-SE-112,4000.0,7000.0,5500.0,unité,table_interne_marche,Service autopartage en boucle
+TRA-SE-113,3000.0,5500.0,4250.0,site,table_interne_marche,Suivi conso carburants cartes privatives
+TRA-SE-116,2.0,5.0,3.0,UTI.km,table_interne_marche,Fret ferroviaire
+TRA-SE-117,1.0,3.0,2.0,t.km,table_interne_marche,Fret fluvial
