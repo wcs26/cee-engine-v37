@@ -19157,6 +19157,51 @@ window.V2 = {
       }
     }
 
+    // V42.11 — SECTION AVAL : Questions précises par fiche pour chiffrage exact
+    // Après que l'utilisateur a vu le pack (amont = P2 + P18), on lui propose ici
+    // les questions précises pour affiner le calcul cumac de chaque fiche retenue.
+    // Logique sales : on présente d'abord le potentiel large, puis on affine.
+    var qAval = this.state.questions || {};
+    if (qAval.par_fiche && Object.keys(qAval.par_fiche).length) {
+      var packAval = this.state.pack || [];
+      var packPrimesAval = {};
+      packAval.forEach(function(p) { packPrimesAval[p.fiche || p.ref] = p.prime || 0; });
+      var refsAval = Object.keys(qAval.par_fiche).sort(function(a,b) { return (packPrimesAval[b]||0) - (packPrimesAval[a]||0); });
+      var isVendorAval = document.body.classList.contains('ui-mode-vendor');
+
+      html += '<div class="v2-card opportunity-section" style="margin-top:24px;border-color:rgba(200,255,107,0.30);">';
+      html += '<div class="v2-card-title" style="font-size:15px;letter-spacing:-0.2px;">📐 Affinons le calcul exact — questions par fiche retenue</div>';
+      html += '<div class="opportunity-intro">';
+      html += 'Pour chaque opération du pack, une information complémentaire permet de calculer la prime au centime près selon la formule ADEME officielle. ';
+      html += 'Les valeurs par défaut sont déjà estimées intelligemment depuis votre profil ; corrigez-les pour préciser.';
+      html += '</div>';
+
+      refsAval.forEach(function(ref) {
+        var qs = qAval.par_fiche[ref];
+        if (!qs || !qs.length) return;
+        var first = qs[0] || {};
+        var nomCom = first.card_fiche_nom || first.fiche_nom || ref;
+        var primeF = packPrimesAval[ref] || 0;
+        var category = first.card_category || 'Opportunité';
+
+        html += '<div class="opportunity-card">';
+        html += '<div class="opportunity-header">';
+        html += '<div class="opportunity-category">' + (isVendorAval ? category : ref) + '</div>';
+        if (primeF > 0) html += '<div class="opportunity-amount">' + primeF.toLocaleString('fr-FR') + ' €</div>';
+        html += '</div>';
+        html += '<div class="opportunity-title">' + nomCom + '</div>';
+        html += '<div class="opportunity-divider"></div>';
+        qs.forEach(function(qq) {
+          var qqCopy = Object.assign({}, qq, { param: 'aval__' + ref + '__' + (qq.param || qq.id || 'p') });
+          // En Mode Vendeur, utiliser version sans préfixe technique
+          if (isVendorAval && qqCopy.question_clean) qqCopy.question = qqCopy.question_clean;
+          html += V2._qHtml(qqCopy);
+        });
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
     c.innerHTML = html;
     this._updateTotal();
   },
