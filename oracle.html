@@ -16641,38 +16641,68 @@ window.POSTE_LABELS = {
 window.classifyPoste = function(ref, nom) {
   var n = (nom || '').toLowerCase();
   var r = (ref || '').toUpperCase();
-  // Ordre = priorité (premier match gagne)
+  // V43.5 — Règles enrichies pour réduire 'autres' de 28% à ~5%.
+  // Ordre = priorité (premier match gagne). Patterns spécifiques en haut.
   var rules = [
-    ['agri_elevage',   ['élevage','tank lait','tank à lait','porcin','volaille','bovin','animaux','pré-refroidisseur','lait','fumier','lisier']],
-    ['agri_serre',     ['serre','écran thermique','maraîchère','horticole','cultures','double paroi gonflable','pulvérisation','irrigation']],
+    // === Spécialités agricoles ===
+    ['agri_elevage',   ['élevage','tank lait','tank à lait','porcin','volaille','bovin','animaux','pré-refroidisseur','lait','fumier','lisier','traite','laitière','laiterie','poulailler']],
+    ['agri_serre',     ['serre','écran thermique','maraîchère','horticole','cultures','double paroi gonflable','pulvérisation','irrigation','ordinateur climatique','climat serre']],
+    // === Enveloppe ===
     ['toiture',        ['toiture','comble','isolation toiture','rampants','revêtements réflectifs']],
-    ['murs',           ['mur',' ite ',' iti ','parois opaques','paroi opaque','isolation paroi']],
+    ['murs',           ['mur',' ite ',' iti ','parois opaques','paroi opaque','isolation paroi','isolant mur']],
     ['plancher',       ['plancher','sol bas','isolation sol']],
-    ['fenetres',       ['fenêtre','fenetre','porte-fenêtre','vitrage','menuiserie','lanterneau','conduits de lumière','pariétodynamique','puits de lumière']],
-    ['audit_iso',      ['iso 50001','audit énergétique','sme ','system management énergie']],
-    ['cpe_renov',      ['cpe','contrat performance','rénovation globale','renovation globale','rénovation amplitude','rénovation ampleur','renovation ampleur']],
+    ['fenetres',       ['fenêtre','fenetre','porte-fenêtre','vitrage','menuiserie','lanterneau','conduits de lumière','pariétodynamique','puits de lumière','volet','protection solaire']],
+    // === Audit & contrats ===
+    ['audit_iso',      ['iso 50001','audit énergétique','sme ','system management énergie','système management énergie']],
+    ['cpe_renov',      ['cpe','contrat performance','rénovation globale','renovation globale','rénovation amplitude','rénovation ampleur','renovation ampleur','rénovation maison','rénovation appartement','services chauffage']],
+    // === Déstratification ===
     ['destrat',        ['destrat','déstrat']],
-    ['chauffage_pac',  ['pompe à chaleur','pompe a chaleur','pac air','pac eau','pac hybride','pac réversible','pac collective','géothermique','thermodynamique']],
-    ['chauffage_chaud',['chaudière','chaudiere','biomasse','optimiseur relance','mini-cogénération','micro-cogénération','chauffe-bain']],
-    ['chaleur_fatale', ['récup chaleur','récupération chaleur','chaleur fatale','récup chaleur tank','récup chaleur eaux grises','récupération chaleur eaux','récupération chaleur tank','récupération chaleur serveurs','récupération chaleur groupe froid']],
-    ['chauffage_emet', ['radiateur','plancher chauffant','ventilo-conv','aérotherme','aerotherme','tube de chauffage','double tube']],
-    ['bruleur',        ['brûleur','bruleur','micro-modulant']],
-    ['regulation',     ['régulation','regulation','gtb','gtc','programmation','programmateur','optimiseur','sonde','robinet thermostatique','mesurage','comptage','sous-comptage','compteur','pilotage','module température','affichage consommations','suivi consommations','équilibrage','désembouage','réglage','contrôle','abaissement t° retour','maintien t°']],
-    ['ventilation',    ['vmc','ventilation','extraction','cta ','double flux','simple flux','récupérateur ventil','déshumidification air','pulseur']],
-    ['eclairage',      ['éclairage','eclairage',' led ','led ','luminaire','lampe','tube fluo']],
-    ['ecs',            ['eau chaude','ecs','chauffe-eau','ces ','solaire combiné','cesi ','cet ','hydro-économe','mitigeur','douche','dispositif solaire thermique']],
-    ['froid_negatif',  ['chambre froide','congélation','froid négatif','meubles frigo','asi onduleur','meuble frigo','onduleur data']],
-    ['froid_clim',     ['climatisation','climatiseur','clim ','rooftop','freecooling','condensation frigo','frigorif','condenseur','haute pression flottante','basse pression flottante','confinement allées','data center','optimisation production froid']],
-    ['process_indus',  ['process','four','séchoir','sechoir','autoclave','compresseur air','air comprimé','pompe à vide','pompe a vide','moteur','moto-variateur','vev','variateur','variation vitesse','séchage','sécheur','isolation point','isolation thermique réseau','transmission performant','presse injection','chauffage décentralisé performant']],
+    // === Chauffage ===
+    ['chauffage_pac',  ['pompe à chaleur','pompe a chaleur','pac air','pac eau','pac hybride','pac réversible','pac collective','géothermique','thermodynamique','pac rehausse']],
+    ['chauffage_chaud',['chaudière','chaudiere','biomasse','optimiseur relance','mini-cogénération','micro-cogénération','chauffe-bain','générateur air chaud','poêle','insert','foyer fermé','radiant gaz']],
+    ['chauffage_emet', ['radiateur','plancher chauffant','ventilo-conv','aérotherme','aerotherme','tube de chauffage','double tube','chauffage zoné','chauffage décentralisé','dalles chauffantes','lampes chauffantes']],
+    // === Brûleur ===
+    ['bruleur',        ['brûleur','bruleur','micro-modulant','allumage modulant']],
+    // === Régulation ===
+    ['regulation',     ['régulation','regulation','gtb','gtc','programmation','programmateur','optimiseur','sonde','robinet thermostatique','mesurage','comptage','sous-comptage','compteur','pilotage','module température','affichage consommations','suivi consommations','équilibrage','désembouage','réglage','contrôle','abaissement t° retour','maintien t°','asservissement','intermittence']],
+    // === Ventilation ===
+    ['ventilation',    ['vmc','ventilation','extraction','cta ','double flux','simple flux','récupérateur ventil','déshumidification air','pulseur','aération','ventilateur']],
+    // === Éclairage ===
+    ['eclairage',      ['éclairage','eclairage',' led ','led ','luminaire','lampe','tube fluo','projecteur','plage horaire éclairage']],
+    // === ECS ===
+    ['ecs',            ['eau chaude','ecs','chauffe-eau','ces ','solaire combiné','cesi ','cet ','hydro-économe','mitigeur','douche','dispositif solaire thermique','système solaire']],
+    // === Récup chaleur fatale ===
+    ['chaleur_fatale', ['récup chaleur','récupération chaleur','chaleur fatale','récup chaleur tank','récup chaleur eaux grises','récupération chaleur eaux','récupération chaleur tank','récupération chaleur serveurs','récupération chaleur groupe froid','récupération condensation','rejet thermique']],
+    // === Froid ===
+    ['froid_negatif',  ['chambre froide','congélation','froid négatif','meubles frigo','asi onduleur','meuble frigo','onduleur data','meuble froid','vitrine réfrigérée','fermeture frigo']],
+    ['froid_clim',     ['climatisation','climatiseur','clim ','rooftop','freecooling','condensation frigo','frigorif','condenseur','haute pression flottante','basse pression flottante','confinement allées','data center','optimisation production froid','installation frigorif','co2 sub','transcritique','split','groupe froid','groupe électrogène']],
+    // === Process industriel ===
+    ['process_indus',  ['process','four','séchoir','sechoir','autoclave','compresseur air','air comprimé','pompe à vide','pompe a vide','moteur','moto-variateur','vev','variateur','variation vitesse','séchage','sécheur','isolation point','isolation thermique réseau','transmission performant','presse injection','chauffage décentralisé performant','stockage chaleur','conversion chaleur','système transmission']],
+    // === Calorifugeage ===
     ['isolation_tuyau',['calorifuge','tuyau','canalisation','point singulier','piquage']],
+    // === Solaire ===
     ['solaire_pv',     ['photovoltaïque',' pv ','pvt','capteur solaire','panneau hybride','séchage solaire']],
-    ['transport',      ['véhicule','pneu','borne','flotte','recharge','wagons','optimisation transport','éco-conduite']],
-    ['reseau_chaleur', ['réseau de chaleur','sous-station','raccordement réseau','poste livraison chaleur','passage réseau basse']],
+    // === Transport ===
+    ['transport',      ['véhicule','pneu','borne','flotte','recharge','wagons','optimisation transport','éco-conduite','irve','iru','remorque','attelage']],
+    // === Réseau chaleur ===
+    ['reseau_chaleur', ['réseau de chaleur','sous-station','raccordement réseau','poste livraison chaleur','passage réseau basse','réhabilitation poste livraison','réseau basse température']],
   ];
   for (var i=0; i<rules.length; i++) {
     var key = rules[i][0], kws = rules[i][1];
     for (var j=0; j<kws.length; j++) { if (n.indexOf(kws[j]) !== -1) return key; }
   }
+  // V43.5 — Fallback par préfixe REF si nom non matché
+  if (r.startsWith('AGRI-EQ-')) return 'agri_serre';
+  if (r.startsWith('AGRI-TH-')) return 'chauffage_chaud';
+  if (r.startsWith('AGRI-UT-')) return 'process_indus';
+  if (r.startsWith('AGRI-SE-')) return 'regulation';
+  if (r.startsWith('BAR-SE-'))  return 'regulation';
+  if (r.startsWith('BAR-EQ-'))  return 'ecs';
+  if (r.startsWith('BAT-SE-'))  return 'regulation';
+  if (r.startsWith('IND-UT-'))  return 'process_indus';
+  if (r.startsWith('IND-BA-'))  return 'eclairage';
+  if (r.startsWith('RES-CH-'))  return 'reseau_chaleur';
+  if (r.startsWith('TRA-'))     return 'transport';
   return 'autres';
 };
 window.posteOf = function(ref, nom) {
@@ -16735,6 +16765,23 @@ window.V2 = {
         e.preventDefault();
         document.body.classList.toggle('show-legacy-toggle');
         console.log('[V42.0] Toggle V1 legacy fab visibility :', document.body.classList.contains('show-legacy-toggle'));
+      }
+      // V43.7 — Navigation clavier ←/→ entre slides Mode Vendeur (fluidité visio)
+      // Évite que le vendeur cherche les boutons "Suivant" pendant l'appel client
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        // Ne pas intercepter si focus sur input/select/textarea (saisie en cours)
+        var tag = (e.target && e.target.tagName || '').toUpperCase();
+        if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+        if (!V2.state.active) return;
+        var VENDOR_FLOW_PAGES = [20, 21, 1, 2, 18, 5, 7, 9, 10];
+        var cur = V2.state.currentPage;
+        var idx = VENDOR_FLOW_PAGES.indexOf(cur);
+        if (idx === -1) return; // pas sur une page du flow vendeur
+        var next = (e.key === 'ArrowRight') ? VENDOR_FLOW_PAGES[idx + 1] : VENDOR_FLOW_PAGES[idx - 1];
+        if (next != null) {
+          e.preventDefault();
+          V2.go(next);
+        }
       }
     });
   },
@@ -19109,45 +19156,72 @@ window.V2 = {
 
     var html = '';
 
-    // V43.3 — Récap par poste métier en TOP P5 (vue panoramique anticipée)
-    // Pour chaque poste, agrège les fiches du pack + prime totale.
-    // Donne immédiatement au client la vision "voici les leviers identifiés".
+    // V43.3 + V43.4 — Récap par poste métier en TOP P5 (vue panoramique avec drill-down)
+    // Pour chaque poste, agrège les fiches du pack + prime totale + détail fiches (top 5)
+    // Donne immédiatement au client la vision "voici les leviers identifiés + détail par poste"
     if (this.state.pack && this.state.pack.length && typeof window.getFullCalc === 'function' && typeof FICHES !== 'undefined' && typeof window.posteOf === 'function') {
       var zoneRP = (this.state.profil && this.state.profil.zone) || 'H2';
       var eTypeRP = (this.state.answers && this.state.answers.energie) || '';
-      var posteAgg = {}; // {posteKey: {icon, label, count, prime, refs}}
+      var posteAgg = {}; // {posteKey: {icon, label, count, prime, fiches:[{ref,label,prime,coverage}]}}
       this.state.pack.forEach(function(pkg) {
         var ref = pkg.fiche || pkg.ref;
         var fv = FICHES.find(function(x){return x.ref===ref;});
         if (!fv) return;
         var nom = (fv.label || fv.ref);
         var p = window.posteOf(ref, nom);
-        if (!posteAgg[p.key]) posteAgg[p.key] = {icon:p.icon, label:p.label, count:0, prime:0, refs:[]};
+        if (!posteAgg[p.key]) posteAgg[p.key] = {icon:p.icon, label:p.label, count:0, prime:0, fiches:[]};
         posteAgg[p.key].count++;
-        posteAgg[p.key].refs.push(ref);
         try {
           var calcRP = window.getFullCalc(fv, 1, zoneRP, eTypeRP);
-          posteAgg[p.key].prime += (calcRP.primeNette || 0);
-        } catch(_e) {}
+          var pn = calcRP.primeNette || 0;
+          posteAgg[p.key].prime += pn;
+          posteAgg[p.key].fiches.push({ref:ref, label:nom, prime:pn, coverage:calcRP.coverage||0});
+        } catch(_e) {
+          posteAgg[p.key].fiches.push({ref:ref, label:nom, prime:0, coverage:0});
+        }
       });
       var posteEntries = Object.keys(posteAgg).map(function(k){return Object.assign({key:k}, posteAgg[k]);});
       posteEntries.sort(function(a,b){return b.prime - a.prime;});
+      // Tri interne : fiches par prime décroissante
+      posteEntries.forEach(function(pe){ pe.fiches.sort(function(a,b){return b.prime - a.prime;}); });
       var totalPrimeAllPostes = posteEntries.reduce(function(s,p){return s + p.prime;}, 0);
 
       if (posteEntries.length > 0) {
         html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(110,146,255,.08),rgba(110,146,255,.02));border-color:rgba(110,146,255,.30);">';
-        html += '<div class="v2-card-title" style="color:#6E92FF;font-size:14px;">🗺 ' + posteEntries.length + ' postes de rénovation identifiés — vue panoramique</div>';
-        html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:12px;line-height:1.55;">Toutes les opportunités CEE classées par poste de travaux. Cliquez sur un poste pour zoomer en bas de page.</div>';
-        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">';
-        posteEntries.forEach(function(pe) {
+        html += '<div class="v2-card-title" style="color:#6E92FF;font-size:14px;">🗺 ' + posteEntries.length + ' postes de rénovation identifiés — détail interactif</div>';
+        html += '<div style="font-size:12px;color:rgba(245,245,247,.7);margin-bottom:12px;line-height:1.55;">Toutes les opportunités CEE classées par poste de travaux. <strong>Cliquez sur un poste</strong> pour voir le détail des fiches.</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">';
+        posteEntries.forEach(function(pe, idx) {
           var pct = totalPrimeAllPostes > 0 ? Math.round(pe.prime / totalPrimeAllPostes * 100) : 0;
-          html += '<div style="padding:12px;background:rgba(110,146,255,.06);border:1px solid rgba(110,146,255,.20);border-radius:8px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background=\'rgba(110,146,255,.12)\';this.style.transform=\'translateY(-1px)\';" onmouseout="this.style.background=\'rgba(110,146,255,.06)\';this.style.transform=\'translateY(0)\';">';
+          var detailId = 'posteDetail_' + idx;
+          var headerId = 'posteHeader_' + idx;
+          html += '<div id="' + headerId + '" style="padding:12px;background:rgba(110,146,255,.06);border:1px solid rgba(110,146,255,.20);border-radius:8px;cursor:pointer;transition:all .2s;" onclick="var el=document.getElementById(\'' + detailId + '\');el.style.display=el.style.display===\'none\'?\'block\':\'none\';this.style.background=el.style.display===\'none\'?\'rgba(110,146,255,.06)\':\'rgba(110,146,255,.14)\';this.style.borderColor=el.style.display===\'none\'?\'rgba(110,146,255,.20)\':\'rgba(110,146,255,.45)\';" onmouseover="if(document.getElementById(\'' + detailId + '\').style.display===\'none\')this.style.background=\'rgba(110,146,255,.10)\';" onmouseout="if(document.getElementById(\'' + detailId + '\').style.display===\'none\')this.style.background=\'rgba(110,146,255,.06)\';">';
           html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
           html += '<span style="font-size:18px;">' + pe.icon + '</span>';
-          html += '<span style="font-size:12px;font-weight:700;color:rgba(245,245,247,.9);">' + pe.label + '</span>';
+          html += '<span style="font-size:12px;font-weight:700;color:rgba(245,245,247,.95);flex:1;">' + pe.label + '</span>';
+          html += '<span style="font-size:10px;color:rgba(245,245,247,.4);">▼</span>';
           html += '</div>';
           html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:4px;">' + pe.count + ' fiche' + (pe.count>1?'s':'') + ' éligible' + (pe.count>1?'s':'') + '</div>';
           if (pe.prime > 0) html += '<div style="font-family:JetBrains Mono,monospace;font-size:14px;font-weight:700;color:#C8FF6B;">' + Math.round(pe.prime).toLocaleString('fr-FR') + ' €<span style="font-size:10px;color:rgba(245,245,247,.5);font-weight:400;margin-left:4px;">(' + pct + '%)</span></div>';
+
+          // V43.4 — Détail fiches du poste (collapsable, fermé par défaut)
+          html += '<div id="' + detailId + '" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(110,146,255,.20);">';
+          var topFiches = pe.fiches.slice(0, 8); // Top 8 par poste
+          topFiches.forEach(function(f) {
+            var labelShort = f.label.length > 38 ? f.label.slice(0,38) + '…' : f.label;
+            var covColor = f.coverage >= 90 ? '#C8FF6B' : f.coverage >= 50 ? '#FFC92E' : '#ff9c2e';
+            html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px;">';
+            html += '<div style="flex:1;min-width:0;">';
+            html += '<div style="font-family:JetBrains Mono,monospace;color:#58a6ff;font-weight:700;font-size:10.5px;">' + f.ref + '</div>';
+            html += '<div style="color:rgba(245,245,247,.75);font-size:10.5px;line-height:1.3;margin-top:2px;">' + labelShort + '</div>';
+            html += '</div>';
+            html += '<div style="text-align:right;margin-left:10px;">';
+            html += '<div style="font-family:JetBrains Mono,monospace;color:#C8FF6B;font-weight:700;">' + Math.round(f.prime).toLocaleString('fr-FR') + ' €</div>';
+            html += '<div style="font-size:9px;color:' + covColor + ';font-weight:600;">couv ' + Math.round(f.coverage) + '%</div>';
+            html += '</div></div>';
+          });
+          if (pe.fiches.length > 8) html += '<div style="font-size:10px;color:rgba(245,245,247,.5);text-align:center;margin-top:6px;font-style:italic;">+ ' + (pe.fiches.length - 8) + ' autre' + (pe.fiches.length-8>1?'s':'') + ' (voir liste complète plus bas)</div>';
+          html += '</div>';
           html += '</div>';
         });
         html += '</div>';
