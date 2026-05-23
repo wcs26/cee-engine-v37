@@ -18686,16 +18686,29 @@ window.V2 = {
 
   _qHtml(qq) {
     // V39.3.2 — supporte 3 types : text (legacy), nombre (avec unité), choix (dropdown)
+    // V44.8 — Pré-remplissage intelligent depuis qq.default_value (pipeline backend)
     var id = qq.param || qq.id || ('q_' + Math.random().toString(36).slice(2,8));
     var val = this.state.answers[id];
+    var hasUserVal = (val !== undefined && val !== null && val !== '');
+    if (!hasUserVal && qq.default_value !== undefined && qq.default_value !== null) {
+      val = qq.default_value;
+      // Auto-persist le default dans state.answers pour que les calculs aval l'utilisent
+      this.state.answers[id] = val;
+    }
     if (val === undefined || val === null) val = '';
     var title = qq.question || qq.label || '?';
+    var sourceBadge = '';
+    if (!hasUserVal && qq.default_source) {
+      sourceBadge = ' <span style="font-size:10px;color:rgba(255,201,46,.85);font-weight:600;margin-left:6px;" title="Valeur pré-remplie automatiquement, modifier si différent">? auto</span>';
+    } else if (hasUserVal) {
+      sourceBadge = ' <span style="font-size:10px;color:#C8FF6B;font-weight:600;margin-left:6px;" title="Confirmé par vous">✓</span>';
+    }
     var impact = qq.impact ? '<div class="v2-q-impact">' + qq.impact + '</div>' : '';
-    var html = '<div class="v2-question"><div class="v2-q-text">' + title + '</div>' + impact;
+    var html = '<div class="v2-question"><div class="v2-q-text">' + title + sourceBadge + '</div>' + impact;
 
+    var markUser = "V2.state.answers['" + id + "']=";
     if (qq.type === 'choix' && Array.isArray(qq.choices) && qq.choices.length) {
-      // Dropdown avec liste exacte des choix ADEME
-      html += '<select class="v2-select" onchange="V2.state.answers[\'' + id + '\']=this.value">';
+      html += '<select class="v2-select" onchange="' + markUser + 'this.value">';
       html += '<option value="">— choisir —</option>';
       qq.choices.forEach(function(c) {
         var sel = (String(val) === String(c)) ? ' selected' : '';
@@ -18705,9 +18718,9 @@ window.V2 = {
       html += '</select>';
     } else if (qq.type === 'nombre') {
       var unite = qq.unite ? '<span style="margin-left:6px;font-size:11px;color:rgba(245,245,247,.5);">' + qq.unite + '</span>' : '';
-      html += '<input type="number" class="v2-input mono" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="0" oninput="V2.state.answers[\'' + id + '\']=Number(this.value)||0" style="width:160px;">' + unite;
+      html += '<input type="number" class="v2-input mono" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="0" oninput="' + markUser + 'Number(this.value)||0" style="width:160px;">' + unite;
     } else {
-      html += '<input type="text" class="v2-input" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="Ta réponse" oninput="V2.state.answers[\'' + id + '\']=this.value">';
+      html += '<input type="text" class="v2-input" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="Ta réponse" oninput="' + markUser + 'this.value">';
     }
     html += '</div>';
     return html;

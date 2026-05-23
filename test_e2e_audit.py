@@ -34,7 +34,9 @@ CAS_TEST = [
         'energie': 'electricite',
         'departement': '75',
         'micro_attendue': 'commerce',
-        'fiches_attendues_mini': ['BAT-EQ-127'],  # LED tertiaire
+        # V44.4 — BAT-EQ-127 LED tertiaire inactive depuis 71e arrêté 1/8/2025
+        # On vérifie plutôt BAT-EQ-124/125 (fermeture meubles frigo) actives
+        'fiches_attendues_mini': ['BAT-EQ-124', 'BAT-TH-158'],
     },
     {
         'siret': '331 760 481 00084',
@@ -129,6 +131,25 @@ def main():
                 ratio = prime / (cumac / 1000)  # prime €/MWhc
                 if ratio < 5 or ratio > 30:
                     warns.append(f"{cas['siret']}: {ref} ratio prime/cumac aberrant : {ratio:.1f} €/MWhc")
+
+        # 5. V44.4 — Cohérence prime/coût/coverage par fiche du top10
+        for p in pack[:10]:
+            ref = p.get('fiche') or p.get('ref')
+            prime = p.get('prime', 0)
+            cumac = p.get('cumac', 0)
+            cout = couts.get(ref, {})
+            cout_moy = cout.get('moy', 0)
+            if prime > 0 and cout_moy > 0:
+                # Approx coverage par défaut (quantité unitaire)
+                # Real coverage = prime / (cout × quantité réelle), mais quantité dépend du contexte
+                # Si prime brute < 1€/MWhc → bug certain
+                if prime < cumac * 0.001:
+                    bugs.append(f"{cas['siret']}: {ref} prime {prime:.0f}€ << cumac {cumac:.0f} kWhc — sous-évaluée ?")
+
+        # 6. V44.4 — Vérifier que les fiches du pack ont toutes un cumac > 0
+        pack_sans_cumac = [p.get('fiche') or p.get('ref') for p in pack if p.get('cumac', 0) == 0 and not fiches_all.get(p.get('fiche') or p.get('ref'), {}).get('mode_calcul')]
+        if pack_sans_cumac:
+            warns.append(f"{cas['siret']}: {len(pack_sans_cumac)} fiches simples du pack avec cumac=0 : {pack_sans_cumac[:5]}")
 
         print()
 

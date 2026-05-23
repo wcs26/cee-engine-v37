@@ -468,6 +468,40 @@ def build_questions_for_fiche(fiche, connu):
     # Version "propre" sans le préfixe [REF] technique — utilisée en Mode Vendeur
     for q in questions:
         q["question_clean"] = _REF_PREFIX_RE.sub("", q.get("question", ""))
+
+    # V44.8 — Pré-remplissage intelligent des valeurs par défaut depuis contexte connu
+    # Permet à l'UI (P5 aval) d'afficher un placeholder/valeur initiale plutôt que 0
+    # `connu` peut être un dict (avec valeurs) ou un set (juste présence de clés)
+    surface_known = None
+    zone_known = None
+    if isinstance(connu, dict):
+        surface_known = connu.get("surface")
+        zone_known = connu.get("zone")
+    # Si set : on ne peut pas extraire de valeurs, donc skip défauts numériques
+    ratio = fiche.get("surface_ratio")
+    for q in questions:
+        param = q.get("param", "")
+        if "default_value" in q:
+            continue  # déjà fourni en amont
+        if param == "surface" and surface_known:
+            if ratio and 0 < ratio < 1:
+                q["default_value"] = int(surface_known * ratio)
+                q["default_source"] = "auto_calc_ratio"
+            else:
+                q["default_value"] = int(surface_known)
+                q["default_source"] = "profil_surface_batiment"
+        elif param == "puissance" and surface_known:
+            q["default_value"] = max(5, int(surface_known * 0.05))
+            q["default_source"] = "estim_50W_par_m2"
+        elif param == "quantite" and surface_known:
+            q["default_value"] = max(1, int(surface_known / 50))
+            q["default_source"] = "estim_1_unite_par_50m2"
+        elif param == "logements" and surface_known:
+            q["default_value"] = max(1, int(surface_known / 70))
+            q["default_source"] = "estim_1_logt_par_70m2"
+        elif param == "zone" and zone_known:
+            q["default_value"] = zone_known
+            q["default_source"] = "profil_departement"
     return questions
 
 
