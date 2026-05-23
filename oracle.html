@@ -21323,14 +21323,32 @@ window.V2 = {
   _notifyPrecisionUpdate() {
     // V38.13 — toast confirmation
     // V44.5 — Validation soft cohérence + suggestion recalcul
+    // V45.0 — Auto-refresh sticky bar pour live update prime/marge en visio
     if (typeof STATE !== 'undefined' && STATE._proAnswers) {
       var warns = V2._validateInputs(STATE._proAnswers);
       if (warns.length && typeof showToast === 'function') {
         showToast('⚠ ' + warns[0] + (warns.length > 1 ? ' (+' + (warns.length-1) + ' autres alertes)' : ''), 6000);
-        return;
+      } else if (typeof showToast === 'function') {
+        showToast('💾 Donnée enregistrée — recalcul prime live', 2000);
       }
     }
-    if (typeof showToast === 'function') showToast('💾 Donnée enregistrée — la prime se met à jour automatiquement', 3000);
+    // V45.0 — Refresh sticky bar + total visible immédiatement
+    try {
+      V2._refreshStickyBar();
+      // Si on est sur P5, re-render pour mettre à jour le classement V44.0
+      if (V2.state.currentPage === 5 && typeof V2._renderPrimesZero === 'function') {
+        // Debounce pour éviter re-render multiples lors de saisies rapides
+        clearTimeout(V2._precisionDebounce);
+        V2._precisionDebounce = setTimeout(function() {
+          V2._renderPrimesZero();
+        }, 400);
+      }
+      // Si sur P7 (Économies), refresh KPI
+      if (V2.state.currentPage === 7 && typeof V2.renderP5 === 'function') {
+        clearTimeout(V2._p7Debounce);
+        V2._p7Debounce = setTimeout(function(){ V2.renderP5(); }, 400);
+      }
+    } catch(_e) {}
   },
 
   // V44.5 — Validation soft des inputs (warnings sans bloquer)
