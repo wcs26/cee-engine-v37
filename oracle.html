@@ -19035,6 +19035,32 @@ window.V2 = {
     fichesZero.sort((a,b) => (b.calc.primeBrute||0) - (a.calc.primeBrute||0));
 
     var html = '';
+
+    // V43.2 — Bandeau CO2 + économie facture en HAUT de P5 (wow factor visio client)
+    var gcGlobal = null;
+    try { if (typeof window.getGlobalCalc === 'function') gcGlobal = window.getGlobalCalc(); } catch(_e) {}
+    if (gcGlobal && gcGlobal.totalKwhc > 0) {
+      var eTypeP5 = (this.state.answers && this.state.answers.energie) || '';
+      var pxEnergieP5 = (eTypeP5 === 'electricite' || eTypeP5 === 'electrique' || eTypeP5 === 'elec') ? 0.20
+        : (eTypeP5 === 'fioul') ? 0.13
+        : (eTypeP5 === 'gaz' || eTypeP5 === 'gpl') ? 0.10
+        : (eTypeP5 === 'bois' || eTypeP5 === 'biomasse') ? 0.06
+        : (eTypeP5 === 'reseau' || eTypeP5 === 'rcu') ? 0.10
+        : 0.12;
+      var ecoFactureAnP5 = (gcGlobal.totalKwhc / 12) * pxEnergieP5;
+      var co2AnP5 = (gcGlobal.totalKwhc * 0.057) / (12 * 1000);
+      var voituresP5 = Math.round(co2AnP5 / 4.6);
+      var arbresP5 = Math.round(co2AnP5 * 50);
+      html += '<div class="v2-card" style="background:linear-gradient(135deg,rgba(125,217,131,.10),rgba(63,185,80,.04));border-color:rgba(125,217,131,.30);">';
+      html += '<div class="v2-card-title" style="color:#7dd983;font-size:14px;">🌍 Impact total du pack — annuel et durée vie</div>';
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;font-size:12.5px;line-height:1.6;margin-top:8px;">';
+      html += '<div><div style="font-size:22px;font-weight:800;color:#C8FF6B;">' + Math.round(ecoFactureAnP5).toLocaleString('fr-FR') + ' €/an</div><div style="color:rgba(245,245,247,.7);">économie facture énergie (estimation)</div></div>';
+      html += '<div><div style="font-size:22px;font-weight:800;color:#7dd983;">' + co2AnP5.toFixed(1) + ' t CO₂/an</div><div style="color:rgba(245,245,247,.7);">émissions évitées (ratio ADEME)</div></div>';
+      if (voituresP5 > 0) html += '<div><div style="font-size:22px;font-weight:800;color:#7dd983;">≈ ' + voituresP5 + ' voiture' + (voituresP5 > 1 ? 's' : '') + '</div><div style="color:rgba(245,245,247,.7);">retirée' + (voituresP5 > 1 ? 's' : '') + ' de la route</div></div>';
+      if (arbresP5 > 0) html += '<div><div style="font-size:22px;font-weight:800;color:#7dd983;">≈ ' + arbresP5.toLocaleString('fr-FR') + ' arbres</div><div style="color:rgba(245,245,247,.7);">équivalent absorption annuelle</div></div>';
+      html += '</div></div>';
+    }
+
     html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.10),rgba(200,255,107,.02));border-color:rgba(200,255,107,.35);">';
     html += '<div class="v2-card-title" style="color:#C8FF6B;">🎁 Argument commercial maximum — projet auto-financé</div>';
     html += '<div style="font-size:13px;color:rgba(245,245,247,.75);line-height:1.6;">';
@@ -20741,27 +20767,77 @@ window.V2 = {
     if (microQuestions[currentMicro] && microQuestions[currentMicro].length) {
       var qList = microQuestions[currentMicro];
       var microLabel = (microActivities.find(m => m.key === currentMicro) || {}).label || currentMicro;
-      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(125,217,131,.08),rgba(125,217,131,.01));border-color:rgba(125,217,131,.30);">';
-      html += '<div class="v2-card-title" style="color:#7dd983;">📋 ' + qList.length + ' questions spécifiques pour <strong>' + microLabel + '</strong></div>';
-      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:12px;">Questions du V1 MICRO_ACTIVITIES (~150 questions au total réparties sur 13 sous-activités).</div>';
-      qList.forEach(q => {
-        var val = current[q.field] != null ? current[q.field] : (typeof q.default === 'function' ? q.default(surfCalc) : q.default);
-        html += '<div style="display:grid;grid-template-columns:1fr 220px;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);align-items:center;">';
-        html += '<div style="font-size:13px;">';
-        html += '<div style="font-weight:600;">' + q.label + (q.unit ? ' <span style="font-size:11px;color:#58a6ff;">(' + q.unit + ')</span>' : '') + '</div>';
-        html += '<div style="font-size:10px;color:rgba(245,245,247,.5);">💰 ' + q.impact + '</div>';
-        html += '</div>';
-        var attrId = 'microQ_' + q.field;
-        var onChange = "STATE._proAnswers=STATE._proAnswers||{};STATE._proAnswers['" + q.field + "']=";
-        if (q.type === 'select') {
-          html += '<select id="' + attrId + '" onchange="' + onChange + 'this.value;V2._notifyPrecisionUpdate();" style="width:100%;padding:6px 10px;background:#0d1117;color:#fff;border:1px solid rgba(125,217,131,.3);border-radius:6px;font-size:13px;">';
-          q.options.forEach(o => { var sel = (o == val) ? ' selected' : ''; html += '<option value="' + o + '"' + sel + '>' + o.replace(/_/g, ' ') + '</option>'; });
-          html += '</select>';
-        } else {
-          html += '<input type="number" id="' + attrId + '" value="' + val + '" onchange="' + onChange + 'parseFloat(this.value);V2._notifyPrecisionUpdate();" style="width:100%;padding:6px 10px;background:#0d1117;color:#fff;border:1px solid rgba(125,217,131,.3);border-radius:6px;font-size:13px;text-align:right;font-family:JetBrains Mono,monospace;">';
-        }
-        html += '</div>';
+
+      // V43.0 — Persistance auto des défauts intelligents dans STATE._proAnswers
+      // pour que les calculs aval (P5, P7) utilisent ces valeurs même sans interaction user.
+      // Track aussi quelles valeurs ont été modifiées par l'user (vs présumées auto).
+      if (typeof STATE !== 'undefined') {
+        STATE._proAnswers = STATE._proAnswers || {};
+        STATE._proAnswersSource = STATE._proAnswersSource || {};
+        qList.forEach(function(q) {
+          if (STATE._proAnswers[q.field] == null) {
+            var def = (typeof q.default === 'function') ? q.default(surfCalc) : q.default;
+            STATE._proAnswers[q.field] = def;
+            STATE._proAnswersSource[q.field] = 'auto';
+          } else if (!STATE._proAnswersSource[q.field]) {
+            STATE._proAnswersSource[q.field] = 'user';
+          }
+        });
+        current = STATE._proAnswers;
+      }
+
+      // V43.0 — Split questions : à valider (user-modifiées) vs présumées (défauts auto)
+      var qToValidate = []; var qPresumed = [];
+      qList.forEach(function(q) {
+        var src = (typeof STATE !== 'undefined' && STATE._proAnswersSource && STATE._proAnswersSource[q.field]) || 'auto';
+        if (src === 'user') qToValidate.push(q); else qPresumed.push(q);
       });
+
+      html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(125,217,131,.08),rgba(125,217,131,.01));border-color:rgba(125,217,131,.30);">';
+      html += '<div class="v2-card-title" style="color:#7dd983;">📋 ' + microLabel + ' — ' + qList.length + ' données analysées';
+      if (qPresumed.length) html += ' <span style="font-size:11px;color:rgba(125,217,131,.7);font-weight:400;">(' + qPresumed.length + ' présumées · ' + qToValidate.length + ' validées)</span>';
+      html += '</div>';
+      html += '<div style="font-size:11px;color:rgba(245,245,247,.55);margin-bottom:12px;line-height:1.5;">Les valeurs présumées sont déduites de votre profil (NAF + surface). Modifie-les uniquement si différent. <span style="color:#C8FF6B;">✓ = confirmé par vous</span> · <span style="color:rgba(255,255,255,.4);">? = déduit par défaut</span></div>';
+
+      function _renderQuestion(q, src) {
+        var val = current[q.field] != null ? current[q.field] : (typeof q.default === 'function' ? q.default(surfCalc) : q.default);
+        var isAuto = (src === 'auto');
+        var indicator = isAuto ? '<span title="Déduit automatiquement" style="color:rgba(255,255,255,.35);font-weight:700;margin-right:6px;">?</span>' : '<span title="Confirmé par vous" style="color:#C8FF6B;font-weight:700;margin-right:6px;">✓</span>';
+        var bg = isAuto ? 'rgba(255,255,255,.015)' : 'rgba(200,255,107,.04)';
+        var border = isAuto ? 'rgba(255,255,255,.04)' : 'rgba(200,255,107,.20)';
+        var labelColor = isAuto ? 'rgba(245,245,247,.7)' : 'rgba(245,245,247,.95)';
+        var h = '';
+        h += '<div style="display:grid;grid-template-columns:1fr 220px;gap:12px;padding:8px 12px;border-bottom:1px solid ' + border + ';background:' + bg + ';border-radius:4px;margin-bottom:2px;align-items:center;">';
+        h += '<div style="font-size:13px;color:' + labelColor + ';">';
+        h += '<div style="font-weight:600;">' + indicator + q.label + (q.unit ? ' <span style="font-size:11px;color:#58a6ff;">(' + q.unit + ')</span>' : '') + '</div>';
+        h += '<div style="font-size:10px;color:rgba(245,245,247,.45);margin-left:18px;">💰 ' + q.impact + '</div>';
+        h += '</div>';
+        var attrId = 'microQ_' + q.field;
+        var onChangeFull = "STATE._proAnswers=STATE._proAnswers||{};STATE._proAnswers['" + q.field + "']=" + (q.type === 'select' ? 'this.value' : 'parseFloat(this.value)') + ";STATE._proAnswersSource=STATE._proAnswersSource||{};STATE._proAnswersSource['" + q.field + "']='user';V2._notifyPrecisionUpdate();V2._renderPrecisionInputs();";
+        var borderInput = isAuto ? 'rgba(125,217,131,.2)' : 'rgba(200,255,107,.45)';
+        if (q.type === 'select') {
+          h += '<select id="' + attrId + '" onchange="' + onChangeFull + '" style="width:100%;padding:6px 10px;background:#0d1117;color:#fff;border:1px solid ' + borderInput + ';border-radius:6px;font-size:13px;">';
+          q.options.forEach(function(o) { var sel = (o == val) ? ' selected' : ''; h += '<option value="' + o + '"' + sel + '>' + o.replace(/_/g, ' ') + '</option>'; });
+          h += '</select>';
+        } else {
+          h += '<input type="number" id="' + attrId + '" value="' + val + '" onchange="' + onChangeFull + '" style="width:100%;padding:6px 10px;background:#0d1117;color:#fff;border:1px solid ' + borderInput + ';border-radius:6px;font-size:13px;text-align:right;font-family:JetBrains Mono,monospace;">';
+        }
+        h += '</div>';
+        return h;
+      }
+
+      if (qToValidate.length) {
+        html += '<div style="font-size:11px;color:#C8FF6B;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin:6px 0 4px;">✓ Validé en visio (' + qToValidate.length + ')</div>';
+        qToValidate.forEach(function(q) { html += _renderQuestion(q, 'user'); });
+      }
+      if (qPresumed.length) {
+        html += '<div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:6px 0;" onclick="var el=document.getElementById(\'v2presumedList\');el.style.display=el.style.display===\'none\'?\'block\':\'none\';var chev=document.getElementById(\'v2presumedChev\');if(chev)chev.textContent=el.style.display===\'none\'?\'▶\':\'▼\';">';
+        html += '<div style="font-size:11px;color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.5px;text-transform:uppercase;">? Présumé (' + qPresumed.length + ') — clic pour replier/déplier</div>';
+        html += '<div id="v2presumedChev" style="font-size:11px;color:rgba(255,255,255,.4);">▼</div></div>';
+        html += '<div id="v2presumedList" style="display:block;">';
+        qPresumed.forEach(function(q) { html += _renderQuestion(q, 'auto'); });
+        html += '</div>';
+      }
       html += '</div>';
     }
 
@@ -21173,6 +21249,30 @@ window.V2 = {
       }
     });
     if (factureAnnuelle > 0) ecoAn = Math.min(ecoAn, factureAnnuelle*0.80);
+
+    // V43.2 — Fallback éco facture si pas de facture saisie : estimation depuis cumac × prix énergie / durée vie ADEME
+    // Ratio cumac → kWh/an réel ≈ cumac / 12 (durée vie moyenne fiches CEE)
+    // Prix moyens chauffage (€/kWh PCI 2026) : gaz 0.10, fioul 0.13, élec 0.20, bois 0.06, RCU 0.10
+    var ecoAnEstimee = false;
+    if (ecoAn === 0 && gc.totalKwhc > 0) {
+      var pxEnergie = (eType === 'electricite' || eType === 'electrique' || eType === 'elec') ? 0.20
+        : (eType === 'fioul') ? 0.13
+        : (eType === 'gaz' || eType === 'gpl') ? 0.10
+        : (eType === 'bois' || eType === 'biomasse') ? 0.06
+        : (eType === 'reseau' || eType === 'rcu') ? 0.10
+        : 0.12; // défaut mix tertiaire
+      // cumac (kWh actualisé sur durée vie) → kWh/an réels = cumac / 12 (durée vie moyenne)
+      ecoAn = (gc.totalKwhc / 12) * pxEnergie;
+      ecoAnEstimee = true;
+    }
+
+    // V43.2 — CO2 évité par an (ratio ADEME : 1 kWh cumac ≈ 0.057 kg CO2 / 12 ans)
+    var co2TonnesAn = (gc.totalKwhc * 0.057) / (12 * 1000); // → tonnes/an
+    var co2Tonnes15ans = co2TonnesAn * 15;
+    // Équivalences pédagogiques
+    var co2EqVoitures = Math.round(co2TonnesAn / 4.6); // 1 voiture ≈ 4.6 tCO2/an France
+    var co2EqArbres = Math.round(co2TonnesAn * 50); // 1 arbre absorbe ≈ 20 kg CO2/an
+
     var rac = gc.totalRac;
     // V42.6.2 — Projections : utiliser primeNette (cohérence V41.3 : c'est la valeur RÉELLEMENT versée au client)
     var gain5 = gc.totalPrimeNette - rac + (ecoAn * 5);
@@ -21181,13 +21281,27 @@ window.V2 = {
     var roiMois = (rac > 0 && ecoAn > 0) ? Math.round(rac / (ecoAn / 12)) : 0;
 
     var html = '';
-    // KPI principaux — V42.6.2 : primeNette en valeur principale (cohérence V41.3)
+    // KPI principaux — V42.6.2 + V43.2 (ajout CO2 + éco facture auto)
     html += '<div class="v2-kpi-grid">';
     html += '<div class="v2-kpi"><div class="v2-kpi-num" title="Prime CEE versée nette client (après commission opérateur)">' + Math.round(gc.totalPrimeNette).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Prime CEE versée</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#C8FF6B;" title="Économie sur la facture énergétique annuelle' + (ecoAnEstimee ? ' (estimation auto sans facture saisie)' : ' (calcul depuis facture saisie)') + '">' + Math.round(ecoAn).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Économie facture/an' + (ecoAnEstimee ? ' (estimée)' : '') + '</div></div>';
+    html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#7dd983;" title="Tonnes de CO2 évitées chaque année grâce aux opérations (ratio ADEME 0.057 kg/kWhc / 12 ans)">' + co2TonnesAn.toFixed(1) + ' t</div><div class="v2-kpi-label">CO₂ évité/an</div></div>';
     html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:#58a6ff;">' + (gc.totalKwhc/1000).toFixed(0) + ' k</div><div class="v2-kpi-label">MWh cumac volume</div></div>';
     html += '<div class="v2-kpi"><div class="v2-kpi-num">' + Math.round(gc.totalCostTTC).toLocaleString('fr-FR') + ' €</div><div class="v2-kpi-label">Coût travaux TTC</div></div>';
     html += '<div class="v2-kpi"><div class="v2-kpi-num" style="color:' + gc.globalCovLevel.color + ';">' + gc.totalCoverage.toFixed(0) + '%</div><div class="v2-kpi-label">Couverture · ' + gc.globalCovLevel.label.replace(/[🚀✓◐◔✗]\s*/g,'') + '</div></div>';
     html += '</div>';
+
+    // V43.2 — Bandeau pédagogique CO2 (en visio client = wow factor)
+    if (co2TonnesAn > 0) {
+      html += '<div class="v2-card" style="background:linear-gradient(135deg,rgba(125,217,131,.10),rgba(63,185,80,.04));border-color:rgba(125,217,131,.30);margin-top:14px;">';
+      html += '<div class="v2-card-title" style="color:#7dd983;font-size:14px;">🌍 Impact environnemental annuel</div>';
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;font-size:12.5px;line-height:1.6;">';
+      html += '<div><div style="font-size:22px;font-weight:800;color:#7dd983;">' + co2TonnesAn.toFixed(1) + ' tonnes</div><div style="color:rgba(245,245,247,.7);">de CO₂ évitées <strong>chaque année</strong></div></div>';
+      if (co2EqVoitures > 0) html += '<div><div style="font-size:22px;font-weight:800;color:#7dd983;">≈ ' + co2EqVoitures + ' voiture' + (co2EqVoitures > 1 ? 's' : '') + '</div><div style="color:rgba(245,245,247,.7);">retirée' + (co2EqVoitures > 1 ? 's' : '') + ' de la route (an)</div></div>';
+      if (co2EqArbres > 0) html += '<div><div style="font-size:22px;font-weight:800;color:#7dd983;">≈ ' + co2EqArbres.toLocaleString('fr-FR') + ' arbres</div><div style="color:rgba(245,245,247,.7);">plantés (équivalent absorption)</div></div>';
+      html += '<div><div style="font-size:22px;font-weight:800;color:#C8FF6B;">' + Math.round(co2Tonnes15ans).toLocaleString('fr-FR') + ' t</div><div style="color:rgba(245,245,247,.7);">CO₂ évité sur durée vie (15 ans)</div></div>';
+      html += '</div></div>';
+    }
 
     // Verdict ROI
     html += '<div class="v2-card" style="background:linear-gradient(180deg,rgba(200,255,107,.06),rgba(200,255,107,.015));border-color:rgba(200,255,107,.25);">';
