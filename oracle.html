@@ -16137,17 +16137,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="v2container">
   <div class="v2-shell">
     <div class="v2-topbar">
-      <div class="v2-brand">CEE&nbsp;<em>Engine</em>&nbsp;— Mode Clair</div>
+      <div class="v2-brand">CEE&nbsp;<em>Engine</em></div>
       <div style="display:flex;gap:8px;align-items:center;">
-        <!-- V37.4.5a — Mode vendeur toggle (commission/marge visibles) -->
-        <button class="v2-back-v1" id="v2SellerToggle" onclick="V2.toggleSeller()" title="Mode vendeur : affiche commission et marge dans P5+P6">
+        <!-- V37.4.5a — Mode vendeur toggle (commission/marge visibles) — BO uniquement -->
+        <button class="v2-back-v1 bo-only" id="v2SellerToggle" onclick="V2.toggleSeller()" title="Mode vendeur : affiche commission et marge dans P5+P6">
           <span id="v2SellerLabel">💼 Mode client</span>
         </button>
-        <!-- V37.4.5a — 6 outils commerciaux V1 (drawer toolkit) accessibles depuis n'importe quelle page V2 -->
-        <button class="v2-back-v1" onclick="V2.openTools()" title="Dossiers · Acheteurs · Documents · Prospection · Formation · Pipeline">
+        <!-- V37.4.5a — 6 outils commerciaux (drawer toolkit) — BO uniquement -->
+        <button class="v2-back-v1 bo-only" onclick="V2.openTools()" title="Dossiers · Acheteurs · Documents · Prospection · Formation · Pipeline">
           🧰 Outils
         </button>
-        <button class="v2-back-v1" onclick="V2.toggle()" title="Retour au mode V1 complet (toutes options avancées)">← Mode complet V1</button>
+        <!-- V44.6 — bouton "Mode complet" caché par défaut (debug only), accessible via Ctrl+Shift+L -->
+        <button class="v2-back-v1 bo-only show-legacy-only" onclick="V2.toggle()" title="Bascule vue Backoffice complète (debug)">↩ Vue complète</button>
       </div>
     </div>
 
@@ -16876,7 +16877,7 @@ window.V2 = {
     this.state.active = true;
     try { localStorage.setItem('cee_v2', '1'); } catch(e) {}
     var lbl = document.getElementById('v2ToggleLabel');
-    if (lbl) lbl.textContent = 'Mode complet V1';
+    if (lbl) lbl.textContent = 'Vue complète';
     // V37.4.22 — Activer FAB Jarvis quand V2 actif
     var fab = document.getElementById('v2JarvisFab');
     if (fab) fab.style.display = 'flex';
@@ -17049,7 +17050,7 @@ window.V2 = {
   },
 
   _authModal(msg) {
-    return '<div class="v2-error">🔒 ' + (msg || 'Connexion requise') + '. Clique <a href="#" onclick="V2.deactivate();return false;" style="color:#58a6ff;text-decoration:underline;">ici pour aller au mode V1</a> où tu peux te connecter, puis reviens ici via le bouton 🚀.</div>';
+    return '<div class="v2-error">🔒 ' + (msg || 'Connexion requise') + '. <a href="#" onclick="V2.deactivate();return false;" style="color:#58a6ff;text-decoration:underline;">Se connecter</a>.</div>';
   },
 
   // V37.4.1 — Wrapper fetch qui injecte JWT Bearer si présent + détecte 401
@@ -21307,8 +21308,42 @@ window.V2 = {
   },
 
   _notifyPrecisionUpdate() {
-    // V38.13 — toast confirmation + suggérer de revenir P5/P6
-    if (typeof showToast === 'function') showToast('💾 Input enregistré · revoir P5 Primes 0€ ou P6 Recommandées pour le nouveau calcul', 4000);
+    // V38.13 — toast confirmation
+    // V44.5 — Validation soft cohérence + suggestion recalcul
+    if (typeof STATE !== 'undefined' && STATE._proAnswers) {
+      var warns = V2._validateInputs(STATE._proAnswers);
+      if (warns.length && typeof showToast === 'function') {
+        showToast('⚠ ' + warns[0] + (warns.length > 1 ? ' (+' + (warns.length-1) + ' autres alertes)' : ''), 6000);
+        return;
+      }
+    }
+    if (typeof showToast === 'function') showToast('💾 Donnée enregistrée — la prime se met à jour automatiquement', 3000);
+  },
+
+  // V44.5 — Validation soft des inputs (warnings sans bloquer)
+  _validateInputs(answers) {
+    var warns = [];
+    if (!answers) return warns;
+    var surf = parseFloat(answers.surface_batiment || 0) || (V2.state.profil && V2.state.profil.surface) || 0;
+    // Hauteur sous plafond
+    var h = parseFloat(answers.hauteur_sous_plafond || 0);
+    if (h && (h < 1.5 || h > 30)) warns.push('Hauteur sous plafond ' + h + 'm peu plausible (1.5-30m attendu)');
+    // P chauffage : ratio surface
+    var pkw = parseFloat(answers.P_chauffage_kW || 0);
+    if (pkw && surf && (pkw > surf * 0.5 || pkw < surf * 0.005)) warns.push('Puissance chauffage ' + pkw + 'kW incohérent avec surface ' + surf + 'm² (typique 30-150 W/m²)');
+    // Surface serre
+    var ss = parseFloat(answers.surface_serre_m2 || 0);
+    if (ss && surf && ss > surf * 5) warns.push('Surface serres ' + ss + 'm² > 5× surface bâtiment ' + surf + 'm² — vérifier');
+    // Tank lait élevage
+    var tank = parseFloat(answers.tank_litres || 0);
+    if (tank && (tank < 100 || tank > 50000)) warns.push('Tank à lait ' + tank + 'L peu plausible (100-50000L attendu)');
+    // Nb chambres hôtel
+    var nbCh = parseFloat(answers.nb_chambres || 0);
+    if (nbCh && surf && nbCh > surf / 5) warns.push('Nombre chambres ' + nbCh + ' > 1 chambre / 5m² — vérifier');
+    // Compresseur air comprimé
+    var pAir = parseFloat(answers.air_comprime_kw || 0);
+    if (pAir && pAir > 500) warns.push('Compresseur air comprimé ' + pAir + ' kW très élevé — vérifier');
+    return warns;
   },
 
   // ════════════════════════════════════════════════════════════════
