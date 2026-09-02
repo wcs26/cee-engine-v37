@@ -53,7 +53,7 @@ def build_ics(cfg: dict) -> str:
     lines = [
         "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//SIRAT//Visite technique//FR",
         "CALSCALE:GREGORIAN", "METHOD:REQUEST", "BEGIN:VEVENT",
-        f"UID:{uuid.uuid4()}@sirat-travaux.com",
+        f"UID:{uuid.uuid4()}@{cfg['organisateur_email'].split('@')[1]}",
         f"DTSTAMP:{stamp}", f"DTSTART:{fmt(start)}", f"DTEND:{fmt(end)}",
         f"SUMMARY:{esc(cfg['titre'])}",
         f"LOCATION:{esc(cfg['lieu'])}",
